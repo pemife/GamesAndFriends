@@ -18,6 +18,16 @@ CREATE TABLE usuarios
   , fechaNac    DATE
 );
 
+DROP TABLE IF EXISTS juegos CASCADE;
+
+CREATE TABLE juegos
+(
+    id            BIGSERIAL     PRIMARY KEY
+  , titulo        VARCHAR(255)  NOT NULL UNIQUE
+  , descripcion   TEXT
+  , fechaLan      DATE      
+);
+
 DROP TABLE IF EXISTS criticas CASCADE;
 
 CREATE TABLE criticas
@@ -32,3 +42,10 @@ CREATE TABLE criticas
   , producto_id   BIGINT            NOT NULL
                                     REFERENCES eventos(id)
 );
+
+DROP TABLE IF EXISTS comentarios CASCADE;
+
+CREATE TABLE comentarios
+(
+  id
+  );
