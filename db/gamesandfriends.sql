@@ -25,7 +25,19 @@ CREATE TABLE juegos
     id            BIGSERIAL     PRIMARY KEY
   , titulo        VARCHAR(255)  NOT NULL UNIQUE
   , descripcion   TEXT
-  , fechaLan      DATE      
+  , fechaLan      DATE
+  , dev           VARCHAR(255)  NOT NULL UNIQUE
+);
+
+DROP TABLE productos CASCADE;
+
+CREATE TABLE productos
+(
+    id            BIGSERIAL         PRIMARY KEY
+  , nombre        VARCHAR(255)      NOT NULL UNIQUE
+  , descripcion   TEXT              NOT NULL
+  , precio        NUMERIC(6,2)
+  , juegos        BIGINT            REFERENCES juegos(id)
 );
 
 DROP TABLE IF EXISTS criticas CASCADE;
@@ -33,14 +45,25 @@ DROP TABLE IF EXISTS criticas CASCADE;
 CREATE TABLE criticas
 (
     id            BIGSERIAL         PRIMARY KEY
-  , texto         TEXT              NOT NULL
+  , opinion       TEXT              NOT NULL
   , created_at    TIMESTAMP(0)      NOT NULL
                                     DEFAULT CURRENT_TIMESTAMP
+  , valoracion    NUMERIC(1)        NOT NULL
   , usuario_id    BIGINT            NOT NULL
                                     REFERENCES usuarios(id)
-  , padre_id      BIGINT            REFERENCES comentarios(id)
   , producto_id   BIGINT            NOT NULL
                                     REFERENCES eventos(id)
+);
+
+DROP TABLE IF EXISTS posts CASCADE;
+
+CREATE TABLE posts
+(
+    id            BIGSERIAL         PRIMARY KEY
+  , titulo        VARCHAR(255)      NOT NULL
+  , created_at    TIMESTAMP(0)      NOT NULL
+                                    DEFAULT CURRENT_TIMESTAMP
+  , 
 );
 
 DROP TABLE IF EXISTS comentarios CASCADE;
@@ -48,4 +71,4 @@ DROP TABLE IF EXISTS comentarios CASCADE;
 CREATE TABLE comentarios
 (
   id
-  );
+);
