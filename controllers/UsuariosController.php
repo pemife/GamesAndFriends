@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -46,7 +46,7 @@ class UsuariosController extends Controller
 
     /**
      * Displays a single Usuarios model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -66,6 +66,8 @@ class UsuariosController extends Controller
     {
         $model = new Usuarios();
 
+        $model->scenario = Usuarios::SCENARIO_CREATE;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -78,7 +80,7 @@ class UsuariosController extends Controller
     /**
      * Updates an existing Usuarios model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -86,9 +88,13 @@ class UsuariosController extends Controller
     {
         $model = $this->findModel($id);
 
+        $model->scenario = Usuarios::SCENARIO_UPDATE;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        $model->password = '';
 
         return $this->render('update', [
             'model' => $model,
@@ -98,7 +104,7 @@ class UsuariosController extends Controller
     /**
      * Deletes an existing Usuarios model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +118,7 @@ class UsuariosController extends Controller
     /**
      * Finds the Usuarios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Usuarios the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
