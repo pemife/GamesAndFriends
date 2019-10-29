@@ -343,581 +343,590 @@
 | **Entrega**     | v1             |
 | **Incidencia**  | [38](https://github.com/pemife/GamesAndFriends/issues/38) |
 
-| **R39**     | **Crear venta**         |
+| **R39**     | **Login/Logout**         |
 | --------------: | :------------------- |
-| **Descripción** | Crear una venta con juego o producto, usuario y fecha.             |
+| **Descripción** | Permitir al usuario Iniciar sesioni con su perfil             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
 | **Incidencia**  | [39](https://github.com/pemife/GamesAndFriends/issues/39) |
 
-| **R40**     | **Editar/Cancelar venta**         |
+| **R40**     | **Crear venta**         |
 | --------------: | :------------------- |
-| **Descripción** | Permitir modificar y borrar la venta creara antes por el usuario             |
+| **Descripción** | Crear una venta con juego o producto, usuario y fecha.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
 | **Incidencia**  | [40](https://github.com/pemife/GamesAndFriends/issues/40) |
 
-| **R41**     | **Confirmar venta**         |
+| **R41**     | **Editar/Cancelar venta**         |
+| --------------: | :------------------- |
+| **Descripción** | Permitir modificar y borrar la venta creara antes por el usuario             |
+| **Prioridad**   | Importante           |
+| **Tipo**        | Funcional                |
+| **Complejidad** | Fácil         |
+| **Entrega**     | v1             |
+| **Incidencia**  | [41](https://github.com/pemife/GamesAndFriends/issues/41) |
+
+| **R42**     | **Confirmar venta**         |
 | --------------: | :------------------- |
 | **Descripción** | Confirmación de venta por parte de los dos usuarios, si alguno de los dos no confirma, la venta no se completa             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [41](https://github.com/pemife/GamesAndFriends/issues/41) |
+| **Incidencia**  | [42](https://github.com/pemife/GamesAndFriends/issues/42) |
 
-| **R42**     | **Buscar juego**         |
+| **R43**     | **Buscar juego**         |
 | --------------: | :------------------- |
 | **Descripción** | Una barra de búsqueda permitirá buscar juegos por nombre             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [42](https://github.com/pemife/GamesAndFriends/issues/42) |
+| **Incidencia**  | [43](https://github.com/pemife/GamesAndFriends/issues/43) |
 
-| **R43**     | **Cambio de moneda**         |
+| **R44**     | **Cambio de moneda**         |
 | --------------: | :------------------- |
 | **Descripción** | Permitirá elegir en que moneda pagar euro, libra, dolares, etc.             |
 | **Prioridad**   | Opcional           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Difícil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [43](https://github.com/pemife/GamesAndFriends/issues/43) |
+| **Incidencia**  | [44](https://github.com/pemife/GamesAndFriends/issues/44) |
 
-| **R44**     | **Buscar por género**         |
+| **R45**     | **Buscar por género**         |
 | --------------: | :------------------- |
 | **Descripción** | Podrá buscar por géneros de juegos.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [44](https://github.com/pemife/GamesAndFriends/issues/44) |
+| **Incidencia**  | [45](https://github.com/pemife/GamesAndFriends/issues/45) |
 
-| **R45**     | **Seleccionar tipo de ordenación**         |
+| **R46**     | **Seleccionar tipo de ordenación**         |
 | --------------: | :------------------- |
 | **Descripción** | Ordenar por editor, desarrolladora, precio, popularidad, opiniones, nombre, etc.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [45](https://github.com/pemife/GamesAndFriends/issues/45) |
+| **Incidencia**  | [46](https://github.com/pemife/GamesAndFriends/issues/46) |
 
-| **R46**     | **Novedades**         |
+| **R47**     | **Novedades**         |
 | --------------: | :------------------- |
 | **Descripción** | Existirá una página con los juegos recién añadidos o actualizados             |
 | **Prioridad**   | Opcional           |
 | **Tipo**        | Información                |
 | **Complejidad** | Media         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [46](https://github.com/pemife/GamesAndFriends/issues/46) |
+| **Incidencia**  | [47](https://github.com/pemife/GamesAndFriends/issues/47) |
 
-| **R47**     | **Opinar sobre juego o producto**         |
+| **R48**     | **Opinar sobre juego o producto**         |
 | --------------: | :------------------- |
 | **Descripción** | Una vez adquirido el juego o producto, el usuario podrá añadir una opinión sobre él             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [47](https://github.com/pemife/GamesAndFriends/issues/47) |
+| **Incidencia**  | [48](https://github.com/pemife/GamesAndFriends/issues/48) |
 
-| **R48**     | **Editar/Borrar opinión**         |
+| **R49**     | **Editar/Borrar opinión**         |
 | --------------: | :------------------- |
 | **Descripción** | Podrá editar o borrar la opinión escrita anteriormente             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [48](https://github.com/pemife/GamesAndFriends/issues/48) |
+| **Incidencia**  | [49](https://github.com/pemife/GamesAndFriends/issues/49) |
 
-| **R49**     | **Restringir acceso a menores**         |
+| **R50**     | **Restringir acceso a menores**         |
 | --------------: | :------------------- |
 | **Descripción** | Habrá contenido para adultos, a los que los usuarios menores de edad no tendrán acceso             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [49](https://github.com/pemife/GamesAndFriends/issues/49) |
+| **Incidencia**  | [50](https://github.com/pemife/GamesAndFriends/issues/50) |
 
-| **R50**     | **Registrarse**         |
+| **R51**     | **Registrarse**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios nuevos entraran como invitados y podrán registrarse             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [50](https://github.com/pemife/GamesAndFriends/issues/50) |
+| **Incidencia**  | [51](https://github.com/pemife/GamesAndFriends/issues/51) |
 
-| **R51**     | **Confirmación de registro**         |
+| **R52**     | **Confirmación de registro**         |
 | --------------: | :------------------- |
 | **Descripción** | Tendrán que confirmar el registro.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [51](https://github.com/pemife/GamesAndFriends/issues/51) |
+| **Incidencia**  | [52](https://github.com/pemife/GamesAndFriends/issues/52) |
 
-| **R52**     | **Recompensas por compra**         |
+| **R53**     | **Recompensas por compra**         |
 | --------------: | :------------------- |
 | **Descripción** | Cuando el usuario realice una compra, recibirá una serie de recompensas canjeables.             |
 | **Prioridad**   | Opcional           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [52](https://github.com/pemife/GamesAndFriends/issues/52) |
+| **Incidencia**  | [53](https://github.com/pemife/GamesAndFriends/issues/53) |
 
-| **R53**     | **Añadir títulos a lista de deseos**         |
+| **R54**     | **Añadir títulos a lista de deseos**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios tendrán una lista de deseos donde pondrán aquellos títulos que deseen adquirir.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [53](https://github.com/pemife/GamesAndFriends/issues/53) |
+| **Incidencia**  | [54](https://github.com/pemife/GamesAndFriends/issues/54) |
 
-| **R54**     | **Borrar títulos de lista de deseos**         |
+| **R55**     | **Borrar títulos de lista de deseos**         |
 | --------------: | :------------------- |
 | **Descripción** | Pueden borrar los títulos añadidos anteriormente a la lista de deseos             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [54](https://github.com/pemife/GamesAndFriends/issues/54) |
+| **Incidencia**  | [55](https://github.com/pemife/GamesAndFriends/issues/55) |
 
-| **R55**     | **Reordenar lista de deseos**         |
+| **R56**     | **Reordenar lista de deseos**         |
 | --------------: | :------------------- |
 | **Descripción** | Pueden ordenar los juegos añadidos a la lista de deseos por orden de importancia             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [55](https://github.com/pemife/GamesAndFriends/issues/55) |
+| **Incidencia**  | [56](https://github.com/pemife/GamesAndFriends/issues/56) |
 
-| **R56**     | **Añadir amigo**         |
+| **R57**     | **Añadir amigo**         |
 | --------------: | :------------------- |
 | **Descripción** | En el apartado social, los usuarios pueden identificarse como amigos             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [56](https://github.com/pemife/GamesAndFriends/issues/56) |
+| **Incidencia**  | [57](https://github.com/pemife/GamesAndFriends/issues/57) |
 
-| **R57**     | **Borrar amigo**         |
+| **R58**     | **Borrar amigo**         |
 | --------------: | :------------------- |
 | **Descripción** | Los amigos pueden borrarse y bloquearse             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [57](https://github.com/pemife/GamesAndFriends/issues/57) |
+| **Incidencia**  | [58](https://github.com/pemife/GamesAndFriends/issues/58) |
 
-| **R58**     | **Ver lista de deseos de amigo**         |
+| **R59**     | **Ver lista de deseos de amigo**         |
 | --------------: | :------------------- |
 | **Descripción** | Cuando seas amigo de un usuario, su lista de deseos es visible para ti             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [58](https://github.com/pemife/GamesAndFriends/issues/58) |
+| **Incidencia**  | [59](https://github.com/pemife/GamesAndFriends/issues/59) |
 
-| **R59**     | **Regalar juego**         |
+| **R60**     | **Regalar juego**         |
 | --------------: | :------------------- |
 | **Descripción** | Cuando seas amigo de un usuario, podrás regalarle juegos             |
 | **Prioridad**   | Opcional           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Difícil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [59](https://github.com/pemife/GamesAndFriends/issues/59) |
+| **Incidencia**  | [60](https://github.com/pemife/GamesAndFriends/issues/60) |
 
-| **R60**     | **Correo de recomendaciones**         |
+| **R61**     | **Correo de recomendaciones**         |
 | --------------: | :------------------- |
 | **Descripción** | Cuando hayas añadido un título a tu lista de deseos, cuando este se ponga en oferta, recibirás un correo avisándolo             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [60](https://github.com/pemife/GamesAndFriends/issues/60) |
+| **Incidencia**  | [61](https://github.com/pemife/GamesAndFriends/issues/61) |
 
-| **R61**     | **Vínculos**         |
+| **R62**     | **Vínculos**         |
 | --------------: | :------------------- |
 | **Descripción** | Recomendaciones de amigos según los juegos que has comprado             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Difícil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [61](https://github.com/pemife/GamesAndFriends/issues/61) |
+| **Incidencia**  | [62](https://github.com/pemife/GamesAndFriends/issues/62) |
 
-| **R62**     | **Crear perfil usuario**         |
+| **R63**     | **Crear perfil usuario**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios podrán crearse un perfil de usuario             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [62](https://github.com/pemife/GamesAndFriends/issues/62) |
+| **Incidencia**  | [63](https://github.com/pemife/GamesAndFriends/issues/63) |
 
-| **R63**     | **Editar/Borrar perfil de usuario**         |
+| **R64**     | **Editar/Borrar perfil de usuario**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios podrán modificar sus propios perfiles de usuario             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [63](https://github.com/pemife/GamesAndFriends/issues/63) |
+| **Incidencia**  | [64](https://github.com/pemife/GamesAndFriends/issues/64) |
 
-| **R64**     | **Compartir en redes sociales**         |
+| **R65**     | **Compartir en redes sociales**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios podrán compartir opiniones de juegos y paginas de juegos por redes sociales             |
 | **Prioridad**   | Opcional           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [64](https://github.com/pemife/GamesAndFriends/issues/64) |
+| **Incidencia**  | [65](https://github.com/pemife/GamesAndFriends/issues/65) |
 
-| **R65**     | **Crear post de comunidad**         |
+| **R66**     | **Crear post de comunidad**         |
 | --------------: | :------------------- |
 | **Descripción** | En el apartado de comunidad, los usuarios podrán compartir capturas de pantalla, videos y guías sobre juegos             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [65](https://github.com/pemife/GamesAndFriends/issues/65) |
+| **Incidencia**  | [66](https://github.com/pemife/GamesAndFriends/issues/66) |
 
-| **R66**     | **Editar/Borrar post de comunidad**         |
+| **R67**     | **Editar/Borrar post de comunidad**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios tienen total acceso de edición y borrado de los post que ellos mismos han creado             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [66](https://github.com/pemife/GamesAndFriends/issues/66) |
+| **Incidencia**  | [67](https://github.com/pemife/GamesAndFriends/issues/67) |
 
-| **R67**     | **Votar post de comunidad**         |
+| **R68**     | **Votar post de comunidad**         |
 | --------------: | :------------------- |
 | **Descripción** | Podrán votar los post de comunidad de otros usuarios             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [67](https://github.com/pemife/GamesAndFriends/issues/67) |
+| **Incidencia**  | [68](https://github.com/pemife/GamesAndFriends/issues/68) |
 
-| **R68**     | **Comentar post de comunidad**         |
+| **R69**     | **Comentar post de comunidad**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios pueden comentar en los posts de la comunidad             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [68](https://github.com/pemife/GamesAndFriends/issues/68) |
+| **Incidencia**  | [69](https://github.com/pemife/GamesAndFriends/issues/69) |
 
-| **R69**     | **Editar/Borrar comentario de post de comunidad**         |
+| **R70**     | **Editar/Borrar comentario de post de comunidad**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios tienen total acceso de edición y borrado de los comentarios que ellos hayan puestos en los posts de comunidad             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [69](https://github.com/pemife/GamesAndFriends/issues/69) |
+| **Incidencia**  | [70](https://github.com/pemife/GamesAndFriends/issues/70) |
 
-| **R70**     | **Personalización de pagina de inicio**         |
+| **R71**     | **Personalización de pagina de inicio**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios podrán personalizar su pagina de inicio con fondos y otros efectos.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [70](https://github.com/pemife/GamesAndFriends/issues/70) |
+| **Incidencia**  | [71](https://github.com/pemife/GamesAndFriends/issues/71) |
 
-| **R71**     | **Bloquear usuario**         |
+| **R72**     | **Bloquear usuario**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios podrán bloquearse entre si             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [71](https://github.com/pemife/GamesAndFriends/issues/71) |
+| **Incidencia**  | [72](https://github.com/pemife/GamesAndFriends/issues/72) |
 
-| **R72**     | **Reportar comentarios**         |
+| **R73**     | **Reportar comentarios**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios podrán reportar los comentarios que otros usuarios hayan dejado en los posts de comunidad             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [72](https://github.com/pemife/GamesAndFriends/issues/72) |
+| **Incidencia**  | [73](https://github.com/pemife/GamesAndFriends/issues/73) |
 
-| **R73**     | **Reportar críticas**         |
+| **R74**     | **Reportar críticas**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios podrán reportar las críticas que otros usuarios dejan.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [73](https://github.com/pemife/GamesAndFriends/issues/73) |
+| **Incidencia**  | [74](https://github.com/pemife/GamesAndFriends/issues/74) |
 
-| **R74**     | **Ordenar críticas**         |
+| **R75**     | **Ordenar críticas**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios pueden ver las criticas ordenadas por diferentes categorías como fechas o votos.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [74](https://github.com/pemife/GamesAndFriends/issues/74) |
+| **Incidencia**  | [75](https://github.com/pemife/GamesAndFriends/issues/75) |
 
-| **R75**     | **Recomendaciones similares**         |
+| **R76**     | **Recomendaciones similares**         |
 | --------------: | :------------------- |
 | **Descripción** | Las páginas descriptivas del juego, tienen juegos similares recomendados.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [75](https://github.com/pemife/GamesAndFriends/issues/75) |
+| **Incidencia**  | [76](https://github.com/pemife/GamesAndFriends/issues/76) |
 
-| **R76**     | **Restricciones por loggin**         |
+| **R77**     | **Restricciones por loggin**         |
 | --------------: | :------------------- |
 | **Descripción** | Las recomendaciones no aparecerán sin loggear, el usuario no podrá comentar, etc.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [76](https://github.com/pemife/GamesAndFriends/issues/76) |
+| **Incidencia**  | [77](https://github.com/pemife/GamesAndFriends/issues/77) |
 
-| **R77**     | **Ignorar títulos**         |
+| **R78**     | **Ignorar títulos**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios podrán ignorar títulos lo que hara que no aparezcan en su tienda             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [77](https://github.com/pemife/GamesAndFriends/issues/77) |
+| **Incidencia**  | [78](https://github.com/pemife/GamesAndFriends/issues/78) |
 
-| **R78**     | **Carro de compra**         |
+| **R79**     | **Carro de compra**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios tendrán un carro de la compra donde podrán añadir juegos o productos para su posterior compra.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Difícil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [78](https://github.com/pemife/GamesAndFriends/issues/78) |
+| **Incidencia**  | [79](https://github.com/pemife/GamesAndFriends/issues/79) |
 
-| **R79**     | **Recomendaciones por carro**         |
+| **R80**     | **Recomendaciones por carro**         |
 | --------------: | :------------------- |
 | **Descripción** | Una vez añades un juego/producto, se recomiendan juegos/productos similares.             |
 | **Prioridad**   | Opcional           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [79](https://github.com/pemife/GamesAndFriends/issues/79) |
+| **Incidencia**  | [80](https://github.com/pemife/GamesAndFriends/issues/80) |
 
-| **R80**     | **Próximos lanzamientos**         |
+| **R81**     | **Próximos lanzamientos**         |
 | --------------: | :------------------- |
 | **Descripción** | Los juegos que saldrán próximamente podrán añadirse a la lista de deseos e ignorarse             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [80](https://github.com/pemife/GamesAndFriends/issues/80) |
+| **Incidencia**  | [81](https://github.com/pemife/GamesAndFriends/issues/81) |
 
-| **R81**     | **Novedades por fecha**         |
+| **R82**     | **Novedades por fecha**         |
 | --------------: | :------------------- |
 | **Descripción** | Habrá una página con información de novedades de cada mes ordenadas por relevancia (votos de usuarios)             |
 | **Prioridad**   | Opcional           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Difícil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [81](https://github.com/pemife/GamesAndFriends/issues/81) |
+| **Incidencia**  | [82](https://github.com/pemife/GamesAndFriends/issues/82) |
 
-| **R82**     | **Elección primera/segunda mano**         |
+| **R83**     | **Elección primera/segunda mano**         |
 | --------------: | :------------------- |
 | **Descripción** | Si hay copias del juego que otros usuarios venden de segunda mano, en la opción de compra, el usuario podrá elegir comprar la opción de segunda mano.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [82](https://github.com/pemife/GamesAndFriends/issues/82) |
+| **Incidencia**  | [83](https://github.com/pemife/GamesAndFriends/issues/83) |
 
-| **R83**     | **Valoraciones recientes**         |
+| **R84**     | **Valoraciones recientes**         |
 | --------------: | :------------------- |
 | **Descripción** | Habrá valoraciones globales y valoraciones recientes, que consistirán en las valoraciones del último año o mes, donde diferencie entre versiones críticas del juego             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [83](https://github.com/pemife/GamesAndFriends/issues/83) |
+| **Incidencia**  | [84](https://github.com/pemife/GamesAndFriends/issues/84) |
 
-| **R84**     | **Amistad por peticiones**         |
+| **R85**     | **Amistad por peticiones**         |
 | --------------: | :------------------- |
 | **Descripción** | Cuando un usuario quiera agregar como amigo a otro usuario, procederá como una petición que el segundo debe aceptar.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [84](https://github.com/pemife/GamesAndFriends/issues/84) |
+| **Incidencia**  | [85](https://github.com/pemife/GamesAndFriends/issues/85) |
 
-| **R85**     | **Notificación de amistad**         |
+| **R86**     | **Notificación de amistad**         |
 | --------------: | :------------------- |
 | **Descripción** | Cuando el usuario reciba una petición de amistad, se le notificara con un correo con el enlace correspondiente para aceptar dicha petición.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [85](https://github.com/pemife/GamesAndFriends/issues/85) |
+| **Incidencia**  | [86](https://github.com/pemife/GamesAndFriends/issues/86) |
 
-| **R86**     | **Bienvenida**         |
+| **R87**     | **Bienvenida**         |
 | --------------: | :------------------- |
 | **Descripción** | Cuando el usuario se registre, recibirá un email de bienvenida             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [86](https://github.com/pemife/GamesAndFriends/issues/86) |
+| **Incidencia**  | [87](https://github.com/pemife/GamesAndFriends/issues/87) |
 
-| **R87**     | **Control de permisos**         |
+| **R88**     | **Control de permisos**         |
 | --------------: | :------------------- |
 | **Descripción** | Un usuario no tendrá permisos de borrado o edición, de cualquier contenido ajeno a él.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [87](https://github.com/pemife/GamesAndFriends/issues/87) |
+| **Incidencia**  | [88](https://github.com/pemife/GamesAndFriends/issues/88) |
 
-| **R88**     | **Seguimiento de críticos**         |
+| **R89**     | **Seguimiento de críticos**         |
 | --------------: | :------------------- |
 | **Descripción** | Un usuario puede seguir al crítico que desee, y sus criticas aparecerán junto a los títulos recomendados.             |
 | **Prioridad**   | Opcional           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [88](https://github.com/pemife/GamesAndFriends/issues/88) |
+| **Incidencia**  | [89](https://github.com/pemife/GamesAndFriends/issues/89) |
 
-| **R89**     | **Seguidores**         |
+| **R90**     | **Seguidores**         |
 | --------------: | :------------------- |
 | **Descripción** | Si eres crítico de juegos, puedes ver aquellos usuarios que te siguen             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [89](https://github.com/pemife/GamesAndFriends/issues/89) |
+| **Incidencia**  | [90](https://github.com/pemife/GamesAndFriends/issues/90) |
 
-| **R90**     | **Seguidos**         |
+| **R91**     | **Seguidos**         |
 | --------------: | :------------------- |
 | **Descripción** | Puedes ver una lista de aquellos críticos a los que sigues             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [90](https://github.com/pemife/GamesAndFriends/issues/90) |
+| **Incidencia**  | [91](https://github.com/pemife/GamesAndFriends/issues/91) |
 
-| **R91**     | **Eliminar cuenta**         |
+| **R92**     | **Eliminar cuenta**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios pueden darse de baja en la aplicación, borrando así su usuario de la base de datos.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [91](https://github.com/pemife/GamesAndFriends/issues/91) |
+| **Incidencia**  | [92](https://github.com/pemife/GamesAndFriends/issues/92) |
 
-| **R92**     | **Cuenta eliminada**         |
+| **R93**     | **Cuenta eliminada**         |
 | --------------: | :------------------- |
 | **Descripción** | Si un usuario se elimina, se mantendrán todas sus aportaciones a la página, como comentarios, criticas o posts en la comunidad, pero el usuario en dichas aportaciones aparecerá como un usuario por defecto, con nombre “Eliminado”             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Media         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [92](https://github.com/pemife/GamesAndFriends/issues/92) |
+| **Incidencia**  | [93](https://github.com/pemife/GamesAndFriends/issues/93) |
 
-| **R93**     | **Búsqueda de usuario**         |
+| **R94**     | **Búsqueda de usuario**         |
 | --------------: | :------------------- |
 | **Descripción** | Se podrá buscar a usuarios por email o por nombre de usuario.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [93](https://github.com/pemife/GamesAndFriends/issues/93) |
+| **Incidencia**  | [94](https://github.com/pemife/GamesAndFriends/issues/94) |
 
-| **R94**     | **Iniciar sesión**         |
+| **R95**     | **Iniciar sesión**         |
 | --------------: | :------------------- |
 | **Descripción** | El usuario podrá iniciar sesión con su perfil             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [94](https://github.com/pemife/GamesAndFriends/issues/94) |
+| **Incidencia**  | [95](https://github.com/pemife/GamesAndFriends/issues/95) |
 
-| **R95**     | **Cerrar sesión**         |
+| **R96**     | **Cerrar sesión**         |
 | --------------: | :------------------- |
 | **Descripción** | El usuario podrá cerrar su sesión             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [95](https://github.com/pemife/GamesAndFriends/issues/95) |
+| **Incidencia**  | [96](https://github.com/pemife/GamesAndFriends/issues/96) |
 
-| **R96**     | **Ver página de juego/producto**         |
+| **R97**     | **Ver página de juego/producto**         |
 | --------------: | :------------------- |
 | **Descripción** | El usuario podrá ver la página del producto que elija             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v1             |
-| **Incidencia**  | [96](https://github.com/pemife/GamesAndFriends/issues/96) |
+| **Incidencia**  | [97](https://github.com/pemife/GamesAndFriends/issues/97) |
 
-| **R97**     | **Clasificaciones por edad**         |
+| **R98**     | **Clasificaciones por edad**         |
 | --------------: | :------------------- |
 | **Descripción** | Los juegos tendrán una edad de consumidor mínima establecida             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v2             |
-| **Incidencia**  | [97](https://github.com/pemife/GamesAndFriends/issues/97) |
+| **Incidencia**  | [98](https://github.com/pemife/GamesAndFriends/issues/98) |
 
-| **R98**     | **Restricciones por edad**         |
+| **R99**     | **Restricciones por edad**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios con una edad menor a la establecida en el juego/producto, no podrán acceder a la pagina del producto.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [98](https://github.com/pemife/GamesAndFriends/issues/98) |
+| **Incidencia**  | [99](https://github.com/pemife/GamesAndFriends/issues/99) |
 
-| **R99**     | **Juegos de usuarios**         |
+| **R100**     | **Juegos de usuarios**         |
 | --------------: | :------------------- |
 | **Descripción** | Los juegos que el usuario haya comprado quedaran reflejados en una lista.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [99](https://github.com/pemife/GamesAndFriends/issues/99) |
+| **Incidencia**  | [100](https://github.com/pemife/GamesAndFriends/issues/100) |
 
-| **R100**     | **Juegos de amigos**         |
+| **R101**     | **Juegos de amigos**         |
 | --------------: | :------------------- |
 | **Descripción** | Los usuarios pueden ver la lista de compra de sus amigos.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [100](https://github.com/pemife/GamesAndFriends/issues/100) |
+| **Incidencia**  | [101](https://github.com/pemife/GamesAndFriends/issues/101) |
 
-| **R101**     | **Carro privado**         |
+| **R102**     | **Carro privado**         |
 | --------------: | :------------------- |
 | **Descripción** | El carro de compra es privado y nadie mas que el usuario puede ver el contenido.             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [101](https://github.com/pemife/GamesAndFriends/issues/101) |
+| **Incidencia**  | [102](https://github.com/pemife/GamesAndFriends/issues/102) |
 
-| **R102**     | **Opinión por hacer**         |
+| **R103**     | **Opinión por hacer**         |
 | --------------: | :------------------- |
 | **Descripción** | Si el usuario posee un juego y no ha dejado opinión sobre el, aparecerá un apartado que lo facilite en la página del juego/producto             |
 | **Prioridad**   | Importante           |
 | **Tipo**        | Funcional                |
 | **Complejidad** | Fácil         |
 | **Entrega**     | v3             |
-| **Incidencia**  | [102](https://github.com/pemife/GamesAndFriends/issues/102) |
+| **Incidencia**  | [104](https://github.com/pemife/GamesAndFriends/issues/104) |
 
 
 ## Cuadro resumen
@@ -962,67 +971,68 @@
 | (**R36**) Varios navegadores | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [36](https://github.com/pemife/GamesAndFriends/issues/36) |
 | (**R37**) Despliegue en un Host | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [37](https://github.com/pemife/GamesAndFriends/issues/37) |
 | (**R38**) Despliegue en un servidor local | Mínimo | Técnico | Fácil | v1 | | **Incidencia**  | [38](https://github.com/pemife/GamesAndFriends/issues/38) |
-| (**R39**) Crear venta | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [39](https://github.com/pemife/GamesAndFriends/issues/39) |
-| (**R40**) Editar/Cancelar venta | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [40](https://github.com/pemife/GamesAndFriends/issues/40) |
-| (**R41**) Confirmar venta | Importante | Funcional | Media | v1 | | **Incidencia**  | [41](https://github.com/pemife/GamesAndFriends/issues/41) |
-| (**R42**) Buscar juego | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [42](https://github.com/pemife/GamesAndFriends/issues/42) |
-| (**R43**) Cambio de moneda | Opcional | Funcional | Difícil | v1 | | **Incidencia**  | [43](https://github.com/pemife/GamesAndFriends/issues/43) |
-| (**R44**) Buscar por género | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [44](https://github.com/pemife/GamesAndFriends/issues/44) |
-| (**R45**) Seleccionar tipo de ordenación | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [45](https://github.com/pemife/GamesAndFriends/issues/45) |
-| (**R46**) Novedades | Opcional | Información | Media | v1 | | **Incidencia**  | [46](https://github.com/pemife/GamesAndFriends/issues/46) |
-| (**R47**) Opinar sobre juego o producto | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [47](https://github.com/pemife/GamesAndFriends/issues/47) |
-| (**R48**) Editar/Borrar opinión | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [48](https://github.com/pemife/GamesAndFriends/issues/48) |
-| (**R49**) Restringir acceso a menores | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [49](https://github.com/pemife/GamesAndFriends/issues/49) |
-| (**R50**) Registrarse | Importante | Funcional | Media | v1 | | **Incidencia**  | [50](https://github.com/pemife/GamesAndFriends/issues/50) |
-| (**R51**) Confirmación de registro | Importante | Funcional | Media | v1 | | **Incidencia**  | [51](https://github.com/pemife/GamesAndFriends/issues/51) |
-| (**R52**) Recompensas por compra | Opcional | Funcional | Fácil | v3 | | **Incidencia**  | [52](https://github.com/pemife/GamesAndFriends/issues/52) |
-| (**R53**) Añadir títulos a lista de deseos | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [53](https://github.com/pemife/GamesAndFriends/issues/53) |
-| (**R54**) Borrar títulos de lista de deseos | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [54](https://github.com/pemife/GamesAndFriends/issues/54) |
-| (**R55**) Reordenar lista de deseos | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [55](https://github.com/pemife/GamesAndFriends/issues/55) |
-| (**R56**) Añadir amigo | Importante | Funcional | Media | v2 | | **Incidencia**  | [56](https://github.com/pemife/GamesAndFriends/issues/56) |
-| (**R57**) Borrar amigo | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [57](https://github.com/pemife/GamesAndFriends/issues/57) |
-| (**R58**) Ver lista de deseos de amigo | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [58](https://github.com/pemife/GamesAndFriends/issues/58) |
-| (**R59**) Regalar juego | Opcional | Funcional | Difícil | v3 | | **Incidencia**  | [59](https://github.com/pemife/GamesAndFriends/issues/59) |
-| (**R60**) Correo de recomendaciones | Importante | Funcional | Media | v2 | | **Incidencia**  | [60](https://github.com/pemife/GamesAndFriends/issues/60) |
-| (**R61**) Vínculos | Importante | Funcional | Difícil | v3 | | **Incidencia**  | [61](https://github.com/pemife/GamesAndFriends/issues/61) |
-| (**R62**) Crear perfil usuario | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [62](https://github.com/pemife/GamesAndFriends/issues/62) |
-| (**R63**) Editar/Borrar perfil de usuario | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [63](https://github.com/pemife/GamesAndFriends/issues/63) |
-| (**R64**) Compartir en redes sociales | Opcional | Funcional | Media | v3 | | **Incidencia**  | [64](https://github.com/pemife/GamesAndFriends/issues/64) |
-| (**R65**) Crear post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [65](https://github.com/pemife/GamesAndFriends/issues/65) |
-| (**R66**) Editar/Borrar post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [66](https://github.com/pemife/GamesAndFriends/issues/66) |
-| (**R67**) Votar post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [67](https://github.com/pemife/GamesAndFriends/issues/67) |
-| (**R68**) Comentar post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [68](https://github.com/pemife/GamesAndFriends/issues/68) |
-| (**R69**) Editar/Borrar comentario de post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [69](https://github.com/pemife/GamesAndFriends/issues/69) |
-| (**R70**) Personalización de pagina de inicio | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [70](https://github.com/pemife/GamesAndFriends/issues/70) |
-| (**R71**) Bloquear usuario | Importante | Funcional | Media | v2 | | **Incidencia**  | [71](https://github.com/pemife/GamesAndFriends/issues/71) |
-| (**R72**) Reportar comentarios | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [72](https://github.com/pemife/GamesAndFriends/issues/72) |
-| (**R73**) Reportar críticas | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [73](https://github.com/pemife/GamesAndFriends/issues/73) |
-| (**R74**) Ordenar críticas | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [74](https://github.com/pemife/GamesAndFriends/issues/74) |
-| (**R75**) Recomendaciones similares | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [75](https://github.com/pemife/GamesAndFriends/issues/75) |
-| (**R76**) Restricciones por loggin | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [76](https://github.com/pemife/GamesAndFriends/issues/76) |
-| (**R77**) Ignorar títulos | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [77](https://github.com/pemife/GamesAndFriends/issues/77) |
-| (**R78**) Carro de compra | Importante | Funcional | Difícil | v3 | | **Incidencia**  | [78](https://github.com/pemife/GamesAndFriends/issues/78) |
-| (**R79**) Recomendaciones por carro | Opcional | Funcional | Media | v3 | | **Incidencia**  | [79](https://github.com/pemife/GamesAndFriends/issues/79) |
-| (**R80**) Próximos lanzamientos | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [80](https://github.com/pemife/GamesAndFriends/issues/80) |
-| (**R81**) Novedades por fecha | Opcional | Funcional | Difícil | v3 | | **Incidencia**  | [81](https://github.com/pemife/GamesAndFriends/issues/81) |
-| (**R82**) Elección primera/segunda mano | Importante | Funcional | Media | v3 | | **Incidencia**  | [82](https://github.com/pemife/GamesAndFriends/issues/82) |
-| (**R83**) Valoraciones recientes | Importante | Funcional | Media | v3 | | **Incidencia**  | [83](https://github.com/pemife/GamesAndFriends/issues/83) |
-| (**R84**) Amistad por peticiones | Importante | Funcional | Media | v3 | | **Incidencia**  | [84](https://github.com/pemife/GamesAndFriends/issues/84) |
-| (**R85**) Notificación de amistad | Importante | Funcional | Media | v3 | | **Incidencia**  | [85](https://github.com/pemife/GamesAndFriends/issues/85) |
-| (**R86**) Bienvenida | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [86](https://github.com/pemife/GamesAndFriends/issues/86) |
-| (**R87**) Control de permisos | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [87](https://github.com/pemife/GamesAndFriends/issues/87) |
-| (**R88**) Seguimiento de críticos | Opcional | Funcional | Fácil | v3 | | **Incidencia**  | [88](https://github.com/pemife/GamesAndFriends/issues/88) |
-| (**R89**) Seguidores | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [89](https://github.com/pemife/GamesAndFriends/issues/89) |
-| (**R90**) Seguidos | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [90](https://github.com/pemife/GamesAndFriends/issues/90) |
-| (**R91**) Eliminar cuenta | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [91](https://github.com/pemife/GamesAndFriends/issues/91) |
-| (**R92**) Cuenta eliminada | Importante | Funcional | Media | v3 | | **Incidencia**  | [92](https://github.com/pemife/GamesAndFriends/issues/92) |
-| (**R93**) Búsqueda de usuario | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [93](https://github.com/pemife/GamesAndFriends/issues/93) |
-| (**R94**) Iniciar sesión | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [94](https://github.com/pemife/GamesAndFriends/issues/94) |
-| (**R95**) Cerrar sesión | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [95](https://github.com/pemife/GamesAndFriends/issues/95) |
-| (**R96**) Ver página de juego/producto | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [96](https://github.com/pemife/GamesAndFriends/issues/96) |
-| (**R97**) Clasificaciones por edad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [97](https://github.com/pemife/GamesAndFriends/issues/97) |
-| (**R98**) Restricciones por edad | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [98](https://github.com/pemife/GamesAndFriends/issues/98) |
-| (**R99**) Juegos de usuarios | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [99](https://github.com/pemife/GamesAndFriends/issues/99) |
-| (**R100**) Juegos de amigos | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [100](https://github.com/pemife/GamesAndFriends/issues/100) |
-| (**R101**) Carro privado | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [101](https://github.com/pemife/GamesAndFriends/issues/101) |
-| (**R102**) Opinión por hacer | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [102](https://github.com/pemife/GamesAndFriends/issues/102) |
+| (**R39**) Login/Logout | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [39](https://github.com/pemife/GamesAndFriends/issues/39) |
+| (**R40**) Crear venta | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [40](https://github.com/pemife/GamesAndFriends/issues/40) |
+| (**R41**) Editar/Cancelar venta | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [41](https://github.com/pemife/GamesAndFriends/issues/41) |
+| (**R42**) Confirmar venta | Importante | Funcional | Media | v1 | | **Incidencia**  | [42](https://github.com/pemife/GamesAndFriends/issues/42) |
+| (**R43**) Buscar juego | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [43](https://github.com/pemife/GamesAndFriends/issues/43) |
+| (**R44**) Cambio de moneda | Opcional | Funcional | Difícil | v1 | | **Incidencia**  | [44](https://github.com/pemife/GamesAndFriends/issues/44) |
+| (**R45**) Buscar por género | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [45](https://github.com/pemife/GamesAndFriends/issues/45) |
+| (**R46**) Seleccionar tipo de ordenación | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [46](https://github.com/pemife/GamesAndFriends/issues/46) |
+| (**R47**) Novedades | Opcional | Información | Media | v1 | | **Incidencia**  | [47](https://github.com/pemife/GamesAndFriends/issues/47) |
+| (**R48**) Opinar sobre juego o producto | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [48](https://github.com/pemife/GamesAndFriends/issues/48) |
+| (**R49**) Editar/Borrar opinión | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [49](https://github.com/pemife/GamesAndFriends/issues/49) |
+| (**R50**) Restringir acceso a menores | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [50](https://github.com/pemife/GamesAndFriends/issues/50) |
+| (**R51**) Registrarse | Importante | Funcional | Media | v1 | | **Incidencia**  | [51](https://github.com/pemife/GamesAndFriends/issues/51) |
+| (**R52**) Confirmación de registro | Importante | Funcional | Media | v1 | | **Incidencia**  | [52](https://github.com/pemife/GamesAndFriends/issues/52) |
+| (**R53**) Recompensas por compra | Opcional | Funcional | Fácil | v3 | | **Incidencia**  | [53](https://github.com/pemife/GamesAndFriends/issues/53) |
+| (**R54**) Añadir títulos a lista de deseos | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [54](https://github.com/pemife/GamesAndFriends/issues/54) |
+| (**R55**) Borrar títulos de lista de deseos | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [55](https://github.com/pemife/GamesAndFriends/issues/55) |
+| (**R56**) Reordenar lista de deseos | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [56](https://github.com/pemife/GamesAndFriends/issues/56) |
+| (**R57**) Añadir amigo | Importante | Funcional | Media | v2 | | **Incidencia**  | [57](https://github.com/pemife/GamesAndFriends/issues/57) |
+| (**R58**) Borrar amigo | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [58](https://github.com/pemife/GamesAndFriends/issues/58) |
+| (**R59**) Ver lista de deseos de amigo | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [59](https://github.com/pemife/GamesAndFriends/issues/59) |
+| (**R60**) Regalar juego | Opcional | Funcional | Difícil | v3 | | **Incidencia**  | [60](https://github.com/pemife/GamesAndFriends/issues/60) |
+| (**R61**) Correo de recomendaciones | Importante | Funcional | Media | v2 | | **Incidencia**  | [61](https://github.com/pemife/GamesAndFriends/issues/61) |
+| (**R62**) Vínculos | Importante | Funcional | Difícil | v3 | | **Incidencia**  | [62](https://github.com/pemife/GamesAndFriends/issues/62) |
+| (**R63**) Crear perfil usuario | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [63](https://github.com/pemife/GamesAndFriends/issues/63) |
+| (**R64**) Editar/Borrar perfil de usuario | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [64](https://github.com/pemife/GamesAndFriends/issues/64) |
+| (**R65**) Compartir en redes sociales | Opcional | Funcional | Media | v3 | | **Incidencia**  | [65](https://github.com/pemife/GamesAndFriends/issues/65) |
+| (**R66**) Crear post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [66](https://github.com/pemife/GamesAndFriends/issues/66) |
+| (**R67**) Editar/Borrar post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [67](https://github.com/pemife/GamesAndFriends/issues/67) |
+| (**R68**) Votar post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [68](https://github.com/pemife/GamesAndFriends/issues/68) |
+| (**R69**) Comentar post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [69](https://github.com/pemife/GamesAndFriends/issues/69) |
+| (**R70**) Editar/Borrar comentario de post de comunidad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [70](https://github.com/pemife/GamesAndFriends/issues/70) |
+| (**R71**) Personalización de pagina de inicio | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [71](https://github.com/pemife/GamesAndFriends/issues/71) |
+| (**R72**) Bloquear usuario | Importante | Funcional | Media | v2 | | **Incidencia**  | [72](https://github.com/pemife/GamesAndFriends/issues/72) |
+| (**R73**) Reportar comentarios | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [73](https://github.com/pemife/GamesAndFriends/issues/73) |
+| (**R74**) Reportar críticas | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [74](https://github.com/pemife/GamesAndFriends/issues/74) |
+| (**R75**) Ordenar críticas | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [75](https://github.com/pemife/GamesAndFriends/issues/75) |
+| (**R76**) Recomendaciones similares | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [76](https://github.com/pemife/GamesAndFriends/issues/76) |
+| (**R77**) Restricciones por loggin | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [77](https://github.com/pemife/GamesAndFriends/issues/77) |
+| (**R78**) Ignorar títulos | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [78](https://github.com/pemife/GamesAndFriends/issues/78) |
+| (**R79**) Carro de compra | Importante | Funcional | Difícil | v3 | | **Incidencia**  | [79](https://github.com/pemife/GamesAndFriends/issues/79) |
+| (**R80**) Recomendaciones por carro | Opcional | Funcional | Media | v3 | | **Incidencia**  | [80](https://github.com/pemife/GamesAndFriends/issues/80) |
+| (**R81**) Próximos lanzamientos | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [81](https://github.com/pemife/GamesAndFriends/issues/81) |
+| (**R82**) Novedades por fecha | Opcional | Funcional | Difícil | v3 | | **Incidencia**  | [82](https://github.com/pemife/GamesAndFriends/issues/82) |
+| (**R83**) Elección primera/segunda mano | Importante | Funcional | Media | v3 | | **Incidencia**  | [83](https://github.com/pemife/GamesAndFriends/issues/83) |
+| (**R84**) Valoraciones recientes | Importante | Funcional | Media | v3 | | **Incidencia**  | [84](https://github.com/pemife/GamesAndFriends/issues/84) |
+| (**R85**) Amistad por peticiones | Importante | Funcional | Media | v3 | | **Incidencia**  | [85](https://github.com/pemife/GamesAndFriends/issues/85) |
+| (**R86**) Notificación de amistad | Importante | Funcional | Media | v3 | | **Incidencia**  | [86](https://github.com/pemife/GamesAndFriends/issues/86) |
+| (**R87**) Bienvenida | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [87](https://github.com/pemife/GamesAndFriends/issues/87) |
+| (**R88**) Control de permisos | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [88](https://github.com/pemife/GamesAndFriends/issues/88) |
+| (**R89**) Seguimiento de críticos | Opcional | Funcional | Fácil | v3 | | **Incidencia**  | [89](https://github.com/pemife/GamesAndFriends/issues/89) |
+| (**R90**) Seguidores | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [90](https://github.com/pemife/GamesAndFriends/issues/90) |
+| (**R91**) Seguidos | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [91](https://github.com/pemife/GamesAndFriends/issues/91) |
+| (**R92**) Eliminar cuenta | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [92](https://github.com/pemife/GamesAndFriends/issues/92) |
+| (**R93**) Cuenta eliminada | Importante | Funcional | Media | v3 | | **Incidencia**  | [93](https://github.com/pemife/GamesAndFriends/issues/93) |
+| (**R94**) Búsqueda de usuario | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [94](https://github.com/pemife/GamesAndFriends/issues/94) |
+| (**R95**) Iniciar sesión | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [95](https://github.com/pemife/GamesAndFriends/issues/95) |
+| (**R96**) Cerrar sesión | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [96](https://github.com/pemife/GamesAndFriends/issues/96) |
+| (**R97**) Ver página de juego/producto | Importante | Funcional | Fácil | v1 | | **Incidencia**  | [97](https://github.com/pemife/GamesAndFriends/issues/97) |
+| (**R98**) Clasificaciones por edad | Importante | Funcional | Fácil | v2 | | **Incidencia**  | [98](https://github.com/pemife/GamesAndFriends/issues/98) |
+| (**R99**) Restricciones por edad | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [99](https://github.com/pemife/GamesAndFriends/issues/99) |
+| (**R100**) Juegos de usuarios | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [100](https://github.com/pemife/GamesAndFriends/issues/100) |
+| (**R101**) Juegos de amigos | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [101](https://github.com/pemife/GamesAndFriends/issues/101) |
+| (**R102**) Carro privado | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [102](https://github.com/pemife/GamesAndFriends/issues/102) |
+| (**R103**) Opinión por hacer | Importante | Funcional | Fácil | v3 | | **Incidencia**  | [104](https://github.com/pemife/GamesAndFriends/issues/104) |
