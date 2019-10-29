@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use app\widgets\Alert;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
@@ -45,16 +46,23 @@ AppAsset::register($this);
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+              '<li>'
+              . Html::a('Login', ['site/login'])
+              . '</li><li>'
+              . Html::a('Registrar', ['usuarios/create'])
+              . '</li>'
             ) : (
-                '<li class="nav-item">'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->nombre . ')',
-                    ['class' => 'btn btn-dark nav-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
+              [
+                'label' => Yii::$app->user->identity->nombre,
+                'items' => [
+                 ['label' => 'Modificar perfil', 'url' => Url::to(['usuarios/update', 'id' => Yii::$app->user->id])],
+                 Html::beginForm(['site/logout'], 'post')
+                 . Html::submitButton(
+                    '&nbsp;&nbsp;Logout (' . Yii::$app->user->identity->nombre . ')',
+                    ['class' => 'btn btn-link logout'])
+                 . Html::endForm()
+                ],
+              ]
             )
         ],
     ]);
