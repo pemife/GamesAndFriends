@@ -156,18 +156,24 @@ VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohet
 ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 19.99, 5, null);
 
 INSERT INTO criticas (opinion, created_at, valoracion, usuario_id, producto_id)
-VALUES ('Pues es un juegazo, me encanta', null, 9, 2, 1),
-('Es algo turbio, pero me gusta, los enemigos son muy raros, tiene su encanto', null, 9, 2, 2),
-('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', null, 5, 2, 3);
+VALUES ('Pues es un juegazo, me encanta', CURRENT_TIMESTAMP, 9, 2, 1),
+('Es algo turbio, pero me gusta, los enemigos son muy raros, tiene su encanto', CURRENT_TIMESTAMP, 9, 2, 2),
+('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 3);
 
 INSERT INTO posts (titulo, created_at, desarrollo, juego_id, usuario_id)
-VALUES ('Primer post', null, 'Cuando empece el proyecto hice este post, para crear una prueba y aqui se quedó la prueba por ahora, ya la cambiare, pero por ahora, asi se mantendrá.', 2, 2);
+VALUES ('Primer post', CURRENT_TIMESTAMP, 'Cuando empece el proyecto hice este post, para crear una prueba y aqui se quedó la prueba por ahora, ya la cambiare, pero por ahora, asi se mantendrá.', 2, 2);
 
 INSERT INTO comentarios (created_at, texto, usuario_id, post_id)
-VALUES (null, 'Pues me gusta tu post, no lo cambies', 1, 1),
-(null, 'jejeje, me he comentado a mi mismo', 2, 1);
+VALUES (CURRENT_TIMESTAMP, 'Pues me gusta tu post, no lo cambies', 1, 1),
+(CURRENT_TIMESTAMP, 'jejeje, me he comentado a mi mismo', 2, 1);
 
 INSERT INTO etiquetas (nombre)
 VALUES ('Deportes'), ('Carreras'), ('Competitivo'), ('Casual'), ('Adictivo'),
 ('Rogue-like'), ('Multijugador'), ('Indie'), ('Dificil'), ('Un jugador'),
 ('RPG'), ('Shooter'), ('FPS'), ('Accion');
+
+INSERT INTO usuarios_etiquetas (usuario_id, etiqueta_id)
+VALUES (1,1), (1,3), (1,4),(1,6);
+
+INSERT INTO juegos_etiquetas (juego_id, etiqueta_id)
+VALUES (2,5), (2,6), (2,8), (2,9), (1,1), (1,2), (1,3), (1,7);
