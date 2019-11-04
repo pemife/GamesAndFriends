@@ -139,6 +139,27 @@ CREATE TABLE juegos_etiquetas
                                        ON UPDATE CASCADE
 );
 
+DROP TABLE IF EXISTS ventas CASCADE;
+
+CREATE TABLE ventas
+(
+    id            BIGSERIAL         PRIMARY KEY
+  , created_at    TIMESTAMP(0)      NOT NULL
+                                    DEFAULT CURRENT_TIMESTAMP
+  , finished_at   TIMESTAMP(0)
+  , vendedor_id   BIGINT            NOT NULL
+                                    REFERENCES usuarios(id)
+                                    ON DELETE NO ACTION
+                                    ON UPDATE CASCADE
+  , comprador_id  BIGINT            REFERENCES usuarios(id)
+                                    ON DELETE NO ACTION
+                                    ON UPDATE CASCADE
+  , producto_id   BIGINT            NOT NULL
+                                    REFERENCES productos(id)
+                                    ON DELETE CASCADE
+                                    ON UPDATE CASCADE
+);
+
 
 --INSERTS --
 
@@ -177,3 +198,9 @@ VALUES (1,1), (1,3), (1,4),(1,6);
 
 INSERT INTO juegos_etiquetas (juego_id, etiqueta_id)
 VALUES (2,5), (2,6), (2,8), (2,9), (1,1), (1,2), (1,3), (1,7);
+
+INSERT INTO ventas(created_at, finished_at, vendedor_id, comprador_id, producto_id)
+VALUES (CURRENT_TIMESTAMP, null, 1, null, 1),
+(CURRENT_TIMESTAMP, null, 2, null, 2),
+(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, 3),
+(CURRENT_TIMESTAMP, null, 2, null, 2);
