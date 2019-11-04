@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Ventas;
 use app\models\VentasSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * VentasController implements the CRUD actions for Ventas model.
@@ -36,7 +36,9 @@ class VentasController extends Controller
     public function actionIndex()
     {
         $searchModel = new VentasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(['Ventas' => ['finished_at' => null]]);
+        // var_dump(Yii::$app->request->queryParams);
+        // exit;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -46,7 +48,7 @@ class VentasController extends Controller
 
     /**
      * Displays a single Ventas model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -78,7 +80,7 @@ class VentasController extends Controller
     /**
      * Updates an existing Ventas model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +100,7 @@ class VentasController extends Controller
     /**
      * Deletes an existing Ventas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +114,7 @@ class VentasController extends Controller
     /**
      * Finds the Ventas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Ventas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
