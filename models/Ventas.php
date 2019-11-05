@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "ventas".
  *
@@ -51,8 +49,8 @@ class Ventas extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'created_at' => 'Created At',
-            'finished_at' => 'Finished At',
+            'created_at' => 'Creacion',
+            'finished_at' => 'Finalizacion',
             'vendedor_id' => 'Vendedor ID',
             'comprador_id' => 'Comprador ID',
             'producto_id' => 'Producto ID',

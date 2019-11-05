@@ -12,15 +12,20 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <!-- <?= $form->field($model, 'created_at')->textInput() ?> -->
+    <?php
 
-    <!-- <?= $form->field($model, 'finished_at')->textInput() ?> -->
+      // var_dump(Yii::$app->user->identity->nombre);
+      // exit;
 
-    <?= $form->field($model, 'vendedor_id')->textInput() ?>
+    ?>
 
-    <!-- <?= $form->field($model, 'comprador_id')->textInput() ?> -->
+    <?= $form->field($model, 'vendedor_id')->hiddenInput([
+          'readonly' => true,
+          'value' => Yii::$app->user->identity->id,
+    ])->label(false);
+    ?>
 
-    <?= $form->field($model, 'producto_id')->textInput() ?>
+    <?= $form->field($model, 'producto_id')->dropDownList($listaProductos)->label('Producto a vender') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

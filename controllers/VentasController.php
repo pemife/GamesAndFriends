@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Productos;
 use app\models\Ventas;
 use app\models\VentasSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -36,8 +38,9 @@ class VentasController extends Controller
     public function actionIndex()
     {
         $searchModel = new VentasSearch();
-        $dataProvider = $searchModel->search(['Ventas' => ['finished_at' => null]]);
-        // var_dump(Yii::$app->request->queryParams);
+        $query = Ventas::find()->where(['finished_at' => null]);
+        $dataProvider = new ActiveDataProvider(['query' => $query]);
+        // var_dump($this->listaProductos());
         // exit;
 
         return $this->render('index', [
@@ -66,18 +69,19 @@ class VentasController extends Controller
      */
     public function actionCreate()
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
-            return $this->redirect(['ventas/index']);
-        }
-
         $model = new Ventas();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
+            return $this->redirect(['ventas/index']);
+        }
+
         return $this->render('create', [
+            'listaProductos' => $this->listaProductos(),
             'model' => $model,
         ]);
     }
@@ -130,5 +134,13 @@ class VentasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    private function listaProductos()
+    {
+        return Productos::find()
+            ->select('nombre, id')
+            ->indexBy('id')
+            ->all();
     }
 }

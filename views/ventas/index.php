@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\VentasSearch */
@@ -20,22 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
+    <table>
+      <tr>
+        <th>Producto</th>
+        <th>Usuario</th>
+      </tr>
+      <?= ListView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'created_at',
-            'finished_at',
-            'vendedor_id',
-            'comprador_id',
-            //'producto_id',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+        'itemView' => '_vistaVentas',
+        ]) ?>
+    </table>
 
 
 </div>
