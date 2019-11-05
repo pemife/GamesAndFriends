@@ -42,6 +42,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
+            ['label' => '2ª Mano', 'url' => ['/ventas/index']],
             ['label' => 'Tienda', 'url' => ['/productos/index']],
             Yii::$app->user->isGuest ? (
               '<li>'

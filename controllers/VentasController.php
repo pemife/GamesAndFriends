@@ -66,6 +66,11 @@ class VentasController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
+            return $this->redirect(['ventas/index']);
+        }
+
         $model = new Ventas();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
