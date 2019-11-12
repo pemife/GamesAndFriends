@@ -1,0 +1,11 @@
+{
+    "uris": [
+        "file:///home/pepemillan/web/GamesAndFriends"
+    ],
+    "indexDatabaseUri": "file:///home/pepemillan/.cache/php-ide-serenata/index-625e381b04445c6a311d309ab1427712.sqlite",
+    "phpVersion": 7.3,
+    "excludedPathExpressions": [],
+    "fileExtensions": [
+        "php"
+    ]
+}

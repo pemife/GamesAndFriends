@@ -11,10 +11,12 @@ use Yii;
  * @property string $nombre
  * @property string $descripcion
  * @property string $precio
+ * @property string $stock
  * @property int $juego_id
  *
  * @property Criticas[] $criticas
  * @property Juegos $juego
+ * @property Ventas[] $ventas
  */
 class Productos extends \yii\db\ActiveRecord
 {
@@ -32,9 +34,9 @@ class Productos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'descripcion'], 'required'],
+            [['nombre', 'descripcion', 'stock'], 'required'],
             [['descripcion'], 'string'],
-            [['precio'], 'number'],
+            [['precio', 'stock'], 'number'],
             [['juego_id'], 'default', 'value' => null],
             [['juego_id'], 'integer'],
             [['nombre'], 'string', 'max' => 255],
@@ -53,6 +55,7 @@ class Productos extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'descripcion' => 'Descripcion',
             'precio' => 'Precio',
+            'stock' => 'Stock',
             'juego_id' => 'Juego ID',
         ];
     }
@@ -71,5 +74,13 @@ class Productos extends \yii\db\ActiveRecord
     public function getJuego()
     {
         return $this->hasOne(Juegos::className(), ['id' => 'juego_id'])->inverseOf('productos');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVentas()
+    {
+        return $this->hasMany(Ventas::className(), ['producto_id' => 'id'])->inverseOf('producto');
     }
 }

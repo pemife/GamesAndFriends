@@ -176,4 +176,14 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         }
         return true;
     }
+
+    public function getVentas()
+    {
+        return $this->hasMany(Ventas::className(), ['vendedor_id' => 'id'])->inverseOf('vendedor');
+    }
+
+    public function getCompras()
+    {
+        return $this->hasMany(Ventas::className(), ['comprador_id' => 'id'])->inverseOf('comprador');
+    }
 }
