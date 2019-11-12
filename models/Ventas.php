@@ -34,7 +34,7 @@ class Ventas extends \yii\db\ActiveRecord
         return [
             [['created_at', 'finished_at'], 'safe'],
             [['vendedor_id', 'producto_id', 'precio'], 'required'],
-            [['precio'], 'number'],
+            [['precio'], 'number', 'min' => 0.00, 'max' => 9999.99],
             [['vendedor_id', 'comprador_id', 'producto_id'], 'default', 'value' => null],
             [['vendedor_id', 'comprador_id', 'producto_id'], 'integer'],
             [['producto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Productos::className(), 'targetAttribute' => ['producto_id' => 'id']],
