@@ -1,14 +1,10 @@
 <p align="center">
-    <a href="http://gamesandfriends.herokuapp.com/index.php?r=productos%2Findex" target="_blank">
+    <a href="http://gamesandfriends.herokuapp.com/index.php" target="_blank">
         <img src="https://cdn.iconscout.com/icon/free/png-512/heroku-5-569467.png" height="100px">
     </a>
     <h1 align="center">Games and Friends</h1>
     <br>
 </p>
-
-% Games & Friends
-% José Millán Fernández
-% Curso 2019/20
 
 # Descripción general del proyecto
 
