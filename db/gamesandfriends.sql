@@ -158,6 +158,7 @@ CREATE TABLE ventas
                                     REFERENCES productos(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
+  , precio        NUMERIC(6,2)      NOT NULL
 );
 
 
@@ -199,8 +200,8 @@ VALUES (1,1), (1,3), (1,4),(1,6);
 INSERT INTO juegos_etiquetas (juego_id, etiqueta_id)
 VALUES (2,5), (2,6), (2,8), (2,9), (1,1), (1,2), (1,3), (1,7);
 
-INSERT INTO ventas(created_at, finished_at, vendedor_id, comprador_id, producto_id)
-VALUES (CURRENT_TIMESTAMP, null, 1, null, 1),
-(CURRENT_TIMESTAMP, null, 2, null, 2),
-(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, 3),
-(CURRENT_TIMESTAMP, null, 2, null, 2);
+INSERT INTO ventas(created_at, finished_at, vendedor_id, comprador_id, producto_id, precio)
+VALUES (CURRENT_TIMESTAMP, null, 1, null, 1, 9000.01),
+(CURRENT_TIMESTAMP, null, 2, null, 2, 9000.01),
+(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, 3, 9000.01),
+(CURRENT_TIMESTAMP, null, 2, null, 2, 9000.01);

@@ -20,10 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <table>
+    <table class="table">
       <tr>
         <th>Producto</th>
         <th>Usuario</th>
+        <th>En venta desde</th>
+        <th>Precio 2ª Mano</th>
       </tr>
       <?= ListView::widget([
         'dataProvider' => $dataProvider,
