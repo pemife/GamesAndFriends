@@ -38,7 +38,12 @@ class VentasController extends Controller
     public function actionIndex()
     {
         $searchModel = new VentasSearch();
-        $query = Ventas::find()->where(['finished_at' => null]);
+        if (Yii::$app->user->isGuest) {
+            $query = Ventas::find()->where(['finished_at' => null]);
+        } else {
+            $query = Ventas::find()->where(['finished_at' => null])
+            ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+        }
         $dataProvider = new ActiveDataProvider(['query' => $query]);
         // var_dump($this->listaProductos());
         // exit;
