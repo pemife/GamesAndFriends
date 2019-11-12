@@ -14,8 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?php
 
-      // var_dump(Yii::$app->user->identity->nombre);
-      // exit;
+      // var_dump($listaProductosVenta);
 
     ?>
 
@@ -25,7 +24,9 @@ use yii\widgets\ActiveForm;
     ])->label(false);
     ?>
 
-    <?= $form->field($model, 'producto_id')->dropDownList($listaProductos)->label('Producto a vender') ?>
+    <?= $form->field($model, 'producto_id')->dropDownList($listaProductosVenta)->label('Producto a vender') ?>
+
+    <?= $form->field($model, 'precio') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

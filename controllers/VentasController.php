@@ -80,8 +80,16 @@ class VentasController extends Controller
             return $this->redirect(['ventas/index']);
         }
 
+        // Inserto el primer valor que saldra por defecto
+        $listaProductosVenta['0'] = '';
+
+        // Crea un array asociativo con el id del producto a vender + el nombre
+        foreach ($this->listaProductos() as $producto) {
+            $listaProductosVenta[$producto->id] = $producto->nombre;
+        }
+
         return $this->render('create', [
-            'listaProductos' => $this->listaProductos(),
+            'listaProductosVenta' => $listaProductosVenta,
             'model' => $model,
         ]);
     }
