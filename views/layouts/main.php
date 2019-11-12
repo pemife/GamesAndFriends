@@ -46,9 +46,9 @@ AppAsset::register($this);
             ['label' => 'Tienda', 'url' => ['/productos/index']],
             Yii::$app->user->isGuest ? (
               '<li>'
-              . Html::a('Login', ['site/login'])
+              . Html::a('Login', ['site/login'], ['class' => 'nav-link'])
               . '</li><li>'
-              . Html::a('Registrar', ['usuarios/create'])
+              . Html::a('Registrar', ['usuarios/create'], ['class' => 'nav-link'])
               . '</li>'
             ) : (
               [
