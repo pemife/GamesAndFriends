@@ -37,6 +37,10 @@ class VentasController extends Controller
      */
     public function actionIndex()
     {
+        // La query perfecta seria:
+        // select disticnt on (p.nombre) nombre, v.precio from ventas v join
+        // productos p on v.producto_id=p.id order by p.nombre, v.precio;
+        // Para enseñar de cada juego, la venta mas barata
         $searchModel = new VentasSearch();
         if (Yii::$app->user->isGuest) {
             $query = Ventas::find()->where(['finished_at' => null]);
