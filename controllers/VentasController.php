@@ -58,6 +58,27 @@ class VentasController extends Controller
         ]);
     }
 
+    public function actionMisVentas()
+    {
+        $searchModel = new VentasSearch();
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['index']);
+        }
+        $query = Ventas::find()->where([
+          'finished_at' => null,
+          'vendedor_id' => Yii::$app->user->id,
+        ]);
+
+        $dataProvider = new ActiveDataProvider(['query' => $query]);
+        // var_dump($this->listaProductos());
+        // exit;
+
+        return $this->render('misVentas', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single Ventas model.
      * @param int $id
