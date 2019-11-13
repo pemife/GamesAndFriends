@@ -28,10 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <th>Precio 2ª Mano</th>
         <th>Acciones</th>
       </tr>
-      <?= ListView::widget([
-        'dataProvider' => $dataProvider,
-        'itemView' => '_vistaVentas',
-        ]) ?>
+        <?php foreach ($misVentas as $venta): ?>
+          <tr>
+            <td><?= $venta->producto->nombre ?></td>
+            <td><?= $venta->vendedor->nombre ?></td>
+            <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
+            <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
+            <td><?= //Enlaces a editar y borrar ?></td>
+          </tr>
+        <?php endforeach; ?>
     </table>
 
 

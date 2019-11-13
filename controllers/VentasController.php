@@ -64,18 +64,14 @@ class VentasController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['index']);
         }
-        $query = Ventas::find()->where([
+
+        $misVentas = Ventas::find()->where([
           'finished_at' => null,
           'vendedor_id' => Yii::$app->user->id,
-        ]);
-
-        $dataProvider = new ActiveDataProvider(['query' => $query]);
-        // var_dump($this->listaProductos());
-        // exit;
+        ])->all();
 
         return $this->render('misVentas', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'misVentas' => $misVentas,
         ]);
     }
 
