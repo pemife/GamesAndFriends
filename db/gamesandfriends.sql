@@ -38,7 +38,7 @@ CREATE TABLE productos
   , descripcion   TEXT              NOT NULL
   , precio        NUMERIC(6,2)
   , stock         NUMERIC(5)        NOT NULL
-  , juego_id      BIGINT            REFERENCES juegos(id)
+  , poseedor_id   BIGINT            REFERENCES usuarios(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
 );
@@ -139,6 +139,33 @@ CREATE TABLE juegos_etiquetas
                                        ON UPDATE CASCADE
 );
 
+DROP TABLE IF EXISTS plataformas CASCADE;
+
+CREATE TABLE plataformas
+(
+    id          BIGSERIAL           PRIMARY KEY
+  , nombre      VARCHAR(50)         UNIQUE
+);
+
+DROP TABLE IF EXISTS copias CASCADE;
+
+CREATE TABLE copias
+(
+    id            BIGSERIAL         PRIMARY KEY
+  , juego_id      BIGINT            NOT NULL
+                                    REFERENCES juegos(id)
+                                    ON DELETE NO ACTION
+                                    ON UPDATE CASCADE
+  , poseedor_id   BIGINT            REFERENCES usuarios(id)
+                                    ON DELETE CASCADE
+                                    ON UPDATE CASCADE
+  , clave         VARCHAR(17)
+  , plataforma_id BIGINT            NOT NULL
+                                    REFERENCES plataformas(id)
+                                    ON DELETE NO ACTION
+                                    ON UPDATE CASCADE
+ );
+
 DROP TABLE IF EXISTS ventas CASCADE;
 
 CREATE TABLE ventas
@@ -154,11 +181,18 @@ CREATE TABLE ventas
   , comprador_id  BIGINT            REFERENCES usuarios(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-  , producto_id   BIGINT            NOT NULL
-                                    REFERENCES productos(id)
-                                    ON DELETE CASCADE
+  , producto_id   BIGINT            REFERENCES productos(id)
+                                    ON DELETE NO ACTION
+                                    ON UPDATE CASCADE
+  , copia_id      BIGINT            REFERENCES copias(id)
+                                    ON DELETE NO ACTION
                                     ON UPDATE CASCADE
   , precio        NUMERIC(6,2)      NOT NULL
+    CONSTRAINT ck_alternar_valores_nulos CHECK (
+        (producto_id IS NOT NULL AND copia_id IS NULL)
+        OR
+        (producto_id IS NULL AND copia_id IS NOT NULL)
+    )
 );
 
 
@@ -172,15 +206,11 @@ INSERT INTO juegos (titulo, descripcion, fechaLan, dev)
 VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix Inc.'),
 ('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.');
 
-INSERT INTO productos (nombre, descripcion, precio, stock, juego_id)
-VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', 19.99, 9001, 1),
-('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', 14.99, 9001, 2),
-('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 19.99, 5, null);
+INSERT INTO productos (nombre, descripcion, precio, stock)
+VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 19.99, 5);
 
 INSERT INTO criticas (opinion, created_at, valoracion, usuario_id, producto_id)
-VALUES ('Pues es un juegazo, me encanta', CURRENT_TIMESTAMP, 9, 2, 1),
-('Es algo turbio, pero me gusta, los enemigos son muy raros, tiene su encanto', CURRENT_TIMESTAMP, 9, 2, 2),
-('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 3);
+VALUES ('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 1);
 
 INSERT INTO posts (titulo, created_at, desarrollo, juego_id, usuario_id)
 VALUES ('Primer post', CURRENT_TIMESTAMP, 'Cuando empece el proyecto hice este post, para crear una prueba y aqui se quedó la prueba por ahora, ya la cambiare, pero por ahora, asi se mantendrá.', 2, 2);
@@ -200,8 +230,15 @@ VALUES (1,1), (1,3), (1,4),(1,6);
 INSERT INTO juegos_etiquetas (juego_id, etiqueta_id)
 VALUES (2,5), (2,6), (2,8), (2,9), (1,1), (1,2), (1,3), (1,7);
 
-INSERT INTO ventas(created_at, finished_at, vendedor_id, comprador_id, producto_id, precio)
-VALUES (CURRENT_TIMESTAMP, null, 1, null, 1, 9000.01),
-(CURRENT_TIMESTAMP, null, 2, null, 2, 9000.01),
-(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, 3, 9000.01),
-(CURRENT_TIMESTAMP, null, 2, null, 2, 9000.01);
+INSERT INTO plataformas (nombre)
+VALUES ('PC'),('PlayStation 4'),('Xbox One'),('Nintendo Switch');
+
+INSERT INTO copias (juego_id, poseedor_id, clave, plataforma_id)
+VALUES (1, 2, 'K57F0-PV9M6-8MZ4Y', 1), (2, 2, 'IZM46-23GIN-5IPAN', 4),
+(1, 2, 'KK57W-KKVQF-JMDZC', 4);
+
+INSERT INTO ventas(created_at, finished_at, vendedor_id, comprador_id, producto_id, copia_id, precio)
+VALUES (CURRENT_TIMESTAMP, null, 1, null, 1, null, 9000.01),
+(CURRENT_TIMESTAMP, null, 2, null, null, 2, 9000.01),
+(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, null, 3, 9000.01),
+(CURRENT_TIMESTAMP, null, 2, null, 1, null, 9000.01);
