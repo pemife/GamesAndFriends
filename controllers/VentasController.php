@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Copias;
 use app\models\Productos;
 use app\models\Ventas;
 use app\models\VentasSearch;
@@ -108,14 +109,21 @@ class VentasController extends Controller
 
         // Inserto el primer valor que saldra por defecto
         $listaProductosVenta['0'] = '';
+        $listaCopiasVenta['0'] = '';
 
         // Crea un array asociativo con el id del producto a vender + el nombre
         foreach ($this->listaProductos() as $producto) {
             $listaProductosVenta[$producto->id] = $producto->nombre;
         }
 
+
+        foreach ($this->listaCopiasUsuario() as $copia) {
+            $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
+        }
+
         return $this->render('create', [
             'listaProductosVenta' => $listaProductosVenta,
+            'listaCopiasVenta' => $listaCopiasVenta,
             'model' => $model,
         ]);
     }
@@ -175,6 +183,13 @@ class VentasController extends Controller
         return Productos::find()
             ->select('nombre, id')
             ->indexBy('id')
+            ->all();
+    }
+
+    private function listaCopiasUsuario()
+    {
+        return Copias::find()
+            ->where(['poseedor_id' => Yii::$app->user->id])
             ->all();
     }
 }

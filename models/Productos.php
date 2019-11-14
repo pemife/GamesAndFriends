@@ -12,10 +12,10 @@ use Yii;
  * @property string $descripcion
  * @property string $precio
  * @property string $stock
- * @property int $juego_id
+ * @property int $poseedor_id
  *
  * @property Criticas[] $criticas
- * @property Juegos $juego
+ * @property Usuarios $poseedor
  * @property Ventas[] $ventas
  */
 class Productos extends \yii\db\ActiveRecord
@@ -37,11 +37,11 @@ class Productos extends \yii\db\ActiveRecord
             [['nombre', 'descripcion', 'stock'], 'required'],
             [['descripcion'], 'string'],
             [['precio', 'stock'], 'number'],
-            [['juego_id'], 'default', 'value' => null],
-            [['juego_id'], 'integer'],
+            [['poseedor_id'], 'default', 'value' => null],
+            [['poseedor_id'], 'integer'],
             [['nombre'], 'string', 'max' => 255],
             [['nombre'], 'unique'],
-            [['juego_id'], 'exist', 'skipOnError' => true, 'targetClass' => Juegos::className(), 'targetAttribute' => ['juego_id' => 'id']],
+            [['poseedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['poseedor_id' => 'id']],
         ];
     }
 
@@ -56,7 +56,7 @@ class Productos extends \yii\db\ActiveRecord
             'descripcion' => 'Descripcion',
             'precio' => 'Precio',
             'stock' => 'Stock',
-            'juego_id' => 'Juego ID',
+            'poseedor_id' => 'Poseedor ID',
         ];
     }
 
@@ -71,9 +71,9 @@ class Productos extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getJuego()
+    public function getPoseedor()
     {
-        return $this->hasOne(Juegos::className(), ['id' => 'juego_id'])->inverseOf('productos');
+        return $this->hasOne(Usuarios::className(), ['id' => 'poseedor_id'])->inverseOf('productos');
     }
 
     /**
