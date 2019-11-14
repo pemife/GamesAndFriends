@@ -17,7 +17,7 @@ class ProductosSearch extends Productos
     public function rules()
     {
         return [
-            [['id', 'juego_id'], 'integer'],
+            [['id', 'poseedor_id'], 'integer'],
             [['nombre', 'descripcion'], 'safe'],
             [['precio', 'stock'], 'number'],
         ];
@@ -62,7 +62,7 @@ class ProductosSearch extends Productos
             'id' => $this->id,
             'precio' => $this->precio,
             'stock' => $this->stock,
-            'juego_id' => $this->juego_id,
+            'poseedor_id' => $this->poseedor_id,
         ]);
 
         $query->andFilterWhere(['ilike', 'nombre', $this->nombre])

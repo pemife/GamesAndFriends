@@ -17,8 +17,9 @@ class VentasSearch extends Ventas
     public function rules()
     {
         return [
-            [['id', 'vendedor_id', 'comprador_id', 'producto_id'], 'integer'],
+            [['id', 'vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'integer'],
             [['created_at', 'finished_at'], 'safe'],
+            [['precio'], 'number'],
         ];
     }
 
@@ -64,6 +65,8 @@ class VentasSearch extends Ventas
             'vendedor_id' => $this->vendedor_id,
             'comprador_id' => $this->comprador_id,
             'producto_id' => $this->producto_id,
+            'copia_id' => $this->copia_id,
+            'precio' => $this->precio,
         ]);
 
         return $dataProvider;

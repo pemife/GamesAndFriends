@@ -18,7 +18,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'precio')->textInput() ?>
 
-    <?= $form->field($model, 'juego_id')->textInput() ?>
+    <?= $form->field($model, 'stock')->textInput() ?>
+
+    <?= $form->field($model, 'poseedor_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

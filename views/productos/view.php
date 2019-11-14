@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion:ntext',
             'precio',
             'stock',
-            'juego_id',
+            'poseedor_id',
         ],
     ]) ?>
 

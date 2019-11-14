@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_creaVenta', [
         'listaProductosVenta' => $listaProductosVenta,
+        'listaCopiasVenta' => $listaCopiasVenta,
         'model' => $model,
     ]) ?>
 

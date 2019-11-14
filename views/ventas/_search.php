@@ -27,6 +27,10 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'producto_id') ?>
 
+    <?php // echo $form->field($model, 'copia_id') ?>
+
+    <?php // echo $form->field($model, 'precio') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>

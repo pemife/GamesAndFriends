@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ListView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\VentasSearch */
@@ -15,23 +15,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Crear venta', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Ventas', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php //var_dump(Yii::$app->user->id) ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <table class="table">
-      <tr>
-        <th>Producto</th>
-        <th>Usuario</th>
-        <th>En venta desde</th>
-        <th>Precio 2ª Mano</th>
-      </tr>
-      <?= ListView::widget([
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'itemView' => '_vistaVentas',
-        ]) ?>
-    </table>
+        'filterModel' => $searchModel,
+        'columns' => [
+            'created_at',
+            'finished_at',
+            'vendedor.nombre',
+            'comprador_id',
+            'producto.nombre',
+            'copia.juego.titulo',
+            'precio',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 
 
 </div>
