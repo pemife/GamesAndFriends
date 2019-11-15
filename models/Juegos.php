@@ -77,4 +77,12 @@ class Juegos extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Productos::className(), ['juego_id' => 'id'])->inverseOf('juego');
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCopias()
+    {
+        return $this->hasMany(Copias::className(), ['juego_id' => 'id'])->inverseOf('juego');
+    }
 }

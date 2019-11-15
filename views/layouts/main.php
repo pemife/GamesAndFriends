@@ -50,19 +50,19 @@ AppAsset::register($this);
               . '</li><li>'
               . Html::a('Registrar', ['usuarios/create'], ['class' => 'nav-link'])
               . '</li>'
-            ) : (
-              [
-                'label' => Yii::$app->user->identity->nombre,
-                'items' => [
-                 ['label' => 'Modificar perfil', 'url' => Url::to(['usuarios/update', 'id' => Yii::$app->user->id])],
-                 Html::beginForm(['site/logout'], 'post')
-                 . Html::submitButton(
-                    '&nbsp;&nbsp;Logout (' . Yii::$app->user->identity->nombre . ')',
-                    ['class' => 'btn btn-link logout'])
-                 . Html::endForm()
-                ],
-              ]
-            )
+            ) : 
+                ['label' => 'Mis ventas', 'url' => ['/ventas/mis-ventas', 'u' => Yii::$app->user->id]],
+                [
+                    'label' => Yii::$app->user->identity->nombre,
+                    'items' => [
+                     ['label' => 'Modificar perfil', 'url' => Url::to(['usuarios/update', 'id' => Yii::$app->user->id])],
+                     Html::beginForm(['site/logout'], 'post')
+                     . Html::submitButton(
+                        '&nbsp;&nbsp;Logout (' . Yii::$app->user->identity->nombre . ')',
+                        ['class' => 'btn btn-link logout'])
+                     . Html::endForm()
+                    ],
+                ]
         ],
     ]);
     NavBar::end();

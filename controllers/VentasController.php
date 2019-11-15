@@ -59,23 +59,6 @@ class VentasController extends Controller
         ]);
     }
 
-    public function actionMisVentas()
-    {
-        $searchModel = new VentasSearch();
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['index']);
-        }
-
-        $misVentas = Ventas::find()->where([
-          'finished_at' => null,
-          'vendedor_id' => Yii::$app->user->id,
-        ])->all();
-
-        return $this->render('misVentas', [
-            'misVentas' => $misVentas,
-        ]);
-    }
-
     /**
      * Displays a single Ventas model.
      * @param int $id
@@ -98,7 +81,14 @@ class VentasController extends Controller
     {
         $model = new Ventas();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->producto_id === '0') {
+                $model->producto_id = null;
+            }
+            if ($model->copia_id === '0') {
+                $model->copia_id = null;
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -108,8 +98,8 @@ class VentasController extends Controller
         }
 
         // Inserto el primer valor que saldra por defecto
-        $listaProductosVenta['0'] = '';
-        $listaCopiasVenta['0'] = '';
+        $listaProductosVenta['0'] = null;
+        $listaCopiasVenta['0'] = null;
 
         // Crea un array asociativo con el id del producto a vender + el nombre
         foreach ($this->listaProductos() as $producto) {
@@ -176,6 +166,28 @@ class VentasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionMisVentas($u)
+    {
+        $searchModel = new VentasSearch();
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->user->id == $u) {
+            $misVentas = Ventas::find()->where([
+                'finished_at' => null,
+                'vendedor_id' => Yii::$app->user->id,
+                ])->with('producto', 'copia')->all();
+
+            return $this->render('misVentas', [
+                    'misVentas' => $misVentas,
+                ]);
+        }
+
+        Yii::$app->session->setFlash('error', 'No puedes acceder a las ventas de otra persona!');
+        $this->goBack();
     }
 
     private function listaProductos()

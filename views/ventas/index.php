@@ -22,17 +22,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
-            'created_at',
-            'finished_at',
-            'vendedor.nombre',
-            'comprador_id',
+            [
+                'label' => 'Desde',
+                'value' => 'created_at',
+                'format' => 'relativeTime',
+            ],
+            [
+                'label' => 'Vendedor',
+                'value' => 'vendedor.nombre',
+            ],
             'producto.nombre',
             'copia.juego.titulo',
-            'precio',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'precio:currency',
         ],
     ]); ?>
 

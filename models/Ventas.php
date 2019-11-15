@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "ventas".
  *
@@ -41,9 +39,11 @@ class Ventas extends \yii\db\ActiveRecord
             [['vendedor_id', 'precio'], 'required'],
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'default', 'value' => null],
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'integer'],
-            [['precio'], 'number'],
-            [['copia_id'], 'exist', 'skipOnError' => true, 'targetClass' => Copias::className(), 'targetAttribute' => ['copia_id' => 'id']],
-            [['producto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Productos::className(), 'targetAttribute' => ['producto_id' => 'id']],
+            [['precio'], 'number', 'max' => '9999.99'],
+            [['copia_id', 'producto_id'], 'safe', 'when' => function ($model) {
+                // var_dump($model);
+                // exit;
+            }],
             [['vendedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['vendedor_id' => 'id']],
             [['comprador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['comprador_id' => 'id']],
         ];
