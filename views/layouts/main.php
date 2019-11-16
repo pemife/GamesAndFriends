@@ -29,6 +29,11 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
+    $usuarioNombre = '';
+    if(!Yii::$app->user->isGuest){
+        $usuarioNombre = Yii::$app->user->identity->nombre;
+    }
+
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -44,25 +49,20 @@ AppAsset::register($this);
         'items' => [
             ['label' => '2ª Mano', 'url' => ['/ventas/index']],
             ['label' => 'Tienda', 'url' => ['/productos/index']],
-            Yii::$app->user->isGuest ? (
-              '<li>'
-              . Html::a('Login', ['site/login'], ['class' => 'nav-link'])
-              . '</li><li>'
-              . Html::a('Registrar', ['usuarios/create'], ['class' => 'nav-link'])
-              . '</li>'
-            ) : 
-                ['label' => 'Mis ventas', 'url' => ['/ventas/mis-ventas', 'u' => Yii::$app->user->id]],
-                [
-                    'label' => Yii::$app->user->identity->nombre,
-                    'items' => [
-                     ['label' => 'Modificar perfil', 'url' => Url::to(['usuarios/update', 'id' => Yii::$app->user->id])],
-                     Html::beginForm(['site/logout'], 'post')
-                     . Html::submitButton(
-                        '&nbsp;&nbsp;Logout (' . Yii::$app->user->identity->nombre . ')',
-                        ['class' => 'btn btn-link logout'])
-                     . Html::endForm()
-                    ],
-                ]
+            ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
+            ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
+            ['label' => 'Mis Ventas', 'url' => ['/usuarios/create'], 'visible' => !Yii::$app->user->isGuest],
+            [
+                'label' => $usuarioNombre,
+                'items' => [
+                 ['label' => 'Modificar perfil', 'url' => Url::to(['usuarios/update', 'id' => Yii::$app->user->id])],
+                 Html::beginForm(['site/logout'], 'post')
+                 . Html::submitButton(
+                    '&nbsp;&nbsp;Logout (' . $usuarioNombre . ')',
+                    ['class' => 'btn btn-link logout'])
+                 . Html::endForm()],
+                 'visible' => !Yii::$app->user->isGuest
+            ]
         ],
     ]);
     NavBar::end();
