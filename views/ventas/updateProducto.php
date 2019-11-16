@@ -23,11 +23,7 @@ $this->params['breadcrumbs'][] = 'Actualizar';
     ->label('', ['visible' => false])
     ?>
 
-    <?= $form->field($model, 'vendedor_id')->textInput() ?>
-
-    <?= $form->field($model, 'comprador_id')->textInput() ?>
-
-    <?= $form->field($model, 'producto_id')->textInput() ?>
+    <?= $form->field($model, 'producto_id')->dropDownList($listaProductosVenta) ?>
 
     <?= $form->field($model, 'precio')->textInput() ?>
 

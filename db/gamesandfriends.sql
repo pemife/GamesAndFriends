@@ -206,8 +206,8 @@ INSERT INTO juegos (titulo, descripcion, fechaLan, dev)
 VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix Inc.'),
 ('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.');
 
-INSERT INTO productos (nombre, descripcion, precio, stock)
-VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 19.99, 5);
+INSERT INTO productos (nombre, descripcion, precio, stock, poseedor_id)
+VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 19.99, 5, 2);
 
 INSERT INTO criticas (opinion, created_at, valoracion, usuario_id, producto_id)
 VALUES ('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 1);
