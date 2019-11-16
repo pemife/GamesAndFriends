@@ -30,8 +30,10 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     $usuarioNombre = '';
+    $usuarioId = '';
     if(!Yii::$app->user->isGuest){
         $usuarioNombre = Yii::$app->user->identity->nombre;
+        $usuarioId = Yii::$app->user->identity->id;
     }
 
     NavBar::begin([
@@ -51,7 +53,7 @@ AppAsset::register($this);
             ['label' => 'Tienda', 'url' => ['/productos/index']],
             ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
-            ['label' => 'Mis Ventas', 'url' => ['/usuarios/create'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Mis Ventas', 'url' => ['/ventas/mis-ventas', 'u' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
             [
                 'label' => $usuarioNombre,
                 'items' => [
