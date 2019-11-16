@@ -23,8 +23,6 @@ $this->params['breadcrumbs'][] = 'Actualizar';
     ->label('', ['visible' => false])
     ?>
 
-    <?= $form->field($model, 'finished_at')->textInput() ?>
-
     <?= $form->field($model, 'vendedor_id')->textInput() ?>
 
     <?= $form->field($model, 'comprador_id')->textInput() ?>
