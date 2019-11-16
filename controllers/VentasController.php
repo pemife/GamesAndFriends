@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Copias;
 use app\models\Productos;
 use app\models\Ventas;
 use app\models\VentasSearch;
@@ -37,10 +38,19 @@ class VentasController extends Controller
      */
     public function actionIndex()
     {
+        // La query perfecta seria:
+        // select disticnt on (p.nombre) nombre, v.precio from ventas v join
+        // productos p on v.producto_id=p.id order by p.nombre, v.precio;
+        // Para enseñar de cada juego, la venta mas barata
         $searchModel = new VentasSearch();
-        $query = Ventas::find()->where(['finished_at' => null]);
+        if (Yii::$app->user->isGuest) {
+            $query = Ventas::find()->where(['finished_at' => null]);
+        } else {
+            $query = Ventas::find()->where(['finished_at' => null])
+            ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+        }
         $dataProvider = new ActiveDataProvider(['query' => $query]);
-        // var_dump($this->listaProductos());
+        // var_dump($this->listaProductosUsuario());
         // exit;
 
         return $this->render('index', [
@@ -71,7 +81,14 @@ class VentasController extends Controller
     {
         $model = new Ventas();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->producto_id === '0') {
+                $model->producto_id = null;
+            }
+            if ($model->copia_id === '0') {
+                $model->copia_id = null;
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -81,15 +98,22 @@ class VentasController extends Controller
         }
 
         // Inserto el primer valor que saldra por defecto
-        $listaProductosVenta['0'] = '';
+        $listaProductosVenta['0'] = null;
+        $listaCopiasVenta['0'] = null;
 
         // Crea un array asociativo con el id del producto a vender + el nombre
-        foreach ($this->listaProductos() as $producto) {
+        foreach ($this->listaProductosUsuario() as $producto) {
             $listaProductosVenta[$producto->id] = $producto->nombre;
+        }
+
+
+        foreach ($this->listaCopiasUsuario() as $copia) {
+            $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
         }
 
         return $this->render('create', [
             'listaProductosVenta' => $listaProductosVenta,
+            'listaCopiasVenta' => $listaCopiasVenta,
             'model' => $model,
         ]);
     }
@@ -109,9 +133,28 @@ class VentasController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        if ($model->producto === null) {
+            $listaCopiasVenta['0'] = null;
+            foreach ($this->listaCopiasUsuario() as $copia) {
+                $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
+            }
+            return $this->render('updateCopia', [
+                'listaCopiasVenta' => $listaCopiasVenta,
+                'model' => $model,
+            ]);
+        } elseif ($model->copia === null) {
+            $listaProductosVenta['0'] = null;
+            foreach ($this->listaProductosUsuario() as $producto) {
+                $listaProductosVenta[$producto->id] = $producto->nombre;
+            }
+            return $this->render('updateProducto', [
+                'listaProductosVenta' => $listaProductosVenta,
+                'model' => $model,
+            ]);
+        }
+
+        Yii::$app->session->setFlash('error', 'No se ha actualizado la puesta en venta');
+        return $this->redirect(['index']);
     }
 
     /**
@@ -144,10 +187,41 @@ class VentasController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    private function listaProductos()
+    public function actionMisVentas($u)
+    {
+        $searchModel = new VentasSearch();
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->user->id == $u) {
+            $misVentas = Ventas::find()->where([
+                'finished_at' => null,
+                'vendedor_id' => Yii::$app->user->id,
+                ])->with('producto', 'copia')->all();
+
+            return $this->render('misVentas', [
+                    'misVentas' => $misVentas,
+                ]);
+        }
+
+        Yii::$app->session->setFlash('error', 'No puedes acceder a las ventas de otra persona!');
+        $this->goBack();
+    }
+
+    private function listaProductosUsuario()
     {
         return Productos::find()
             ->select('nombre, id')
+            ->indexBy('id')
+            ->where(['poseedor_id' => Yii::$app->user->id])
+            ->all();
+    }
+
+    private function listaCopiasUsuario()
+    {
+        return Copias::find()
+            ->where(['poseedor_id' => Yii::$app->user->id])
             ->indexBy('id')
             ->all();
     }

@@ -29,6 +29,13 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
+    $usuarioNombre = '';
+    $usuarioId = '';
+    if(!Yii::$app->user->isGuest){
+        $usuarioNombre = Yii::$app->user->identity->nombre;
+        $usuarioId = Yii::$app->user->identity->id;
+    }
+
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -44,25 +51,20 @@ AppAsset::register($this);
         'items' => [
             ['label' => '2ª Mano', 'url' => ['/ventas/index']],
             ['label' => 'Tienda', 'url' => ['/productos/index']],
-            Yii::$app->user->isGuest ? (
-              '<li>'
-              . Html::a('Login', ['site/login'])
-              . '</li><li>'
-              . Html::a('Registrar', ['usuarios/create'])
-              . '</li>'
-            ) : (
-              [
-                'label' => Yii::$app->user->identity->nombre,
+            ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
+            ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
+            ['label' => 'Mis Ventas', 'url' => ['/ventas/mis-ventas', 'u' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
+            [
+                'label' => $usuarioNombre,
                 'items' => [
                  ['label' => 'Modificar perfil', 'url' => Url::to(['usuarios/update', 'id' => Yii::$app->user->id])],
                  Html::beginForm(['site/logout'], 'post')
                  . Html::submitButton(
-                    '&nbsp;&nbsp;Logout (' . Yii::$app->user->identity->nombre . ')',
+                    '&nbsp;&nbsp;Logout (' . $usuarioNombre . ')',
                     ['class' => 'btn btn-link logout'])
-                 . Html::endForm()
-                ],
-              ]
-            )
+                 . Html::endForm()],
+                 'visible' => !Yii::$app->user->isGuest
+            ]
         ],
     ]);
     NavBar::end();

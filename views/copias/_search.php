@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\ProductosSearch */
+/* @var $model app\models\CopiasSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="productos-search">
+<div class="copias-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,15 +17,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'nombre') ?>
+    <?= $form->field($model, 'juego_id') ?>
 
-    <?= $form->field($model, 'descripcion') ?>
+    <?= $form->field($model, 'poseedor_id') ?>
 
-    <?= $form->field($model, 'precio') ?>
+    <?= $form->field($model, 'clave') ?>
 
-    <?= $form->field($model, 'stock') ?>
-
-    <?php // echo $form->field($model, 'poseedor_id') ?>
+    <?= $form->field($model, 'plataforma_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

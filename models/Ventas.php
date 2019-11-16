@@ -11,7 +11,10 @@ namespace app\models;
  * @property int $vendedor_id
  * @property int $comprador_id
  * @property int $producto_id
+ * @property int $copia_id
+ * @property string $precio
  *
+ * @property Copias $copia
  * @property Productos $producto
  * @property Usuarios $vendedor
  * @property Usuarios $comprador
@@ -33,11 +36,17 @@ class Ventas extends \yii\db\ActiveRecord
     {
         return [
             [['created_at', 'finished_at'], 'safe'],
-            [['vendedor_id', 'producto_id', 'precio'], 'required'],
-            [['precio'], 'number', 'min' => 0.00, 'max' => 9999.99],
-            [['vendedor_id', 'comprador_id', 'producto_id'], 'default', 'value' => null],
-            [['vendedor_id', 'comprador_id', 'producto_id'], 'integer'],
-            [['producto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Productos::className(), 'targetAttribute' => ['producto_id' => 'id']],
+            [['vendedor_id', 'precio'], 'required'],
+            [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'default', 'value' => null],
+            [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'integer'],
+            [['precio'], 'number', 'max' => '9999.99'],
+            [['copia_id', 'producto_id'], 'safe', 'when' => function ($model) {
+                var_dump($modelo);
+                exit;
+                return  ($model->copia_id != '0' and $model->producto_id == '0')
+                        or
+                        ($model->copia_id == '0' and $model->producto_id != '0');
+            }],
             [['vendedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['vendedor_id' => 'id']],
             [['comprador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['comprador_id' => 'id']],
         ];
@@ -50,13 +59,22 @@ class Ventas extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'created_at' => 'Creacion',
-            'finished_at' => 'Finalizacion',
+            'created_at' => 'Created At',
+            'finished_at' => 'Finished At',
             'vendedor_id' => 'Vendedor ID',
             'comprador_id' => 'Comprador ID',
             'producto_id' => 'Producto ID',
+            'copia_id' => 'Copia ID',
             'precio' => 'Precio',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCopia()
+    {
+        return $this->hasOne(Copias::className(), ['id' => 'copia_id'])->inverseOf('ventas');
     }
 
     /**

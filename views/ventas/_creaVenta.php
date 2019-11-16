@@ -26,6 +26,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'producto_id')->dropDownList($listaProductosVenta)->label('Producto a vender') ?>
 
+    <?= $form->field($model, 'copia_id')->dropDownList($listaCopiasVenta)->label('Copia a vender') ?>
+
     <?= $form->field($model, 'precio') ?>
 
     <div class="form-group">

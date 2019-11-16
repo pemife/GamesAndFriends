@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\JuegosSearch */
+/* @var $searchModel app\models\CopiasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Juegos';
+$this->title = 'Copias';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="juegos-index">
+<div class="copias-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Juegos', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Copias', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -24,12 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'titulo',
-            'descripcion:ntext',
-            'fechalan',
-            'dev',
+            'juego_id',
+            'poseedor_id',
+            'clave',
+            'plataforma_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

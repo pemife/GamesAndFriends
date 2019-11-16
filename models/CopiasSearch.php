@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Productos;
+use app\models\Copias;
 
 /**
- * ProductosSearch represents the model behind the search form of `app\models\Productos`.
+ * CopiasSearch represents the model behind the search form of `app\models\Copias`.
  */
-class ProductosSearch extends Productos
+class CopiasSearch extends Copias
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,8 @@ class ProductosSearch extends Productos
     public function rules()
     {
         return [
-            [['id', 'poseedor_id'], 'integer'],
-            [['nombre', 'descripcion'], 'safe'],
-            [['precio', 'stock'], 'number'],
+            [['id', 'juego_id', 'poseedor_id', 'plataforma_id'], 'integer'],
+            [['clave'], 'safe'],
         ];
     }
 
@@ -41,7 +40,7 @@ class ProductosSearch extends Productos
      */
     public function search($params)
     {
-        $query = Productos::find();
+        $query = Copias::find();
 
         // add conditions that should always apply here
 
@@ -60,13 +59,12 @@ class ProductosSearch extends Productos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'precio' => $this->precio,
-            'stock' => $this->stock,
+            'juego_id' => $this->juego_id,
             'poseedor_id' => $this->poseedor_id,
+            'plataforma_id' => $this->plataforma_id,
         ]);
 
-        $query->andFilterWhere(['ilike', 'nombre', $this->nombre])
-            ->andFilterWhere(['ilike', 'descripcion', $this->descripcion]);
+        $query->andFilterWhere(['ilike', 'clave', $this->clave]);
 
         return $dataProvider;
     }
