@@ -112,7 +112,7 @@ class VentasController extends Controller
         }
 
         return $this->render('create', [
-            'listaProductosUsuarioVenta' => $listaProductosVenta,
+            'listaProductosVenta' => $listaProductosVenta,
             'listaCopiasVenta' => $listaCopiasVenta,
             'model' => $model,
         ]);
@@ -128,6 +128,10 @@ class VentasController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
 
         if ($model->producto === null) {
             $listaCopiasVenta['0'] = null;
@@ -147,10 +151,6 @@ class VentasController extends Controller
                 'listaProductosVenta' => $listaProductosVenta,
                 'model' => $model,
             ]);
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         Yii::$app->session->setFlash('error', 'No se ha actualizado la puesta en venta');

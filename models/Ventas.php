@@ -41,8 +41,11 @@ class Ventas extends \yii\db\ActiveRecord
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'integer'],
             [['precio'], 'number', 'max' => '9999.99'],
             [['copia_id', 'producto_id'], 'safe', 'when' => function ($model) {
-                // var_dump($model);
-                // exit;
+                var_dump($modelo);
+                exit;
+                return  ($model->copia_id != '0' and $model->producto_id == '0')
+                        or
+                        ($model->copia_id == '0' and $model->producto_id != '0');
             }],
             [['vendedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['vendedor_id' => 'id']],
             [['comprador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['comprador_id' => 'id']],

@@ -40,7 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
             <td>
                 <?= Html::a('Editar', ['/ventas/update', 'id' => $venta->id], ['class' => 'btn btn-info']) ?>
-                <?= Html::a('Editar', ['/ventas/delete', 'id' => $venta->id], ['class' => 'btn btn-danger']) ?>
+                <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
+                      'class' => 'btn btn-danger',
+                      'data' => [
+                          'confirm' => '¿Seguro que quieres retirar esta copia?',
+                          'method' => 'post',
+                      ],
+                  ]) ?>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -70,7 +76,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
             <td>
                 <?= Html::a('Editar', ['/ventas/update', 'id' => $venta->id], ['class' => 'btn btn-info']) ?>
-                <?= Html::a('Editar', ['/ventas/delete', 'id' => $venta->id], ['class' => 'btn btn-danger']) ?>
+                <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
+                      'class' => 'btn btn-danger',
+                      'data' => [
+                          'confirm' => '¿Seguro que quieres retirar este producto?',
+                          'method' => 'post',
+                      ],
+                  ]) ?>
             </td>
           </tr>
         <?php endforeach; ?>
