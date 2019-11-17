@@ -40,17 +40,36 @@ class Ventas extends \yii\db\ActiveRecord
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'default', 'value' => null],
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'integer'],
             [['precio'], 'number', 'max' => '9999.99'],
-            [['copia_id', 'producto_id'], 'safe', 'when' => function ($model) {
-                var_dump($modelo);
-                exit;
-                return  ($model->copia_id != '0' and $model->producto_id == '0')
-                        or
-                        ($model->copia_id == '0' and $model->producto_id != '0');
+            ['producto_id', 'required', 'when' => function ($model) {
+                return empty($model->copia_id);
             }],
+            ['copia_id', 'required', 'when' => function ($model) {
+                return empty($model->producto_id);
+            }],
+            [['copia_id', 'producto_id'], 'validarCopiaProducto'],
             [['vendedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['vendedor_id' => 'id']],
             [['comprador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['comprador_id' => 'id']],
         ];
     }
+
+    public function validarCopiaProducto($atributo, $params)
+    {
+        if (empty($this->copia_id) && empty($this->producto_id)) {
+            $this->addError('copia_id', 'Debes elegir el producto o copia que poner en venta.');
+        } elseif (!empty($this->copia_id) && !empty($this->producto_id)) {
+            $this->addError('copia_id', 'No puedes poner en venta una copia y un producto a la vez.');
+        }
+    }
+
+    //  Funcion que realice como validacion (no es correcto)
+    // function ($model) {
+    //     var_dump($model);
+    //     if (($model->copia_id != '0' and $model->producto_id == '0')
+    //             or
+    //         ($model->copia_id == '0' and $model->producto_id != '0')) {
+    //         $this->addError($copia_id, 'No puedes poner en venta a la vez un producto y una copia.');
+    //     }
+    // }
 
     /**
      * {@inheritdoc}

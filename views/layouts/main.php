@@ -54,6 +54,7 @@ AppAsset::register($this);
             ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Mis Ventas', 'url' => ['/ventas/mis-ventas', 'u' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Perfil', 'url' => ['/usuarios/view', 'id' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
             [
                 'label' => $usuarioNombre,
                 'items' => [
