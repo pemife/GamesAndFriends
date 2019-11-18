@@ -50,8 +50,6 @@ class VentasController extends Controller
             ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
         }
         $dataProvider = new ActiveDataProvider(['query' => $query]);
-        // var_dump($this->listaProductosUsuario());
-        // exit;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -101,15 +99,23 @@ class VentasController extends Controller
         // Inserto el primer valor que saldra por defecto
         $listaProductosVenta['0'] = null;
         $listaCopiasVenta['0'] = null;
+        $puedeVender = false;
 
         // Crea un array asociativo con el id del producto a vender + el nombre
         foreach ($this->listaProductosUsuario() as $producto) {
             $listaProductosVenta[$producto->id] = $producto->nombre;
+            $puedeVender = true;
         }
 
 
         foreach ($this->listaCopiasUsuario() as $copia) {
             $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
+            $puedeVender = true;
+        }
+
+        if (!$puedeVender) {
+            Yii::$app->session->setFlash('error', 'Tu usuario no posee ningun producto o copia!');
+            return $this->redirect(['ventas/index']);
         }
 
         return $this->render('create', [

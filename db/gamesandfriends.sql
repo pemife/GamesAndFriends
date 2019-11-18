@@ -181,14 +181,14 @@ CREATE TABLE ventas
   , comprador_id  BIGINT            REFERENCES usuarios(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-  , producto_id   BIGINT            REFERENCES productos(id)
+  , producto_id   BIGINT            UNIQUE REFERENCES productos(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-  , copia_id      BIGINT            REFERENCES copias(id)
+  , copia_id      BIGINT            UNIQUE REFERENCES copias(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
   , precio        NUMERIC(6,2)      NOT NULL
-    CONSTRAINT ck_alternar_valores_nulos CHECK (
+  , CONSTRAINT ck_alternar_valores_nulos CHECK (
         (producto_id IS NOT NULL AND copia_id IS NULL)
         OR
         (producto_id IS NULL AND copia_id IS NOT NULL)
@@ -204,7 +204,8 @@ VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'admin@aculturese.com'),
 
 INSERT INTO juegos (titulo, descripcion, fechaLan, dev)
 VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix Inc.'),
-('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.');
+('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.'),
+('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve Inc');
 
 INSERT INTO productos (nombre, descripcion, precio, stock, poseedor_id)
 VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 19.99, 5, 2);
@@ -235,10 +236,10 @@ VALUES ('PC'),('PlayStation 4'),('Xbox One'),('Nintendo Switch');
 
 INSERT INTO copias (juego_id, poseedor_id, clave, plataforma_id)
 VALUES (1, 2, 'K57F0-PV9M6-8MZ4Y', 1), (2, 2, 'IZM46-23GIN-5IPAN', 4),
-(1, 2, 'KK57W-KKVQF-JMDZC', 4);
+(1, 2, 'KK57W-KKVQF-JMDZC', 4), (3, 2, 'SDK32-182SJ-12WKS', 1);
 
 INSERT INTO ventas(created_at, finished_at, vendedor_id, comprador_id, producto_id, copia_id, precio)
 VALUES (CURRENT_TIMESTAMP, null, 1, null, 1, null, 9000.01),
 (CURRENT_TIMESTAMP, null, 2, null, null, 2, 9000.01),
 (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, null, 3, 9000.01),
-(CURRENT_TIMESTAMP, null, 2, null, 1, null, 9000.01);
+(CURRENT_TIMESTAMP, null, 2, null, null, 4, 9000.01);

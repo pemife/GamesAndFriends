@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $searchModel app\models\VentasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Mis Ventas';
+$this->title = 'Puesto en venta';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ventas-index">
