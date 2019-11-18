@@ -15,6 +15,7 @@ use yii\widgets\ActiveForm;
     <?php
 
       // var_dump($listaProductosVenta);
+      // var_dump(empty($listaCopiasVenta));
 
     ?>
 
