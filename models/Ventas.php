@@ -46,6 +46,8 @@ class Ventas extends \yii\db\ActiveRecord
             ['copia_id', 'required', 'when' => function ($model) {
                 return empty($model->producto_id);
             }],
+            ['copia_id', 'unique', 'message' => 'Ya tienes esa copia en venta'],
+            ['producto_id', 'unique', 'message' => 'Ya tienes ese producto en venta!'],
             [['copia_id', 'producto_id'], 'validarCopiaProducto'],
             [['vendedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['vendedor_id' => 'id']],
             [['comprador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['comprador_id' => 'id']],
