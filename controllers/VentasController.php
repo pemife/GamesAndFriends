@@ -50,8 +50,6 @@ class VentasController extends Controller
             ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
         }
         $dataProvider = new ActiveDataProvider(['query' => $query]);
-        // var_dump($this->listaProductosUsuario());
-        // exit;
 
         return $this->render('index', [
             'searchModel' => $searchModel,

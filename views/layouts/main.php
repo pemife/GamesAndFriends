@@ -50,10 +50,10 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => '2ª Mano', 'url' => ['/ventas/index']],
-            ['label' => 'Tienda', 'url' => ['/productos/index']],
+            ['label' => 'Productos', 'url' => ['/productos/index']],
             ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
-            ['label' => 'Mis Ventas', 'url' => ['/ventas/mis-ventas', 'u' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Puesto en Venta', 'url' => ['/ventas/mis-ventas', 'u' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
             ['label' => 'Perfil', 'url' => ['/usuarios/view', 'id' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
             [
                 'label' => $usuarioNombre,
