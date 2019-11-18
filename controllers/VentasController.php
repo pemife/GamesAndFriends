@@ -88,8 +88,9 @@ class VentasController extends Controller
             if ($model->copia_id === '0') {
                 $model->copia_id = null;
             }
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         if (Yii::$app->user->isGuest) {
