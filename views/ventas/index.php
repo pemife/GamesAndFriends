@@ -10,6 +10,38 @@ use yii\grid\GridView;
 $this->title = 'En venta';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php
+$js = <<<EOF
+
+$('#busquedaJuegosNombre').keyup(function (){
+  var texto = $('#busquedaJuegosNombre').val();
+  var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
+  $('.juego').each(function (){
+    var nombreJuego = this.attributes.name.value;
+    if(!tituloRegExp.test(nombreJuego)){
+      this.style.display = "none";
+    } else {
+      this.style.display = "";
+    }
+  });
+});
+
+$('#busquedaProductosNombre').keyup(function (){
+  var texto = $('#busquedaProductosNombre').val();
+  var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
+  $('.producto').each(function (){
+    var nombreProducto = this.attributes.name.value;
+    if(!tituloRegExp.test(nombreProducto)){
+      this.style.display = "none";
+    } else {
+      this.style.display = "";
+    }
+  });
+});
+
+EOF;
+$this->registerJs($js);
+?>
 <style media="screen">
     * {
         box-sizing: border-box;
@@ -19,6 +51,14 @@ $this->params['breadcrumbs'][] = $this->title;
         float: left;
         width: 50%;
         padding: 10px;
+    }
+
+    #tablaCopias {
+        background-color: #b5bcc9;
+    }
+
+    #tablaProductos {
+        background-color: #c9bbb5;
     }
 
     .row:after {
@@ -43,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="column">
             <br>
 
-            <input type="text" name="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
+            <input type="text" id="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
 
             <br><br>
 
@@ -51,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <br>
 
-            <table class="table" bgcolor="#b5bcc9">
+            <table class="table" id="tablaCopias">
               <tr>
                 <th>Copia</th>
                 <th>Usuario</th>
@@ -65,8 +105,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             continue;
                         }
                 ?>
-                  <tr>
-                    <td><?= $venta->copia->juego->titulo ? $venta->copia->juego->titulo : null; ?></td>
+                  <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
+                    <td><?= $venta->copia->juego->titulo ?></td>
                     <td><?= $venta->vendedor->nombre ?></td>
                     <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
                     <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
@@ -75,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
                               'class' => 'btn btn-danger',
                               'data' => [
-                                  'confirm' => '¿Seguro que quieres retirar este producto?',
+                                  'confirm' => '¿Seguro que quieres retirar esta copia?',
                                   'method' => 'post',
                               ],
                           ]) ?>
@@ -88,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="column">
             <br>
 
-            <input type="text" name="busquedaProductosNombre" placeholder="Buscar productos por nombre">
+            <input type="text" id="busquedaProductosNombre" placeholder="Buscar productos por nombre">
 
             <br><br>
 
@@ -96,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <br>
 
-            <table class="table" bgcolor="#c9bbb5">
+            <table class="table" id="tablaProductos">
               <tr>
                 <th>Producto</th>
                 <th>Usuario</th>
@@ -110,8 +150,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             continue;
                         }
                 ?>
-                  <tr>
-                    <td><?= $venta->producto->nombre ? $venta->producto->nombre : null; ?></td>
+                  <tr class="producto" name="<?= $venta->producto->nombre ?>">
+                    <td><?= $venta->producto->nombre ?></td>
                     <td><?= $venta->vendedor->nombre ?></td>
                     <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
                     <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
