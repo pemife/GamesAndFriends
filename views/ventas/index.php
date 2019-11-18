@@ -94,6 +94,7 @@ $this->registerJs($js);
             <table class="table" id="tablaCopias">
               <tr>
                 <th>Copia</th>
+                <th>Géneros</th>
                 <th>Usuario</th>
                 <th>En venta desde</th>
                 <th>Precio 2ª Mano</th>
@@ -104,9 +105,17 @@ $this->registerJs($js);
                         if($venta->copia === null){
                             continue;
                         }
+                        // implode(" ,", $venta->copia->juego->etiquetas)
                 ?>
                   <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
                     <td><?= $venta->copia->juego->titulo ?></td>
+                    <td>
+                      <?php
+                        foreach ($venta->copia->juego->etiquetas as $etiqueta) {
+                          echo $etiqueta->nombre . ", ";
+                        }
+                      ?>
+                    </td>
                     <td><?= $venta->vendedor->nombre ?></td>
                     <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
                     <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
