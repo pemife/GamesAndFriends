@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Copias;
+use app\models\Etiquetas;
 use app\models\Productos;
 use app\models\Ventas;
 use app\models\VentasSearch;
@@ -50,10 +51,12 @@ class VentasController extends Controller
             ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
         }
         $dataProvider = new ActiveDataProvider(['query' => $query]);
+        $generos = Etiquetas::find()->orderBy('nombre')->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'generos' => $generos,
         ]);
     }
 

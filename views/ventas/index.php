@@ -39,6 +39,19 @@ $('#busquedaProductosNombre').keyup(function (){
   });
 });
 
+$('#busquedaJuegosGenero').change(function (){
+    var texto = $('#busquedaJuegosGenero option:selected').text();
+    var generoRegExp = new RegExp('.*' + texto + '.*', "i");
+    $('.generos').each(function (){
+      var generosJuego = this.textContent;
+      if(!generoRegExp.test(generosJuego)){
+        this.parentNode.style.display = "none";
+      } else {
+        this.parentNode.style.display = "";
+      }
+    });
+});
+
 EOF;
 $this->registerJs($js);
 ?>
@@ -81,19 +94,26 @@ $this->registerJs($js);
 
     <div class="row">
         <div class="column">
-            <br>
-
-            <input type="text" id="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
-
-            <br><br>
-
             <h1>Juegos</h1>
 
             <br>
 
+            <input type="text" id="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
+            <br>
+            <label for="busquedaJuegosGenero">Filtro generos: </label>
+            <select id="busquedaJuegosGenero">
+                <option disabled selected>-- selecciona genero--</option>
+                <?php foreach ($generos as $genero): ?>
+                    <option value="<?= $genero->id ?>"><?= $genero->nombre ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <br><br>
+
             <table class="table" id="tablaCopias">
               <tr>
                 <th>Copia</th>
+                <th>Géneros</th>
                 <th>Usuario</th>
                 <th>En venta desde</th>
                 <th>Precio 2ª Mano</th>
@@ -107,6 +127,20 @@ $this->registerJs($js);
                 ?>
                   <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
                     <td><?= $venta->copia->juego->titulo ?></td>
+                    <td class="generos">
+                      <?php
+                        $index = 0;
+                        $numeroJuegos = count($venta->copia->juego->etiquetas);
+                        foreach ($venta->copia->juego->etiquetas as $etiqueta) {
+                            if($index == ($numeroJuegos-1)){
+                                echo $etiqueta->nombre;
+                                continue;
+                            }
+                            echo $etiqueta->nombre . ", ";
+                            $index++;
+                        }
+                      ?>
+                    </td>
                     <td><?= $venta->vendedor->nombre ?></td>
                     <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
                     <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
@@ -126,15 +160,13 @@ $this->registerJs($js);
         </div>
 
         <div class="column">
+            <h1>Productos</h1>
+
             <br>
 
             <input type="text" id="busquedaProductosNombre" placeholder="Buscar productos por nombre">
 
-            <br><br>
-
-            <h1>Productos</h1>
-
-            <br>
+            <br><br><br>
 
             <table class="table" id="tablaProductos">
               <tr>
