@@ -181,6 +181,32 @@ class VentasController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionMisVentas($u)
+    {
+        $searchModel = new VentasSearch();
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->user->id == $u) {
+            $misVentas = Ventas::find()->where([
+            'finished_at' => null,
+            'vendedor_id' => Yii::$app->user->id,
+            ])->with('producto', 'copia')->all();
+
+            if (empty($misVentas)) {
+                Yii::$app->session->setFlash('error', 'No tienes ningun producto o copia en venta!');
+            }
+
+            return $this->render('misVentas', [
+              'misVentas' => $misVentas,
+            ]);
+        }
+
+        Yii::$app->session->setFlash('error', 'No puedes acceder a las ventas de otra persona!');
+        $this->goBack();
+    }
+
     /**
      * Finds the Ventas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -195,28 +221,6 @@ class VentasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionMisVentas($u)
-    {
-        $searchModel = new VentasSearch();
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['index']);
-        }
-
-        if (Yii::$app->user->id == $u) {
-            $misVentas = Ventas::find()->where([
-                'finished_at' => null,
-                'vendedor_id' => Yii::$app->user->id,
-                ])->with('producto', 'copia')->all();
-
-            return $this->render('misVentas', [
-                    'misVentas' => $misVentas,
-                ]);
-        }
-
-        Yii::$app->session->setFlash('error', 'No puedes acceder a las ventas de otra persona!');
-        $this->goBack();
     }
 
     private function listaProductosUsuario()

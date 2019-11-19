@@ -7,6 +7,8 @@ use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\Usuarios */
 /* @var $form yii\widgets\ActiveForm */
+
+$model->password = '';
 ?>
 
 <div class="usuarios-form">

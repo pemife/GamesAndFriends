@@ -186,4 +186,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Ventas::className(), ['comprador_id' => 'id'])->inverseOf('comprador');
     }
+
+    public function creaToken()
+    {
+        return Yii::$app->security->generateRandomString(32);
+    }
 }

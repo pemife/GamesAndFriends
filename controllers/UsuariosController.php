@@ -93,8 +93,11 @@ class UsuariosController extends Controller
 
         $model->scenario = Usuarios::SCENARIO_CREATE;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->token = $model->creaToken();
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -113,17 +116,19 @@ class UsuariosController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->scenario = Usuarios::SCENARIO_UPDATE;
+        if ($this->tienePermisos($model)) {
+            $model->scenario = Usuarios::SCENARIO_UPDATE;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('update', [
+              'model' => $model,
+            ]);
         }
-
-        $model->password = '';
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+        Yii::$app->session->setFlash('danger', 'No puedes modificar el perfil de otra persona');
+        return $this->goHome();
     }
 
     /**
@@ -135,9 +140,36 @@ class UsuariosController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        if ($this->tienePermisos($model)) {
+            $model->delete();
+
+            return $this->redirect(['index']);
+        }
+
+        Yii::$app->session->setFlash('danger', 'No puedes borrar el perfil de otra persona');
+        return $this->goHome();
+    }
+
+    public function actionCambioPass($id)
+    {
+        $model = $this->findModel($id);
+        if (Yii::$app->request->post('tokenUsuario') !== $model->token) {
+            // var_dump(Yii::$app->request->post('tokenUsuario'));
+            // exit;
+            Yii::$app->session->setFlash('error', 'Validación incorrecta de usuario');
+            return $this->redirect(['site/login']);
+        }
+        $model->scenario = Usuarios::SCENARIO_UPDATE;
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('info', 'La contraseña se ha guardado correctamente');
+            return $this->redirect(['site/login']);
+        }
+        $model->password = $model->password_repeat = '';
+        return $this->render('cambioPass', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -154,5 +186,10 @@ class UsuariosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function tienePermisos($model)
+    {
+        return Yii::$app->user->id === 1 || Yii::$app->user->id === $model->id;
     }
 }
