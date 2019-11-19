@@ -41,17 +41,13 @@ $('#busquedaProductosNombre').keyup(function (){
 
 $('#busquedaJuegosGenero').change(function (){
     var texto = $('#busquedaJuegosGenero option:selected').text();
-    console.log(this);
-    console.log(texto);
-    var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
-    $('.juego').each(function (){
-      var generosJuego = $('this td');
-      console.log(generosJuego);
-      if(!tituloRegExp.test(generosJuego)){
-        this.style.display = "none";
+    var generoRegExp = new RegExp('.*' + texto + '.*', "i");
+    $('.generos').each(function (){
+      var generosJuego = this.textContent;
+      if(!generoRegExp.test(generosJuego)){
+        this.parentNode.style.display = "none";
       } else {
-        console.log('valida -> ' + this.name.value)
-        this.style.display = "";
+        this.parentNode.style.display = "";
       }
     });
 });
@@ -131,7 +127,7 @@ $this->registerJs($js);
                 ?>
                   <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
                     <td><?= $venta->copia->juego->titulo ?></td>
-                    <td>
+                    <td class="generos">
                       <?php
                         $index = 0;
                         $numeroJuegos = count($venta->copia->juego->etiquetas);

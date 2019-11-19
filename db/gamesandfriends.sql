@@ -229,7 +229,7 @@ INSERT INTO usuarios_etiquetas (usuario_id, etiqueta_id)
 VALUES (1,1), (1,3), (1,4),(1,6);
 
 INSERT INTO juegos_etiquetas (juego_id, etiqueta_id)
-VALUES (2,5), (2,6), (2,8), (2,9), (1,1), (1,2), (1,3), (1,7);
+VALUES (2,5),(2,6),(2,8),(2,9),(1,1),(1,2),(1,3),(1,7),(3,3),(3,7),(3,12),(3,13),(3,14);
 
 INSERT INTO plataformas (nombre)
 VALUES ('PC'),('PlayStation 4'),('Xbox One'),('Nintendo Switch');
