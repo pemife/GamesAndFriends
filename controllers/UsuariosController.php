@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -25,6 +26,30 @@ class UsuariosController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+            'access' => [
+              'class' => AccessControl::classname(),
+              'only' => ['update', 'login', 'logout'],
+              'rules' => [
+                [
+                  'allow' => true,
+                  'actions' => ['update'],
+                  'roles' => ['@'],
+                  /*'matchCallback' => function ($rule, $action) {
+                      return Yii::$app->user->id === 1;
+                  },*/
+                ],
+                [
+                  'allow' => true,
+                  'actions' => ['login'],
+                  'roles' => ['?'],
+                ],
+                [
+                  'allow' => true,
+                  'actions' => ['logout'],
+                  'roles' => ['@'],
+                ],
+              ],
             ],
         ];
     }
