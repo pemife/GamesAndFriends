@@ -39,6 +39,23 @@ $('#busquedaProductosNombre').keyup(function (){
   });
 });
 
+$('#busquedaJuegosGenero').change(function (){
+    var texto = $('#busquedaJuegosGenero option:selected').text();
+    console.log(this);
+    console.log(texto);
+    var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
+    $('.juego').each(function (){
+      var generosJuego = $('this td');
+      console.log(generosJuego);
+      if(!tituloRegExp.test(generosJuego)){
+        this.style.display = "none";
+      } else {
+        console.log('valida -> ' + this.name.value)
+        this.style.display = "";
+      }
+    });
+});
+
 EOF;
 $this->registerJs($js);
 ?>
@@ -81,15 +98,21 @@ $this->registerJs($js);
 
     <div class="row">
         <div class="column">
-            <br>
-
-            <input type="text" id="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
-
-            <br><br>
-
             <h1>Juegos</h1>
 
             <br>
+
+            <input type="text" id="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
+            <br>
+            <label for="busquedaJuegosGenero">Filtro generos: </label>
+            <select id="busquedaJuegosGenero">
+                <option disabled selected>-- selecciona genero--</option>
+                <?php foreach ($generos as $genero): ?>
+                    <option value="<?= $genero->id ?>"><?= $genero->nombre ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <br><br>
 
             <table class="table" id="tablaCopias">
               <tr>
@@ -105,14 +128,20 @@ $this->registerJs($js);
                         if($venta->copia === null){
                             continue;
                         }
-                        // implode(" ,", $venta->copia->juego->etiquetas)
                 ?>
                   <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
                     <td><?= $venta->copia->juego->titulo ?></td>
                     <td>
                       <?php
+                        $index = 0;
+                        $numeroJuegos = count($venta->copia->juego->etiquetas);
                         foreach ($venta->copia->juego->etiquetas as $etiqueta) {
-                          echo $etiqueta->nombre . ", ";
+                            if($index == ($numeroJuegos-1)){
+                                echo $etiqueta->nombre;
+                                continue;
+                            }
+                            echo $etiqueta->nombre . ", ";
+                            $index++;
                         }
                       ?>
                     </td>
@@ -135,15 +164,13 @@ $this->registerJs($js);
         </div>
 
         <div class="column">
+            <h1>Productos</h1>
+
             <br>
 
             <input type="text" id="busquedaProductosNombre" placeholder="Buscar productos por nombre">
 
-            <br><br>
-
-            <h1>Productos</h1>
-
-            <br>
+            <br><br><br>
 
             <table class="table" id="tablaProductos">
               <tr>
