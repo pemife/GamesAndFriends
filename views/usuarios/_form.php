@@ -27,6 +27,7 @@ $model->password = '';
 
     <?= $form->field($model, 'fechanac')->widget(DatePicker::classname(), [
       'options' => ['placeholder' => 'Introduzca su fecha de nacimiento'],
+      'size' => 'sm',
       'pluginOptions' => [
           'autoclose'=> true,
           'format' => 'dd/mm/yyyy'
