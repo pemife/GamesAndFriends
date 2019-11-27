@@ -26,6 +26,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 {
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
+    const SCENARIO_CAMBIOPASS = 'cambioPass';
 
     public $password_repeat;
     /**
@@ -42,13 +43,18 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['nombre', 'password', 'email'], 'required'],
-            [['created_at', 'fechanac'], 'safe'],
+            [['nombre', 'email'], 'required'],
+            [['password'], 'required', 'on' => [self::SCENARIO_CREATE]],
+            [['fechanac'], 'date'],
+            [['fechanac'], 'date', 'format' => 'd/m/y', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_CREATE]],
+            [['fechanac'], 'validaFecha', 'on' => [self::SCENARIO_UPDATE]],
+            [['created_at'], 'safe'],
             [['biografia'], 'string'],
             [['nombre', 'token'], 'string', 'max' => 32],
             [['password'], 'string', 'max' => 60],
             [['password', 'password_repeat', 'email'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE]],
+            [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CAMBIOPASS]],
+            [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_CAMBIOPASS]],
             [['email'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['nombre'], 'unique'],
@@ -165,7 +171,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             if ($this->scenario === self::SCENARIO_CREATE) {
                 goto salto;
             }
-        } elseif ($this->scenario === self::SCENARIO_UPDATE) {
+        } elseif ($this->scenario === self::SCENARIO_UPDATE || $this->scenario === self::SCENARIO_CAMBIOPASS) {
             if ($this->password === '') {
                 $this->password = $this->getOldAttribute('password');
             } else {
@@ -190,5 +196,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function creaToken()
     {
         return Yii::$app->security->generateRandomString(32);
+    }
+
+    public function validaFecha($fecha, $params)
+    {
+        if (date($fecha) >= date('d/m/y')) {
+            $this->addError($fecha, 'No puede ser mayor que hoy');
+        }
     }
 }
