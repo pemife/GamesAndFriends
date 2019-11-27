@@ -24,20 +24,10 @@ $this->params['breadcrumbs'][] = 'Cambiar Contraseña';
 
     <?= $form->field($model, 'email')->hiddenInput(['value' => $model->email])->label(false) ?>
 
-    <?= $form->field($model, 'biografia')->hiddenInput(['value' => $model->biografia])->label(false) ?>
-
-    <?= $form->field($model, 'fechanac')->hiddenInput(['value' => $model->fechanac])->label(false) ?>
-
     <div class="form-group">
-        <?= Html::submitButton('Save', [
-          'class' => 'btn btn-success',
-          'data-params' => [
-            'tokenUsuario' => $model->token,
-          ],
+        <?= Html::submitButton('Guardar', [
+          'class' => 'btn btn-success'
         ]) ?>
-        <?php
-
-        ?>
     </div>
 
     <?php ActiveForm::end(); ?>

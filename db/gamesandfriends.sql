@@ -15,7 +15,7 @@ CREATE TABLE usuarios
   , token       VARCHAR(32)
   , email       VARCHAR(255)  NOT NULL UNIQUE
   , biografia   TEXT
-  , fechaNac    DATE
+  , fechaNac    DATE          CHECK (fechaNac < CURRENT_DATE)
 );
 
 DROP TABLE IF EXISTS juegos CASCADE;

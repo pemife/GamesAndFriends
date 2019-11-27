@@ -119,9 +119,15 @@ class UsuariosController extends Controller
         if ($this->tienePermisos($model)) {
             $model->scenario = Usuarios::SCENARIO_UPDATE;
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post())) {
+                // var_dump($model);
+                // exit;
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
+
+            $model->password = '';
 
             return $this->render('update', [
               'model' => $model,
@@ -155,16 +161,14 @@ class UsuariosController extends Controller
     public function actionCambioPass($id)
     {
         $model = $this->findModel($id);
-        if (Yii::$app->request->post('tokenUsuario') !== $model->token) {
-            // var_dump(Yii::$app->request->post('tokenUsuario'));
-            // exit;
+        if (Yii::$app->user->id !== $model->id) {
             Yii::$app->session->setFlash('error', 'Validación incorrecta de usuario');
             return $this->redirect(['site/login']);
         }
-        $model->scenario = Usuarios::SCENARIO_UPDATE;
+        $model->scenario = Usuarios::SCENARIO_CAMBIOPASS;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('info', 'La contraseña se ha guardado correctamente');
-            return $this->redirect(['site/login']);
+            return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
         }
         $model->password = $model->password_repeat = '';
         return $this->render('cambioPass', [

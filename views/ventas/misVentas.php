@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Crear venta', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Poner en venta Producto/Copia', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <h1>Productos</h1>

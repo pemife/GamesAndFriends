@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\VentasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'En venta';
+$this->title = 'Mercado 2ª Mano';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
@@ -89,7 +89,7 @@ $this->registerJs($js);
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Ventas', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Poner en venta Producto/Copia', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <div class="row">
