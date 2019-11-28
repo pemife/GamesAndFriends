@@ -45,9 +45,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['nombre', 'email'], 'required'],
             [['password'], 'required', 'on' => [self::SCENARIO_CREATE]],
-            [['fechanac'], 'date'],
-            [['fechanac'], 'date', 'format' => 'd/m/y', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_CREATE]],
-            [['fechanac'], 'validaFecha', 'on' => [self::SCENARIO_UPDATE]],
+            [['fechanac'], 'date', 'format' => 'yyyy-mm-dd', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_CREATE]],
+            [['fechanac'], 'validaFecha', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_CREATE]],
             [['created_at'], 'safe'],
             [['biografia'], 'string'],
             [['nombre', 'token'], 'string', 'max' => 32],
@@ -200,7 +199,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function validaFecha($fecha, $params)
     {
-        if (date($fecha) >= date('d/m/y')) {
+        if (strtotime($fecha) >= date('now')) {
             $this->addError($fecha, 'No puede ser mayor que hoy');
         }
     }

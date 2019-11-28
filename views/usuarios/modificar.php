@@ -24,11 +24,25 @@ use kartik\date\DatePicker;
       'size' => 'sm',
       'pluginOptions' => [
           'autoclose'=> true,
-          'format' => 'dd/mm/yyyy'
+          'format' => 'yyyy-mm-dd',
       ]
     ]) ?>
 
-    <?php echo $model->fechanac ?>
+    <?php
+        echo $model->fechanac;
+        echo '<br>';
+        echo date('d-m-y', strtotime($model->fechanac));
+        echo '<br>';
+        echo strtotime($model->fechanac);
+        echo '<br>';
+        echo date('d-m-y', strtotime(date('now')));
+        echo '<br>';
+        if(strtotime($model->fechanac) > date('y-m-d')){
+            echo 'es mayor que la fecha de hoy';
+        } else {
+            echo 'es MENOR que la fecha de hoy';
+        };
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
