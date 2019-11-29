@@ -197,9 +197,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return Yii::$app->security->generateRandomString(32);
     }
 
-    public function validaFecha($fecha, $params)
+    public function validaFecha($fecha)
     {
-        if (strtotime($fecha) >= date('now')) {
+        if (strtotime($this->fechanac) > strtotime(date('Y-m-d'))) {
             $this->addError($fecha, 'No puede ser mayor que hoy');
         }
     }

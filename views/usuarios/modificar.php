@@ -7,6 +7,10 @@ use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\Usuarios */
 /* @var $form yii\widgets\ActiveForm */
+// echo $model->fechanac;
+// echo '<br>' . strtotime($model->fechanac);
+// echo '<br>' . date('Y-m-d');
+// echo '<br>' . strtotime(date('Y-m-d'));
 ?>
 
 <div class="usuarios-form">
@@ -29,19 +33,19 @@ use kartik\date\DatePicker;
     ]) ?>
 
     <?php
-        echo $model->fechanac;
-        echo '<br>';
-        echo date('d-m-y', strtotime($model->fechanac));
-        echo '<br>';
-        echo strtotime($model->fechanac);
-        echo '<br>';
-        echo date('d-m-y', strtotime(date('now')));
-        echo '<br>';
-        if(strtotime($model->fechanac) > date('y-m-d')){
-            echo 'es mayor que la fecha de hoy';
-        } else {
-            echo 'es MENOR que la fecha de hoy';
-        };
+        // echo $model->fechanac;
+        // echo '<br>';
+        // echo strtotime($model->fechanac);
+        // echo '<br>';
+        // echo date('Y-m-d');
+        // echo '<br>';
+        // if(strtotime($model->fechanac) > strtotime(date('Y-m-d'))){
+        //     echo '<p style="color:red;">es <b>mayor</b> que la fecha de hoy</p>';
+        //     echo 'fechaNac: ' . strtotime($model->fechanac) . '<br>ahora: ' . strtotime(date('Y-m-d'));
+        // } else {
+        //     echo '<p style="color:red;">es <b>MENOR</b> que la fecha de hoy</p>';
+        //     echo 'fechaNac: ' . strtotime($model->fechanac) . '<br>ahora: ' . strtotime(date('Y-m-d'));
+        // };
     ?>
 
     <div class="form-group">
