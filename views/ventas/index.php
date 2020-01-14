@@ -9,6 +9,26 @@ use yii\grid\GridView;
 
 $this->title = 'Mercado 2ª Mano';
 $this->params['breadcrumbs'][] = $this->title;
+
+$copiasEnVenta = null;
+foreach ( $dataProvider->getModels() as $venta ){
+  if($venta->copia === null){
+    continue;
+  } else {
+    $copiasEnVenta[] = $venta;
+  }
+}
+
+$productosEnVenta = null;
+foreach ( $dataProvider->getModels() as $venta ){
+  if($venta->producto === null){
+    continue;
+  } else {
+    $productosEnVenta[] = $venta;
+  }
+}
+// var_dump($productosEnVenta);
+// exit;
 ?>
 <?php
 $js = <<<EOF
@@ -50,6 +70,12 @@ $('#busquedaJuegosGenero').change(function (){
         this.parentNode.style.display = "";
       }
     });
+    if ( $("#tablaCopias .juego").filter(":visible").length == 0){
+      $("#trNoHayJuegos").display = "";
+    } else {
+      $("#trNoHayJuegos").display = "none";
+    }
+    alert($("#tablaCopias .juego").filter(":visible").length)
 });
 
 EOF;
@@ -100,9 +126,9 @@ $this->registerJs($js);
 
             <input type="text" id="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
             <br>
-            <label for="busquedaJuegosGenero">Filtro generos: </label>
+            <label for="busquedaJuegosGenero">Filtro géneros: </label>
             <select id="busquedaJuegosGenero">
-                <option disabled selected>-- selecciona genero--</option>
+                <option disabled selected>-- selecciona género--</option>
                 <?php foreach ($generos as $genero): ?>
                     <option value="<?= $genero->id ?>"><?= $genero->nombre ?></option>
                 <?php endforeach; ?>
@@ -119,7 +145,26 @@ $this->registerJs($js);
                 <th>Precio 2ª Mano</th>
                 <th>Acciones</th>
               </tr>
+              <tr id="trNoHayJuegos" style="display: none;">
+                <td colspan="6">
+                  <center>
+                    -- No hay ningun juego de ese género --
+                  </center>
+                </td>
+              </tr>
                 <?php
+                    if (empty($copiasEnVenta)){
+                      ?>
+                      <tr>
+                        <td colspan="6">
+                          <center>
+                            -- No hay ningun juego en venta --
+                          </center>
+                        </td>
+                      </tr>
+                      <?php
+                    } else {
+
                     foreach ($dataProvider->getModels() as $venta):
                         if($venta->copia === null){
                             continue;
@@ -155,7 +200,10 @@ $this->registerJs($js);
                           ]) ?>
                     </td>
                   </tr>
-                <?php endforeach; ?>
+              <?php
+                  endforeach;
+                }
+              ?>
             </table>
         </div>
 
@@ -177,6 +225,17 @@ $this->registerJs($js);
                 <th>Acciones</th>
               </tr>
                 <?php
+                    if (empty($productosEnVenta)){
+                      ?>
+                      <tr>
+                        <td colspan="6">
+                          <center>
+                            -- No hay ningun producto en venta --
+                          </center>
+                        </td>
+                      </tr>
+                      <?php
+                    } else {
                     foreach ($dataProvider->getModels() as $venta):
                         if($venta->producto === null){
                             continue;
@@ -198,7 +257,10 @@ $this->registerJs($js);
                           ]) ?>
                     </td>
                   </tr>
-                <?php endforeach; ?>
+                <?php
+                  endforeach;
+                  }
+                ?>
             </table>
         </div>
     </div>
