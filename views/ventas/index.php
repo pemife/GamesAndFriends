@@ -44,6 +44,11 @@ $('#busquedaJuegosNombre').keyup(function (){
       this.style.display = "";
     }
   });
+  if ( $("#tablaCopias .juego").filter(":visible").length == 0){
+    $("#trNoHayJuegosNombre").show();
+  } else {
+    $("#trNoHayJuegosNombre").hide();
+  }
 });
 
 $('#busquedaProductosNombre').keyup(function (){
@@ -57,6 +62,11 @@ $('#busquedaProductosNombre').keyup(function (){
       this.style.display = "";
     }
   });
+  if ( $("#tablaProductos .producto").filter(":visible").length == 0){
+    $("#trNoHayProductosNombre").show();
+  } else {
+    $("#trNoHayProductosNombre").hide();
+  }
 });
 
 $('#busquedaJuegosGenero').change(function (){
@@ -71,11 +81,10 @@ $('#busquedaJuegosGenero').change(function (){
       }
     });
     if ( $("#tablaCopias .juego").filter(":visible").length == 0){
-      $("#trNoHayJuegos").display = "";
+      $("#trNoHayJuegosGenero").show();
     } else {
-      $("#trNoHayJuegos").display = "none";
+      $("#trNoHayJuegosGenero").hide();
     }
-    alert($("#tablaCopias .juego").filter(":visible").length)
 });
 
 EOF;
@@ -145,10 +154,17 @@ $this->registerJs($js);
                 <th>Precio 2ª Mano</th>
                 <th>Acciones</th>
               </tr>
-              <tr id="trNoHayJuegos" style="display: none;">
+              <tr id="trNoHayJuegosGenero" style="display: none;">
                 <td colspan="6">
                   <center>
                     -- No hay ningun juego de ese género --
+                  </center>
+                </td>
+              </tr>
+              <tr id="trNoHayJuegosNombre" style="display: none;">
+                <td colspan="6">
+                  <center>
+                    -- No hay juegos con ese nombre --
                   </center>
                 </td>
               </tr>
@@ -223,6 +239,13 @@ $this->registerJs($js);
                 <th>En venta desde</th>
                 <th>Precio 2ª Mano</th>
                 <th>Acciones</th>
+              </tr>
+              <tr id="trNoHayProductosNombre">
+                <td colspan="5" style="display: none;">
+                  <center>
+                    -- No hay ningun producto con ese nombre --
+                  </center>
+                </td>
               </tr>
                 <?php
                     if (empty($productosEnVenta)){
