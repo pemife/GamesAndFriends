@@ -87,6 +87,14 @@ $('#busquedaJuegosGenero').change(function (){
     }
 });
 
+$('#busquedaJuegosGenero').focusout(function (){
+    $('#trNoHayJuegosGenero').hide();
+});
+
+$('#busquedaJuegosNombre').focusout(function (){
+    $('#trNoHayJuegosNombre').hide();
+});
+
 EOF;
 $this->registerJs($js);
 ?>
