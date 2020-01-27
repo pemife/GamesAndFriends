@@ -93,80 +93,81 @@ $this->registerJs($js);
     </p>
 
     <div class="row">
-        <div class="column">
-            <h1>Juegos</h1>
+      <div class="col">
+        <h1>Juegos</h1>
+        <div class="col">
+          <h3>Filtros</h3>
+          <label for="busquedaJuegosNombre">Nombre:</label>
+          <input type="text" id="busquedaJuegosNombre">
+          <br>
+          <label for="busquedaJuegosGenero">Géneros: </label>
+          <select id="busquedaJuegosGenero">
 
-            <br>
-
-            <input type="text" id="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
-            <br>
-            <label for="busquedaJuegosGenero">Filtro generos: </label>
-            <select id="busquedaJuegosGenero">
-                <option disabled selected>-- selecciona genero--</option>
-                <?php foreach ($generos as $genero): ?>
-                    <option value="<?= $genero->id ?>"><?= $genero->nombre ?></option>
-                <?php endforeach; ?>
-            </select>
-
-            <br><br>
-
-            <table class="table" id="tablaCopias">
-              <tr>
-                <th>Copia</th>
-                <th>Géneros</th>
-                <th>Usuario</th>
-                <th>En venta desde</th>
-                <th>Precio 2ª Mano</th>
-                <th>Acciones</th>
-              </tr>
-                <?php
-                    foreach ($dataProvider->getModels() as $venta):
-                        if($venta->copia === null){
-                            continue;
-                        }
-                ?>
-                  <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
-                    <td><?= $venta->copia->juego->titulo ?></td>
-                    <td class="generos">
-                      <?php
-                        $index = 0;
-                        $numeroJuegos = count($venta->copia->juego->etiquetas);
-                        foreach ($venta->copia->juego->etiquetas as $etiqueta) {
-                            if($index == ($numeroJuegos-1)){
-                                echo $etiqueta->nombre;
-                                continue;
-                            }
-                            echo $etiqueta->nombre . ", ";
-                            $index++;
-                        }
-                      ?>
-                    </td>
-                    <td><?= $venta->vendedor->nombre ?></td>
-                    <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
-                    <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
-                    <td>
-                        <?= Html::a('Editar', ['/ventas/update', 'id' => $venta->id], ['class' => 'btn btn-info']) ?>
-                        <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
-                              'class' => 'btn btn-danger',
-                              'data' => [
-                                  'confirm' => '¿Seguro que quieres retirar esta copia?',
-                                  'method' => 'post',
-                              ],
-                          ]) ?>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-            </table>
+            <option disabled selected>-- selecciona genero--</option>
+            <?php foreach ($generos as $genero): ?>
+              <option value="<?= $genero->id ?>"><?= $genero->nombre ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
+        <div class="col">
+          <table class="table" id="tablaCopias">
+            <tr>
+              <th>Copia</th>
+              <th>Géneros</th>
+              <th>Usuario</th>
+              <th>En venta desde</th>
+              <th>Precio 2ª Mano</th>
+              <th>Acciones</th>
+            </tr>
+            <?php
+            foreach ($dataProvider->getModels() as $venta):
+              if($venta->copia === null){
+                continue;
+              }
+              ?>
+              <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
+                <td><?= $venta->copia->juego->titulo ?></td>
+                <td class="generos">
+                  <?php
+                  $index = 0;
+                  $numeroJuegos = count($venta->copia->juego->etiquetas);
+                  foreach ($venta->copia->juego->etiquetas as $etiqueta) {
+                    if($index == ($numeroJuegos-1)){
+                      echo $etiqueta->nombre;
+                      continue;
+                    }
+                    echo $etiqueta->nombre . ", ";
+                    $index++;
+                  }
+                  ?>
+                </td>
+                <td><?= $venta->vendedor->nombre ?></td>
+                <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
+                <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
+                <td>
+                  <?= Html::a('Editar', ['/ventas/update', 'id' => $venta->id], ['class' => 'btn btn-info']) ?>
+                  <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
+                  'class' => 'btn btn-danger',
+                  'data' => [
+                  'confirm' => '¿Seguro que quieres retirar esta copia?',
+                  'method' => 'post',
+                  ],
+                  ]) ?>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </table>
+        </div>
+      </div>
 
-        <div class="column">
-            <h1>Productos</h1>
+      <?php /* \Yii::debug($dataProvider) */?>
 
-            <br>
+      <div class="col">
+          <h1>Productos</h1>
 
-            <input type="text" id="busquedaProductosNombre" placeholder="Buscar productos por nombre">
-
-            <br><br><br>
+          <div class="col">
+            <label for="busquedaProductosNombre"></label>
+            <input type="text" id="busquedaProductosNombre">
 
             <table class="table" id="tablaProductos">
               <tr>
@@ -176,31 +177,32 @@ $this->registerJs($js);
                 <th>Precio 2ª Mano</th>
                 <th>Acciones</th>
               </tr>
-                <?php
-                    foreach ($dataProvider->getModels() as $venta):
-                        if($venta->producto === null){
-                            continue;
-                        }
+              <?php
+              foreach ($dataProvider->getModels() as $venta):
+                if($venta->producto === null){
+                  continue;
+                }
                 ?>
-                  <tr class="producto" name="<?= $venta->producto->nombre ?>">
-                    <td><?= $venta->producto->nombre ?></td>
-                    <td><?= $venta->vendedor->nombre ?></td>
-                    <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
-                    <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
-                    <td>
-                        <?= Html::a('Editar', ['/ventas/update', 'id' => $venta->id], ['class' => 'btn btn-info']) ?>
-                        <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
-                              'class' => 'btn btn-danger',
-                              'data' => [
-                                  'confirm' => '¿Seguro que quieres retirar esta copia?',
-                                  'method' => 'post',
-                              ],
-                          ]) ?>
+                <tr class="producto" name="<?= $venta->producto->nombre ?>">
+                  <td><?= $venta->producto->nombre ?></td>
+                  <td><?= $venta->vendedor->nombre ?></td>
+                  <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
+                  <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
+                  <td>
+                    <?= Html::a('Editar', ['/ventas/update', 'id' => $venta->id], ['class' => 'btn btn-info']) ?>
+                    <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
+                      'class' => 'btn btn-danger',
+                      'data' => [
+                        'confirm' => '¿Seguro que quieres retirar esta copia?',
+                        'method' => 'post',
+                      ],
+                      ]) ?>
                     </td>
                   </tr>
                 <?php endforeach; ?>
-            </table>
-        </div>
+              </table>
+          </div>
+      </div>
     </div>
 
 </div>
