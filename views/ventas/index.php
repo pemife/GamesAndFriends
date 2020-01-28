@@ -7,28 +7,8 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\VentasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Mercado 2ª Mano';
+$this->title = 'En venta';
 $this->params['breadcrumbs'][] = $this->title;
-
-$copiasEnVenta = null;
-foreach ( $dataProvider->getModels() as $venta ){
-  if($venta->copia === null){
-    continue;
-  } else {
-    $copiasEnVenta[] = $venta;
-  }
-}
-
-$productosEnVenta = null;
-foreach ( $dataProvider->getModels() as $venta ){
-  if($venta->producto === null){
-    continue;
-  } else {
-    $productosEnVenta[] = $venta;
-  }
-}
-// var_dump($productosEnVenta);
-// exit;
 ?>
 <?php
 $js = <<<EOF
@@ -44,11 +24,6 @@ $('#busquedaJuegosNombre').keyup(function (){
       this.style.display = "";
     }
   });
-  if ( $("#tablaCopias .juego").filter(":visible").length == 0){
-    $("#trNoHayJuegosNombre").show();
-  } else {
-    $("#trNoHayJuegosNombre").hide();
-  }
 });
 
 $('#busquedaProductosNombre').keyup(function (){
@@ -62,11 +37,6 @@ $('#busquedaProductosNombre').keyup(function (){
       this.style.display = "";
     }
   });
-  if ( $("#tablaProductos .producto").filter(":visible").length == 0){
-    $("#trNoHayProductosNombre").show();
-  } else {
-    $("#trNoHayProductosNombre").hide();
-  }
 });
 
 $('#busquedaJuegosGenero').change(function (){
@@ -80,19 +50,6 @@ $('#busquedaJuegosGenero').change(function (){
         this.parentNode.style.display = "";
       }
     });
-    if ( $("#tablaCopias .juego").filter(":visible").length == 0){
-      $("#trNoHayJuegosGenero").show();
-    } else {
-      $("#trNoHayJuegosGenero").hide();
-    }
-});
-
-$('#busquedaJuegosGenero').focusout(function (){
-    $('#trNoHayJuegosGenero').hide();
-});
-
-$('#busquedaJuegosNombre').focusout(function (){
-    $('#trNoHayJuegosNombre').hide();
 });
 
 EOF;
@@ -132,105 +89,10 @@ $this->registerJs($js);
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Poner en venta Producto/Copia', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Ventas', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <div class="row">
-<<<<<<< Updated upstream
-        <div class="column">
-            <h1>Juegos</h1>
-
-            <br>
-
-            <input type="text" id="busquedaJuegosNombre" placeholder="Buscar juegos por nombre">
-            <br>
-            <label for="busquedaJuegosGenero">Filtro géneros: </label>
-            <select id="busquedaJuegosGenero">
-                <option disabled selected>-- selecciona género--</option>
-                <?php foreach ($generos as $genero): ?>
-                    <option value="<?= $genero->id ?>"><?= $genero->nombre ?></option>
-                <?php endforeach; ?>
-            </select>
-
-            <br><br>
-
-            <table class="table" id="tablaCopias">
-              <tr>
-                <th>Copia</th>
-                <th>Géneros</th>
-                <th>Usuario</th>
-                <th>En venta desde</th>
-                <th>Precio 2ª Mano</th>
-                <th>Acciones</th>
-              </tr>
-              <tr id="trNoHayJuegosGenero" style="display: none;">
-                <td colspan="6">
-                  <center>
-                    -- No hay ningun juego de ese género --
-                  </center>
-                </td>
-              </tr>
-              <tr id="trNoHayJuegosNombre" style="display: none;">
-                <td colspan="6">
-                  <center>
-                    -- No hay juegos con ese nombre --
-                  </center>
-                </td>
-              </tr>
-                <?php
-                    if (empty($copiasEnVenta)){
-                      ?>
-                      <tr>
-                        <td colspan="6">
-                          <center>
-                            -- No hay ningun juego en venta --
-                          </center>
-                        </td>
-                      </tr>
-                      <?php
-                    } else {
-
-                    foreach ($dataProvider->getModels() as $venta):
-                        if($venta->copia === null){
-                            continue;
-                        }
-                ?>
-                  <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
-                    <td><?= $venta->copia->juego->titulo ?></td>
-                    <td class="generos">
-                      <?php
-                        $index = 0;
-                        $numeroJuegos = count($venta->copia->juego->etiquetas);
-                        foreach ($venta->copia->juego->etiquetas as $etiqueta) {
-                            if($index == ($numeroJuegos-1)){
-                                echo $etiqueta->nombre;
-                                continue;
-                            }
-                            echo $etiqueta->nombre . ", ";
-                            $index++;
-                        }
-                      ?>
-                    </td>
-                    <td><?= $venta->vendedor->nombre ?></td>
-                    <td><?= Yii::$app->formatter->asRelativeTime($venta->created_at) ?></td>
-                    <td><?= Yii::$app->formatter->asCurrency($venta->precio) ?></td>
-                    <td>
-                        <?= Html::a('Editar', ['/ventas/update', 'id' => $venta->id], ['class' => 'btn btn-info']) ?>
-                        <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
-                              'class' => 'btn btn-danger',
-                              'data' => [
-                                  'confirm' => '¿Seguro que quieres retirar esta copia?',
-                                  'method' => 'post',
-                              ],
-                          ]) ?>
-                    </td>
-                  </tr>
-              <?php
-                  endforeach;
-                }
-              ?>
-            </table>
-=======
       <div class="col">
         <h1>Juegos</h1>
         <div class="col">
@@ -295,7 +157,6 @@ $this->registerJs($js);
               </tr>
             <?php endforeach; ?>
           </table>
->>>>>>> Stashed changes
         </div>
       </div>
 
@@ -316,37 +177,11 @@ $this->registerJs($js);
                 <th>Precio 2ª Mano</th>
                 <th>Acciones</th>
               </tr>
-<<<<<<< Updated upstream
-              <tr id="trNoHayProductosNombre">
-                <td colspan="5" style="display: none;">
-                  <center>
-                    -- No hay ningun producto con ese nombre --
-                  </center>
-                </td>
-              </tr>
-                <?php
-                    if (empty($productosEnVenta)){
-                      ?>
-                      <tr>
-                        <td colspan="6">
-                          <center>
-                            -- No hay ningun producto en venta --
-                          </center>
-                        </td>
-                      </tr>
-                      <?php
-                    } else {
-                    foreach ($dataProvider->getModels() as $venta):
-                        if($venta->producto === null){
-                            continue;
-                        }
-=======
               <?php
               foreach ($dataProvider->getModels() as $venta):
                 if($venta->producto === null){
                   continue;
                 }
->>>>>>> Stashed changes
                 ?>
                 <tr class="producto" name="<?= $venta->producto->nombre ?>">
                   <td><?= $venta->producto->nombre ?></td>
@@ -364,19 +199,10 @@ $this->registerJs($js);
                       ]) ?>
                     </td>
                   </tr>
-<<<<<<< Updated upstream
-                <?php
-                  endforeach;
-                  }
-                ?>
-            </table>
-        </div>
-=======
                 <?php endforeach; ?>
               </table>
           </div>
       </div>
->>>>>>> Stashed changes
     </div>
 
 </div>
