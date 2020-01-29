@@ -52,6 +52,24 @@ $('#busquedaJuegosGenero').change(function (){
     });
 });
 
+/* ESTO ESTA COMENTADO
+function actualizarLista(){
+  $.ajax({
+    method: 'GET',
+    url: '$url2',
+    data: {},
+      success: function(result){
+        if (result) {
+          $('#amigosAjax').html(result);
+        } else {
+          alert('Ha habido un error con la lista de asistentes(2)');
+        }
+      }
+  });
+
+}
+*/
+
 EOF;
 $this->registerJs($js);
 ?>
@@ -149,9 +167,9 @@ $this->registerJs($js);
                   <?= Html::a('Retirar', ['/ventas/delete', 'id' => $venta->id], [
                   'class' => 'btn btn-danger',
                   'data' => [
-                  'confirm' => '¿Seguro que quieres retirar esta copia?',
-                  'method' => 'post',
-                  ],
+                    'confirm' => '¿Seguro que quieres retirar esta copia?',
+                    'method' => 'post',
+                    ],
                   ]) ?>
                 </td>
               </tr>
