@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -9,6 +10,8 @@ use yii\grid\GridView;
 
 $this->title = 'En venta';
 $this->params['breadcrumbs'][] = $this->title;
+
+$url2 = Url::to('filtra-copias');
 ?>
 <?php
 $js = <<<EOF
@@ -53,11 +56,11 @@ $('#busquedaJuegosGenero').change(function (){
 });
 
 /* ESTO ESTA COMENTADO
-function actualizarLista(){
+function actualizarLista(var nombre, var genero){
   $.ajax({
     method: 'GET',
     url: '$url2',
-    data: {},
+    data: {nombre, genero},
       success: function(result){
         if (result) {
           $('#amigosAjax').html(result);
