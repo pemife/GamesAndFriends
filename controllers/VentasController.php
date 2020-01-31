@@ -240,19 +240,18 @@ class VentasController extends Controller
             ->all();
     }
 
-    public function actionFiltraCopias($texto, $genero)
+    public function actionFiltraCopiasNombre($nombre, $genero)
     {
-        // $ventasProvider = new ActiveDataProvider([
-        //     'query' => Ventas::find()
-        //     ->where(['finished_at' => null])
-        //     ->andFilterWhere(['ilike', 'copia.juego.titulo', $texto])
-        //     ->andFilterWhere(['ilike', 'copia.juego.etiquetas']),
-        // ]);
+        $ventasProvider = new ActiveDataProvider([
+            'query' => Ventas::find()
+            ->with('copia.juego')
+            ->where(['finished_at' => null]),
+        ]);
 
-        \Yii::debug($listaCopias);
+        // \Yii::debug($ventasProvider->getModels());
 
         return $this->renderAjax('vistaCopias', [
-          'listaCopias' => $listaCopias,
+          'listaCopias' => $ventasProvider->getModels(),
         ]);
     }
 }

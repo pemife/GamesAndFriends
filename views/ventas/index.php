@@ -11,22 +11,50 @@ use yii\grid\GridView;
 $this->title = 'En venta';
 $this->params['breadcrumbs'][] = $this->title;
 
-$url2 = Url::to('filtra-copias');
+$url2 = Url::to(['filtra-copias']);
 ?>
 <?php
 $js = <<<EOF
 
-$('#busquedaJuegosNombre').keyup(function (){
-  var texto = $('#busquedaJuegosNombre').val();
-  var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
-  $('.juego').each(function (){
-    var nombreJuego = this.attributes.name.value;
-    if(!tituloRegExp.test(nombreJuego)){
-      this.style.display = "none";
-    } else {
-      this.style.display = "";
-    }
+function actualizarLista(nombre, genero){
+  console.log(nombre, "\t", genero);
+
+  $.ajax({
+    method: 'GET',
+    url: '$url2',
+    data: {nombre, genero},
+      success: function(result){
+        if (result) {
+          $('#tablacopias').html(result);
+        } else {
+          alert('No existen Copias con esas caracteristicas');
+        }
+      },
+      error: function(result){
+        // alert(result);
+      }
   });
+
+}
+
+$('#busquedaJuegosNombre').keyup(function (){
+  if (typeof temporizador !== 'undefined') {
+    clearTimeout(temporizador);
+  }
+  var texto = $('#busquedaJuegosNombre').val();
+  var genero = $('#busquedaJuegosGenero option:selected').text();
+  // var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
+
+  temporizador = setTimeout(actualizarLista, 500, texto, genero);
+
+  // $('.juego').each(function (){
+  //   var nombreJuego = this.attributes.name.value;
+  //   if(!tituloRegExp.test(nombreJuego)){
+  //     this.style.display = "none";
+  //   } else {
+  //     this.style.display = "";
+  //   }
+  // });
 });
 
 $('#busquedaProductosNombre').keyup(function (){
@@ -54,24 +82,6 @@ $('#busquedaJuegosGenero').change(function (){
       }
     });
 });
-
-/* ESTO ESTA COMENTADO
-function actualizarLista(var nombre, var genero){
-  $.ajax({
-    method: 'GET',
-    url: '$url2',
-    data: {nombre, genero},
-      success: function(result){
-        if (result) {
-          $('#amigosAjax').html(result);
-        } else {
-          alert('Ha habido un error con la lista de asistentes(2)');
-        }
-      }
-  });
-
-}
-*/
 
 EOF;
 $this->registerJs($js);
@@ -141,6 +151,11 @@ $this->registerJs($js);
               <th>Acciones</th>
             </tr>
             <?php
+            
+            // return $this->renderAjax('vistaCopias', [
+            //   'listaCopias' => $dataProvider->getModels(),
+            // ]);
+
             foreach ($dataProvider->getModels() as $venta):
               if($venta->copia === null){
                 continue;

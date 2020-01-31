@@ -2,6 +2,19 @@
 
 use yii\helpers\Html;
 
+?>
+
+<tr>
+  <th>Copia</th>
+  <th>Géneros</th>
+  <th>Usuario</th>
+  <th>En venta desde</th>
+  <th>Precio 2ª Mano</th>
+  <th>Acciones</th>
+</tr>
+
+<?php
+
 foreach ($listaCopias as $venta):
 ?>
 <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
