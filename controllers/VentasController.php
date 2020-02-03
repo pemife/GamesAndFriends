@@ -240,18 +240,12 @@ class VentasController extends Controller
             ->all();
     }
 
-    public function actionFiltraCopiasNombre($nombre, $genero)
+    public function actionFiltraCopias($nombre, $genero)
     {
-        $ventasProvider = new ActiveDataProvider([
-            'query' => Ventas::find()
-            ->with('copia.juego')
-            ->where(['finished_at' => null]),
-        ]);
-
-        // \Yii::debug($ventasProvider->getModels());
-
-        return $this->renderAjax('vistaCopias', [
-          'listaCopias' => $ventasProvider->getModels(),
+        $dataProvider = new ActiveDataProvider([
+          'query' => Ventas::find()
+          ->where(['finished_at' => null])
+          ->filterWhere([]),
         ]);
     }
 }

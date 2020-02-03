@@ -15,7 +15,7 @@ use yii\helpers\Html;
 
 <?php
 
-foreach ($listaCopias as $venta):
+foreach ($listaVentas as $venta):
 ?>
 <tr class="juego" name="<?= $venta->copia->juego->titulo ?>">
   <td><?= $venta->copia->juego->titulo ?></td>

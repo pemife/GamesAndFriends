@@ -11,7 +11,8 @@ use yii\grid\GridView;
 $this->title = 'En venta';
 $this->params['breadcrumbs'][] = $this->title;
 
-$url2 = Url::to(['filtra-copias']);
+$url = Url::to(['filtra-copias']);
+
 ?>
 <?php
 $js = <<<EOF
@@ -21,7 +22,7 @@ function actualizarLista(nombre, genero){
 
   $.ajax({
     method: 'GET',
-    url: '$url2',
+    url: '$url',
     data: {nombre, genero},
       success: function(result){
         if (result) {
@@ -31,56 +32,50 @@ function actualizarLista(nombre, genero){
         }
       },
       error: function(result){
-        // alert(result);
+        // alert("fallo ");
       }
   });
-
 }
 
-$('#busquedaJuegosNombre').keyup(function (){
-  if (typeof temporizador !== 'undefined') {
-    clearTimeout(temporizador);
-  }
-  var texto = $('#busquedaJuegosNombre').val();
-  var genero = $('#busquedaJuegosGenero option:selected').text();
-  // var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
+// $('#busquedaJuegosNombre').keyup(function (){
+//   if (typeof temporizador !== 'undefined') {
+//     clearTimeout(temporizador);
+//   }
+//   var texto = $('#busquedaJuegosNombre').val();
+//   var genero = $('#busquedaJuegosGenero option:selected').text();
+//   // var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
+//
+//   temporizador = setTimeout(actualizarLista, 500, texto, genero);
+//
+//   // $('.juego').each(function (){
+//   //   var nombreJuego = this.attributes.name.value;
+//   //   if(!tituloRegExp.test(nombreJuego)){
+//   //     this.style.display = "none";
+//   //   } else {
+//   //     this.style.display = "";
+//   //   }
+//   // });
+// });
 
-  temporizador = setTimeout(actualizarLista, 500, texto, genero);
+// $('#busquedaProductosNombre').keyup(function (){
+//   var texto = $('#busquedaProductosNombre').val();
+//   var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
+//   $('.producto').each(function (){
+//     var nombreProducto = this.attributes.name.value;
+//     if(!tituloRegExp.test(nombreProducto)){
+//       this.style.display = "none";
+//     } else {
+//       this.style.display = "";
+//     }
+//   });
+// });
 
-  // $('.juego').each(function (){
-  //   var nombreJuego = this.attributes.name.value;
-  //   if(!tituloRegExp.test(nombreJuego)){
-  //     this.style.display = "none";
-  //   } else {
-  //     this.style.display = "";
-  //   }
-  // });
-});
+$('.filtroJuegos').change(function(){
+  var nombre = $('#busquedaJuegosNombre').val();
+  var genero = $('#busquedaJuegosGenero option:selected').val();
 
-$('#busquedaProductosNombre').keyup(function (){
-  var texto = $('#busquedaProductosNombre').val();
-  var tituloRegExp = new RegExp('.*' + texto + '.*', "i");
-  $('.producto').each(function (){
-    var nombreProducto = this.attributes.name.value;
-    if(!tituloRegExp.test(nombreProducto)){
-      this.style.display = "none";
-    } else {
-      this.style.display = "";
-    }
-  });
-});
+  actualizarLista(nombre, genero);
 
-$('#busquedaJuegosGenero').change(function (){
-    var texto = $('#busquedaJuegosGenero option:selected').text();
-    var generoRegExp = new RegExp('.*' + texto + '.*', "i");
-    $('.generos').each(function (){
-      var generosJuego = this.textContent;
-      if(!generoRegExp.test(generosJuego)){
-        this.parentNode.style.display = "none";
-      } else {
-        this.parentNode.style.display = "";
-      }
-    });
 });
 
 EOF;
@@ -129,12 +124,12 @@ $this->registerJs($js);
         <div class="col">
           <h3>Filtros</h3>
           <label for="busquedaJuegosNombre">Nombre:</label>
-          <input type="text" id="busquedaJuegosNombre">
+          <input type="text" id="busquedaJuegosNombre" class="filtroJuegos">
           <br>
           <label for="busquedaJuegosGenero">Géneros: </label>
-          <select id="busquedaJuegosGenero">
+          <select id="busquedaJuegosGenero" class="filtroJuegos">
 
-            <option disabled selected>-- selecciona genero--</option>
+            <option value="null" disabled selected>-- selecciona genero--</option>
             <?php foreach ($generos as $genero): ?>
               <option value="<?= $genero->id ?>"><?= $genero->nombre ?></option>
             <?php endforeach; ?>
@@ -151,7 +146,7 @@ $this->registerJs($js);
               <th>Acciones</th>
             </tr>
             <?php
-            
+
             // return $this->renderAjax('vistaCopias', [
             //   'listaCopias' => $dataProvider->getModels(),
             // ]);
@@ -175,6 +170,12 @@ $this->registerJs($js);
                     echo $etiqueta->nombre . ", ";
                     $index++;
                   }
+                  // foreach ($venta->copia->juego->etiquetas as $genero) {
+                  //   $generos[] = $genero->nombre;
+                  // }
+                  // var_dump($generos);
+                  // exit;
+                  // implode(", ", $generos);
                   ?>
                 </td>
                 <td><?= $venta->vendedor->nombre ?></td>
