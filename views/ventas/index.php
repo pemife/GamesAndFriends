@@ -160,22 +160,17 @@ $this->registerJs($js);
                 <td><?= $venta->copia->juego->titulo ?></td>
                 <td class="generos">
                   <?php
-                  $index = 0;
-                  $numeroJuegos = count($venta->copia->juego->etiquetas);
-                  foreach ($venta->copia->juego->etiquetas as $etiqueta) {
-                    if($index == ($numeroJuegos-1)){
-                      echo $etiqueta->nombre;
-                      continue;
-                    }
-                    echo $etiqueta->nombre . ", ";
-                    $index++;
-                  }
+                  $nombresGeneros = [];
+                  $idesGeneros = [];
+                  foreach ($venta->copia->juego->etiquetas as $genero) {
+                    $idesGeneros[] = $genero->id;
+                    $nombresGeneros[] = $genero->nombre;
+                  };
+                  echo "<data value='" . implode(", ", $idesGeneros) . "'></data>";
+                  echo implode(", ", $nombresGeneros);
                   // foreach ($venta->copia->juego->etiquetas as $genero) {
-                  //   $generos[] = $genero->nombre;
+                  //
                   // }
-                  // var_dump($generos);
-                  // exit;
-                  // implode(", ", $generos);
                   ?>
                 </td>
                 <td><?= $venta->vendedor->nombre ?></td>
