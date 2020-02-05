@@ -50,12 +50,20 @@ class VentasController extends Controller
             $query = Ventas::find()->where(['finished_at' => null])
             ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
         }
-        $dataProvider = new ActiveDataProvider(['query' => $query]);
+
+        $copiasProvider = new ActiveDataProvider([
+            'query' => $query->filterWhere(['producto_id' => null]),
+        ]);
+        $productosProvider = new ActiveDataProvider([
+            'query' => $query->filterWhere(['copia_id' => null]),
+        ]);
+
         $generos = Etiquetas::find()->orderBy('nombre')->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'copiasProvider' => $copiasProvider,
+            'productosProvider' => $productosProvider,
             'generos' => $generos,
         ]);
     }
