@@ -24,12 +24,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $copiasProvider,
         'columns' => [
             'copia.juego.titulo',
-            [
-                'label' => 'Generos',
-                'value' => function($model){
-                    return var_dump($model);
-                }
-            ],
+            // [
+            //     'label' => 'Generos',
+            //     'value' => function($model){
+            //         var_dump($model);
+            //         $generos = "";
+            //         // foreach ($model->copia->juego->etiquetas as $genero) {
+            //         //     $generos += $genero->nombre;
+            //         // }
+            //         return $model->copia->id;
+            //     }
+            // ],
 
         ],
     ]); ?>
