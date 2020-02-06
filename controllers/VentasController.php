@@ -44,18 +44,44 @@ class VentasController extends Controller
         // productos p on v.producto_id=p.id order by p.nombre, v.precio;
         // Para enseñar de cada juego, la venta mas barata
         $searchModel = new VentasSearch();
+
+        // Si el usuario no esta logueado, se le muestran todas las copias/productos
+        // en venta
         if (Yii::$app->user->isGuest) {
-            $query = Ventas::find()->where(['finished_at' => null]);
+            // Una query para copias y otra para productos
+            $queryCopias = Ventas::find()
+            ->where([
+                'finished_at' => null,
+                'producto_id' => null,
+            ]);
+
+            $queryProductos = Ventas::find()
+            ->where([
+                'finished_at' => null,
+                'copia_id' => null,
+            ]);
         } else {
-            $query = Ventas::find()->where(['finished_at' => null])
+            $queryCopias = Ventas::find()
+            ->where([
+                'finished_at' => null,
+                'producto_id' => null,
+            ])
+            ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+
+            $queryProductos = Ventas::find()
+            ->where([
+                'finished_at' => null,
+                'copia_id' => null,
+            ])
             ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
         }
 
         $copiasProvider = new ActiveDataProvider([
-            'query' => $query->filterWhere(['producto_id' => null]),
+            'query' => $queryCopias,
         ]);
+
         $productosProvider = new ActiveDataProvider([
-            'query' => $query->filterWhere(['copia_id' => null]),
+            'query' => $queryProductos,
         ]);
 
         $generos = Etiquetas::find()->orderBy('nombre')->all();
