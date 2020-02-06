@@ -26,7 +26,7 @@ CREATE TABLE juegos
   , titulo        VARCHAR(255)  NOT NULL UNIQUE
   , descripcion   TEXT
   , fechaLan      DATE
-  , dev           VARCHAR(255)  NOT NULL UNIQUE
+  , dev           VARCHAR(255)  NOT NULL
 );
 
 DROP TABLE productos CASCADE;

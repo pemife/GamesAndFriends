@@ -78,6 +78,9 @@ class VentasController extends Controller
 
         $copiasProvider = new ActiveDataProvider([
             'query' => $queryCopias,
+            'pagination' => [
+              'pageSize' => 5,
+            ]
         ]);
 
         $productosProvider = new ActiveDataProvider([

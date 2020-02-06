@@ -1,7 +1,9 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\grid\GridView;
+
+use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\VentasSearch */
@@ -22,11 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>Juegos</h1>
 
-    <?= Gridview::widget([
+    <?= GridView::widget([
         'dataProvider' => $copiasProvider,
         'columns' => [
             'copia.juego.titulo',
             'vendedor.nombre:ntext:Vendedor',
+            'created_at:RelativeTime:En venta desde',
             [
                 'label' => 'Generos',
                 'value' => function($model){
@@ -39,9 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $cadenaGeneros;
                 }
             ],
-            'precio'
-
+            'precio',
+            ['class' => 'yii\grid\ActionColumn'],
         ],
+    ]); ?>
+
+    <?= LinkPager::widget([
+      'pagination' => $copiasProvider->getPagination(),
     ]); ?>
 
     <h1>Productos</h1>
@@ -50,18 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $productosProvider,
         'columns' => [
             'producto.nombre',
-            // [
-            //     'label' => 'Generos',
-            //     'value' => function($model){
-            //         var_dump($model);
-            //         $generos = "";
-            //         // foreach ($model->copia->juego->etiquetas as $genero) {
-            //         //     $generos += $genero->nombre;
-            //         // }
-            //         return $model->copia->id;
-            //     }
-            // ],
-
+            'vendedor.nombre:ntext:Vendedor',
+            'created_at:RelativeTime:En venta desde',
+            'precio',
+            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 
