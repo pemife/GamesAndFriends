@@ -80,7 +80,7 @@ class VentasController extends Controller
             'query' => $queryCopias,
             'pagination' => [
               'pageSize' => 5,
-            ]
+            ],
         ]);
 
         $productosProvider = new ActiveDataProvider([
@@ -142,13 +142,13 @@ class VentasController extends Controller
         $puedeVender = false;
 
         // Crea un array asociativo con el id del producto a vender + el nombre
-        foreach ($this->listaProductosUsuario() as $producto) {
+        foreach (Productos::lista() as $producto) {
             $listaProductosVenta[$producto->id] = $producto->nombre;
             $puedeVender = true;
         }
 
 
-        foreach ($this->listaCopiasUsuario() as $copia) {
+        foreach (Copias::lista() as $copia) {
             $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             $puedeVender = true;
         }
@@ -182,7 +182,7 @@ class VentasController extends Controller
 
         if ($model->producto === null) {
             $listaCopiasVenta['0'] = null;
-            foreach ($this->listaCopiasUsuario() as $copia) {
+            foreach (Copias::lista() as $copia) {
                 $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             }
             return $this->render('updateCopia', [
@@ -191,7 +191,7 @@ class VentasController extends Controller
             ]);
         } elseif ($model->copia === null) {
             $listaProductosVenta['0'] = null;
-            foreach ($this->listaProductosUsuario() as $producto) {
+            foreach (Productos::lista() as $producto) {
                 $listaProductosVenta[$producto->id] = $producto->nombre;
             }
             return $this->render('updateProducto', [
@@ -258,23 +258,6 @@ class VentasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    private function listaProductosUsuario()
-    {
-        return Productos::find()
-            ->select('nombre, id')
-            ->indexBy('id')
-            ->where(['poseedor_id' => Yii::$app->user->id])
-            ->all();
-    }
-
-    private function listaCopiasUsuario()
-    {
-        return Copias::find()
-            ->where(['poseedor_id' => Yii::$app->user->id])
-            ->indexBy('id')
-            ->all();
     }
 
     public function actionFiltraCopias($nombre, $genero)

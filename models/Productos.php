@@ -60,6 +60,15 @@ class Productos extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function lista()
+    {
+        return self::find()
+            ->select('nombre, id')
+            ->indexBy('id')
+            ->where(['poseedor_id' => Yii::$app->user->isGuest ? '*' : Yii::$app->user->id])
+            ->all();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
