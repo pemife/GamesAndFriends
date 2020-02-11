@@ -49,7 +49,7 @@ CREATE TABLE criticas
 (
     id            BIGSERIAL         PRIMARY KEY
   , opinion       TEXT              NOT NULL
-  , created_at    TIMESTAMP(0)      NOT NULL
+  , created_at    TIMESTAMPTZ(0)      NOT NULL
                                     DEFAULT CURRENT_TIMESTAMP
   , valoracion    NUMERIC(1)        NOT NULL
                                     CHECK (valoracion > 0)
@@ -69,7 +69,7 @@ CREATE TABLE posts
 (
     id            BIGSERIAL         PRIMARY KEY
   , titulo        VARCHAR(255)      NOT NULL
-  , created_at    TIMESTAMP(0)      NOT NULL
+  , created_at    TIMESTAMPTZ(0)      NOT NULL
                                     DEFAULT CURRENT_TIMESTAMP
   , media         VARCHAR(255)
   , desarrollo    TEXT
@@ -88,7 +88,7 @@ DROP TABLE IF EXISTS comentarios CASCADE;
 CREATE TABLE comentarios
 (
     id              BIGSERIAL         PRIMARY KEY
-  , created_at      TIMESTAMP(0)      NOT NULL
+  , created_at      TIMESTAMPTZ(0)      NOT NULL
                                       DEFAULT CURRENT_TIMESTAMP
   , texto           TEXT              NOT NULL
   , usuario_id      BIGINT            NOT NULL
@@ -171,9 +171,9 @@ DROP TABLE IF EXISTS ventas CASCADE;
 CREATE TABLE ventas
 (
     id            BIGSERIAL         PRIMARY KEY
-  , created_at    TIMESTAMP(0)      NOT NULL
+  , created_at    TIMESTAMPTZ(0)      NOT NULL
                                     DEFAULT CURRENT_TIMESTAMP
-  , finished_at   TIMESTAMP(0)
+  , finished_at   TIMESTAMPTZ(0)
   , vendedor_id   BIGINT            NOT NULL
                                     REFERENCES usuarios(id)
                                     ON DELETE NO ACTION

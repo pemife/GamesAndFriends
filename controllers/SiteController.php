@@ -61,7 +61,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->redirect(['/productos/index']);
+        return $this->redirect(['/ventas/index']);
     }
 
     /**
@@ -77,7 +77,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+            return $this->goBack();
         }
 
         $model->password = '';
