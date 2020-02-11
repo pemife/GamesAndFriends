@@ -27,6 +27,7 @@ CREATE TABLE juegos
   , descripcion   TEXT
   , fechaLan      DATE
   , dev           VARCHAR(255)  NOT NULL
+  , publ          VARCHAR(255)  NOT NULL
 );
 
 DROP TABLE productos CASCADE;
@@ -202,10 +203,10 @@ INSERT INTO usuarios (nombre, password, email)
 VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'admin@aculturese.com'),
 ('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org');
 
-INSERT INTO juegos (titulo, descripcion, fechaLan, dev)
-VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix Inc.'),
-('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.'),
-('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve Inc');
+INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ)
+VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix LLC', 'Psyonix LLC'),
+('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.', 'Nicalis Inc.'),
+('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve');
 
 INSERT INTO productos (nombre, descripcion, precio, stock, poseedor_id)
 VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 19.99, 5, 2);

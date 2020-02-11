@@ -31,11 +31,10 @@ class Juegos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo', 'dev'], 'required'],
+            [['titulo', 'dev', 'publ'], 'required'],
             [['descripcion'], 'string'],
             [['fechalan'], 'safe'],
-            [['titulo', 'dev'], 'string', 'max' => 255],
-            [['dev'], 'unique'],
+            [['titulo', 'dev', 'publ'], 'string', 'max' => 255],
             [['titulo'], 'unique'],
         ];
     }
@@ -47,14 +46,17 @@ class Juegos extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'titulo' => 'Titulo',
-            'descripcion' => 'Descripcion',
-            'fechalan' => 'Fechalan',
-            'dev' => 'Dev',
+            'titulo' => 'Título',
+            'descripcion' => 'Descripción',
+            'fechalan' => 'Fecha de lanzamiento',
+            'dev' => 'Desarrolladora',
+            'publ' => 'Editora',
         ];
     }
 
     /**
+     * Gets query for [[Etiquetas]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getEtiquetas()
@@ -63,6 +65,8 @@ class Juegos extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Posts]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getPosts()
@@ -71,6 +75,8 @@ class Juegos extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Copias]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getProductos()
@@ -79,6 +85,8 @@ class Juegos extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Copias]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getCopias()

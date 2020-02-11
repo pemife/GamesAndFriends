@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Juegos */
@@ -16,9 +17,18 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descripcion')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'fechalan')->textInput() ?>
+    <?= $form->field($model, 'fechalan')->widget(DatePicker::classname(), [
+      'options' => ['placeholder' => 'Introduzca fecha de lanzamiento'],
+      'size' => 'sm',
+      'pluginOptions' => [
+          'autoclose'=> true,
+          'format' => 'yyyy-mm-dd'
+      ]
+    ]) ?>
 
     <?= $form->field($model, 'dev')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'publ')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

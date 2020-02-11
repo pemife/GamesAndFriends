@@ -9,6 +9,7 @@ use app\models\Ventas;
 use app\models\VentasSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -28,6 +29,15 @@ class VentasController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
