@@ -54,6 +54,22 @@ class Juegos extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function lista()
+    {
+        return self::find()
+        ->indexBy('id')
+        ->all();
+    }
+
+    public static function listaAsociativa()
+    {
+        foreach (self::lista() as $juego) {
+            $listaAsociativa[$juego->id] = $juego->titulo;
+        }
+
+        return $listaAsociativa;
+    }
+
     /**
      * Gets query for [[Etiquetas]].
      *

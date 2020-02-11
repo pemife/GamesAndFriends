@@ -51,10 +51,10 @@ class Copias extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'juego_id' => 'Juego ID',
-            'poseedor_id' => 'Poseedor ID',
+            'juego_id' => 'Juego',
+            'poseedor_id' => 'Poseedor',
             'clave' => 'Clave',
-            'plataforma_id' => 'Plataforma ID',
+            'plataforma_id' => 'Plataforma',
         ];
     }
 

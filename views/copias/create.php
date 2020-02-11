@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Copias */
 
-$this->title = 'Create Copias';
+$this->title = 'Añadir juego a inventario';
 $this->params['breadcrumbs'][] = ['label' => 'Copias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -13,8 +13,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render('creaCopia', [
         'model' => $model,
+        'listaJuegos' => $listaJuegos,
+        'listaPlataformas' => $listaPlataformas,
     ]) ?>
 
 </div>

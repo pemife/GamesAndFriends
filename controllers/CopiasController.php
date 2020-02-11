@@ -2,12 +2,15 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Copias;
 use app\models\CopiasSearch;
+use app\models\Juegos;
+use app\models\Plataformas;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * CopiasController implements the CRUD actions for Copias model.
@@ -25,6 +28,15 @@ class CopiasController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+            'access' => [
+              'class' => AccessControl::className(),
+              'rules' => [
+                [
+                  'allow' => true,
+                  'roles' => ['@'],
+                ],
+              ],
             ],
         ];
     }
@@ -46,7 +58,7 @@ class CopiasController extends Controller
 
     /**
      * Displays a single Copias model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -72,13 +84,15 @@ class CopiasController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'listaJuegos' => Juegos::listaAsociativa(),
+            'listaPlataformas' => Plataformas::listaAsociativa(),
         ]);
     }
 
     /**
      * Updates an existing Copias model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +112,7 @@ class CopiasController extends Controller
     /**
      * Deletes an existing Copias model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +126,7 @@ class CopiasController extends Controller
     /**
      * Finds the Copias model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Copias the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "plataformas".
  *
@@ -31,6 +29,22 @@ class Plataformas extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 50],
             [['nombre'], 'unique'],
         ];
+    }
+
+    public static function lista()
+    {
+        return self::find()
+        ->indexBy('id')
+        ->all();
+    }
+
+    public static function listaAsociativa()
+    {
+        foreach (self::lista() as $plataforma) {
+            $listaAsociativa[$plataforma->id] = $plataforma->nombre;
+        }
+
+        return $listaAsociativa;
     }
 
     /**

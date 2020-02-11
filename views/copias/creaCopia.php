@@ -4,25 +4,24 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Ventas */
+/* @var $model app\models\Copias */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="ventas-form">
+<div class="copias-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'vendedor_id')->hiddenInput([
+    <?= $form->field($model, 'juego_id')->dropDownList($listaJuegos)->label('Juego a vender') ?>
+
+    <?= $form->field($model, 'poseedor_id')->hiddenInput([
           'readonly' => true,
           'value' => Yii::$app->user->identity->id,
-    ])->label(false);
-    ?>
+    ])->label(false); ?>
 
-    <?= $form->field($model, 'producto_id')->dropDownList($listaProductosVenta)->label('Producto a vender') ?>
+    <?= $form->field($model, 'clave')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'copia_id')->dropDownList($listaCopiasVenta)->label('Copia a vender') ?>
-
-    <?= $form->field($model, 'precio') ?>
+    <?= $form->field($model, 'plataforma_id')->dropDownList($listaPlataformas) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
