@@ -160,7 +160,8 @@ CREATE TABLE copias
   , poseedor_id   BIGINT            REFERENCES usuarios(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
-  , clave         VARCHAR(17)
+  , clave         VARCHAR(17)       CONSTRAINT ck_patron_clave
+                                    CHECK (clave LIKE '_____-_____-_____')
   , plataforma_id BIGINT            NOT NULL
                                     REFERENCES plataformas(id)
                                     ON DELETE NO ACTION

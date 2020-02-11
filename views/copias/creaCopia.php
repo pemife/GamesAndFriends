@@ -1,5 +1,7 @@
 <?php
 
+use kartik\select2\Select2;
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,7 +14,12 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'juego_id')->dropDownList($listaJuegos)->label('Juego a vender') ?>
+    <?= $form->field($model, 'juego_id')->widget(Select2::className(),[
+        'data' => $listaJuegos,
+        'pluginOptions' => [
+          'allowClear' => false,
+        ]
+      ]); ?>
 
     <?= $form->field($model, 'poseedor_id')->hiddenInput([
           'readonly' => true,
@@ -21,7 +28,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'clave')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'plataforma_id')->dropDownList($listaPlataformas) ?>
+    <?= $form->field($model, 'plataforma_id')->widget(Select2::className(), [
+        'data' => $listaPlataformas,
+    ]); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

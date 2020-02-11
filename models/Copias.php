@@ -38,6 +38,7 @@ class Copias extends \yii\db\ActiveRecord
             [['juego_id', 'poseedor_id', 'plataforma_id'], 'default', 'value' => null],
             [['juego_id', 'poseedor_id', 'plataforma_id'], 'integer'],
             [['clave'], 'string', 'max' => 17],
+            [['clave'], 'match', 'pattern' => '/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/'],
             [['juego_id'], 'exist', 'skipOnError' => true, 'targetClass' => Juegos::className(), 'targetAttribute' => ['juego_id' => 'id']],
             [['plataforma_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plataformas::className(), 'targetAttribute' => ['plataforma_id' => 'id']],
             [['poseedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['poseedor_id' => 'id']],
