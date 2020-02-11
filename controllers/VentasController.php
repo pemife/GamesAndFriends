@@ -44,18 +44,55 @@ class VentasController extends Controller
         // productos p on v.producto_id=p.id order by p.nombre, v.precio;
         // Para enseñar de cada juego, la venta mas barata
         $searchModel = new VentasSearch();
+
+        // Si el usuario no esta logueado, se le muestran todas las copias/productos
+        // en venta
         if (Yii::$app->user->isGuest) {
-            $query = Ventas::find()->where(['finished_at' => null]);
+            // Una query para copias y otra para productos
+            $queryCopias = Ventas::find()
+            ->where([
+                'finished_at' => null,
+                'producto_id' => null,
+            ]);
+
+            $queryProductos = Ventas::find()
+            ->where([
+                'finished_at' => null,
+                'copia_id' => null,
+            ]);
         } else {
-            $query = Ventas::find()->where(['finished_at' => null])
+            $queryCopias = Ventas::find()
+            ->where([
+                'finished_at' => null,
+                'producto_id' => null,
+            ])
+            ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+
+            $queryProductos = Ventas::find()
+            ->where([
+                'finished_at' => null,
+                'copia_id' => null,
+            ])
             ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
         }
-        $dataProvider = new ActiveDataProvider(['query' => $query]);
+
+        $copiasProvider = new ActiveDataProvider([
+            'query' => $queryCopias,
+            'pagination' => [
+              'pageSize' => 5,
+            ],
+        ]);
+
+        $productosProvider = new ActiveDataProvider([
+            'query' => $queryProductos,
+        ]);
+
         $generos = Etiquetas::find()->orderBy('nombre')->all();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'copiasProvider' => $copiasProvider,
+            'productosProvider' => $productosProvider,
             'generos' => $generos,
         ]);
     }
@@ -105,13 +142,13 @@ class VentasController extends Controller
         $puedeVender = false;
 
         // Crea un array asociativo con el id del producto a vender + el nombre
-        foreach ($this->listaProductosUsuario() as $producto) {
+        foreach (Productos::lista() as $producto) {
             $listaProductosVenta[$producto->id] = $producto->nombre;
             $puedeVender = true;
         }
 
 
-        foreach ($this->listaCopiasUsuario() as $copia) {
+        foreach (Copias::lista() as $copia) {
             $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             $puedeVender = true;
         }
@@ -145,7 +182,7 @@ class VentasController extends Controller
 
         if ($model->producto === null) {
             $listaCopiasVenta['0'] = null;
-            foreach ($this->listaCopiasUsuario() as $copia) {
+            foreach (Copias::lista() as $copia) {
                 $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             }
             return $this->render('updateCopia', [
@@ -154,7 +191,7 @@ class VentasController extends Controller
             ]);
         } elseif ($model->copia === null) {
             $listaProductosVenta['0'] = null;
-            foreach ($this->listaProductosUsuario() as $producto) {
+            foreach (Productos::lista() as $producto) {
                 $listaProductosVenta[$producto->id] = $producto->nombre;
             }
             return $this->render('updateProducto', [
@@ -181,6 +218,32 @@ class VentasController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionMisVentas($u)
+    {
+        $searchModel = new VentasSearch();
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['index']);
+        }
+
+        if (Yii::$app->user->id == $u) {
+            $misVentas = Ventas::find()->where([
+            'finished_at' => null,
+            'vendedor_id' => Yii::$app->user->id,
+            ])->with('producto', 'copia')->all();
+
+            if (empty($misVentas)) {
+                Yii::$app->session->setFlash('error', 'No tienes ningun producto o copia en venta!');
+            }
+
+            return $this->render('misVentas', [
+              'misVentas' => $misVentas,
+            ]);
+        }
+
+        Yii::$app->session->setFlash('error', 'No puedes acceder a las ventas de otra persona!');
+        $this->goBack();
+    }
+
     /**
      * Finds the Ventas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -197,42 +260,12 @@ class VentasController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionMisVentas($u)
+    public function actionFiltraCopias($nombre, $genero)
     {
-        $searchModel = new VentasSearch();
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['index']);
-        }
-
-        if (Yii::$app->user->id == $u) {
-            $misVentas = Ventas::find()->where([
-                'finished_at' => null,
-                'vendedor_id' => Yii::$app->user->id,
-                ])->with('producto', 'copia')->all();
-
-            return $this->render('misVentas', [
-                    'misVentas' => $misVentas,
-                ]);
-        }
-
-        Yii::$app->session->setFlash('error', 'No puedes acceder a las ventas de otra persona!');
-        $this->goBack();
-    }
-
-    private function listaProductosUsuario()
-    {
-        return Productos::find()
-            ->select('nombre, id')
-            ->indexBy('id')
-            ->where(['poseedor_id' => Yii::$app->user->id])
-            ->all();
-    }
-
-    private function listaCopiasUsuario()
-    {
-        return Copias::find()
-            ->where(['poseedor_id' => Yii::$app->user->id])
-            ->indexBy('id')
-            ->all();
+        $dataProvider = new ActiveDataProvider([
+          'query' => Ventas::find()
+          ->where(['finished_at' => null])
+          ->filterWhere([]),
+        ]);
     }
 }

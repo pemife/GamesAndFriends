@@ -17,14 +17,14 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'R3_7qYdbLDIZRVaFXB2LsgkdoUEgdDoD',
+            'cookieValidationKey' => 'GLmkLpbA2S9rOOkGfDima1h8raBs1KxP',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => app\models\Usuarios::class,
-            'enableAutoLogin' => false,
+            'identityClass' => 'app\models\User',
+            'enableAutoLogin' => true,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -61,6 +61,14 @@ $config = [
         ],
         */
     ],
+    'container' => [
+        'definitions' => [
+            'yii\grid\ActionColumn' => ['header' => 'Acciones'],
+            'yii\widgets\LinkPager' => 'yii\bootstrap4\LinkPager',
+            'yii\grid\DataColumn' => 'app\widgets\DataColumn',
+            'yii\grid\GridView' => ['filterErrorOptions' => ['class' => 'invalid-feedback']],
+        ],
+    ],
     'params' => $params,
 ];
 
@@ -78,6 +86,14 @@ if (YII_ENV_DEV) {
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
+        'generators' => [
+            'crud' => [ // generator name
+                'class' => 'yii\gii\generators\crud\Generator', // generator class
+                'templates' => [ // setting for out templates
+                    'default' => '@app/templates/crud/default', // template name => path to template
+                ],
+            ],
+        ],
     ];
 }
 

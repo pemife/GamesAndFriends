@@ -58,6 +58,14 @@ class Copias extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function lista()
+    {
+        return self::find()
+            ->where(['poseedor_id' => Yii::$app->user->id])
+            ->indexBy('id')
+            ->all();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
