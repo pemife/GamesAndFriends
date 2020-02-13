@@ -18,6 +18,14 @@ CREATE TABLE usuarios
   , fechaNac    DATE          CHECK (fechaNac < CURRENT_DATE)
 );
 
+DROP TABLE IF EXISTS plataformas CASCADE;
+
+CREATE TABLE plataformas
+(
+  id          BIGSERIAL           PRIMARY KEY
+  , nombre      VARCHAR(50)         UNIQUE
+);
+
 DROP TABLE IF EXISTS juegos CASCADE;
 
 CREATE TABLE juegos
@@ -138,14 +146,6 @@ CREATE TABLE juegos_etiquetas
                                        REFERENCES etiquetas(id)
                                        ON DELETE CASCADE
                                        ON UPDATE CASCADE
-);
-
-DROP TABLE IF EXISTS plataformas CASCADE;
-
-CREATE TABLE plataformas
-(
-    id          BIGSERIAL           PRIMARY KEY
-  , nombre      VARCHAR(50)         UNIQUE
 );
 
 DROP TABLE IF EXISTS copias CASCADE;
