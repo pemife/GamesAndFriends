@@ -60,8 +60,7 @@ case $url in
 
         dev=`awk '/<div class="summary column" id="developers_list">/,/<\/div>/' .paginaJuego.html | cut -d">" -f2 | cut -d"<" -f1`
 
-        pub=`awk '/\/publisher\//,/<\/a>/' .paginaJuego.html`
-        #Me he quedado aqui
+        pub=`awk '/<div class="subtitle column">Editor:/,/<\/div>/' .paginaJuego.html`
 
         echo $nombreJuego
         echo $descripcionJuego
