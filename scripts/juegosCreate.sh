@@ -70,7 +70,7 @@ case $url in
         echo "Desarrolladora: " $dev
         echo "Editora: " $pub
 
-        sudo -u postgres psql -d gamesandfriends -c "INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ) VALUES ('$nombreJuego', '$descripcionJuego', '$fechaFormateada', '$dev', '$publ');"
+        sudo -u postgres psql -d gamesandfriends -c "INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ) VALUES ('${nombreJuego}', '${descripcionJuego}', '${fechaFormateada}', '${dev}', '${publ}');"
         # 2>/dev/null
     ;;
     nintendo ) echo "es un enlace de nintendo eshop";;
