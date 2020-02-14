@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion:ntext',
             'fechalan',
             'dev',
+            'publ',
         ],
     ]) ?>
 
