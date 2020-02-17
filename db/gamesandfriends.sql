@@ -166,6 +166,7 @@ CREATE TABLE copias
                                     REFERENCES plataformas(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
+  , CONSTRAINT uq_clave_plataforma UNIQUE (clave, plataforma_id)
  );
 
 DROP TABLE IF EXISTS ventas CASCADE;
