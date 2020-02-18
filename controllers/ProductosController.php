@@ -2,12 +2,13 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Productos;
 use app\models\ProductosSearch;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ProductosController implements the CRUD actions for Productos model.
@@ -25,6 +26,15 @@ class ProductosController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+            'access' => [
+              'class' => AccessControl::className(),
+              'rules' => [
+                [
+                  'allow' => true,
+                  'roles' => ['@'],
+                ],
+              ],
             ],
         ];
     }
@@ -46,7 +56,7 @@ class ProductosController extends Controller
 
     /**
      * Displays a single Productos model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -78,7 +88,7 @@ class ProductosController extends Controller
     /**
      * Updates an existing Productos model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +108,7 @@ class ProductosController extends Controller
     /**
      * Deletes an existing Productos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +122,7 @@ class ProductosController extends Controller
     /**
      * Finds the Productos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Productos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

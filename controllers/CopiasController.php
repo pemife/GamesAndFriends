@@ -49,7 +49,9 @@ class CopiasController extends Controller
     public function actionIndex()
     {
         $query = Copias::find()
-        ->where(['poseedor_id' => Yii::$app->user->id]);
+        ->where(['poseedor_id' => Yii::$app->user->id])
+        ->joinWith('juego')
+        ->orderBy('titulo');
 
         $searchModel = new CopiasSearch();
         $dataProvider = new ActiveDataProvider([
@@ -57,6 +59,11 @@ class CopiasController extends Controller
             'pagination' => [
               'pageSize' => 20,
             ],
+            // 'sort' => [
+            //   'defaultOrder' => [
+            //     'juego.titulo' => SORT_ASC,
+            //   ],
+            // ],
         ]);
 
         return $this->render('index', [
