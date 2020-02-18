@@ -8,7 +8,6 @@ use app\models\Juegos;
 use app\models\Plataformas;
 use Yii;
 use yii\data\ActiveDataProvider;
-
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -49,10 +48,15 @@ class CopiasController extends Controller
      */
     public function actionIndex()
     {
+        $query = Copias::find()
+        ->where(['poseedor_id' => Yii::$app->user->id]);
+
         $searchModel = new CopiasSearch();
         $dataProvider = new ActiveDataProvider([
-            'query' => Copias::find()
-            ->where('poseedor_id' => Yii::$app->user->id)
+            'query' => $query,
+            'pagination' => [
+              'pageSize' => 20,
+            ],
         ]);
 
         return $this->render('index', [

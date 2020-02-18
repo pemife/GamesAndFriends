@@ -192,6 +192,16 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Ventas::className(), ['comprador_id' => 'id'])->inverseOf('comprador');
     }
 
+    /**
+     * Gets query for [[Copias]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCopias()
+    {
+        return $this->hasMany(Copias::className(), ['poseedor_id' => 'id'])->inverseOf('poseedor');
+    }
+
     public function creaToken()
     {
         return Yii::$app->security->generateRandomString(32);
