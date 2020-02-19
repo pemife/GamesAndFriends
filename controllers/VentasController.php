@@ -157,7 +157,6 @@ class VentasController extends Controller
             $puedeVender = true;
         }
 
-
         foreach (Copias::lista() as $copia) {
             $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             $puedeVender = true;

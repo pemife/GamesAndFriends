@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Ventas */
@@ -18,9 +19,21 @@ use yii\widgets\ActiveForm;
     ])->label(false);
     ?>
 
-    <?= $form->field($model, 'producto_id')->dropDownList($listaProductosVenta)->label('Producto a vender') ?>
+    <?= $form->field($model, 'producto_id')->widget(Select2::className(),[
+        'data' => $listaProductosVenta,
+        'options' => ['placeholder' => 'Introduzca un producto'],
+        'pluginOptions' => [
+          'allowClear' => false,
+        ],
+      ])->label('Producto a vender'); ?>
 
-    <?= $form->field($model, 'copia_id')->dropDownList($listaCopiasVenta)->label('Copia a vender') ?>
+    <?= $form->field($model, 'copia_id')->widget(Select2::className(),[
+        'data' => $listaCopiasVenta,
+        'options' => ['placeholder' => 'Introduzca una copia'],
+        'pluginOptions' => [
+          'allowClear' => false,
+        ]
+      ])->label('Copia a vender'); ?>
 
     <?= $form->field($model, 'precio') ?>
 

@@ -70,6 +70,17 @@ class Productos extends \yii\db\ActiveRecord
     }
 
     /**
+     *  @return \yii\db\ActiveQuery
+     *  Lista de Productos que devuelve un activeQuery
+     */
+    public static function listaQuery()
+    {
+        return self::find()
+            ->indexBy('id')
+            ->where(['poseedor_id' => Yii::$app->user->isGuest ? '*' : Yii::$app->user->id]);
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getCriticas()
