@@ -80,12 +80,12 @@ class Ventas extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'created_at' => 'Created At',
-            'finished_at' => 'Finished At',
-            'vendedor_id' => 'Vendedor ID',
-            'comprador_id' => 'Comprador ID',
-            'producto_id' => 'Producto ID',
-            'copia_id' => 'Copia ID',
+            'created_at' => 'Fecha de creación',
+            'finished_at' => 'Fecha de finalización',
+            'vendedor_id' => 'Id de vendedor',
+            'comprador_id' => 'Id de comprador',
+            'producto_id' => 'Id de producto',
+            'copia_id' => 'Id de copia',
             'precio' => 'Precio',
         ];
     }
