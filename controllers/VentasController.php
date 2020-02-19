@@ -33,9 +33,11 @@ class VentasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete', 'mis-ventas'],
                 'rules' => [
                     [
                         'allow' => true,
+                        'actions' => ['create', 'update', 'delete', 'mis-ventas'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -57,33 +59,23 @@ class VentasController extends Controller
 
         // Si el usuario no esta logueado, se le muestran todas las copias/productos
         // en venta
-        if (Yii::$app->user->isGuest) {
-            // Una query para copias y otra para productos
-            $queryCopias = Ventas::find()
-            ->where([
-                'finished_at' => null,
-                'producto_id' => null,
-            ]);
+        // Una query para copias y otra para productos
+        $queryCopias = Ventas::find()
+        ->where([
+            'finished_at' => null,
+            'producto_id' => null,
+        ]);
 
-            $queryProductos = Ventas::find()
-            ->where([
-                'finished_at' => null,
-                'copia_id' => null,
-            ]);
-        } else {
-            $queryCopias = Ventas::find()
-            ->where([
-                'finished_at' => null,
-                'producto_id' => null,
-            ])
-            ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+        $queryProductos = Ventas::find()
+        ->where([
+            'finished_at' => null,
+            'copia_id' => null,
+        ]);
 
-            $queryProductos = Ventas::find()
-            ->where([
-                'finished_at' => null,
-                'copia_id' => null,
-            ])
-            ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+        if (!Yii::$app->user->isGuest) {
+            $queryCopias->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+
+            $queryProductos->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
         }
 
         $copiasProvider = new ActiveDataProvider([
@@ -95,6 +87,9 @@ class VentasController extends Controller
 
         $productosProvider = new ActiveDataProvider([
             'query' => $queryProductos,
+            'pagination' => [
+              'pageSize' => 5,
+            ],
         ]);
 
         $generos = Etiquetas::find()->orderBy('nombre')->all();

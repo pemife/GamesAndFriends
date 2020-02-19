@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => '¿Estas seguro de querer borrar este elemento?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,13 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'created_at',
             'finished_at',
-            'vendedor_id',
-            'comprador_id',
-            'producto_id',
-            'copia_id',
+            'vendedor.nombre:text:Vendedor',
+            'comprador.nombre:text:Comprador',
+            'producto.nombre:text:Producto',
+            'copia.juego.titulo',
             'precio',
         ],
     ]) ?>
