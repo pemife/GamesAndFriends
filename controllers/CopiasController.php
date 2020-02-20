@@ -49,7 +49,7 @@ class CopiasController extends Controller
     public function actionIndex()
     {
         $query = Copias::find()
-        ->where(['poseedor_id' => Yii::$app->user->id])
+        ->where(['propietario_id' => Yii::$app->user->id])
         ->joinWith('juego')
         ->orderBy('titulo');
 

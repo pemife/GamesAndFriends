@@ -7,9 +7,15 @@ use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model app\models\Ventas */
 /* @var $form yii\widgets\ActiveForm */
+
+$this->title = 'Venta de copia';
+$this->params['breadcrumbs'][] = ['label' => 'Ventas', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="ventas-form">
+
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <?php $form = ActiveForm::begin(); ?>
 

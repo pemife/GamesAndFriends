@@ -21,11 +21,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descripcion') ?>
 
-    <?= $form->field($model, 'precio') ?>
-
     <?= $form->field($model, 'stock') ?>
 
-    <?php // echo $form->field($model, 'poseedor_id') ?>
+    <?php // echo $form->field($model, 'propietario_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

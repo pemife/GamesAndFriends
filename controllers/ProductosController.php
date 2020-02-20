@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Productos;
 use app\models\ProductosSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -46,7 +47,13 @@ class ProductosController extends Controller
     public function actionIndex()
     {
         $searchModel = new ProductosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $query = Productos::find()
+        ->where(['!=', 'propietario_id', Yii::$app->user->isGuest ? '*' : Yii::$app->user->id]);
+
+        $dataProvider = new ActiveDataProvider([
+          'query' => $query,
+          'pagination' => ['pagesize' => 20],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
