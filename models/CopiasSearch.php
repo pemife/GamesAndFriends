@@ -17,7 +17,7 @@ class CopiasSearch extends Copias
     public function rules()
     {
         return [
-            [['id', 'juego_id', 'poseedor_id', 'plataforma_id'], 'integer'],
+            [['id', 'juego_id', 'propietario_id', 'plataforma_id'], 'integer'],
             [['clave'], 'safe'],
         ];
     }
@@ -60,7 +60,7 @@ class CopiasSearch extends Copias
         $query->andFilterWhere([
             'id' => $this->id,
             'juego_id' => $this->juego_id,
-            'poseedor_id' => $this->poseedor_id,
+            'propietario_id' => $this->propietario_id,
             'plataforma_id' => $this->plataforma_id,
         ]);
 

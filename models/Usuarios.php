@@ -199,7 +199,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getCopias()
     {
-        return $this->hasMany(Copias::className(), ['poseedor_id' => 'id'])->inverseOf('poseedor');
+        return $this->hasMany(Copias::className(), ['propietario_id' => 'id'])->inverseOf('propietario');
+    }
+
+    public function getProductos()
+    {
+        return $this->hasMany(Productos::className(), ['propietario_id' => 'id'])->inverseOf('propietario');
     }
 
     public function creaToken()

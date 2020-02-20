@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
         ]
       ]); ?>
 
-    <?= $form->field($model, 'poseedor_id')->hiddenInput([
+    <?= $form->field($model, 'propietario_id')->hiddenInput([
           'readonly' => true,
           'value' => Yii::$app->user->identity->id,
     ])->label(false); ?>

@@ -280,7 +280,7 @@ class VentasController extends Controller
         ]);
     }
 
-    public function actionCreaVentaProducto()
+    public function actionVentaProducto()
     {
         $model = new Ventas();
 
@@ -313,7 +313,7 @@ class VentasController extends Controller
         ]);
     }
 
-    public function actionCreaVentaCopia()
+    public function actionVentaCopia()
     {
         $model = new Ventas();
 
@@ -329,9 +329,9 @@ class VentasController extends Controller
             return $this->redirect(['ventas/index']);
         }
 
-        // Crea un array asociativo con el id del producto a vender + el nombre
+        // Crea un array asociativo con el id de la copia a vender + el nombre
         foreach (Copias::lista() as $copia) {
-            $listaCopiasVenta[$copia->id] = $copia->nombre;
+            $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             $puedeVender = true;
         }
 

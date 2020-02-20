@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Productos;
 
 /**
  * ProductosSearch represents the model behind the search form of `app\models\Productos`.
@@ -17,9 +16,9 @@ class ProductosSearch extends Productos
     public function rules()
     {
         return [
-            [['id', 'poseedor_id'], 'integer'],
+            [['id', 'propietario_id'], 'integer'],
             [['nombre', 'descripcion'], 'safe'],
-            [['precio', 'stock'], 'number'],
+            [['stock'], 'number'],
         ];
     }
 
@@ -33,7 +32,7 @@ class ProductosSearch extends Productos
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -60,9 +59,8 @@ class ProductosSearch extends Productos
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'precio' => $this->precio,
             'stock' => $this->stock,
-            'poseedor_id' => $this->poseedor_id,
+            'propietario_id' => $this->propietario_id,
         ]);
 
         $query->andFilterWhere(['ilike', 'nombre', $this->nombre])

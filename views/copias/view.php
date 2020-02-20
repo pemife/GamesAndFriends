@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'juego_id',
-            'poseedor_id',
+            'propietario_id',
             'clave',
             'plataforma_id',
         ],

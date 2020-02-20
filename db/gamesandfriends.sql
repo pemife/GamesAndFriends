@@ -45,9 +45,8 @@ CREATE TABLE productos
     id            BIGSERIAL         PRIMARY KEY
   , nombre        VARCHAR(255)      NOT NULL UNIQUE
   , descripcion   TEXT              NOT NULL
-  , precio        NUMERIC(6,2)
   , stock         NUMERIC(5)        NOT NULL
-  , poseedor_id   BIGINT            REFERENCES usuarios(id)
+  , propietario_id   BIGINT            REFERENCES usuarios(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
 );
@@ -157,7 +156,7 @@ CREATE TABLE copias
                                     REFERENCES juegos(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-  , poseedor_id   BIGINT            REFERENCES usuarios(id)
+  , propietario_id   BIGINT            REFERENCES usuarios(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
   , clave         VARCHAR(17)       CONSTRAINT ck_patron_clave
@@ -210,8 +209,8 @@ VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohet
 ('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.', 'Nicalis Inc.'),
 ('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve');
 
-INSERT INTO productos (nombre, descripcion, precio, stock, poseedor_id)
-VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 19.99, 5, 2);
+INSERT INTO productos (nombre, descripcion, stock, propietario_id)
+VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 2);
 
 INSERT INTO criticas (opinion, created_at, valoracion, usuario_id, producto_id)
 VALUES ('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 1);
@@ -237,7 +236,7 @@ VALUES (2,5),(2,6),(2,8),(2,9),(1,1),(1,2),(1,3),(1,7),(3,3),(3,7),(3,12),(3,13)
 INSERT INTO plataformas (nombre)
 VALUES ('PC'),('PlayStation 4'),('Xbox One'),('Nintendo Switch');
 
-INSERT INTO copias (juego_id, poseedor_id, clave, plataforma_id)
+INSERT INTO copias (juego_id, propietario_id, clave, plataforma_id)
 VALUES (1, 2, 'K57F0-PV9M6-8MZ4Y', 1), (2, 2, 'IZM46-23GIN-5IPAN', 4),
 (1, 2, 'KK57W-KKVQF-JMDZC', 4), (3, 2, 'SDK32-182SJ-12WKS', 1);
 

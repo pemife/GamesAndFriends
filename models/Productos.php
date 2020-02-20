@@ -10,12 +10,11 @@ use Yii;
  * @property int $id
  * @property string $nombre
  * @property string $descripcion
- * @property string $precio
  * @property string $stock
- * @property int $poseedor_id
+ * @property int $propietario_id
  *
  * @property Criticas[] $criticas
- * @property Usuarios $poseedor
+ * @property Usuarios $propietario
  * @property Ventas[] $ventas
  */
 class Productos extends \yii\db\ActiveRecord
@@ -36,12 +35,11 @@ class Productos extends \yii\db\ActiveRecord
         return [
             [['nombre', 'descripcion', 'stock'], 'required'],
             [['descripcion'], 'string'],
-            [['precio', 'stock'], 'number'],
-            [['poseedor_id'], 'default', 'value' => null],
-            [['poseedor_id'], 'integer'],
+            [['propietario_id'], 'default', 'value' => null],
+            [['propietario_id'], 'integer'],
             [['nombre'], 'string', 'max' => 255],
             [['nombre'], 'unique'],
-            [['poseedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['poseedor_id' => 'id']],
+            [['propietario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['propietario_id' => 'id']],
         ];
     }
 
@@ -54,9 +52,8 @@ class Productos extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nombre' => 'Nombre',
             'descripcion' => 'Descripcion',
-            'precio' => 'Precio',
-            'stock' => 'Stock',
-            'poseedor_id' => 'Poseedor ID',
+            'stock' => 'Cantidad',
+            'propietario_id' => 'Propietario',
         ];
     }
 
@@ -65,7 +62,7 @@ class Productos extends \yii\db\ActiveRecord
         return self::find()
             ->select('nombre, id')
             ->indexBy('id')
-            ->where(['poseedor_id' => Yii::$app->user->isGuest ? '*' : Yii::$app->user->id])
+            ->where(['propietario_id' => Yii::$app->user->isGuest ? '*' : Yii::$app->user->id])
             ->all();
     }
 
@@ -77,7 +74,7 @@ class Productos extends \yii\db\ActiveRecord
     {
         return self::find()
             ->indexBy('id')
-            ->where(['poseedor_id' => Yii::$app->user->isGuest ? '*' : Yii::$app->user->id]);
+            ->where(['propietario_id' => Yii::$app->user->isGuest ? '*' : Yii::$app->user->id]);
     }
 
     /**
@@ -91,9 +88,9 @@ class Productos extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPoseedor()
+    public function getPropietario()
     {
-        return $this->hasOne(Usuarios::className(), ['id' => 'poseedor_id'])->inverseOf('productos');
+        return $this->hasOne(Usuarios::className(), ['id' => 'propietario_id'])->inverseOf('productos');
     }
 
     /**
