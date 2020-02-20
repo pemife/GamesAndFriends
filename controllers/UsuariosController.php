@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Copias;
+use app\models\Productos;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -77,8 +80,26 @@ class UsuariosController extends Controller
      */
     public function actionView($id)
     {
+        $queryProductos = Productos::find()
+        ->where(['propietario_id' => $id]);
+
+        $queryCopias = Copias::find()
+        ->where(['propietario_id' => $id]);
+
+        $productosProvider = new ActiveDataProvider([
+          'query' => $queryProductos,
+          'pagination' => ['pageSize' => 5],
+        ]);
+
+        $copiasProvider = new ActiveDataProvider([
+          'query' => $queryCopias,
+          'pagination' => ['pageSize' => 5],
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'productosProvider' => $productosProvider,
+            'copiasProvider' => $copiasProvider,
         ]);
     }
 

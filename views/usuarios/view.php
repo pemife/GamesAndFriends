@@ -1,5 +1,7 @@
 <?php
 
+use yii\grid\GridView;
+
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
@@ -103,5 +105,35 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
             'fechanac',
         ],
     ]) ?>
+
+    </br></br>
+
+    <h1>Inventario</h1>
+
+    <div class="row">
+      <div class="col">
+        <h3>Productos</h3>
+        <?= GridView::widget([
+          'dataProvider' => $productosProvider,
+          'columns' => [
+            'nombre',
+            'stock',
+          ],
+          ]) ?>
+        </div>
+        <div class="col">
+          <h3>Juegos</h3>
+          <?= GridView::widget([
+            'dataProvider' => $copiasProvider,
+            'columns' => [
+              'juego.titulo',
+              ['class' => 'yii\grid\ActionColumn'],
+            ],
+            ]) ?>
+          </div>
+    </div>
+
+
+
 
 </div>
