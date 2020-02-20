@@ -29,8 +29,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'fechalan',
             'dev',
             'publ',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{delete} {view} {update} {vermercado}',
+              'buttons' => [
+                'vermercado' => function ($url, $model, $key){
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                    ['ventas/ventas-juego', 'id' => $model->id],
+                    ['title' => 'ver en mercado']
+                  );
+                },
+              ],
+            ],
         ],
     ]); ?>
 

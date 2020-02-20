@@ -8,7 +8,7 @@ use kartik\select2\Select2;
 /* @var $model app\models\Ventas */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = 'Venta de copia';
+$this->title = 'Venta de juego';
 $this->params['breadcrumbs'][] = ['label' => 'Ventas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'copia_id')->widget(Select2::className(),[
         'data' => $listaCopiasVenta,
-        'options' => ['placeholder' => 'Introduzca una copia'],
+        'options' => ['placeholder' => 'Introduzca una copia del juego que quiere vender'],
         'pluginOptions' => [
           'allowClear' => false,
         ],

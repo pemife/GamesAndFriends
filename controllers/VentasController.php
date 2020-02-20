@@ -46,7 +46,7 @@ class VentasController extends Controller
     }
 
     /**
-     * Lists all Ventas models.
+     * Muestra todas las ventas.
      * @return mixed
      */
     public function actionIndex()
@@ -222,6 +222,11 @@ class VentasController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Muestra todas las ventas donde el vendedor es el usuario logueado.
+     * @param  int  $u Id del usuario del que queremos ver sus ventas
+     * @return string    Resultado de renderizado de la página
+     */
     public function actionMisVentas($u)
     {
         $searchModel = new VentasSearch();
@@ -271,6 +276,12 @@ class VentasController extends Controller
         $this->goBack();
     }
 
+    /**
+     * Esta accion filtra las copias por nombre y por genero [TODO].
+     * @param  string $nombre El nombre del juego de Copia
+     * @param  string $genero El genero del juego de Copia
+     * @return [type]         [description]
+     */
     public function actionFiltraCopias($nombre, $genero)
     {
         $dataProvider = new ActiveDataProvider([
@@ -280,7 +291,11 @@ class VentasController extends Controller
         ]);
     }
 
-    public function actionVentaProducto()
+    /**
+     * Esta accion sirve para la creacion de la venta de un producto.
+     * @return string El resultado del renderizado de la página
+     */
+    public function actionCreaVentaProducto()
     {
         $model = new Ventas();
 
@@ -313,7 +328,11 @@ class VentasController extends Controller
         ]);
     }
 
-    public function actionVentaCopia()
+    /**
+     * Esta accion sirve para la creacion de la venta de una copia.
+     * @return string El resultado del renderizado de la página
+     */
+    public function actionCreaVentaCopia()
     {
         $model = new Ventas();
 
@@ -343,6 +362,28 @@ class VentasController extends Controller
         return $this->render('creaVentaCopia', [
             'listaCopiasVenta' => $listaCopiasVenta,
             'model' => $model,
+        ]);
+    }
+
+    /**
+     * Accion que renderiza una lista de todas las copias en venta
+     * de un juego concreto.
+     * @param  int $id El id de un juego
+     * @return string     El resultado del renderizado
+     */
+    public function actionVentasJuego($id)
+    {
+        $query = Ventas::find()
+        ->joinWith('copia')
+        ->where(['juego_id' => $id]);
+
+        $ventasProvider = new ActiveDataProvider([
+          'query' => $query,
+          'pagination' => ['pageSize' => 20],
+        ]);
+
+        return $this->render('ventasJuego', [
+            'ventasProvider' => $ventasProvider,
         ]);
     }
 
