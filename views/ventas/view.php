@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php if($model->vendedor_id == Yii::$app->user->id){
-            echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+            echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
 
             echo Html::a('Delete', ['delete', 'id' => $model->id], [
               'class' => 'btn btn-danger',

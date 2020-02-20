@@ -29,13 +29,15 @@ class ProductosController extends Controller
                 ],
             ],
             'access' => [
-              'class' => AccessControl::className(),
-              'rules' => [
-                [
-                  'allow' => true,
-                  'roles' => ['@'],
+                'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete', 'mis-ventas'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'delete', 'mis-ventas'],
+                        'roles' => ['@'],
+                    ],
                 ],
-              ],
             ],
         ];
     }
