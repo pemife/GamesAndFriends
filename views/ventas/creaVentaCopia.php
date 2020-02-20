@@ -19,21 +19,18 @@ use kartik\select2\Select2;
     ])->label(false);
     ?>
 
-    <?= $form->field($model, 'producto_id')->widget(Select2::className(),[
-        'data' => $listaProductosVenta,
-        'options' => ['placeholder' => 'Introduzca un producto'],
-        'pluginOptions' => [
-          'allowClear' => false,
-        ],
-      ])->label('Producto a vender'); ?>
-
     <?= $form->field($model, 'copia_id')->widget(Select2::className(),[
         'data' => $listaCopiasVenta,
         'options' => ['placeholder' => 'Introduzca una copia'],
         'pluginOptions' => [
           'allowClear' => false,
-        ]
+        ],
       ])->label('Copia a vender'); ?>
+
+    <?= $form->field($model, 'producto_id')->hiddenInput([
+            'readonly' => true,
+            'value' => null,
+      ])->label(false); ?>
 
     <?= $form->field($model, 'precio') ?>
 
