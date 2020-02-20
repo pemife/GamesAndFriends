@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Juegos;
 use app\models\JuegosSearch;
+use app\models\Ventas;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -62,8 +63,15 @@ class JuegosController extends Controller
      */
     public function actionView($id)
     {
+        $ventaMasBarata = Ventas::find()
+        ->joinWith('copia')
+        ->where(['juego_id' => $id])
+        ->orderBy('precio')
+        ->one();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'precioMinimo' => $ventaMasBarata->precio,
         ]);
     }
 

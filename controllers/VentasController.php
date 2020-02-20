@@ -375,7 +375,8 @@ class VentasController extends Controller
     {
         $query = Ventas::find()
         ->joinWith('copia')
-        ->where(['juego_id' => $id]);
+        ->where(['juego_id' => $id])
+        ->orderBy('precio');
 
         $ventasProvider = new ActiveDataProvider([
           'query' => $query,
