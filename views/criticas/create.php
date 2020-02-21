@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Criticas */
 
-$this->title = 'Create Criticas';
+$this->title = 'Crear Criticas';
 $this->params['breadcrumbs'][] = ['label' => 'Criticas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
