@@ -18,7 +18,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <span>
       <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
       <h3>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
-      <?= Html::a('Ver en mercado', ['ventas/ventas-juego', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+      <?= Html::a(
+          'Ver en mercado',
+          [
+            'ventas/ventas-item',
+            'id' => $model->id,
+            'esProducto' => false
+          ],
+          ['class' => 'btn btn-success']
+        ) ?>
     </span>
 
     </br></br>

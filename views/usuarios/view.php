@@ -118,6 +118,26 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
           'columns' => [
             'nombre',
             'stock',
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{view} {vermercado}',
+              'buttons' => [
+                'view' => function ($url, $model, $key) {
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-eye-open"></span>',
+                    ['productos/view', 'id' => $model->id],
+                    ['title' => 'ver copia']
+                  );
+                },
+                'vermercado' => function ($url, $model, $key){
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
+                    ['title' => 'ver en mercado']
+                  );
+                },
+              ]
+            ],
           ],
           ]) ?>
         </div>
@@ -127,7 +147,30 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
             'dataProvider' => $copiasProvider,
             'columns' => [
               'juego.titulo',
-              ['class' => 'yii\grid\ActionColumn'],
+              [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {vermercado}',
+                'buttons' => [
+                  'view' => function ($url, $model, $key) {
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-eye-open"></span>',
+                      ['copias/view', 'id' => $model->id],
+                      ['title' => 'ver copia']
+                    );
+                  },
+                  'vermercado' => function ($url, $model, $key){
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                      [
+                        'ventas/ventas-item',
+                        'id' => $model->id,
+                        'esProducto' => false,
+                      ],
+                      ['title' => 'ver en mercado']
+                    );
+                  },
+                ]
+              ],
             ],
             ]) ?>
           </div>

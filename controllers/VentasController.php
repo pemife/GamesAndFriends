@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Copias;
 use app\models\Etiquetas;
+use app\models\Juegos;
 use app\models\Productos;
 use app\models\Ventas;
 use app\models\VentasSearch;
@@ -370,16 +371,53 @@ class VentasController extends Controller
     }
 
     /**
-     * Accion que renderiza una lista de todas las copias en venta
-     * de un juego concreto.
-     * @param  int $id El id de un juego
+     * Accion que renderiza una lista de todas las ventas
+     * de un item concreto.
+     * @param mixed $id El id del item que queremos usar
+     * @param bool $esProducto Boolean para saber si es un producto o una copia
      * @return string     El resultado del renderizado
      */
-    public function actionVentasJuego($id)
+    public function actionVentasItem($id, $esProducto)
+    {
+        $query = Ventas::find();
+
+        if ($esProducto) {
+            $query->joinWith('producto')
+            ->where(['producto_id' => $id]);
+
+            $nombreItem = Productos::findOne($id)->nombre;
+        } else {
+            $query->joinWith('copia')
+            ->where(['copia_id' => $id]);
+
+            $nombreItem = Juegos::findOne($id)->titulo;
+        }
+
+        $query->orderBy('precio');
+
+        $ventasProvider = new ActiveDataProvider([
+          'query' => $query,
+          'pagination' => ['pageSize' => 20],
+        ]);
+
+        return $this->render('ventasItem', [
+            'esProducto' => $esProducto,
+            'nombreItem' => $nombreItem,
+            'ventasProvider' => $ventasProvider,
+        ]);
+    }
+
+    /**
+     * Accion que renderiza una lista de todas las ventas
+     * de un producto concreto.
+     * @param  int $id El id de un producto
+     * @return string     El resultado del renderizado
+     */
+    public function actionVentasProducto($id)
     {
         $query = Ventas::find()
-        ->joinWith('copia')
-        ->where(['juego_id' => $id])
+        ->joinWith('producto')
+        ->where(['producto_id' => $id])
         ->orderBy('precio');
 
         $ventasProvider = new ActiveDataProvider([
@@ -387,7 +425,7 @@ class VentasController extends Controller
           'pagination' => ['pageSize' => 20],
         ]);
 
-        return $this->render('ventasJuego', [
+        return $this->render('ventasItem', [
             'ventasProvider' => $ventasProvider,
         ]);
     }
