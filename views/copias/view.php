@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Copias */
 
-$this->title = $model->id;
+$this->title = $model->juego->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Copias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -31,11 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'juego_id',
-            'propietario_id',
-            'clave',
-            'plataforma_id',
+            'juego.titulo',
+            'propietario.nombre:text:Propietario',
+            'plataforma.nombre:text:Plataforma',
         ],
     ]) ?>
 

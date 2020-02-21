@@ -81,9 +81,13 @@ class CopiasController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if (Yii::$app->user->id == $this->findModel($id)->propietario_id) {
+            return $this->render('view', [
+              'model' => $this->findModel($id),
+            ]);
+        }
+        Yii::$app->session->setFlash('error', '¡No tienes acceso a esa copia!');
+        return $this->goBack();
     }
 
     /**
