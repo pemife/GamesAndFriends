@@ -30,9 +30,11 @@ class JuegosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
+                        'actions' => ['create', 'update', 'delete'],
                         'roles' => ['@'],
                     ],
                 ],

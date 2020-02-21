@@ -32,11 +32,11 @@ class CopiasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'mis-ventas'],
+                'only' => ['create', 'update', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete', 'mis-ventas'],
+                        'actions' => ['create', 'update', 'delete'],
                         'roles' => ['@'],
                     ],
                 ],

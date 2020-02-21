@@ -9,7 +9,7 @@ use yii\widgets\LinkPager;
 /* @var $searchModel app\models\VentasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ventas de ' . $ventasProvider->models[1]->copia->juego->titulo;
+$this->title = 'Ventas de ' . $ventasProvider->models[0]->copia->juego->titulo;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

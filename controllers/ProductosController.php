@@ -30,11 +30,11 @@ class ProductosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'mis-ventas'],
+                'only' => ['create', 'update', 'delete'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete', 'mis-ventas'],
+                        'actions' => ['create', 'update', 'delete'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -49,8 +49,12 @@ class ProductosController extends Controller
     public function actionIndex()
     {
         $searchModel = new ProductosSearch();
-        $query = Productos::find()
-        ->where(['!=', 'propietario_id', Yii::$app->user->isGuest ? '*' : Yii::$app->user->id]);
+
+        $query = Productos::find();
+
+        if (!Yii::$app->user->isGuest) {
+            $query->where(['!=', 'propietario_id', Yii::$app->user->id]);
+        }
 
         $dataProvider = new ActiveDataProvider([
           'query' => $query,
