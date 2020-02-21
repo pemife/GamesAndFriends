@@ -152,7 +152,7 @@ class VentasController extends Controller
             $puedeVender = true;
         }
 
-        foreach (Copias::lista() as $copia) {
+        foreach (Copias::listaQuery()->all() as $copia) {
             $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             $puedeVender = true;
         }
@@ -186,7 +186,7 @@ class VentasController extends Controller
 
         if ($model->producto === null) {
             $listaCopiasVenta['0'] = null;
-            foreach (Copias::lista() as $copia) {
+            foreach (Copias::listaQuery()->all() as $copia) {
                 $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             }
             return $this->render('updateCopia', [
@@ -349,18 +349,22 @@ class VentasController extends Controller
         }
 
         // Crea un array asociativo con el id de la copia a vender + el nombre
-        foreach (Copias::lista() as $copia) {
+        foreach (Copias::listaQuery()->all() as $copia) {
             $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
-            $puedeVender = true;
         }
 
-        if (!$puedeVender) {
+        $dataProvider = new ActiveDataProvider([
+          'query' => Copias::listaQuery(),
+        ]);
+
+        if ($dataProvider->count == 0) {
             Yii::$app->session->setFlash('error', '¡Tu usuario no posee ninguna copia!');
             return $this->redirect(['ventas/index']);
         }
 
         return $this->render('creaVentaCopia', [
             'listaCopiasVenta' => $listaCopiasVenta,
+            'dataProvider' => $dataProvider,
             'model' => $model,
         ]);
     }

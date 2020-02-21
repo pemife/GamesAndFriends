@@ -59,7 +59,7 @@ class Copias extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function lista()
+    public static function listaQuery()
     {
         $query = self::find();
 
@@ -67,7 +67,7 @@ class Copias extends \yii\db\ActiveRecord
             $query->andWhere(['propietario_id' => Yii::$app->user->id]);
         }
 
-        return $query->all();
+        return $query;
     }
 
     /**

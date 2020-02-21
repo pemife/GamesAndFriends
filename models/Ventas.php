@@ -39,41 +39,15 @@ class Ventas extends \yii\db\ActiveRecord
             [['vendedor_id', 'precio'], 'required'],
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'default', 'value' => null],
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'integer'],
-            [['vendedor_id'], 'validarVendedorPropietario'],
+            [['copia_id', 'producto_id'], 'validarCopiaProducto'],
             [['precio'], 'number', 'max' => '9999.99'],
             ['copia_id', 'unique', 'message' => '¡Ya tienes esa copia en venta!'],
             ['producto_id', 'unique', 'message' => '¡Ya tienes ese producto en venta!'],
-            [['copia_id', 'producto_id'], 'validarCopiaProducto'],
+            [['vendedor_id'], 'validarVendedorPropietario'],
             [['vendedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['vendedor_id' => 'id']],
             [['comprador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['comprador_id' => 'id']],
         ];
     }
-
-    public function validarVendedorPropietario($atributo, $params)
-    {
-        if ($this->vendedor_id !== ($this->producto->propietario_id)) {
-            $this->addError('vendedor_id', '¡No eres el propietario de este item!');
-        }
-    }
-
-    public function validarCopiaProducto($atributo, $params)
-    {
-        if (empty($this->copia_id) && empty($this->producto_id)) {
-            $this->addError('copia_id', 'Debes elegir el producto o copia que poner en venta.');
-        } elseif (!empty($this->copia_id) && !empty($this->producto_id)) {
-            $this->addError('copia_id', 'No puedes poner en venta una copia y un producto a la vez.');
-        }
-    }
-
-    //  Funcion que realice como validacion (no es correcto)
-    // function ($model) {
-    //     var_dump($model);
-    //     if (($model->copia_id != '0' and $model->producto_id == '0')
-    //             or
-    //         ($model->copia_id == '0' and $model->producto_id != '0')) {
-    //         $this->addError($copia_id, 'No puedes poner en venta a la vez un producto y una copia.');
-    //     }
-    // }
 
     /**
      * {@inheritdoc}
@@ -90,6 +64,25 @@ class Ventas extends \yii\db\ActiveRecord
             'copia_id' => 'Id de copia',
             'precio' => 'Precio',
         ];
+    }
+
+    public function validarVendedorPropietario($atributo, $params)
+    {
+        if (!empty($this->producto) && ($this->vendedor_id != $this->producto->propietario_id)) {
+            $this->addError('vendedor_id', '¡No eres el propietario de ese producto');
+        }
+        if (!empty($this->copia) && ($this->vendedor_id != $this->copia->propietario_id)) {
+            $this->addError('vendedor_id', '¡No eres el propietario de esa copia!');
+        }
+    }
+
+    public function validarCopiaProducto($atributo, $params)
+    {
+        if (empty($this->copia_id) && empty($this->producto_id)) {
+            $this->addError('copia_id', 'Debes elegir el producto o copia que poner en venta.');
+        } elseif (!empty($this->copia_id) && !empty($this->producto_id)) {
+            $this->addError('copia_id', 'No puedes poner en venta una copia y un producto a la vez.');
+        }
     }
 
     /**
