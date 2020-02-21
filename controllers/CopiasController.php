@@ -6,6 +6,7 @@ use app\models\Copias;
 use app\models\CopiasSearch;
 use app\models\Juegos;
 use app\models\Plataformas;
+use app\models\Usuarios;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -32,11 +33,11 @@ class CopiasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete'],
+                'only' => ['create', 'update', 'delete', 'mis-copias'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => ['create', 'update', 'delete', 'mis-copias'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -50,8 +51,11 @@ class CopiasController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->isGuest) {
+            $this->redirect(['copias/mis-copias', 'id' => Yii::$app->user->id]);
+        }
+
         $query = Copias::find()
-        ->where(['propietario_id' => Yii::$app->user->id])
         ->joinWith('juego')
         ->orderBy('titulo');
 
@@ -61,11 +65,6 @@ class CopiasController extends Controller
             'pagination' => [
               'pageSize' => 20,
             ],
-            // 'sort' => [
-            //   'defaultOrder' => [
-            //     'juego.titulo' => SORT_ASC,
-            //   ],
-            // ],
         ]);
 
         return $this->render('index', [
@@ -139,6 +138,30 @@ class CopiasController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionMisCopias($id)
+    {
+        $usuario = Usuarios::findOne($id);
+
+        $query = Copias::find()
+        ->where(['propietario_id' => $id])
+        ->joinWith('juego')
+        ->orderBy('titulo');
+
+        $searchModel = new CopiasSearch();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+              'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('misCopias', [
+            'modelUsuario' => $usuario,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

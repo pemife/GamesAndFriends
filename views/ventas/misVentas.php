@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Poner en venta Producto/Copia', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Poner en venta Producto/Juego', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <h1>Productos</h1>
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <br><br>
-    <h1>Copias</h1>
+    <h1>Juegos</h1>
 
     <?= GridView::widget([
         'dataProvider' => $misCopiasProvider,

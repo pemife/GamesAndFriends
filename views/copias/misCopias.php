@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\Usuarios;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CopiasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Lista de copias';
+$this->title = Yii::$app->user->id == $modelUsuario->id ? 'Mis juegos' : 'Juegos de ' . $modelUsuario->nombre;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="copias-index">
@@ -24,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'juego.titulo',
             'plataforma.nombre:text:Plataforma',
-            'propietario.nombre',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

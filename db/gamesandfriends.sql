@@ -241,7 +241,7 @@ VALUES (1, 2, 'K57F0-PV9M6-8MZ4Y', 1), (2, 2, 'IZM46-23GIN-5IPAN', 4),
 (1, 2, 'KK57W-KKVQF-JMDZC', 4), (3, 2, 'SDK32-182SJ-12WKS', 1);
 
 INSERT INTO ventas(created_at, finished_at, vendedor_id, comprador_id, producto_id, copia_id, precio)
-VALUES (CURRENT_TIMESTAMP, null, 1, null, 1, null, 9000.01),
+VALUES (CURRENT_TIMESTAMP, null, 2, null, 1, null, 9000.01),
 (CURRENT_TIMESTAMP, null, 2, null, null, 2, 9000.01),
 (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 2, null, 3, 9000.01),
 (CURRENT_TIMESTAMP, null, 2, null, null, 4, 9000.01);

@@ -39,6 +39,7 @@ class Ventas extends \yii\db\ActiveRecord
             [['vendedor_id', 'precio'], 'required'],
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'default', 'value' => null],
             [['vendedor_id', 'comprador_id', 'producto_id', 'copia_id'], 'integer'],
+            [['vendedor_id'], 'validarVendedorPropietario'],
             [['precio'], 'number', 'max' => '9999.99'],
             ['copia_id', 'unique', 'message' => '¡Ya tienes esa copia en venta!'],
             ['producto_id', 'unique', 'message' => '¡Ya tienes ese producto en venta!'],
@@ -46,6 +47,13 @@ class Ventas extends \yii\db\ActiveRecord
             [['vendedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['vendedor_id' => 'id']],
             [['comprador_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['comprador_id' => 'id']],
         ];
+    }
+
+    public function validarVendedorPropietario($atributo, $params)
+    {
+        if ($this->vendedor_id !== ($this->producto->propietario_id)) {
+            $this->addError('vendedor_id', '¡No eres el propietario de este item!');
+        }
     }
 
     public function validarCopiaProducto($atributo, $params)
