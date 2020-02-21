@@ -57,13 +57,20 @@ class Productos extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Devuelve una lista con los nombres e ids.
+     * @return [type] [description]
+     */
     public static function lista()
     {
-        return self::find()
-            ->select('nombre, id')
-            ->indexBy('id')
-            ->where(['propietario_id' => Yii::$app->user->isGuest ? '*' : Yii::$app->user->id])
-            ->all();
+        $query = self::find()
+        ->select('nombre, id');
+
+        if (!Yii::$app->user->isGuest) {
+            $query->andWhere(['propietario_id' => Yii::$app->user->id]);
+        }
+
+        return $query->all();
     }
 
     /**
@@ -72,9 +79,13 @@ class Productos extends \yii\db\ActiveRecord
      */
     public static function listaQuery()
     {
-        return self::find()
-            ->indexBy('id')
-            ->where(['propietario_id' => Yii::$app->user->isGuest ? '*' : Yii::$app->user->id]);
+        $query = self::find()
+        ->indexBy('id');
+
+        if (!Yii::$app->user->isGuest) {
+            $query->andWhere(['propietario_id' => Yii::$app->user->id]);
+        }
+        return $query;
     }
 
     /**

@@ -61,10 +61,13 @@ class Copias extends \yii\db\ActiveRecord
 
     public static function lista()
     {
-        return self::find()
-            ->where(['propietario_id' => Yii::$app->user->id])
-            ->indexBy('id')
-            ->all();
+        $query = self::find();
+
+        if (!Yii::$app->user->isGuest) {
+            $query->andWhere(['propietario_id' => Yii::$app->user->id]);
+        }
+
+        return $query->all();
     }
 
     /**
