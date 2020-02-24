@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Ventas;
 
 /**
  * VentasSearch represents the model behind the search form of `app\models\Ventas`.
@@ -33,7 +32,7 @@ class VentasSearch extends Ventas
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -48,6 +47,11 @@ class VentasSearch extends Ventas
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['titulo'] = [
+            'asc' => ['titulo' => SORT_ASC],
+            'desc' => ['titulo' => SORT_DESC],
+        ];
 
         $this->load($params);
 
