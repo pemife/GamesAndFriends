@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Posts;
 use app\models\PostsSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * PostsController implements the CRUD actions for Posts model.
@@ -24,6 +24,29 @@ class PostsController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            $model = Posts::findOne(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->usuario_id != Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar el post de otra persona!');
+                                return false;
+                            }
+                            return true;
+                        },
+                    ],
                 ],
             ],
         ];
@@ -46,7 +69,7 @@ class PostsController extends Controller
 
     /**
      * Displays a single Posts model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -78,7 +101,7 @@ class PostsController extends Controller
     /**
      * Updates an existing Posts model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +121,7 @@ class PostsController extends Controller
     /**
      * Deletes an existing Posts model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +135,7 @@ class PostsController extends Controller
     /**
      * Finds the Posts model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Posts the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

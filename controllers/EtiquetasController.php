@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Etiquetas;
 use app\models\EtiquetasSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * EtiquetasController implements the CRUD actions for Etiquetas model.
@@ -24,6 +24,19 @@ class EtiquetasController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->user->id == 1;
+                        },
+                    ],
                 ],
             ],
         ];
@@ -46,7 +59,7 @@ class EtiquetasController extends Controller
 
     /**
      * Displays a single Etiquetas model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -78,7 +91,7 @@ class EtiquetasController extends Controller
     /**
      * Updates an existing Etiquetas model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +111,7 @@ class EtiquetasController extends Controller
     /**
      * Deletes an existing Etiquetas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +125,7 @@ class EtiquetasController extends Controller
     /**
      * Finds the Etiquetas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Etiquetas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

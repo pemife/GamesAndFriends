@@ -38,8 +38,21 @@ class VentasController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete', 'mis-ventas'],
+                        'actions' => ['create', 'mis-ventas'],
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            // Yii::debug(Yii::$app->request->queryParams['id']);
+                            $model = Ventas::findOne(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->vendedor_id != Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar la venta de otra persona!');
+                                return false;
+                            }
+                            return true;
+                        },
                     ],
                 ],
             ],
@@ -231,10 +244,6 @@ class VentasController extends Controller
     public function actionMisVentas($u)
     {
         $searchModel = new VentasSearch();
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', '¡No has iniciado sesión!');
-            return $this->redirect(['index']);
-        }
 
         if (Yii::$app->user->id == $u) {
             $queryMisProductos = Ventas::find()->where([
@@ -274,7 +283,7 @@ class VentasController extends Controller
         }
 
         Yii::$app->session->setFlash('error', 'No puedes acceder a las ventas de otra persona!');
-        $this->goBack();
+        $this->redirect(['/ventas/index']);
     }
 
     /**

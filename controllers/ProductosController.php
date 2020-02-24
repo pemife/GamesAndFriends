@@ -34,8 +34,20 @@ class ProductosController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => ['create'],
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            $model = Productos::findOne(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->propietario_id != Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
+                                return false;
+                            }
+                            return true;
+                        },
                     ],
                 ],
             ],

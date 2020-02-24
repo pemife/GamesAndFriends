@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'publ',
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{delete} {view} {update} {vermercado}',
+              'template' => '{view} {vermercado}',
               'buttons' => [
                 'vermercado' => function ($url, $model, $key){
                   return Html::a(

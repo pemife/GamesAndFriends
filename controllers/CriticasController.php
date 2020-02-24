@@ -2,12 +2,12 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Criticas;
 use app\models\CriticasSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * CriticasController implements the CRUD actions for Criticas model.
@@ -24,6 +24,29 @@ class CriticasController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            $model = Criticas::findOne(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->usuario_id != Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar la crítica de otra persona!');
+                                return false;
+                            }
+                            return true;
+                        },
+                    ],
                 ],
             ],
         ];
@@ -46,7 +69,7 @@ class CriticasController extends Controller
 
     /**
      * Displays a single Criticas model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -78,7 +101,7 @@ class CriticasController extends Controller
     /**
      * Updates an existing Criticas model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +121,7 @@ class CriticasController extends Controller
     /**
      * Deletes an existing Criticas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +135,7 @@ class CriticasController extends Controller
     /**
      * Finds the Criticas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Criticas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

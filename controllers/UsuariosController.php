@@ -36,11 +36,15 @@ class UsuariosController extends Controller
               'rules' => [
                 [
                   'allow' => true,
-                  'actions' => ['update'],
-                  'roles' => ['@'],
-                  /*'matchCallback' => function ($rule, $action) {
-                      return Yii::$app->user->id === 1;
-                  },*/
+                  'actions' => ['update', 'delete'],
+                  'matchCallback' => function ($rule, $action) {
+                      $model = Usuarios::findOne(Yii::$app->request->queryParams['id']);
+                      if (!Yii::$app->user->isGuest && ($model->id != Yii::$app->user->id)) {
+                          Yii::$app->session->setFlash('error', '¡No puedes modificar el perfil de otra persona!');
+                          return false;
+                      }
+                      return true;
+                  },
                 ],
                 [
                   'allow' => true,

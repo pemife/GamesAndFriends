@@ -37,8 +37,20 @@ class CopiasController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete', 'mis-copias'],
+                        'actions' => ['create', 'mis-copias'],
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => false,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            $model = Copias::findOne(Yii::$app->request->queryParams['id']);
+                            if ($model->propietario_id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar la copia de otra persona!');
+                                return false;
+                            }
+                            return true;
+                        },
                     ],
                 ],
             ],
