@@ -50,7 +50,9 @@
         "phpoffice/phpspreadsheet": "^1.1",
         "symfony/dotenv": "^4.0",
         "knplabs/github-api": "^2.11",
-        "php-http/guzzle6-adapter": "^1.1"
+        "php-http/guzzle6-adapter": "^1.1",
+        "kartik-v/yii2-widget-datepicker": "dev-master",
+        "kartik-v/yii2-widget-select2": "dev-master"
     },
     "config": {
         "process-timeout": 1800,
