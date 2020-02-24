@@ -387,8 +387,8 @@ class VentasController extends Controller
 
             $nombreItem = Productos::findOne($id)->nombre;
         } else {
-            $query->joinWith('copia')
-            ->where(['copia_id' => $id]);
+            $query->joinWith('copia', 'juego')
+            ->where(['juego_id' => $id]);
 
             $nombreItem = Juegos::findOne($id)->titulo;
         }
@@ -403,29 +403,6 @@ class VentasController extends Controller
         return $this->render('ventasItem', [
             'esProducto' => $esProducto,
             'nombreItem' => $nombreItem,
-            'ventasProvider' => $ventasProvider,
-        ]);
-    }
-
-    /**
-     * Accion que renderiza una lista de todas las ventas
-     * de un producto concreto.
-     * @param  int $id El id de un producto
-     * @return string     El resultado del renderizado
-     */
-    public function actionVentasProducto($id)
-    {
-        $query = Ventas::find()
-        ->joinWith('producto')
-        ->where(['producto_id' => $id])
-        ->orderBy('precio');
-
-        $ventasProvider = new ActiveDataProvider([
-          'query' => $query,
-          'pagination' => ['pageSize' => 20],
-        ]);
-
-        return $this->render('ventasItem', [
             'ventasProvider' => $ventasProvider,
         ]);
     }

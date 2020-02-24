@@ -8,6 +8,9 @@ use yii\helpers\Url;
 /* @var $searchModel app\models\VentasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->title = 'Ventas de ' . $nombreItem;
+$this->params['breadcrumbs'][] = $this->title;
+
 if($esProducto){
   $columns = [
     'producto.nombre',
@@ -37,9 +40,6 @@ if($esProducto){
     ['class' => 'yii\grid\ActionColumn'],
   ];
 }
-
-$this->title = 'Ventas de ' . $nombreItem;
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="ventas-index">
