@@ -1,5 +1,7 @@
 <?php
 
+use kartik\date\DatePicker;
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -20,9 +22,7 @@ $currentTimeStamp = date('Y-m-d H:i:s', time());
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'created_at')->textInput(['readonly' => true, 'value' => $currentTimeStamp]); ?>
-
-    <?= $form->field($model, 'copia_id')->dropDownList($listaCopiasVenta) ?>
+    <?= $form->field($model, 'copia_id')->dropDownList($listaCopiasVenta)->label('Copia a vender') ?>
 
     <?= $form->field($model, 'precio')->textInput() ?>
 

@@ -120,7 +120,7 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
             'stock',
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{view} {vermercado}',
+              'template' => '{view} {vermercado} {update} {delete}',
               'buttons' => [
                 'view' => function ($url, $model, $key) {
                   return Html::a(
@@ -136,6 +136,26 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
                     ['title' => 'ver en mercado']
                   );
                 },
+                'update' => function ($url, $model, $key) {
+                  if (Yii::$app->user->id == $model->propietario_id){
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-pencil"></span>',
+                      ['ventas/update', 'id' => $model->id],
+                      ['title' => 'ver en mercado']
+                    );
+                  }
+                  return null;
+                },
+                'delete' => function ($url, $model, $key) {
+                  if (Yii::$app->user->id == $model->propietario_id){
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-trash"></span>',
+                      ['ventas/delete', 'id' => $model->id],
+                      ['title' => 'ver en mercado']
+                    );
+                  }
+                  return null;
+                }
               ]
             ],
           ],
@@ -149,7 +169,7 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
               'juego.titulo',
               [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {vermercado}',
+                'template' => '{vermercado} {view} {update} {delete}',
                 'buttons' => [
                   'view' => function ($url, $model, $key) {
                     return Html::a(
@@ -169,6 +189,26 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
                       ['title' => 'ver en mercado']
                     );
                   },
+                  'update' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->propietario_id){
+                      return Html::a(
+                        '<span class="glyphicon glyphicon-pencil"></span>',
+                        ['ventas/update', 'id' => $model->id],
+                        ['title' => 'ver en mercado']
+                      );
+                    }
+                    return null;
+                  },
+                  'delete' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->propietario_id){
+                      return Html::a(
+                        '<span class="glyphicon glyphicon-trash"></span>',
+                        ['ventas/delete', 'id' => $model->id],
+                        ['title' => 'ver en mercado']
+                      );
+                    }
+                    return null;
+                  }
                 ]
               ],
             ],
