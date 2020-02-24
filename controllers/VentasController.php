@@ -47,11 +47,11 @@ class VentasController extends Controller
                         'matchCallback' => function ($rule, $action) {
                             // Yii::debug(Yii::$app->request->queryParams['id']);
                             $model = Ventas::findOne(Yii::$app->request->queryParams['id']);
-                            if (!Yii::$app->user->isGuest && ($model->vendedor_id != Yii::$app->user->id)) {
-                                Yii::$app->session->setFlash('error', '¡No puedes modificar la venta de otra persona!');
-                                return false;
+                            if (!Yii::$app->user->isGuest && ($model->vendedor_id == Yii::$app->user->id)) {
+                                return true;
                             }
-                            return true;
+                            Yii::$app->session->setFlash('error', '¡No puedes modificar la venta de otra persona!');
+                            return false;
                         },
                     ],
                 ],

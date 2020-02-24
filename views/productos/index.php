@@ -28,8 +28,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'descripcion:ntext',
             'stock',
             'propietario.nombre:ntext:Propietario',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{view} {update} {delete} {vermercado}',
+              'buttons' => [
+                'vermercado' => function ($url, $model, $key){
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
+                    ['title' => 'ver en mercado']
+                  );
+                },
+              ],
+            ],
         ],
     ]); ?>
 

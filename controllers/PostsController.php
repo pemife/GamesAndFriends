@@ -40,11 +40,11 @@ class PostsController extends Controller
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
                             $model = Posts::findOne(Yii::$app->request->queryParams['id']);
-                            if (!Yii::$app->user->isGuest && ($model->usuario_id != Yii::$app->user->id)) {
-                                Yii::$app->session->setFlash('error', '¡No puedes modificar el post de otra persona!');
-                                return false;
+                            if (!Yii::$app->user->isGuest && ($model->usuario_id == Yii::$app->user->id)) {
+                                return true;
                             }
-                            return true;
+                            Yii::$app->session->setFlash('error', '¡No puedes modificar el post de otra persona!');
+                            return false;
                         },
                     ],
                 ],

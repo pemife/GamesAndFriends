@@ -30,8 +30,12 @@ class ProductosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete'],
+                'only' => ['create', 'update', 'delete', 'index'],
                 'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                    ],
                     [
                         'allow' => true,
                         'actions' => ['create'],
@@ -42,11 +46,11 @@ class ProductosController extends Controller
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
                             $model = Productos::findOne(Yii::$app->request->queryParams['id']);
-                            if (!Yii::$app->user->isGuest && ($model->propietario_id != Yii::$app->user->id)) {
-                                Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
-                                return false;
+                            if (!Yii::$app->user->isGuest && ($model->propietario_id == Yii::$app->user->id)) {
+                                return true;
                             }
-                            return true;
+                            Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
+                            return false;
                         },
                     ],
                 ],
