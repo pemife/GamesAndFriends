@@ -9,13 +9,13 @@ use Yii;
  *
  * @property int $id
  * @property int $juego_id
- * @property int $poseedor_id
+ * @property int $propietario_id
  * @property string $clave
  * @property int $plataforma_id
  *
  * @property Juegos $juego
  * @property Plataformas $plataforma
- * @property Usuarios $poseedor
+ * @property Usuarios $propietario
  * @property Ventas[] $ventas
  */
 class Copias extends \yii\db\ActiveRecord
@@ -35,13 +35,13 @@ class Copias extends \yii\db\ActiveRecord
     {
         return [
             [['juego_id', 'plataforma_id'], 'required'],
-            [['juego_id', 'poseedor_id', 'plataforma_id'], 'default', 'value' => null],
-            [['juego_id', 'poseedor_id', 'plataforma_id'], 'integer'],
+            [['juego_id', 'propietario_id', 'plataforma_id'], 'default', 'value' => null],
+            [['juego_id', 'propietario_id', 'plataforma_id'], 'integer'],
             [['clave'], 'string', 'max' => 17],
             [['clave'], 'match', 'pattern' => '/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/'],
             [['juego_id'], 'exist', 'skipOnError' => true, 'targetClass' => Juegos::className(), 'targetAttribute' => ['juego_id' => 'id']],
             [['plataforma_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plataformas::className(), 'targetAttribute' => ['plataforma_id' => 'id']],
-            [['poseedor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['poseedor_id' => 'id']],
+            [['propietario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['propietario_id' => 'id']],
         ];
     }
 
@@ -53,18 +53,21 @@ class Copias extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'juego_id' => 'Juego',
-            'poseedor_id' => 'Poseedor',
+            'propietario_id' => 'propietario',
             'clave' => 'Clave',
             'plataforma_id' => 'Plataforma',
         ];
     }
 
-    public static function lista()
+    public static function listaQuery()
     {
-        return self::find()
-            ->where(['poseedor_id' => Yii::$app->user->id])
-            ->indexBy('id')
-            ->all();
+        $query = self::find();
+
+        if (!Yii::$app->user->isGuest) {
+            $query->andWhere(['propietario_id' => Yii::$app->user->id]);
+        }
+
+        return $query;
     }
 
     /**
@@ -86,9 +89,9 @@ class Copias extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPoseedor()
+    public function getPropietario()
     {
-        return $this->hasOne(Usuarios::className(), ['id' => 'poseedor_id'])->inverseOf('copias');
+        return $this->hasOne(Usuarios::className(), ['id' => 'propietario_id'])->inverseOf('copias');
     }
 
     /**

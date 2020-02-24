@@ -34,7 +34,7 @@ use yii\bootstrap4\ActiveForm;
     }
 } ?>
     <div class="form-group">
-        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
+        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Guardar') ?>, ['class' => 'btn btn-success']) ?>
     </div>
 
     <?= "<?php " ?>ActiveForm::end(); ?>

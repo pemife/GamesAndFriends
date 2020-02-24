@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Copias */
 
-$this->title = $model->id;
+$this->title = $model->juego->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Copias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -15,25 +15,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    <?php if(Yii::$app->user->id === 1) : ?>
+      <p>
+          <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']) ?>
+          <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+              'class' => 'btn btn-danger',
+              'data' => [
+                  'confirm' => '¿Estas seguro de querer borrar este elemento?',
+                  'method' => 'post',
+              ],
+          ]) ?>
+      </p>
+    <?php endif ?>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'juego_id',
-            'poseedor_id',
-            'clave',
-            'plataforma_id',
+            'juego.titulo',
+            'propietario.nombre:text:Propietario',
+            'plataforma.nombre:text:Plataforma',
         ],
     ]) ?>
 

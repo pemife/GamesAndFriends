@@ -1,11 +1,11 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Juegos */
 
-$this->title = 'Create Juegos';
+$this->title = 'Crear Juegos';
 $this->params['breadcrumbs'][] = ['label' => 'Juegos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

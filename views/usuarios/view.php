@@ -1,5 +1,7 @@
 <?php
 
+use yii\grid\GridView;
+
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
@@ -97,11 +99,124 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
         'model' => $model,
         'attributes' => [
             'nombre',
-            'created_at:RelativeTime',
+            'created_at:Date',
             'email:email',
             'biografia:ntext',
             'fechanac',
         ],
     ]) ?>
+
+    </br></br>
+
+    <h1>Inventario</h1>
+
+    <div class="row">
+      <div class="col">
+        <h3>Productos</h3>
+        <?= GridView::widget([
+          'dataProvider' => $productosProvider,
+          'columns' => [
+            'nombre',
+            'stock',
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{view} {vermercado} {update} {delete}',
+              'buttons' => [
+                'view' => function ($url, $model, $key) {
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-eye-open"></span>',
+                    ['productos/view', 'id' => $model->id],
+                    ['title' => 'ver copia']
+                  );
+                },
+                'vermercado' => function ($url, $model, $key){
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
+                    ['title' => 'ver en mercado']
+                  );
+                },
+                'update' => function ($url, $model, $key) {
+                  if (Yii::$app->user->id == $model->propietario_id){
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-pencil"></span>',
+                      ['ventas/update', 'id' => $model->id],
+                      ['title' => 'ver en mercado']
+                    );
+                  }
+                  return null;
+                },
+                'delete' => function ($url, $model, $key) {
+                  if (Yii::$app->user->id == $model->propietario_id){
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-trash"></span>',
+                      ['ventas/delete', 'id' => $model->id],
+                      ['title' => 'ver en mercado']
+                    );
+                  }
+                  return null;
+                }
+              ]
+            ],
+          ],
+          ]) ?>
+        </div>
+        <div class="col">
+          <h3>Juegos</h3>
+          <?= GridView::widget([
+            'dataProvider' => $copiasProvider,
+            'columns' => [
+              'juego.titulo',
+              [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{vermercado} {view} {update} {delete}',
+                'buttons' => [
+                  'view' => function ($url, $model, $key) {
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-eye-open"></span>',
+                      ['copias/view', 'id' => $model->id],
+                      ['title' => 'ver copia']
+                    );
+                  },
+                  'vermercado' => function ($url, $model, $key){
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                      [
+                        'ventas/ventas-item',
+                        'id' => $model->id,
+                        'esProducto' => false,
+                      ],
+                      ['title' => 'ver en mercado']
+                    );
+                  },
+                  'update' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->propietario_id){
+                      return Html::a(
+                        '<span class="glyphicon glyphicon-pencil"></span>',
+                        ['ventas/update', 'id' => $model->id],
+                        ['title' => 'ver en mercado']
+                      );
+                    }
+                    return null;
+                  },
+                  'delete' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->propietario_id){
+                      return Html::a(
+                        '<span class="glyphicon glyphicon-trash"></span>',
+                        ['ventas/delete', 'id' => $model->id],
+                        ['title' => 'ver en mercado']
+                      );
+                    }
+                    return null;
+                  }
+                ]
+              ],
+            ],
+            ]) ?>
+          </div>
+    </div>
+
+
+
 
 </div>

@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Productos', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Productos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -24,16 +24,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'nombre',
             'descripcion:ntext',
-            'precio',
             'stock',
-            //'poseedor_id',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'propietario.nombre:ntext:Propietario',
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{view} {update} {delete} {vermercado}',
+              'buttons' => [
+                'vermercado' => function ($url, $model, $key){
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
+                    ['title' => 'ver en mercado']
+                  );
+                },
+              ],
+            ],
         ],
     ]); ?>
 

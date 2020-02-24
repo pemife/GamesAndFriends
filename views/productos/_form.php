@@ -16,14 +16,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'descripcion')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'precio')->textInput() ?>
-
     <?= $form->field($model, 'stock')->textInput() ?>
 
-    <?= $form->field($model, 'poseedor_id')->textInput() ?>
+    <?= $form->field($model, 'propietario_id')->hiddeninput([
+      'readonly' => true,
+      'value' => Yii::$app->user->identity->id,
+    ])->label(false) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

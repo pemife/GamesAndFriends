@@ -2,32 +2,29 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\Usuarios;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\EtiquetasSearch */
+/* @var $searchModel app\models\CopiasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Etiquetas';
+$this->title = Yii::$app->user->id == $modelUsuario->id ? 'Mis juegos' : 'Juegos de ' . $modelUsuario->nombre;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="etiquetas-index">
+<div class="copias-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Crear Etiquetas', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Copias', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'nombre',
+            'juego.titulo',
+            'plataforma.nombre:text:Plataforma',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

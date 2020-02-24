@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Copias;
 use app\models\Etiquetas;
+use app\models\Juegos;
 use app\models\Productos;
 use app\models\Ventas;
 use app\models\VentasSearch;
@@ -33,10 +34,25 @@ class VentasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete', 'mis-ventas'],
                 'rules' => [
                     [
                         'allow' => true,
+                        'actions' => ['create', 'mis-ventas'],
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            // Yii::debug(Yii::$app->request->queryParams['id']);
+                            $model = Ventas::findOne(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->vendedor_id == Yii::$app->user->id)) {
+                                return true;
+                            }
+                            Yii::$app->session->setFlash('error', '¡No puedes modificar la venta de otra persona!');
+                            return false;
+                        },
                     ],
                 ],
             ],
@@ -44,7 +60,7 @@ class VentasController extends Controller
     }
 
     /**
-     * Lists all Ventas models.
+     * Muestra todas las ventas.
      * @return mixed
      */
     public function actionIndex()
@@ -57,33 +73,23 @@ class VentasController extends Controller
 
         // Si el usuario no esta logueado, se le muestran todas las copias/productos
         // en venta
-        if (Yii::$app->user->isGuest) {
-            // Una query para copias y otra para productos
-            $queryCopias = Ventas::find()
-            ->where([
-                'finished_at' => null,
-                'producto_id' => null,
-            ]);
+        // Una query para copias y otra para productos
+        $queryCopias = Ventas::find()
+        ->where([
+            'finished_at' => null,
+            'producto_id' => null,
+        ]);
 
-            $queryProductos = Ventas::find()
-            ->where([
-                'finished_at' => null,
-                'copia_id' => null,
-            ]);
-        } else {
-            $queryCopias = Ventas::find()
-            ->where([
-                'finished_at' => null,
-                'producto_id' => null,
-            ])
-            ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+        $queryProductos = Ventas::find()
+        ->where([
+            'finished_at' => null,
+            'copia_id' => null,
+        ]);
 
-            $queryProductos = Ventas::find()
-            ->where([
-                'finished_at' => null,
-                'copia_id' => null,
-            ])
-            ->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+        if (!Yii::$app->user->isGuest) {
+            $queryCopias->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+
+            $queryProductos->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
         }
 
         $copiasProvider = new ActiveDataProvider([
@@ -95,6 +101,9 @@ class VentasController extends Controller
 
         $productosProvider = new ActiveDataProvider([
             'query' => $queryProductos,
+            'pagination' => [
+              'pageSize' => 5,
+            ],
         ]);
 
         $generos = Etiquetas::find()->orderBy('nombre')->all();
@@ -157,8 +166,7 @@ class VentasController extends Controller
             $puedeVender = true;
         }
 
-
-        foreach (Copias::lista() as $copia) {
+        foreach (Copias::listaQuery()->all() as $copia) {
             $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             $puedeVender = true;
         }
@@ -192,7 +200,7 @@ class VentasController extends Controller
 
         if ($model->producto === null) {
             $listaCopiasVenta['0'] = null;
-            foreach (Copias::lista() as $copia) {
+            foreach (Copias::listaQuery()->all() as $copia) {
                 $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
             }
             return $this->render('updateCopia', [
@@ -228,30 +236,184 @@ class VentasController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Muestra todas las ventas donde el vendedor es el usuario logueado.
+     * @param  int  $u Id del usuario del que queremos ver sus ventas
+     * @return string    Resultado de renderizado de la página
+     */
     public function actionMisVentas($u)
     {
         $searchModel = new VentasSearch();
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['index']);
-        }
 
         if (Yii::$app->user->id == $u) {
-            $misVentas = Ventas::find()->where([
-            'finished_at' => null,
-            'vendedor_id' => Yii::$app->user->id,
-            ])->with('producto', 'copia')->all();
+            $queryMisProductos = Ventas::find()->where([
+                'finished_at' => null,
+                'copia_id' => null,
+                'vendedor_id' => Yii::$app->user->id,
+            ]);
 
-            if (empty($misVentas)) {
+            $queryMisCopias = Ventas::find()->where([
+                'finished_at' => null,
+                'producto_id' => null,
+                'vendedor_id' => Yii::$app->user->id,
+            ]);
+
+            $misProductosProvider = new ActiveDataProvider([
+                'query' => $queryMisProductos,
+                'pagination' => [
+                    'pageSize' => 5,
+                ],
+            ]);
+
+            $misCopiasProvider = new ActiveDataProvider([
+                'query' => $queryMisCopias,
+                'pagination' => [
+                    'pageSize' => 5,
+                ],
+            ]);
+
+            if ($misProductosProvider->count == 0 && $misCopiasProvider->count == 0) {
                 Yii::$app->session->setFlash('error', 'No tienes ningun producto o copia en venta!');
             }
 
             return $this->render('misVentas', [
-              'misVentas' => $misVentas,
+              'misProductosProvider' => $misProductosProvider,
+              'misCopiasProvider' => $misCopiasProvider,
             ]);
         }
 
         Yii::$app->session->setFlash('error', 'No puedes acceder a las ventas de otra persona!');
-        $this->goBack();
+        $this->redirect(['/ventas/index']);
+    }
+
+    /**
+     * Esta accion filtra las copias por nombre y por genero [TODO].
+     * @param  string $nombre El nombre del juego de Copia
+     * @param  string $genero El genero del juego de Copia
+     * @return [type]         [description]
+     */
+    public function actionFiltraCopias($nombre, $genero)
+    {
+        $dataProvider = new ActiveDataProvider([
+          'query' => Ventas::find()
+          ->where(['finished_at' => null])
+          ->filterWhere([]),
+        ]);
+    }
+
+    /**
+     * Esta accion sirve para la creacion de la venta de un producto.
+     * @return string El resultado del renderizado de la página
+     */
+    public function actionCreaVentaProducto()
+    {
+        $model = new Ventas();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            Yii::$app->session->setFlash('error', 'Ha ocurrido un fallo al procesar tu venta');
+        }
+
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
+            return $this->redirect(['ventas/index']);
+        }
+
+        // Crea un array asociativo con el id del producto a vender + el nombre
+        foreach (Productos::lista() as $producto) {
+            $listaProductosVenta[$producto->id] = $producto->nombre;
+            $puedeVender = true;
+        }
+
+        if (!$puedeVender) {
+            Yii::$app->session->setFlash('error', '¡Tu usuario no posee ningun producto!');
+            return $this->redirect(['ventas/index']);
+        }
+
+        return $this->render('creaVentaProducto', [
+            'listaProductosVenta' => $listaProductosVenta,
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Esta accion sirve para la creacion de la venta de una copia.
+     * @return string El resultado del renderizado de la página
+     */
+    public function actionCreaVentaCopia()
+    {
+        $model = new Ventas();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            Yii::$app->session->setFlash('error', 'Ha ocurrido un fallo al procesar tu venta');
+        }
+
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
+            return $this->redirect(['ventas/index']);
+        }
+
+        // Crea un array asociativo con el id de la copia a vender + el nombre
+        foreach (Copias::listaQuery()->all() as $copia) {
+            $listaCopiasVenta[$copia->id] = $copia->juego->titulo;
+        }
+
+        $dataProvider = new ActiveDataProvider([
+          'query' => Copias::listaQuery(),
+        ]);
+
+        if ($dataProvider->count == 0) {
+            Yii::$app->session->setFlash('error', '¡Tu usuario no posee ninguna copia!');
+            return $this->redirect(['ventas/index']);
+        }
+
+        return $this->render('creaVentaCopia', [
+            'listaCopiasVenta' => $listaCopiasVenta,
+            'dataProvider' => $dataProvider,
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Accion que renderiza una lista de todas las ventas
+     * de un item concreto.
+     * @param mixed $id El id del item que queremos usar
+     * @param bool $esProducto Boolean para saber si es un producto o una copia
+     * @return string     El resultado del renderizado
+     */
+    public function actionVentasItem($id, $esProducto)
+    {
+        $query = Ventas::find();
+
+        if ($esProducto) {
+            $query->joinWith('producto')
+            ->where(['producto_id' => $id]);
+
+            $nombreItem = Productos::findOne($id)->nombre;
+        } else {
+            $query->joinWith('copia', 'juego')
+            ->where(['juego_id' => $id]);
+
+            $nombreItem = Juegos::findOne($id)->titulo;
+        }
+
+        $query->orderBy('precio');
+
+        $ventasProvider = new ActiveDataProvider([
+          'query' => $query,
+          'pagination' => ['pageSize' => 20],
+        ]);
+
+        return $this->render('ventasItem', [
+            'esProducto' => $esProducto,
+            'nombreItem' => $nombreItem,
+            'ventasProvider' => $ventasProvider,
+        ]);
     }
 
     /**
@@ -268,14 +430,5 @@ class VentasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionFiltraCopias($nombre, $genero)
-    {
-        $dataProvider = new ActiveDataProvider([
-          'query' => Ventas::find()
-          ->where(['finished_at' => null])
-          ->filterWhere([]),
-        ]);
     }
 }

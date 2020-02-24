@@ -18,7 +18,7 @@ class JuegosSearch extends Juegos
     {
         return [
             [['id'], 'integer'],
-            [['titulo', 'descripcion', 'fechalan', 'dev'], 'safe'],
+            [['titulo', 'descripcion', 'fechalan', 'dev', 'publ'], 'safe'],
         ];
     }
 
@@ -64,7 +64,8 @@ class JuegosSearch extends Juegos
 
         $query->andFilterWhere(['ilike', 'titulo', $this->titulo])
             ->andFilterWhere(['ilike', 'descripcion', $this->descripcion])
-            ->andFilterWhere(['ilike', 'dev', $this->dev]);
+            ->andFilterWhere(['ilike', 'dev', $this->dev])
+            ->andFilterWhere(['ilike', 'publ', $this->publ]);
 
         return $dataProvider;
     }

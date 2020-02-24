@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\CopiasSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Copias';
+$this->title = 'Lista de copias';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="copias-index">
@@ -15,22 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Copias', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Copias', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'juego_id',
-            'poseedor_id',
-            'clave',
-            'plataforma_id',
+            'juego.titulo',
+            'plataforma.nombre:text:Plataforma',
+            'propietario.nombre',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

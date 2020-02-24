@@ -51,14 +51,15 @@ AppAsset::register($this);
         'items' => [
             ['label' => '2ª Mano', 'url' => ['/ventas/index']],
             ['label' => 'Productos', 'url' => ['/productos/index']],
+            ['label' => 'Juegos', 'url' => ['/juegos/index']],
             ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
-            ['label' => 'Puesto en Venta', 'url' => ['/ventas/mis-ventas', 'u' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => 'Perfil', 'url' => ['/usuarios/view', 'id' => $usuarioId], 'visible' => !Yii::$app->user->isGuest],
             [
                 'label' => $usuarioNombre,
                 'items' => [
-                 ['label' => 'Modificar perfil', 'url' => Url::to(['usuarios/update', 'id' => Yii::$app->user->id])],
+                 ['label' => 'Puesto en Venta', 'url' => ['/ventas/mis-ventas', 'u' => $usuarioId]],
+                 ['label' => 'Ver perfil', 'url' => ['usuarios/view', 'id' => Yii::$app->user->id]],
+                 ['label' => 'Modificar perfil', 'url' => ['usuarios/update', 'id' => Yii::$app->user->id]],
                  Html::beginForm(['site/logout'], 'post')
                  . Html::submitButton(
                     '&nbsp;&nbsp;Logout (' . $usuarioNombre . ')',

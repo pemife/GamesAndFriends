@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Productos;
 use app\models\ProductosSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ProductosController implements the CRUD actions for Productos model.
@@ -26,6 +28,33 @@ class ProductosController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete', 'index'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            $model = Productos::findOne(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->propietario_id == Yii::$app->user->id)) {
+                                return true;
+                            }
+                            Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
+                            return false;
+                        },
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -36,7 +65,17 @@ class ProductosController extends Controller
     public function actionIndex()
     {
         $searchModel = new ProductosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $query = Productos::find();
+
+        if (!Yii::$app->user->isGuest) {
+            $query->where(['!=', 'propietario_id', Yii::$app->user->id]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
+          'query' => $query,
+          'pagination' => ['pagesize' => 20],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -46,7 +85,7 @@ class ProductosController extends Controller
 
     /**
      * Displays a single Productos model.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -78,7 +117,7 @@ class ProductosController extends Controller
     /**
      * Updates an existing Productos model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,7 +137,7 @@ class ProductosController extends Controller
     /**
      * Deletes an existing Productos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param int $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -112,7 +151,7 @@ class ProductosController extends Controller
     /**
      * Finds the Productos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param int $id
      * @return Productos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

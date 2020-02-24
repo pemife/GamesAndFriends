@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'juego_id') ?>
 
-    <?= $form->field($model, 'poseedor_id') ?>
+    <?= $form->field($model, 'propietario_id') ?>
 
     <?= $form->field($model, 'clave') ?>
 

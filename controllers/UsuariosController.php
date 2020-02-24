@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Copias;
+use app\models\Productos;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -28,28 +31,32 @@ class UsuariosController extends Controller
                 ],
             ],
             'access' => [
-              'class' => AccessControl::classname(),
-              'only' => ['update', 'login', 'logout'],
-              'rules' => [
-                [
-                  'allow' => true,
-                  'actions' => ['update'],
-                  'roles' => ['@'],
-                  /*'matchCallback' => function ($rule, $action) {
-                      return Yii::$app->user->id === 1;
-                  },*/
-                ],
-                [
-                  'allow' => true,
-                  'actions' => ['login'],
-                  'roles' => ['?'],
-                ],
-                [
-                  'allow' => true,
-                  'actions' => ['logout'],
-                  'roles' => ['@'],
-                ],
-              ],
+                'class' => AccessControl::classname(),
+                'only' => ['update', 'login', 'logout'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['login'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            $model = Usuarios::findOne(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->id == Yii::$app->user->id)) {
+                                return true;
+                            }
+                            Yii::$app->session->setFlash('error', '¡No puedes modificar el perfil de otra persona!');
+                            return false;
+                        },
+                    ],
+                  ],
             ],
         ];
     }
@@ -77,8 +84,26 @@ class UsuariosController extends Controller
      */
     public function actionView($id)
     {
+        $queryProductos = Productos::find()
+        ->where(['propietario_id' => $id]);
+
+        $queryCopias = Copias::find()
+        ->where(['propietario_id' => $id]);
+
+        $productosProvider = new ActiveDataProvider([
+          'query' => $queryProductos,
+          'pagination' => ['pageSize' => 5],
+        ]);
+
+        $copiasProvider = new ActiveDataProvider([
+          'query' => $queryCopias,
+          'pagination' => ['pageSize' => 5],
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'productosProvider' => $productosProvider,
+            'copiasProvider' => $copiasProvider,
         ]);
     }
 

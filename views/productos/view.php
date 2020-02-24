@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Productos */
 
-$this->title = $model->id;
+$this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Productos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -16,26 +16,28 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?php if($model->propietario_id == Yii::$app->user->id){
+          echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
+          echo Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
+              'confirm' => '¿Estas seguro de querer borrar este elemento?',
+              'method' => 'post',
             ],
-        ]) ?>
+          ]);
+        } ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'nombre',
-            'descripcion:ntext',
-            'precio',
-            'stock',
-            'poseedor_id',
-        ],
-    ]) ?>
+    <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
+    <p>
+      <span style="font-weight: bold;">Descripcion:</span>
+      </br>
+      <?= Html::encode($model->descripcion) ?>
+    </p>
+    <p>
+      <span style="font-weight: bold;">Propietario:</span>
+      </br>
+      <?= Html::a($model->propietario->nombre, ['usuarios/view', 'id' => $model->propietario_id]) ?>
+    </p>
 
 </div>

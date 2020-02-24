@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Juegos', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Crear Juegos', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -24,14 +24,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-
-            'id',
             'titulo',
             'descripcion:ntext',
             'fechalan',
             'dev',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'publ',
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{view} {vermercado}',
+              'buttons' => [
+                'vermercado' => function ($url, $model, $key){
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
+                    ['title' => 'ver en mercado']
+                  );
+                },
+              ],
+            ],
         ],
     ]); ?>
 

@@ -6,7 +6,9 @@ use app\models\Copias;
 use app\models\CopiasSearch;
 use app\models\Juegos;
 use app\models\Plataformas;
+use app\models\Usuarios;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -30,13 +32,27 @@ class CopiasController extends Controller
                 ],
             ],
             'access' => [
-              'class' => AccessControl::className(),
-              'rules' => [
-                [
-                  'allow' => true,
-                  'roles' => ['@'],
+                'class' => AccessControl::className(),
+                'only' => ['create', 'update', 'delete', 'mis-copias'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['create', 'mis-copias'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'delete'],
+                        'matchCallback' => function ($rule, $action) {
+                            $model = Copias::findOne(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->propietario_id == Yii::$app->user->id)) {
+                                return true;
+                            }
+                            Yii::$app->session->setFlash('error', '¡No puedes modificar la copia de otra persona!');
+                            return false;
+                        },
+                    ],
                 ],
-              ],
             ],
         ];
     }
@@ -47,8 +63,21 @@ class CopiasController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->isGuest) {
+            $this->redirect(['copias/mis-copias', 'id' => Yii::$app->user->id]);
+        }
+
+        $query = Copias::find()
+        ->joinWith('juego')
+        ->orderBy('titulo');
+
         $searchModel = new CopiasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+              'pageSize' => 20,
+            ],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -64,9 +93,13 @@ class CopiasController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if (Yii::$app->user->id == $this->findModel($id)->propietario_id) {
+            return $this->render('view', [
+              'model' => $this->findModel($id),
+            ]);
+        }
+        Yii::$app->session->setFlash('error', '¡No tienes acceso a esa copia!');
+        return $this->goBack();
     }
 
     /**
@@ -121,6 +154,30 @@ class CopiasController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionMisCopias($id)
+    {
+        $usuario = Usuarios::findOne($id);
+
+        $query = Copias::find()
+        ->where(['propietario_id' => $id])
+        ->joinWith('juego')
+        ->orderBy('titulo');
+
+        $searchModel = new CopiasSearch();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+              'pageSize' => 20,
+            ],
+        ]);
+
+        return $this->render('misCopias', [
+            'modelUsuario' => $usuario,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**

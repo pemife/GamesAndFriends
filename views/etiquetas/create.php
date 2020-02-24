@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Etiquetas */
 
-$this->title = 'Create Etiquetas';
+$this->title = 'Crear Etiquetas';
 $this->params['breadcrumbs'][] = ['label' => 'Etiquetas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
