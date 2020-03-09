@@ -44,8 +44,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'precio',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{view} {vermercado}',
+              'buttons' => [
+                'vermercado' => function ($url, $model, $key){
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                    ['ventas/ventas-item', 'id' => $model->copia->juego->id, 'esProducto' => false],
+                    ['title' => 'ventas de ' . $model->copia->juego->titulo]
+                  );
+                },
+              ]
+            ],
+          ],
     ]); ?>
 
     <?= LinkPager::widget([
@@ -61,7 +73,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'vendedor.nombre:ntext:Vendedor',
             'created_at:RelativeTime:En venta desde',
             'precio',
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+              'class' => 'yii\grid\ActionColumn',
+              'template' => '{view} {vermercado}',
+              'buttons' => [
+                'vermercado' => function ($url, $model, $key){
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
+                    ['title' => 'ventas de ' . $model->producto->nombre]
+                  );
+                },
+              ]
+            ],
         ],
     ]); ?>
 
