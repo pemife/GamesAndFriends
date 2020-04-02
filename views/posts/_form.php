@@ -1,5 +1,7 @@
 <?php
 
+use kartik\select2\Select2;
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -20,9 +22,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'desarrollo')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'juego_id')->textInput() ?>
+    <?= $form->field($model, 'juego_id')->widget(Select2::className(),[
+        'data' => $listaJuegos,
+        'options' => ['placeholder' => 'Introduzca el juego del que trata el post'],
+        'pluginOptions' => [
+          'allowClear' => false,
+        ],
+      ])->label('Juego del post'); ?>
 
-    <?= $form->field($model, 'usuario_id')->textInput() ?>
+    <?= $form->field($model, 'usuario_id')->hiddenInput([
+      'readonly' => true,
+      'value' => Yii::$app->user->identity->id,
+      ])->label(false);
+      ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

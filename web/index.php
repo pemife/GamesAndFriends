@@ -7,7 +7,7 @@ if (($getenv = getenv('YII_ENV')) !== 'prod'
     (new \Symfony\Component\Dotenv\Dotenv())->load($file);
 }
 
-define('YII_ENV', $getenv('YII_ENV') ?: 'dev');
+define('YII_ENV', getenv('YII_ENV') ?: 'dev');
 define('YII_DEBUG', getenv('YII_DEBUG') ?: YII_ENV == 'dev');
 
 require __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
