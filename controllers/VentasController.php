@@ -388,16 +388,16 @@ class VentasController extends Controller
      */
     public function actionVentasItem($id, $esProducto)
     {
-        $query = Ventas::find();
+        $query = Ventas::find()->where(['finished_at' => null]);
 
         if ($esProducto) {
             $query->joinWith('producto')
-            ->where(['producto_id' => $id]);
+            ->andWhere(['producto_id' => $id]);
 
             $nombreItem = Productos::findOne($id)->nombre;
         } else {
             $query->joinWith('copia', 'juego')
-            ->where(['juego_id' => $id]);
+            ->andWhere(['juego_id' => $id]);
 
             $nombreItem = Juegos::findOne($id)->titulo;
         }
