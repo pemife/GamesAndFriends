@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vermercado' => function ($url, $model, $key){
                   return Html::a(
                     '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
+                    ['ventas/ventas-item', 'id' => $model->producto->id, 'esProducto' => true],
                     ['title' => 'ver en mercado']
                   );
                 },
