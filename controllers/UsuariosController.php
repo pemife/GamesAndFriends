@@ -201,6 +201,12 @@ class UsuariosController extends Controller
         ]);
     }
 
+    // https://jqueryui.com/sortable/
+    // public fucntion actionListaDeseos($uId)
+    // {
+    //     return null;
+    // }
+
     /**
      * Finds the Usuarios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

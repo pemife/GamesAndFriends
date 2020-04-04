@@ -16,8 +16,36 @@ if($esProducto){
     'producto.nombre',
     'producto.descripcion',
     'producto.stock',
-    'producto.propietario.nombre',
-    ['class' => 'yii\grid\ActionColumn'],
+    'producto.propietario.nombre:ntext:Propietario',
+    [
+        'class' => 'yii\grid\ActionColumn',
+        'template' => '{view} {update} {delete}',
+        'buttons' => [
+            'update' => function ($url, $model, $key){
+                if(Yii::$app->user->id == $model->vendedor->id) {
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-pencil"></span>',
+                      ['ventas/update', 'id' => $model->id],
+                      ['title' => 'Actualizar']
+                    );
+                }
+            },
+            'delete' => function ($url, $model, $key){
+                if(Yii::$app->user->id == $model->vendedor->id) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-trash"></span>',
+                        ['ventas/delete', 'id' => $model->id],
+                        [
+                            'title' => 'Eliminar',
+                            'data-method' => 'POST',
+                            'confirm' => 'Esta seguro de que quiere eliminar la venta?'
+                        ]
+                    );
+                }
+                return null;
+            }
+        ]
+    ],
   ];
 } else {
   $columns = [
@@ -37,7 +65,35 @@ if($esProducto){
         }
     ],
     'precio',
-    ['class' => 'yii\grid\ActionColumn'],
+    [
+        'class' => 'yii\grid\ActionColumn',
+        'template' => '{view} {update} {delete}',
+        'buttons' => [
+            'update' => function ($url, $model, $key){
+                if(Yii::$app->user->id == $model->vendedor->id) {
+                    return Html::a(
+                      '<span class="glyphicon glyphicon-pencil"></span>',
+                      ['ventas/update', 'id' => $model->id],
+                      ['title' => 'Actualizar']
+                    );
+                }
+            },
+            'delete' => function ($url, $model, $key){
+                if(Yii::$app->user->id == $model->vendedor->id) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-trash"></span>',
+                        ['ventas/delete', 'id' => $model->id],
+                        [
+                            'title' => 'Eliminar',
+                            'data-method' => 'POST',
+                            'confirm' => 'Esta seguro de que quiere eliminar la venta?'
+                        ]
+                    );
+                }
+                return null;
+            }
+        ]
+    ],
   ];
 }
 ?>

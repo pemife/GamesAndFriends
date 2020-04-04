@@ -51,7 +51,7 @@ class Productos extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'descripcion' => 'Descripcion',
+            'descripcion' => 'Descripción',
             'stock' => 'Cantidad',
             'propietario_id' => 'Propietario',
         ];

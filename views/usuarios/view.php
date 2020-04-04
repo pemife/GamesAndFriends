@@ -70,13 +70,11 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
                         <?= Html::a('Borrar perfil', $enlaceBor, [
                             'class' => 'btn btn-link',
                             'disabled' => !$puedeModificar,
-                            'data' => $puedeModificar ?
-                            [
+                            'data' => [
                                 'confirm' => 'Seguro que quieres borrar el perfil?',
                                 'method' => 'post',
-                                ] :
-                                [],
-                                ]) ?>
+                            ],
+                            ]) ?>
                     </li>
                     <li>
                         <?= Html::a('Cambiar contraseña', $enlacePass, [
@@ -119,39 +117,48 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
             'nombre',
             'stock',
             [
+                'header' => 'Estado',
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{estado}',
+                'buttons' => [
+                    'estado' => function ($url, $model, $key) {
+                        //TODO
+                    }
+                ],
+            ],
+            [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{view} {vermercado} {update} {delete}',
+              'template' => '{vermercado} {view} {delete}',
               'buttons' => [
-                'view' => function ($url, $model, $key) {
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-eye-open"></span>',
-                    ['productos/view', 'id' => $model->id],
-                    ['title' => 'ver copia']
-                  );
-                },
-                'vermercado' => function ($url, $model, $key){
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
-                    ['title' => 'ver en mercado']
-                  );
-                },
-                'update' => function ($url, $model, $key) {
-                  if (Yii::$app->user->id == $model->propietario_id){
-                    return Html::a(
-                      '<span class="glyphicon glyphicon-pencil"></span>',
-                      ['ventas/update', 'id' => $model->id],
-                      ['title' => 'ver en mercado']
-                    );
-                  }
-                  return null;
-                },
+                  'vermercado' => function ($url, $model, $key){
+                      return Html::a(
+                          '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                          ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
+                          ['title' => 'ver en mercado']
+                      );
+                  },
+                  'view' => function ($url, $model, $key) {
+                      return Html::a(
+                          '<span class="glyphicon glyphicon-eye-open"></span>',
+                          ['productos/view', 'id' => $model->id],
+                          ['title' => 'ver producto']
+                      );
+                  },
                 'delete' => function ($url, $model, $key) {
                   if (Yii::$app->user->id == $model->propietario_id){
                     return Html::a(
                       '<span class="glyphicon glyphicon-trash"></span>',
-                      ['ventas/delete', 'id' => $model->id],
-                      ['title' => 'ver en mercado']
+                      [
+                          'productos/delete',
+                          'id' => $model->id,
+                      ],
+                      [
+                          'data' => [
+                            'method' => 'post',
+                            'confirm' => '¿Estas seguro de retirar el producto?(Esta accion no se puede deshacer)',
+                          ],
+                          'title' => 'retirar producto de inventario',
+                      ]
                     );
                   }
                   return null;
@@ -167,6 +174,16 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
             'dataProvider' => $copiasProvider,
             'columns' => [
               'juego.titulo',
+              [
+                  'header' => 'Estado',
+                  'class' => 'yii\grid\ActionColumn',
+                  'template' => '{estado}',
+                  'buttons' => [
+                      'estado' => function ($url, $model, $key) {
+                          //TODO
+                      }
+                  ],
+              ],
               [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{vermercado} {view} {update} {delete}',
