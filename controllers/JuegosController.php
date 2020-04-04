@@ -6,6 +6,7 @@ use app\models\Juegos;
 use app\models\JuegosSearch;
 use app\models\Ventas;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -129,6 +130,25 @@ class JuegosController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Muestra una vista con los juegos recien añadidos o actualizados.
+     * @return mixed Renderiza una pagina con novedades de juegos
+     */
+    public function actionNovedades()
+    {
+        $searchModel = new JuegosSearch();
+        $queryJuegosNuevos = Juegos::find()->orderBy('fechalan DESC')->limit(10);
+
+        $juegosProvider = new ActiveDataProvider([
+            'query' => $queryJuegosNuevos,
+        ]);
+
+        return $this->render('novedades', [
+            'searchModel' => $searchModel,
+            'juegosProvider' => $juegosProvider,
+        ]);
     }
 
     /**

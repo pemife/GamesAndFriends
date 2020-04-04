@@ -49,6 +49,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
+            ['label' => 'Novedades', 'url' => ['/juegos/novedades']],
             ['label' => '2ª Mano', 'url' => ['/ventas/index']],
             ['label' => 'Productos', 'url' => ['/productos/index']],
             ['label' => 'Juegos', 'url' => ['/juegos/index']],
