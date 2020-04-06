@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Productos */
@@ -39,5 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
       </br>
       <?= Html::a($model->propietario->nombre, ['usuarios/view', 'id' => $model->propietario_id]) ?>
     </p>
+
+    <h3>Críticas</h3>
+
+    <?= ListView::widget([
+        'dataProvider' => $dataProvider,
+        'itemView' => '_productosCriticas'
+    ]); ?>
 
 </div>

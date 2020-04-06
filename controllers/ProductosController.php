@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Criticas;
 use app\models\Productos;
 use app\models\ProductosSearch;
 use Yii;
@@ -91,8 +92,15 @@ class ProductosController extends Controller
      */
     public function actionView($id)
     {
+        $criticasQuery = Criticas::find()->where(['producto_id' => $id])->limit(10);
+
+        $criticasProvider = new ActiveDataProvider([
+            'query' => $criticasQuery,
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $criticasProvider,
         ]);
     }
 

@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Criticas;
 use app\models\CriticasSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

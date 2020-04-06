@@ -210,7 +210,7 @@ VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohet
 ('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve');
 
 INSERT INTO productos (nombre, descripcion, stock, propietario_id)
-VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 1);
+VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 2);
 
 INSERT INTO criticas (opinion, created_at, valoracion, usuario_id, producto_id)
 VALUES ('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 1);
