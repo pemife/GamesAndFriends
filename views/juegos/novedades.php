@@ -9,6 +9,66 @@ use yii\grid\GridView;
 
 $this->title = 'Novedades';
 $this->params['breadcrumbs'][] = $this->title;
+$js = <<<script
+var slideIndex = 0;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+    showDivs(slideIndex += n);
+    console.log("plusDivs");
+    console.log(slideIndex);
+}
+
+$(document).ready(function(){
+    $("#flechaIzda").on("click", function(){
+        plusDivs(-1);
+    });
+    $("#flechaDcha").on("click",function(){
+         plusDivs(1);
+    });
+
+    $(".selector").on('click', function(){
+        var arraySelectores = document.getElementsByName("grupoSelectores");
+
+        slideIndex = parseInt(this.value);
+        console.log("selector onclick");
+        console.log(slideIndex);
+        showDivs(slideIndex);
+
+        for (i=0; i < arraySelectores.length -1; i++) {
+            arraySelectores[i].setAttribute("checked", false);
+        }
+        arraySelectores[slideIndex].setAttribute("checked", true);
+    });
+});
+
+function showDivs(n) {
+  var i;
+  var arrayImagenes = document.getElementsByClassName("imagenesJuegos");
+  var arrayNombresJuego = document.getElementsByClassName("nombresJuegos");
+  var arraySelectores = document.getElementsByClassName("selector");
+
+  if (n > arrayImagenes.length - 1) {slideIndex = 0}
+  if (n < 0) {slideIndex = arrayImagenes.length -1}
+  console.log("showDivs");
+  console.log(slideIndex);
+
+  for (i = 0; i < arrayImagenes.length; i++) {
+    arrayImagenes[i].style.display = "none";
+    arrayNombresJuego[i].style.display = "none";
+  }
+
+  arrayImagenes[slideIndex].style = "width:30%";
+  arrayImagenes[slideIndex].style.display = "block";
+
+  arrayNombresJuego[slideIndex].style.display = "block";
+
+  arraySelectores.checked = false;
+  arraySelectores[slideIndex].checked = true;
+}
+script;
+
+$this->registerJS($js);
 ?>
 <div class="juegos-novedades">
     <style>
@@ -18,43 +78,37 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2>Novedades</h2>
 
     <center>
-        <div>
-            <?php foreach ($juegosProvider->getModels() as $juego) : ?>
-                <img class="imagenesJuegos" src="imagenJuego.jpg" style="width:30%">
-            <?php endforeach; ?>
-
-            <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+        <div class="w3-content w3-display-container">
             <?php
-            $length = $juegosProvider->getCount();
             foreach ($juegosProvider->getModels() as $juego) : ?>
-                <img class="imagenesJuegos" src="imagenJuego.jpg" style="width:30%">
+                <h3 class="nombresJuegos"><?= Html::encode($juego->titulo) ?></h3>
+                <?= Html::a(
+                        Html::img(
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Video-Game-Controller-Icon-D-Edit.svg/480px-Video-Game-Controller-Icon-D-Edit.svg.png',
+                            ['class' => 'imagenesJuegos'],
+                            ['style' => 'width:30%']
+                        ),
+                        ['juegos/view', 'id' => $juego->id]
+                    ) ?>
+
             <?php endforeach; ?>
-            <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+            <!-- <img class="imagenesJuegos" src="imagenJuego.jpg" style="width:30%"> -->
+            <button class="w3-button w3-black w3-display-left" id="flechaIzda">&#10094;</button>
+            <?php
+            for ($i=0; $i < $juegosProvider->getCount(); $i++) {
+                echo Html::radio(
+                    'grupoSelectores',
+                    false,
+                    [
+                        'class' => 'selector',
+                        'value' => $i
+                    ]
+                );
+            }
+             ?>
+            <button class="w3-button w3-black w3-display-right" id="flechaDcha">&#10095;</button>
         </div>
     </center>
-
-    <script>
-        var slideIndex = 1;
-        showDivs(slideIndex);
-
-        function plusDivs(n) {
-          showDivs(slideIndex += n);
-        }
-
-        function showDivs(n) {
-          var i;
-          var x = document.getElementsByClassName("imagenesJuegos");
-          if (n > x.length) {slideIndex = 1}
-          if (n < 1) {slideIndex = x.length}
-          for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-          }
-          x[slideIndex-1].style.display = "block";
-        }
-
-    </script>
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= GridView::widget([
         'dataProvider' => $juegosProvider,
