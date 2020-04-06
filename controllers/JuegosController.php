@@ -76,7 +76,7 @@ class JuegosController extends Controller
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'precioMinimo' => $ventaMasBarata->precio,
+            'precioMinimo' => $ventaMasBarata ? $ventaMasBarata->precio : null,
         ]);
     }
 
