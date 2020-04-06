@@ -139,10 +139,11 @@ class JuegosController extends Controller
     public function actionNovedades()
     {
         $searchModel = new JuegosSearch();
-        $queryJuegosNuevos = Juegos::find()->orderBy('fechalan DESC')->limit(10);
+        $queryJuegosNuevos = Juegos::find()->orderBy('fechalan DESC')->limit(10)->offset(0);
 
         $juegosProvider = new ActiveDataProvider([
             'query' => $queryJuegosNuevos,
+            'pagination' => false,
         ]);
 
         return $this->render('novedades', [
