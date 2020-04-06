@@ -17,7 +17,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <span>
       <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
-      <h3>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
+      <?php
+        if($precioMinimo != null){
+            ?>
+                <h3>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
+            <?php
+        } else {
+            ?>
+                <h3>No hay ninguna copia en venta actualmente</h3>
+            <?php
+        }
+      ?>
       <?= Html::a(
           'Ver en mercado',
           [
