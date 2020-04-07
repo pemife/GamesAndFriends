@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ListView;
+use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Productos */
@@ -29,16 +30,24 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
-    <p>
-      <span style="font-weight: bold;">Descripcion:</span>
-      </br>
-      <?= Html::encode($model->descripcion) ?>
-    </p>
-    <p>
-      <span style="font-weight: bold;">Propietario:</span>
-      </br>
-      <?= Html::a($model->propietario->nombre, ['usuarios/view', 'id' => $model->propietario_id]) ?>
-    </p>
+
+    </br></br>
+
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'descripcion:text',
+            [
+              'attribute' => 'propietario.nombre',
+              'label' => 'Propietario',
+              'format' => 'raw',
+              'value' => Html::a(
+                $model->propietario->nombre,
+                ['usuarios/view', 'id' => $model->propietario->id]
+              ),
+            ]
+        ],
+    ]) ?>
 
     <h3>Críticas</h3>
 

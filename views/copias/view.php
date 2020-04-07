@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'juego.titulo',
             'propietario.nombre:text:Propietario',
             'plataforma.nombre:text:Plataforma',
+            // 'enVenta',
         ],
     ]) ?>
 
