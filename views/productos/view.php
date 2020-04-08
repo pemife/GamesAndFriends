@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ListView;
+use yii\grid\GridView;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -18,8 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php if($model->propietario_id == Yii::$app->user->id){
-          echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
-          echo Html::a('Delete', ['delete', 'id' => $model->id], [
+          echo Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
+          echo Html::a('Borrar', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
               'confirm' => '¿Estas seguro de querer borrar este elemento?',
@@ -51,9 +51,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3>Críticas</h3>
 
-    <?= ListView::widget([
+    <p>
+        <?php if($model->propietario_id == Yii::$app->user->id){
+          echo Html::a('Opinar', ['criticas/critica-producto', 'id' => $model->id], ['class' => 'btn btn-success']);
+        } ?>
+    </p>
+
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'itemView' => '_productosCriticas'
+        'columns' => [
+            'usuario.nombre',
+            'opinion',
+            'valoracion',
+        ]
     ]); ?>
 
 </div>

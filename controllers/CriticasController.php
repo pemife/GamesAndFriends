@@ -3,7 +3,8 @@
 namespace app\controllers;
 
 use app\models\Criticas;
-use app\models\CriticasSearch;
+use app\models\Productos;
+use app\models\Usuarios;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -54,21 +55,6 @@ class CriticasController extends Controller
     }
 
     /**
-     * Lists all Criticas models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new CriticasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
      * Displays a single Criticas model.
      * @param int $id
      * @return mixed
@@ -76,9 +62,7 @@ class CriticasController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        return $this->redirect(['productos/view', 'id' => Criticas::findOne($id)->producto_id]);
     }
 
     /**
@@ -131,6 +115,30 @@ class CriticasController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionCriticaProducto($id)
+    {
+        if (Criticas::find()->where(['usuario_id' => Yii::$app->user->id])->one()->id === $id) {
+            Yii::$app->session->setFlash('error', 'Ya has hecho una reseña de ese producto');
+            return $this->redirect(['productos/view', 'id' => $id]);
+        }
+
+        if (!Usuarios::findOne(Yii::$app->user->id)->tieneProducto(Yii::$app->user->id, $id)) {
+            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña de un producto que no tienes');
+            return $this->redirect(['productos/view', 'id' => $id]);
+        }
+
+        $model = new Criticas();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['productos/view', 'id' => $id]);
+        }
+
+        return $this->render('criticaProducto', [
+            'model' => $model,
+            'producto' => Productos::findOne($id),
+        ]);
     }
 
     /**

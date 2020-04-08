@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "criticas".
  *
@@ -35,7 +33,8 @@ class Criticas extends \yii\db\ActiveRecord
         return [
             [['opinion', 'valoracion', 'usuario_id', 'producto_id'], 'required'],
             [['opinion'], 'string'],
-            [['created_at'], 'safe'],
+            [['created_at'], 'datetime'],
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
             [['valoracion'], 'number'],
             [['usuario_id', 'producto_id'], 'default', 'value' => null],
             [['usuario_id', 'producto_id'], 'integer'],

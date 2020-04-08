@@ -218,4 +218,16 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             $this->addError($fecha, 'No puede ser mayor que hoy');
         }
     }
+
+    public function tieneProducto($uId, $pId)
+    {
+        $arrayProductos = $this->findOne($uId)->productos;
+        foreach ($arrayProductos as $producto) {
+            if ($producto->id == $pId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
