@@ -52,8 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3>Críticas</h3>
 
     <p>
-        <?php if($model->propietario_id == Yii::$app->user->id){
-          echo Html::a('Opinar', ['criticas/critica-producto', 'id' => $model->id], ['class' => 'btn btn-success']);
+        <?php if($tieneProducto){
+          echo Html::a('Opinar', ['criticas/critica-producto', 'producto_id' => $model->id], ['class' => 'btn btn-success']);
         } ?>
     </p>
 

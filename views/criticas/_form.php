@@ -35,6 +35,8 @@ use yii\widgets\ActiveForm;
         ]
       ]); ?>
 
+    <?= $form->field($model, 'juego_id')->textInput()->hiddenInput()->label(false) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

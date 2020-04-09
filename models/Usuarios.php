@@ -219,9 +219,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         }
     }
 
-    public function tieneProducto($uId, $pId)
+    public function tieneProducto($pId)
     {
-        $arrayProductos = $this->findOne($uId)->productos;
+        $arrayProductos = $this->productos;
+
         foreach ($arrayProductos as $producto) {
             if ($producto->id == $pId) {
                 return true;

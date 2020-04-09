@@ -72,6 +72,11 @@ class CriticasController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña sin iniciar sesion!');
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
+        }
+
         $model = new Criticas();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -117,27 +122,32 @@ class CriticasController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionCriticaProducto($id)
+    public function actionCriticaProducto($producto_id)
     {
-        if (Criticas::find()->where(['usuario_id' => Yii::$app->user->id])->one()->id === $id) {
-            Yii::$app->session->setFlash('error', 'Ya has hecho una reseña de ese producto');
-            return $this->redirect(['productos/view', 'id' => $id]);
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña sin iniciar sesion!');
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
         }
 
-        if (!Usuarios::findOne(Yii::$app->user->id)->tieneProducto(Yii::$app->user->id, $id)) {
+        if (Criticas::find()->where(['usuario_id' => Yii::$app->user->id, 'producto_id' => $producto_id])->one()) {
+            Yii::$app->session->setFlash('error', 'Ya has hecho una reseña de ese producto');
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
+        }
+
+        if (!Usuarios::findOne(Yii::$app->user->id)->tieneProducto($producto_id)) {
             Yii::$app->session->setFlash('error', 'No puedes hacer una reseña de un producto que no tienes');
-            return $this->redirect(['productos/view', 'id' => $id]);
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
         }
 
         $model = new Criticas();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['productos/view', 'id' => $id]);
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
         }
 
         return $this->render('criticaProducto', [
             'model' => $model,
-            'producto' => Productos::findOne($id),
+            'producto' => Productos::findOne($producto_id),
         ]);
     }
 
