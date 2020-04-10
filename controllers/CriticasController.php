@@ -3,8 +3,11 @@
 namespace app\controllers;
 
 use app\models\Criticas;
-use app\models\CriticasSearch;
+use app\models\Juegos;
+use app\models\Productos;
+use app\models\Usuarios;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -53,21 +56,6 @@ class CriticasController extends Controller
     }
 
     /**
-     * Lists all Criticas models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new CriticasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
      * Displays a single Criticas model.
      * @param int $id
      * @return mixed
@@ -75,9 +63,7 @@ class CriticasController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        return $this->redirect(['productos/view', 'id' => Criticas::findOne($id)->producto_id]);
     }
 
     /**
@@ -87,6 +73,11 @@ class CriticasController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña sin iniciar sesion!');
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
+        }
+
         $model = new Criticas();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -130,6 +121,64 @@ class CriticasController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionCriticaProducto($producto_id)
+    {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña sin iniciar sesion!');
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
+        }
+
+        if (Criticas::find()->where(['usuario_id' => Yii::$app->user->id, 'producto_id' => $producto_id])->one()) {
+            Yii::$app->session->setFlash('error', 'Ya has hecho una reseña de ese producto');
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
+        }
+
+        if (!Usuarios::findOne(Yii::$app->user->id)->tieneProducto($producto_id)) {
+            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña de un producto que no tienes');
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
+        }
+
+        $model = new Criticas();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['productos/view', 'id' => $producto_id]);
+        }
+
+        return $this->render('criticaProducto', [
+            'model' => $model,
+            'producto' => Productos::findOne($producto_id),
+        ]);
+    }
+
+    public function actionCriticaJuego($juego_id)
+    {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña sin iniciar sesion!');
+            return $this->redirect(['juegos/view', 'id' => $juego_id]);
+        }
+
+        if (Criticas::find()->where(['usuario_id' => Yii::$app->user->id, 'juego_id' => $juego_id])->one()) {
+            Yii::$app->session->setFlash('error', '¡Ya has hecho una reseña de ese juego!');
+            return $this->redirect(['juegos/view', 'id' => $juego_id]);
+        }
+
+        if (!Usuarios::findOne(Yii::$app->user->id)->tieneJuego($juego_id)) {
+            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña de un juego que no tienes');
+            return $this->redirect(['juegos/view', 'id' => $juego_id]);
+        }
+
+        $model = new Criticas();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['juegos/view', 'id' => $juego_id]);
+        }
+
+        return $this->render('criticaJuego', [
+            'model' => $model,
+            'juego' => Juegos::findOne($juego_id),
+        ]);
     }
 
     /**

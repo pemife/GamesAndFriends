@@ -57,18 +57,27 @@ CREATE TABLE criticas
 (
     id            BIGSERIAL         PRIMARY KEY
   , opinion       TEXT              NOT NULL
-  , created_at    TIMESTAMPTZ(0)      NOT NULL
+  , created_at    TIMESTAMPTZ(0)    NOT NULL
                                     DEFAULT CURRENT_TIMESTAMP
   , valoracion    NUMERIC(1)        NOT NULL
-                                    CHECK (valoracion > 0)
+                                    CHECK (valoracion >= 0)
   , usuario_id    BIGINT            NOT NULL
                                     REFERENCES usuarios(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-  , producto_id   BIGINT            NOT NULL
-                                    REFERENCES productos(id)
+  , producto_id   BIGINT            REFERENCES productos(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
+  , juego_id      BIGINT            REFERENCES juegos(id)
+                                    ON DELETE CASCADE
+                                    ON UPDATE CASCADE
+  , CONSTRAINT uq_usuario_producto  UNIQUE (usuario_id, producto_id)
+  , CONSTRAINT uq_usuario_juego  UNIQUE (usuario_id, juego_id)
+  , CONSTRAINT ck_alternar_valores_nulos CHECK (
+        (producto_id IS NOT NULL AND juego_id IS NULL)
+        OR
+        (producto_id IS NULL AND juego_id IS NOT NULL)
+    )
 );
 
 DROP TABLE IF EXISTS posts CASCADE;
@@ -210,7 +219,7 @@ VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohet
 ('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve');
 
 INSERT INTO productos (nombre, descripcion, stock, propietario_id)
-VALUES ('Funko POP de psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 1);
+VALUES ('Funko POP de Psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 2);
 
 INSERT INTO criticas (opinion, created_at, valoracion, usuario_id, producto_id)
 VALUES ('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 1);

@@ -20,6 +20,8 @@ use Yii;
  */
 class Copias extends \yii\db\ActiveRecord
 {
+    // public $en_venta;
+
     /**
      * {@inheritdoc}
      */
@@ -42,6 +44,8 @@ class Copias extends \yii\db\ActiveRecord
             [['juego_id'], 'exist', 'skipOnError' => true, 'targetClass' => Juegos::className(), 'targetAttribute' => ['juego_id' => 'id']],
             [['plataforma_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plataformas::className(), 'targetAttribute' => ['plataforma_id' => 'id']],
             [['propietario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['propietario_id' => 'id']],
+            // [['en_venta'], 'boolean'],
+            // [['en_venta'], 'default', 'value' => false],
         ];
     }
 
@@ -56,6 +60,7 @@ class Copias extends \yii\db\ActiveRecord
             'propietario_id' => 'propietario',
             'clave' => 'Clave',
             'plataforma_id' => 'Plataforma',
+            'en_venta' => 'En venta',
         ];
     }
 
@@ -68,6 +73,16 @@ class Copias extends \yii\db\ActiveRecord
         }
 
         return $query;
+    }
+
+    public function getEnVenta()
+    {
+        return $this->en_venta;
+    }
+
+    public function setEnVenta($value)
+    {
+        $this->en_venta = $value;
     }
 
     /**

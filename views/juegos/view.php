@@ -2,6 +2,7 @@
 
 use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Juegos */
@@ -63,6 +64,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'publ',
         ],
     ]) ?>
+
+    <h3>Críticas</h3>
+
+    <p>
+        <?php if($tieneJuego){
+          echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
+        } ?>
+    </p>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'usuario.nombre',
+            'opinion',
+            'valoracion',
+        ]
+    ]); ?>
 
 
 </div>

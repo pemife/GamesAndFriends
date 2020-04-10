@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Criticas;
 use app\models\Productos;
 use app\models\ProductosSearch;
+use app\models\Usuarios;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -91,8 +93,21 @@ class ProductosController extends Controller
      */
     public function actionView($id)
     {
+        $criticasQuery = Criticas::find()->where(['producto_id' => $id]);
+
+        $criticasProvider = new ActiveDataProvider([
+            'query' => $criticasQuery,
+            'pagination' => [
+              'pagesize' => 10,
+            ],
+        ]);
+
+        $tieneProducto = Yii::$app->user->isGuest ? false : Usuarios::findOne(Yii::$app->user->id)->tieneProducto($id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $criticasProvider,
+            'tieneProducto' => $tieneProducto,
         ]);
     }
 

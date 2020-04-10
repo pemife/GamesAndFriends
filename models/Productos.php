@@ -53,7 +53,7 @@ class Productos extends \yii\db\ActiveRecord
             'nombre' => 'Nombre',
             'descripcion' => 'Descripción',
             'stock' => 'Cantidad',
-            'propietario_id' => 'Propietario',
+            'propietario_id' => 'Id de Propietario',
         ];
     }
 

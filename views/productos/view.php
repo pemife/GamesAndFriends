@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\grid\GridView;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -17,27 +18,62 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php if($model->propietario_id == Yii::$app->user->id){
-          echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
-          echo Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-              'confirm' => '¿Estas seguro de querer borrar este elemento?',
-              'method' => 'post',
-            ],
-          ]);
+            echo Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
+            echo Html::a('Borrar', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger mr-2',
+                'data' => [
+                    'confirm' => '¿Estas seguro de querer borrar este elemento?',
+                    'method' => 'post',
+                ],
+            ]);
+            echo Html::a('Poner en venta',
+                [
+                    'ventas/crea-venta-producto',
+                    'productoId' => $model->id
+                ],
+                [
+                    'class' => 'btn btn-success',
+                    'hidden' => false,
+                ]
+            );
         } ?>
     </p>
 
     <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
+
+    </br></br>
+
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'descripcion:text',
+            [
+              'attribute' => 'propietario.nombre',
+              'label' => 'Propietario',
+              'format' => 'raw',
+              'value' => Html::a(
+                $model->propietario->nombre,
+                ['usuarios/view', 'id' => $model->propietario->id]
+              ),
+            ]
+        ],
+    ]) ?>
+
+    <h3>Críticas</h3>
+
     <p>
-      <span style="font-weight: bold;">Descripcion:</span>
-      </br>
-      <?= Html::encode($model->descripcion) ?>
+        <?php if($tieneProducto){
+          echo Html::a('Opinar', ['criticas/critica-producto', 'producto_id' => $model->id], ['class' => 'btn btn-success']);
+        } ?>
     </p>
-    <p>
-      <span style="font-weight: bold;">Propietario:</span>
-      </br>
-      <?= Html::a($model->propietario->nombre, ['usuarios/view', 'id' => $model->propietario_id]) ?>
-    </p>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            'usuario.nombre',
+            'opinion',
+            'valoracion',
+        ]
+    ]); ?>
 
 </div>
