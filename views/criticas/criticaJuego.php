@@ -8,12 +8,12 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Criticas */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = 'Critica de juego: ' . $juego->titulo;
+$this->title = 'Critica de juego: ' . $model->juego->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Criticas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="criticas-criticaProducto">
+<div class="criticas-criticaJuego">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -34,7 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'producto_id')->label(false)->hiddenInput(['value' => null]) ?>
 
-    <?= $form->field($model, 'juego_id')->label(false)->hiddenInput(['value' => $juego->id]) ?>
+    <?= $form->field($model, 'juego_id')->label(false)->hiddenInput(['value' => $model->juego->id]) ?>
+
+    <?= var_dump($model->esCriticaProducto()) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
