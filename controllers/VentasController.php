@@ -304,10 +304,15 @@ class VentasController extends Controller
     /**
      * Esta accion sirve para la creacion de la venta de un producto.
      * @return string El resultado del renderizado de la página
+     * @param mixed $productoId
      */
-    public function actionCreaVentaProducto()
+    public function actionCreaVentaProducto($productoId)
     {
         $model = new Ventas();
+
+        if ($productoId != 0) {
+            $model->producto_id = $productoId;
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {

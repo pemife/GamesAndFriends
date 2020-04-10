@@ -231,4 +231,17 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
         return false;
     }
+
+    public function tieneJuego($jId)
+    {
+        $arrayJuegos = $this->copias;
+
+        foreach ($arrayJuegos as $copia) {
+            if ($copia->juego->id == $jId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

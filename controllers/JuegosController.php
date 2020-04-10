@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Criticas;
 use app\models\Juegos;
 use app\models\JuegosSearch;
+use app\models\Usuarios;
 use app\models\Ventas;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -74,9 +76,22 @@ class JuegosController extends Controller
         ->orderBy('precio')
         ->one();
 
+        $criticasQuery = Criticas::find()->where(['juego_id' => $id]);
+
+        $criticasProvider = new ActiveDataProvider([
+            'query' => $criticasQuery,
+            'pagination' => [
+              'pagesize' => 10,
+            ],
+        ]);
+
+        $tieneJuego = Yii::$app->user->isGuest ? false : Usuarios::findOne(Yii::$app->user->id)->tieneJuego($id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'precioMinimo' => $ventaMasBarata ? $ventaMasBarata->precio : null,
+            'dataProvider' => $criticasProvider,
+            'tieneJuego' => $tieneJuego,
         ]);
     }
 

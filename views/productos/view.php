@@ -18,14 +18,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php if($model->propietario_id == Yii::$app->user->id){
-          echo Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
-          echo Html::a('Borrar', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-              'confirm' => '¿Estas seguro de querer borrar este elemento?',
-              'method' => 'post',
-            ],
-          ]);
+            echo Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
+            echo Html::a('Borrar', ['delete', 'id' => $model->id], [
+                'class' => 'btn btn-danger mr-2',
+                'data' => [
+                    'confirm' => '¿Estas seguro de querer borrar este elemento?',
+                    'method' => 'post',
+                ],
+            ]);
+            echo Html::a('Poner en venta',
+                [
+                    'ventas/crea-venta-producto',
+                    'productoId' => $model->id
+                ],
+                [
+                    'class' => 'btn btn-success',
+                    'hidden' => false,
+                ]
+            );
         } ?>
     </p>
 
