@@ -79,11 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'usuario.nombre',
             'opinion',
             'valoracion',
+            'last_update:Date',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',
                 'buttons' => [
                     'update' => function ($url, $model, $key){
+                        if(Yii::$app->user->id != $model->usuario->id){
+                          return "";
+                        }
                         return Html::a(
                           '<span class="glyphicon glyphicon-pencil"></span>',
                           [
@@ -96,6 +100,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'delete' => function ($url, $model, $key){
+                        if(Yii::$app->user->id != $model->usuario->id){
+                          return "";
+                        }
                         return Html::a(
                           '<span class="glyphicon glyphicon-trash"></span>',
                           [

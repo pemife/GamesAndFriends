@@ -73,6 +73,46 @@ $this->params['breadcrumbs'][] = $this->title;
             'usuario.nombre',
             'opinion',
             'valoracion',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update} {delete}',
+                'buttons' => [
+                    'update' => function ($url, $model, $key){
+                        if(Yii::$app->user->id != $model->usuario->id){
+                          return "";
+                        }
+                        return Html::a(
+                          '<span class="glyphicon glyphicon-pencil"></span>',
+                          [
+                              '/criticas/update',
+                              'id' => $model->id,
+                          ],
+                          [
+                              'title' => 'editar crítica',
+                          ]
+                        );
+                    },
+                    'delete' => function ($url, $model, $key){
+                        if(Yii::$app->user->id != $model->usuario->id){
+                          return "";
+                        }
+                        return Html::a(
+                          '<span class="glyphicon glyphicon-trash"></span>',
+                          [
+                              'criticas/delete',
+                              'id' => $model->id,
+                          ],
+                          [
+                              'data' => [
+                                'method' => 'post',
+                                'confirm' => '¿Estas seguro de borrar la crítica?(Esta accion no se puede deshacer)',
+                              ],
+                              'title' => 'borrar crítica',
+                          ]
+                        );
+                    }
+                ]
+            ],
         ]
     ]); ?>
 

@@ -54,6 +54,11 @@ class CriticasController extends Controller
         ];
     }
 
+    public function actionIndex()
+    {
+        return $this->goBack();
+    }
+
     /**
      * Displays a single Criticas model.
      * @param int $id
@@ -99,9 +104,6 @@ class CriticasController extends Controller
     {
         $model = $this->findModel($id);
 
-        // var_dump($model);
-        // exit;
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($model->esCriticaProducto()) {
                 return $this->redirect(['productos/view', 'id' => $model->producto_id]);
@@ -112,7 +114,7 @@ class CriticasController extends Controller
         if ($model->esCriticaProducto()) {
             return $this->render('criticaProducto', [
                 'model' => $model,
-                'producto' => Producto::findOne($model),
+                'producto' => Productos::findOne($model->producto_id),
             ]);
         }
 
@@ -130,9 +132,17 @@ class CriticasController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        if ($model->esCriticaProducto()) {
+            $url = ['productos/view', 'id' => $model->producto_id];
+        } else {
+            $url = ['juegos/view', 'id' => $model->juego_id];
+        }
+
+        $model->delete();
+
+        return $this->redirect($url);
     }
 
     public function actionCriticaProducto($producto_id)

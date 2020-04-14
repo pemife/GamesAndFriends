@@ -57,7 +57,9 @@ CREATE TABLE criticas
 (
     id            BIGSERIAL         PRIMARY KEY
   , opinion       TEXT              NOT NULL
-  , created_at    TIMESTAMPTZ(0)    NOT NULL
+  , created_at    DATE              NOT NULL
+                                    DEFAULT CURRENT_TIMESTAMP
+  , last_update   DATE              NOT NULL
                                     DEFAULT CURRENT_TIMESTAMP
   , valoracion    NUMERIC(1)        NOT NULL
                                     CHECK (valoracion >= 0)

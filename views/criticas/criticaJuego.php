@@ -31,12 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
 
     <?= $form->field($model, 'usuario_id')->label(false)->hiddenInput(['value' => Yii::$app->user->id]) ?>
-
     <?= $form->field($model, 'producto_id')->label(false)->hiddenInput(['value' => null]) ?>
-
     <?= $form->field($model, 'juego_id')->label(false)->hiddenInput(['value' => $model->juego->id]) ?>
-
-    <?= var_dump($model->esCriticaProducto()) ?>
+    <?= $form->field($model, 'last_update')->label(false)->hiddenInput(['value' => date('Y-m-d')]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
