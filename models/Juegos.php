@@ -102,4 +102,14 @@ class Juegos extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Copias::className(), ['juego_id' => 'id'])->inverseOf('juego');
     }
+
+    /**
+     * Gets query for [[Criticas]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCriticas()
+    {
+        return $this->hasMany(Criticas::className(), ['juego_id' => 'id'])->inverseOf('juego');
+    }
 }

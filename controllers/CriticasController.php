@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use app\models\Criticas;
-use app\models\Juegos;
 use app\models\Productos;
 use app\models\Usuarios;
 use Yii;
@@ -55,6 +54,11 @@ class CriticasController extends Controller
         ];
     }
 
+    public function actionIndex()
+    {
+        return $this->goBack();
+    }
+
     /**
      * Displays a single Criticas model.
      * @param int $id
@@ -101,10 +105,20 @@ class CriticasController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->esCriticaProducto()) {
+                return $this->redirect(['productos/view', 'id' => $model->producto_id]);
+            }
+            return $this->redirect(['juegos/view', 'id' => $model->juego_id]);
         }
 
-        return $this->render('update', [
+        if ($model->esCriticaProducto()) {
+            return $this->render('criticaProducto', [
+                'model' => $model,
+                'producto' => Productos::findOne($model->producto_id),
+            ]);
+        }
+
+        return $this->render('criticaJuego', [
             'model' => $model,
         ]);
     }
@@ -118,9 +132,17 @@ class CriticasController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        if ($model->esCriticaProducto()) {
+            $url = ['productos/view', 'id' => $model->producto_id];
+        } else {
+            $url = ['juegos/view', 'id' => $model->juego_id];
+        }
+
+        $model->delete();
+
+        return $this->redirect($url);
     }
 
     public function actionCriticaProducto($producto_id)
@@ -145,6 +167,8 @@ class CriticasController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['productos/view', 'id' => $producto_id]);
         }
+
+        // $model->producto_id = $producto->id;
 
         return $this->render('criticaProducto', [
             'model' => $model,
@@ -175,9 +199,10 @@ class CriticasController extends Controller
             return $this->redirect(['juegos/view', 'id' => $juego_id]);
         }
 
+        $model->juego_id = $juego_id;
+
         return $this->render('criticaJuego', [
             'model' => $model,
-            'juego' => Juegos::findOne($juego_id),
         ]);
     }
 

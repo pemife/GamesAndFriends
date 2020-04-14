@@ -8,12 +8,12 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Criticas */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = 'Critica de juego: ' . $juego->titulo;
+$this->title = 'Critica de juego: ' . $model->juego->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Criticas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="criticas-criticaProducto">
+<div class="criticas-criticaJuego">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -31,10 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
 
     <?= $form->field($model, 'usuario_id')->label(false)->hiddenInput(['value' => Yii::$app->user->id]) ?>
-
     <?= $form->field($model, 'producto_id')->label(false)->hiddenInput(['value' => null]) ?>
-
-    <?= $form->field($model, 'juego_id')->label(false)->hiddenInput(['value' => $juego->id]) ?>
+    <?= $form->field($model, 'juego_id')->label(false)->hiddenInput(['value' => $model->juego->id]) ?>
+    <?= $form->field($model, 'last_update')->label(false)->hiddenInput(['value' => date('Y-m-d')]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

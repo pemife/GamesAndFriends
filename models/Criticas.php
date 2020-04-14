@@ -11,6 +11,7 @@ namespace app\models;
  * @property string $valoracion
  * @property int $usuario_id
  * @property int $producto_id
+ * @property int $juego_id
  *
  * @property Productos $producto
  * @property Usuarios $usuario
@@ -33,10 +34,9 @@ class Criticas extends \yii\db\ActiveRecord
         return [
             [['opinion', 'valoracion', 'usuario_id'], 'required'],
             [['opinion'], 'string'],
-            [['created_at'], 'datetime'],
-            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s')],
-            [['valoracion'], 'number'],
-            [['usuario_id', 'producto_id'], 'default', 'value' => null],
+            [['created_at', 'last_update'], 'date', 'format' => 'Y-m-d'],
+            [['created_at', 'last_update'], 'default', 'value' => date('Y-m-d')],
+            [['valoracion'], 'number', 'min' => 0, 'max' => 9],
             [['usuario_id', 'producto_id'], 'integer'],
             [['juego_id', 'producto_id'], 'validarCopiaProducto'],
             [['producto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Productos::className(), 'targetAttribute' => ['producto_id' => 'id']],
@@ -52,9 +52,10 @@ class Criticas extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'opinion' => 'Opinion',
-            'created_at' => 'Created At',
-            'valoracion' => 'Valoracion',
+            'opinion' => 'Opinión',
+            'created_at' => 'Fecha de creación',
+            'last_update' => 'Ultima actualización',
+            'valoracion' => 'Valoración',
             'usuario_id' => 'Usuario ID',
             'producto_id' => 'Producto ID',
             'juego_id' => 'Juego ID',
@@ -92,5 +93,10 @@ class Criticas extends \yii\db\ActiveRecord
     public function getJuego()
     {
         return $this->hasOne(Juegos::className(), ['id' => 'juego_id'])->inverseOf('criticas');
+    }
+
+    public function esCriticaProducto()
+    {
+        return $this->producto_id != null;
     }
 }
