@@ -41,10 +41,10 @@ use kartik\date\DatePicker;
         // echo '<br>';
         // if(strtotime($model->fechanac) > strtotime(date('Y-m-d'))){
         //     echo '<p style="color:red;">es <b>mayor</b> que la fecha de hoy</p>';
-        //     echo 'fechaNac: ' . strtotime($model->fechanac) . '<br>ahora: ' . strtotime(date('Y-m-d'));
+        //     echo 'fechanac: ' . strtotime($model->fechanac) . '<br>ahora: ' . strtotime(date('Y-m-d'));
         // } else {
         //     echo '<p style="color:red;">es <b>MENOR</b> que la fecha de hoy</p>';
-        //     echo 'fechaNac: ' . strtotime($model->fechanac) . '<br>ahora: ' . strtotime(date('Y-m-d'));
+        //     echo 'fechanac: ' . strtotime($model->fechanac) . '<br>ahora: ' . strtotime(date('Y-m-d'));
         // };
     ?>
 

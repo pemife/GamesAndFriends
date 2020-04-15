@@ -100,7 +100,7 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
             'created_at:Date',
             'email:email',
             'biografia:ntext',
-            'fechanac',
+            'fechanac:Date',
         ],
     ]) ?>
 
