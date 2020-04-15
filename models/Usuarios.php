@@ -244,4 +244,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
         return false;
     }
+
+    public function esMayorDeEdad()
+    {
+        return $prueba = $this->fechanac < (date('Y-m-d', strtotime('- 18 years')));
+    }
 }

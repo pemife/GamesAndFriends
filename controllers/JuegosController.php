@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Criticas;
+use app\models\Etiquetas;
 use app\models\Juegos;
 use app\models\JuegosSearch;
 use app\models\Usuarios;
@@ -33,13 +34,28 @@ class JuegosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete'],
+                'only' => ['create', 'update', 'delete', 'view'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['create', 'update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->id == 1;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (!Yii::$app->user->isGuest) {
+                                if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
+                                    return true;
+                                }
+                                Yii::$app->session->setFlash('error', '¡Debes ser mayor de edad para ver este contenido!');
+                            } else {
+                                Yii::$app->session->setFlash('error', '¡Debes iniciar sesión para ver contenido adulto!');
+                            }
+                            return false;
                         },
                     ],
                 ],
@@ -53,8 +69,20 @@ class JuegosController extends Controller
      */
     public function actionIndex()
     {
+        // $searchModel->search(Yii::$app->request->queryParams);
         $searchModel = new JuegosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $query = Juegos::find()->where(['cont_adul' => false]);
+
+        if (!Yii::$app->user->isGuest) {
+            if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
+                $query = Juegos::find();
+            }
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -103,13 +131,27 @@ class JuegosController extends Controller
     public function actionCreate()
     {
         $model = new Juegos();
+        // $generos = [];
+        // var_dump($generos);
+        // exit;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            // if (Yii::$app->request->post('generos')) {
+            //     $generos = Yii::$app->request->post('generos');
+            //     var_dump($generos);
+            //     exit;
+            // }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        // foreach (Etiquetas::find()->all() as $etiqueta) {
+        //     $generosProvider[] = [$etiqueta->id => $etiqueta->nombre];
+        // }
+
         return $this->render('create', [
             'model' => $model,
+            // 'generosProvider' => $generosProvider,
+            // 'generos' => $generos,
         ]);
     }
 
@@ -154,7 +196,13 @@ class JuegosController extends Controller
     public function actionNovedades()
     {
         $searchModel = new JuegosSearch();
-        $queryJuegosNuevos = Juegos::find()->orderBy('fechalan DESC')->limit(10)->offset(0);
+        $queryJuegosNuevos = Juegos::find()->where(['cont_adul' => false])->orderBy('fechalan DESC')->limit(10)->offset(0);
+
+        if (!Yii::$app->user->isGuest) {
+            if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
+                $queryJuegosNuevos->orWhere(['cont_adul' => true]);
+            }
+        }
 
         $juegosProvider = new ActiveDataProvider([
             'query' => $queryJuegosNuevos,

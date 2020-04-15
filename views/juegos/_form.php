@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Juegos */
@@ -26,9 +27,24 @@ use kartik\date\DatePicker;
       ]
     ]) ?>
 
+    <?php echo "";
+        // echo $form->field($generos)->widget(Select2::classname(), [
+        //     'name' => 'Generos',
+        //     'data' => $generosProvider,
+        //     'size' => Select2::SMALL,
+        //     'options' => ['placeholder' => 'Introduce los géneros del juego', 'multiple' => true],
+        //     'pluginOptions' => [
+        //         'allowClear' => false,
+        //         'tags' => true,
+        //     ],
+        // ]);
+    ?>
+
     <?= $form->field($model, 'dev')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'publ')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'cont_adul')->checkbox(['checked' => false]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

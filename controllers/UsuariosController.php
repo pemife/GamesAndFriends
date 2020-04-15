@@ -201,6 +201,11 @@ class UsuariosController extends Controller
         ]);
     }
 
+    public function actionAnadirInventario()
+    {
+        return $this->render('anadirInventario');
+    }
+
     // https://jqueryui.com/sortable/
     // public fucntion actionListaDeseos($uId)
     // {

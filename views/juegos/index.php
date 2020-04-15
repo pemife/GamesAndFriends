@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'fechalan',
             'dev',
             'publ',
+            'cont_adul:boolean',
             [
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado}',

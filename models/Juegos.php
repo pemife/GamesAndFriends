@@ -39,6 +39,7 @@ class Juegos extends \yii\db\ActiveRecord
             [['fechalan'], 'safe'],
             [['titulo', 'dev', 'publ'], 'string', 'max' => 255],
             [['titulo'], 'unique'],
+            [['cont_adul'], 'boolean', 'trueValue' => true, 'falseValue' => false],
         ];
     }
 
@@ -54,6 +55,7 @@ class Juegos extends \yii\db\ActiveRecord
             'fechalan' => 'Fecha de lanzamiento',
             'dev' => 'Desarrolladora',
             'publ' => 'Editora',
+            'cont_adul' => 'Contenido adulto',
         ];
     }
 
