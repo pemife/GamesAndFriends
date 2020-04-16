@@ -144,13 +144,13 @@ class JuegosController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        // foreach (Etiquetas::find()->all() as $etiqueta) {
-        //     $generosProvider[] = [$etiqueta->id => $etiqueta->nombre];
-        // }
+        foreach (Etiquetas::find()->all() as $etiqueta) {
+            $generosProvider[] = [$etiqueta->id => $etiqueta->nombre];
+        }
 
         return $this->render('create', [
             'model' => $model,
-            // 'generosProvider' => $generosProvider,
+            'generosProvider' => $generosProvider,
             // 'generos' => $generos,
         ]);
     }

@@ -27,17 +27,18 @@ use kartik\select2\Select2;
       ]
     ]) ?>
 
-    <?php echo "";
-        // echo $form->field($generos)->widget(Select2::classname(), [
-        //     'name' => 'Generos',
-        //     'data' => $generosProvider,
-        //     'size' => Select2::SMALL,
-        //     'options' => ['placeholder' => 'Introduce los géneros del juego', 'multiple' => true],
-        //     'pluginOptions' => [
-        //         'allowClear' => false,
-        //         'tags' => true,
-        //     ],
-        // ]);
+    <?php
+        //https://stackoverflow.com/questions/26763298/how-do-i-work-with-many-to-many-relations-in-yii2
+        echo Select2::widget([
+            'name' => 'Generos',
+            'data' => $generosProvider,
+            'size' => Select2::SMALL,
+            'options' => ['placeholder' => 'Introduce los géneros del juego', 'multiple' => true],
+            'pluginOptions' => [
+                'allowClear' => false,
+                'tags' => true,
+            ],
+        ]);
     ?>
 
     <?= $form->field($model, 'dev')->textInput(['maxlength' => true]) ?>
