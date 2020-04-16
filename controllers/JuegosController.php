@@ -136,21 +136,23 @@ class JuegosController extends Controller
         // exit;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            // if (Yii::$app->request->post('generos')) {
-            //     $generos = Yii::$app->request->post('generos');
-            //     var_dump($generos);
-            //     exit;
-            // }
+            // $model->link('etiquetas', $model->etiquetas);
+            // var_dump(Yii::$app->request->post('Juegos'));
+            // exit;
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         foreach (Etiquetas::find()->all() as $etiqueta) {
-            $generosProvider[] = [$etiqueta->id => $etiqueta->nombre];
+            $generosArray[$etiqueta->id] = $etiqueta->nombre;
         }
+
+        // $queryGeneros = Etiquetas::find();
+        //
+        // $generosProvider = new ActiveDataProvider(['query' => $queryGeneros]);
 
         return $this->render('create', [
             'model' => $model,
-            'generosProvider' => $generosProvider,
+            'generosArray' => $generosArray,
             // 'generos' => $generos,
         ]);
     }
