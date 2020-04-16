@@ -6,6 +6,7 @@ use app\models\Copias;
 use app\models\Etiquetas;
 use app\models\Juegos;
 use app\models\Productos;
+use app\models\Usuarios;
 use app\models\Ventas;
 use app\models\VentasSearch;
 use Yii;
@@ -85,6 +86,13 @@ class VentasController extends Controller
             'finished_at' => null,
             'copia_id' => null,
         ]);
+
+        // Si el usuario es menor de edad, no muestra los juegos de contenido adulto
+        if (!Yii::$app->user->isGuest) {
+            if (!Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
+                $queryCopias->joinWith('copia.juego')->andWhere(['cont_adul' => false]);
+            }
+        }
 
         if (!Yii::$app->user->isGuest) {
             $queryCopias->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
