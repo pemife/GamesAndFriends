@@ -67,7 +67,7 @@ CREATE TABLE criticas
                                     CHECK (valoracion >= 0)
   , usuario_id    BIGINT            NOT NULL
                                     REFERENCES usuarios(id)
-                                    ON DELETE NO ACTION
+                                    ON DELETE CASCADE
                                     ON UPDATE CASCADE
   , producto_id   BIGINT            REFERENCES productos(id)
                                     ON DELETE CASCADE
@@ -100,7 +100,7 @@ CREATE TABLE posts
                                     ON UPDATE CASCADE
   , usuario_id    BIGINT            NOT NULL
                                     REFERENCES usuarios(id)
-                                    ON DELETE NO ACTION
+                                    ON DELETE CASCADE
                                     ON UPDATE CASCADE
 );
 
@@ -114,7 +114,7 @@ CREATE TABLE comentarios
   , texto           TEXT              NOT NULL
   , usuario_id      BIGINT            NOT NULL
                                       REFERENCES usuarios(id)
-                                      ON DELETE NO ACTION
+                                      ON DELETE CASCADE
                                       ON UPDATE CASCADE
   , post_id         BIGINT            NOT NULL
                                       REFERENCES posts(id)
@@ -191,10 +191,10 @@ CREATE TABLE ventas
   , finished_at   TIMESTAMPTZ(0)
   , vendedor_id   BIGINT            NOT NULL
                                     REFERENCES usuarios(id)
-                                    ON DELETE NO ACTION
+                                    ON DELETE CASCADE
                                     ON UPDATE CASCADE
   , comprador_id  BIGINT            REFERENCES usuarios(id)
-                                    ON DELETE NO ACTION
+                                    ON DELETE CASCADE
                                     ON UPDATE CASCADE
   , producto_id   BIGINT            UNIQUE REFERENCES productos(id)
                                     ON DELETE NO ACTION
