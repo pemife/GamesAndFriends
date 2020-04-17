@@ -136,9 +136,15 @@ class JuegosController extends Controller
         // exit;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            // $model->link('etiquetas', $model->etiquetas);
-            // var_dump(Yii::$app->request->post('Juegos'));
+            $juego = Yii::$app->request->post('Juegos');
+
+            foreach ($juego['etiquetas'] as $idEtiqueta) {
+                $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+            }
+
+            // var_dump($etiquetas);
             // exit;
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
