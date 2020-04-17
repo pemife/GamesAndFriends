@@ -131,9 +131,6 @@ class JuegosController extends Controller
     public function actionCreate()
     {
         $model = new Juegos();
-        // $generos = [];
-        // var_dump($generos);
-        // exit;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $juego = Yii::$app->request->post('Juegos');
@@ -142,9 +139,6 @@ class JuegosController extends Controller
                 $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
             }
 
-            // var_dump($etiquetas);
-            // exit;
-
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -152,14 +146,9 @@ class JuegosController extends Controller
             $generosArray[$etiqueta->id] = $etiqueta->nombre;
         }
 
-        // $queryGeneros = Etiquetas::find();
-        //
-        // $generosProvider = new ActiveDataProvider(['query' => $queryGeneros]);
-
         return $this->render('create', [
             'model' => $model,
             'generosArray' => $generosArray,
-            // 'generos' => $generos,
         ]);
     }
 
@@ -175,11 +164,22 @@ class JuegosController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $juego = Yii::$app->request->post('Juegos');
+
+            foreach ($juego['etiquetas'] as $idEtiqueta) {
+                $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        foreach (Etiquetas::find()->all() as $etiqueta) {
+            $generosArray[$etiqueta->id] = $etiqueta->nombre;
         }
 
         return $this->render('update', [
             'model' => $model,
+            'generosArray' => $generosArray,
         ]);
     }
 
