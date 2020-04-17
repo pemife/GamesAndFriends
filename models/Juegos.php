@@ -11,7 +11,7 @@ namespace app\models;
  * @property string $fechalan
  * @property string $dev
  *
- * @property JuegosEtiquetas[] $juegosEtiquetas
+ * @property Etiquetas[] $etiquetas
  * @property Posts[] $posts
  * @property Productos[] $productos
  */

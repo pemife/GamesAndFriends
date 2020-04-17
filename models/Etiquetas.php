@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "etiquetas".
  *
@@ -47,11 +45,13 @@ class Etiquetas extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Juegos]].
+     *
      * @return \yii\db\ActiveQuery
      */
-    public function getJuegosEtiquetas()
+    public function getJuegos()
     {
-        return $this->hasMany(JuegosEtiquetas::className(), ['etiqueta_id' => 'id'])->inverseOf('etiqueta');
+        return $this->hasMany(Juegos::className(), ['id' => 'juego_id'])->viaTable('juegos_etiquetas', ['etiqueta_id' => 'id']);
     }
 
     /**

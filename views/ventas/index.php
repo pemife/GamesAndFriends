@@ -38,7 +38,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         $generos[] = $genero->nombre;
                     }
 
-                    $cadenaGeneros = implode(", ", $generos);
+                    $cadenaGeneros = "";
+
+                    if (!empty($generos)) {
+                        $cadenaGeneros = implode(", ", $generos);
+                    }
 
                     return $cadenaGeneros;
                 }

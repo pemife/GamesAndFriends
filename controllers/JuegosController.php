@@ -131,27 +131,24 @@ class JuegosController extends Controller
     public function actionCreate()
     {
         $model = new Juegos();
-        // $generos = [];
-        // var_dump($generos);
-        // exit;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            // if (Yii::$app->request->post('generos')) {
-            //     $generos = Yii::$app->request->post('generos');
-            //     var_dump($generos);
-            //     exit;
-            // }
+            $juego = Yii::$app->request->post('Juegos');
+
+            foreach ($juego['etiquetas'] as $idEtiqueta) {
+                $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        // foreach (Etiquetas::find()->all() as $etiqueta) {
-        //     $generosProvider[] = [$etiqueta->id => $etiqueta->nombre];
-        // }
+        foreach (Etiquetas::find()->all() as $etiqueta) {
+            $generosArray[$etiqueta->id] = $etiqueta->nombre;
+        }
 
         return $this->render('create', [
             'model' => $model,
-            // 'generosProvider' => $generosProvider,
-            // 'generos' => $generos,
+            'generosArray' => $generosArray,
         ]);
     }
 
@@ -167,11 +164,22 @@ class JuegosController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $juego = Yii::$app->request->post('Juegos');
+
+            foreach ($juego['etiquetas'] as $idEtiqueta) {
+                $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        foreach (Etiquetas::find()->all() as $etiqueta) {
+            $generosArray[$etiqueta->id] = $etiqueta->nombre;
         }
 
         return $this->render('update', [
             'model' => $model,
+            'generosArray' => $generosArray,
         ]);
     }
 
