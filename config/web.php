@@ -38,11 +38,12 @@ $config = [
             // comment the following array to send mail using php's mail function:
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.office365.com',
-                'username' => 'gamesandfriends@outlook.es',
+                'host' => 'smtp.gmail.com',
+                'username' => 'gamesandfriends2@gmail.com',
                 'password' => getenv('SMTP_PASS'),
                 'port' => '587',
                 'encryption' => 'tls',
+                // 'streamOptions' => ['ssl' => ['allow_self_signed' => true, 'verify_peer' => false]],
             ],
         ],
         'log' => $log,
