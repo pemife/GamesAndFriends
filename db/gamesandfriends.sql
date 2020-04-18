@@ -6,16 +6,17 @@ DROP TABLE IF EXISTS usuarios CASCADE;
 
 CREATE TABLE usuarios
 (
-    id          BIGSERIAL     PRIMARY KEY
-  , nombre      VARCHAR(32)   NOT NULL UNIQUE
-                              CONSTRAINT ck_nombre_sin_espacios
-                              CHECK (nombre NOT ILIKE '% %')
-  , password    VARCHAR(60)   NOT NULL
-  , created_at  DATE          NOT NULL DEFAULT CURRENT_DATE
-  , token       VARCHAR(32)
-  , email       VARCHAR(255)  NOT NULL UNIQUE
-  , biografia   TEXT
-  , fechanac    DATE          CHECK (fechanac < CURRENT_DATE)
+    id              BIGSERIAL       PRIMARY KEY
+  , nombre          VARCHAR(32)     NOT NULL UNIQUE
+                                    CONSTRAINT ck_nombre_sin_espacios
+                                    CHECK (nombre NOT ILIKE '% %')
+  , password                        VARCHAR(60)   NOT NULL
+  , created_at      DATE            NOT NULL DEFAULT CURRENT_DATE
+  , requested_at    TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
+  , token           VARCHAR(32)
+  , email           VARCHAR(255)    NOT NULL UNIQUE
+  , biografia       TEXT
+  , fechanac        DATE            CHECK (fechanac < CURRENT_DATE)
 );
 
 DROP TABLE IF EXISTS plataformas CASCADE;

@@ -16,6 +16,7 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $biografia
  * @property string $fechanac
+ * @property string $requested_at
  *
  * @property Comentarios[] $comentarios
  * @property Criticas[] $criticas
@@ -57,6 +58,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['email'], 'email'],
             [['email'], 'unique'],
             [['nombre'], 'unique'],
+            [['requested_at'], 'datetime'],
         ];
     }
 
@@ -74,6 +76,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'email' => 'Email',
             'biografia' => 'Biografia',
             'fechanac' => 'Fecha de Nacimiento',
+            'requested_at' => 'Miembro desde',
         ];
     }
 

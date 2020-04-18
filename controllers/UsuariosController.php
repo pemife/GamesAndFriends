@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Copias;
+use app\models\LoginForm;
 use app\models\Productos;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
@@ -125,6 +126,16 @@ class UsuariosController extends Controller
             if ($model->save()) {
                 $this->enviaCorreoConfirmacion($model->id);
 
+                $usuario = Yii::$app->request->post('Usuarios');
+
+                $modelLogin = new LoginForm([
+                    'username' => $model->nombre,
+                    'password' => $usuario['password'],
+                    'rememberMe' => '1',
+                ]);
+
+                $modelLogin->login();
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
@@ -212,6 +223,25 @@ class UsuariosController extends Controller
         return $this->render('anadirInventario');
     }
 
+    public function actionVerificar($token)
+    {
+        if (!Yii::$app->user->isGuest) {
+            $usuario = Usuarios::findOne(Yii::$app->user->id);
+
+            $aTiempo = ((new \DateTime())->getTimestamp() - $usuario->requested_at) < 3600;
+
+            if ($usuario->token === $token && $aTiempo) {
+                $usuario->token = null;
+                Yii::$app->session->setFlash('success', 'Tu cuenta ha sido verificada');
+            }
+
+            return $this->redirect(['site/home']);
+        }
+
+        Yii::$app->session->setFlash('error', 'Debes iniciar session para verificar tu cuenta');
+        return $this->redirect(['site/login']);
+    }
+
     // https://jqueryui.com/sortable/
     // public fucntion actionListaDeseos($uId)
     // {
@@ -242,7 +272,7 @@ class UsuariosController extends Controller
     private function enviaCorreoConfirmacion($usuarioId)
     {
         Yii::$app->mailer->compose()
-        ->setFrom('gamesandfriends@outlook.es')
+        ->setFrom('gamesandfriends2@gmail.com')
         ->setTo(Usuarios::findOne($usuarioId)->email)
         ->setSubject('Confirmacion de registro')
         ->setHtmlBody('Confirma tu correo electronico con el siguiente enlace: '
@@ -250,14 +280,8 @@ class UsuariosController extends Controller
             'Confirmar',
             Url::to(
                 [
-                    'usuario/verificar',
-                    'data' => [
-                        'params' => [
-                            'id' => $usuarioId,
-                            'token' => Usuarios::findOne($usuarioId)->token,
-                        ],
-                        'method' => 'POST',
-                    ],
+                    'usuarios/verificar',
+                    'token' => Usuarios::findOne($usuarioId)->token,
                 ],
                 true
             )

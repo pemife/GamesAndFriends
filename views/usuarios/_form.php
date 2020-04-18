@@ -32,6 +32,8 @@ use kartik\date\DatePicker;
       ]
     ]) ?>
 
+    <?php $form->field($model, 'requested_at')->hiddenInput(['value' => (new \DateTime())->getTimestamp()])->label(false) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
