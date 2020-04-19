@@ -223,6 +223,29 @@ class UsuariosController extends Controller
         return $this->render('anadirInventario');
     }
 
+    public function actionSolicitarVerificacion()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $usuario = Usuarios::findOne(Yii::$app->user->id);
+            $usuario->requested_at = (new \Datetime())->getTimestamp();
+
+            var_dump($usuario, Usuarios::findOne(Yii::$app->user->id));
+            exit;
+
+            $usuario->scenario = Usuarios::SCENARIO_UPDATE;
+            if (!$usuario->save()) {
+                Yii::$app->session->setFlash('error', 'Error al solicitar la verificacion');
+            } else {
+                $this->enviaCorreoConfirmacion(Yii::$app->user->id);
+            }
+
+            return $this->actionView(Yii::$app->user->id);
+        }
+
+        Yii::$app->session->setFlash('error', 'Debes iniciar sesion para solicitar la verificacion de tu cuenta');
+        return $this->redirect(['site/login']);
+    }
+
     public function actionVerificar($token)
     {
         if (!Yii::$app->user->isGuest) {
@@ -232,8 +255,17 @@ class UsuariosController extends Controller
 
             if ($usuario->token === $token && $aTiempo) {
                 $usuario->token = null;
-                Yii::$app->session->setFlash('success', 'Tu cuenta ha sido verificada');
+
+                $usuario->scenario = Usuarios::SCENARIO_UPDATE;
+                if ($usuario->save()) {
+                    Yii::$app->session->setFlash('success', 'Tu cuenta ha sido verificada');
+                    return $this->redirect(['site/index']);
+                }
+                Yii::debug([$usuario, $token, $aTiempo]);
+                Yii::$app->session->setFlash('error', 'Ha ocurrido un error guardando los cambios');
+                return $this->redirect(['view', 'id' => $usuario->id]);
             }
+            Yii::$app->session->setFlash('error', 'Ha ocurrido un error al verificar la cuenta (intentalo de nuevo)');
 
             return $this->redirect(['site/index']);
         }
@@ -269,7 +301,7 @@ class UsuariosController extends Controller
         return Yii::$app->user->id === 1 || Yii::$app->user->id === $model->id;
     }
 
-    private function enviaCorreoConfirmacion($usuarioId)
+    public function enviaCorreoConfirmacion($usuarioId)
     {
         Yii::$app->mailer->compose()
         ->setFrom('gamesandfriends2@gmail.com')

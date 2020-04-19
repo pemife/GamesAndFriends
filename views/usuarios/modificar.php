@@ -19,7 +19,7 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'readonly' => true]) ?>
 
     <?= $form->field($model, 'biografia')->textarea(['rows' => 6]) ?>
 
