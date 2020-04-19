@@ -228,14 +228,14 @@ class UsuariosController extends Controller
         if (!Yii::$app->user->isGuest) {
             $usuario = Usuarios::findOne(Yii::$app->user->id);
 
-            $aTiempo = ((new \DateTime())->getTimestamp() - $usuario->requested_at) < 3600;
+            $aTiempo = ((new \DateTime())->getTimestamp() - strtotime($usuario->requested_at)) < 3600;
 
             if ($usuario->token === $token && $aTiempo) {
                 $usuario->token = null;
                 Yii::$app->session->setFlash('success', 'Tu cuenta ha sido verificada');
             }
 
-            return $this->redirect(['site/home']);
+            return $this->redirect(['site/index']);
         }
 
         Yii::$app->session->setFlash('error', 'Debes iniciar session para verificar tu cuenta');
