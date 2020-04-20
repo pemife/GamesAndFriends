@@ -227,16 +227,14 @@ class UsuariosController extends Controller
     {
         if (!Yii::$app->user->isGuest) {
             $usuario = Usuarios::findOne(Yii::$app->user->id);
-            $usuario->requested_at = (new \Datetime())->getTimestamp();
+            $usuario->requested_at = date('Y-m-d H:i:s');
 
-            var_dump($usuario, Usuarios::findOne(Yii::$app->user->id));
-            exit;
-
-            $usuario->scenario = Usuarios::SCENARIO_UPDATE;
-            if (!$usuario->save()) {
-                Yii::$app->session->setFlash('error', 'Error al solicitar la verificacion');
-            } else {
+            $usuario->scenario = Usuarios::SCENARIO_VERIFICACION;
+            if ($usuario->save()) {
                 $this->enviaCorreoConfirmacion(Yii::$app->user->id);
+            } else {
+                Yii::$app->session->setFlash('error', 'Error al solicitar la verificacion');
+                Yii::debug($usuario);
             }
 
             return $this->actionView(Yii::$app->user->id);
@@ -256,7 +254,7 @@ class UsuariosController extends Controller
             if ($usuario->token === $token && $aTiempo) {
                 $usuario->token = null;
 
-                $usuario->scenario = Usuarios::SCENARIO_UPDATE;
+                $usuario->scenario = Usuarios::SCENARIO_VERIFICACION;
                 if ($usuario->save()) {
                     Yii::$app->session->setFlash('success', 'Tu cuenta ha sido verificada');
                     return $this->redirect(['site/index']);
