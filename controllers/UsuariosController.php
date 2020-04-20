@@ -124,7 +124,7 @@ class UsuariosController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->token = $model->creaToken();
             if ($model->save()) {
-                $this->enviaCorreoConfirmacion($model->id);
+                $this->enviaCorreoBienvenida($model->id);
 
                 $usuario = Yii::$app->request->post('Usuarios');
 
@@ -316,6 +316,22 @@ class UsuariosController extends Controller
                 true
             )
         ))->send();
+
+        Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
+    }
+
+    public function enviaCorreoBienvenida($usuarioId)
+    {
+        Yii::$app->mailer->compose(
+            'bienvenida',
+            [
+                'nombre' => Usuarios::findOne($usuarioId)->nombre,
+                'token' => Usuarios::findOne($usuarioId)->token,
+            ]
+        )->setFrom('gamesandfriends2@gmail.com')
+        ->setTo(Usuarios::findOne($usuarioId)->email)
+        ->setSubject('Bienvenid@ a GamesandFriends')
+        ->send();
 
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
     }
