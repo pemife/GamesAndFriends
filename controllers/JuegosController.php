@@ -47,15 +47,19 @@ class JuegosController extends Controller
                         'allow' => true,
                         'actions' => ['view'],
                         'matchCallback' => function ($rule, $action) {
-                            if (!Yii::$app->user->isGuest) {
-                                if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
-                                    return true;
+                            $model = Juegos::findOne(Yii::$app->request->queryParams['id']);
+                            if ($model->cont_adul == true) {
+                                if (!Yii::$app->user->isGuest) {
+                                    if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
+                                        return true;
+                                    }
+                                    Yii::$app->session->setFlash('error', '¡Debes ser mayor de edad para ver este contenido!');
+                                } else {
+                                    Yii::$app->session->setFlash('error', '¡Debes iniciar sesión para ver contenido adulto!');
                                 }
-                                Yii::$app->session->setFlash('error', '¡Debes ser mayor de edad para ver este contenido!');
-                            } else {
-                                Yii::$app->session->setFlash('error', '¡Debes iniciar sesión para ver contenido adulto!');
+                                return false;
                             }
-                            return false;
+                            return true;
                         },
                     ],
                 ],

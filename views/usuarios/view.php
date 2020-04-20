@@ -58,7 +58,7 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
         </div>
         <div class="opciones">
             <span class="dropdown">
-                <button class="glyphicon glyphicon-cog" type="button" data-toggle="dropdown" style="height: 30px; width: 30px;"></button>
+                <button class="glyphicon glyphicon-cog" type="button" data-toggle="dropdown" style="height: 30px; width: 35px;"></button>
                 <ul class="dropdown-menu pull-right">
                     <li>
                         <?= Html::a('Modificar perfil', $enlaceMod, [
@@ -72,7 +72,7 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
                             'disabled' => !$puedeModificar,
                             'data' => [
                                 'confirm' => 'Seguro que quieres borrar el perfil?',
-                                'method' => 'post',
+                                'method' => 'POST',
                             ],
                             ]) ?>
                     </li>
@@ -84,6 +84,16 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
                             'data-params' => [
                                 'tokenUsuario' => $model->token,
                             ],
+                            ]) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Verificar cuenta',
+                            [
+                              'solicitar-verificacion',
+                            ],
+                            [
+                              'class' => 'btn btn-link',
+                              'disabled' => !$puedeModificar || $model->token == null,
                             ]) ?>
                     </li>
                 </ul>

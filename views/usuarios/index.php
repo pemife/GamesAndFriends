@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'nombre',
             // 'password',
             'created_at',
-            'token',
+            // 'token',
             // 'email:email',
             // 'biografia:ntext',
             // 'fechanac',

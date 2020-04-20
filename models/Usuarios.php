@@ -16,6 +16,7 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property string $biografia
  * @property string $fechanac
+ * @property string $requested_at
  *
  * @property Comentarios[] $comentarios
  * @property Criticas[] $criticas
@@ -27,6 +28,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_CAMBIOPASS = 'cambioPass';
+    const SCENARIO_VERIFICACION = 'verificar';
 
     public $password_repeat;
     /**
@@ -49,14 +51,19 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['fechanac'], 'validaFecha', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_CREATE]],
             [['created_at'], 'safe'],
             [['biografia'], 'string'],
-            [['nombre', 'token'], 'string', 'max' => 32],
+            [['nombre'], 'string', 'max' => 32],
+            [['token'], 'string', 'max' => 32, 'on' => [self::SCENARIO_CREATE]],
+            [['token'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['password'], 'string', 'max' => 60],
             [['password', 'password_repeat', 'email'], 'required', 'on' => [self::SCENARIO_CREATE]],
             [['password', 'password_repeat'], 'required', 'on' => [self::SCENARIO_CAMBIOPASS]],
             [['password'], 'compare', 'on' => [self::SCENARIO_CREATE, self::SCENARIO_CAMBIOPASS]],
-            [['email'], 'string', 'max' => 255],
+            [['email'], 'email'],
             [['email'], 'unique'],
             [['nombre'], 'unique'],
+            [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss'],
+            [['requested_at'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
+            [['token'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
         ];
     }
 
@@ -74,6 +81,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'email' => 'Email',
             'biografia' => 'Biografia',
             'fechanac' => 'Fecha de Nacimiento',
+            'requested_at' => 'Miembro desde',
         ];
     }
 
