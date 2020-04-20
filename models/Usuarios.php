@@ -257,4 +257,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return $prueba = $this->fechanac < (date('Y-m-d', strtotime('- 18 years')));
     }
+
+    public function esVerificado()
+    {
+        return !isset($this->token);
+    }
 }

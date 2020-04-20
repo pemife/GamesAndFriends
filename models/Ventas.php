@@ -116,4 +116,9 @@ class Ventas extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'comprador_id'])->inverseOf('ventas0');
     }
+
+    public function esProducto()
+    {
+        return isset($this->producto_id);
+    }
 }

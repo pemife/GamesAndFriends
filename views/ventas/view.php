@@ -17,9 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php if($model->vendedor_id == Yii::$app->user->id){
-            echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
 
-            echo Html::a('Delete', ['delete', 'id' => $model->id], [
+            echo Html::a('Retirar del mercado', ['delete', 'id' => $model->id], [
               'class' => 'btn btn-danger',
               'data' => [
                 'confirm' => '¿Estas seguro de querer borrar este elemento?',
@@ -39,12 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
       <span style="font-weight: bold;">Precio: </span> <?= Html::encode($model->precio) ?>
     </p>
     <?php if(!Yii::$app->user->isGuest){
-      echo Html::a('Comprar', ['comprar', 'id' => $model->id], [
+      echo Html::a('Solicitar compra', ['solicitar-compra', 'idVenta' => $model->id], [
         'class' => 'btn btn-success',
-        'data' => [
-          'confirm' => '¿Estas seguro de que quieres comprarlo?',
-          'method' => 'post',
-        ],
       ]);
     } ?>
 
