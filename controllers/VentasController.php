@@ -35,16 +35,38 @@ class VentasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'mis-ventas'],
+                'only' => ['create', 'update', 'delete', 'mis-ventas', 'solicitar-compra', 'finalizar-venta'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'mis-ventas'],
+                        'actions' => ['create'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡No puedes poner nada en venta sin loggear!');
+                                return false;
+                            }
+
+                            if (Usuarios::findOne(Yii::$app->user->id)->esVerificado()) {
+                                return true;
+                            }
+
+                            Yii::$app->session->setFlash('error', '¡No puedes poner nada en venta sin verificar tu cuenta!');
+                            return false;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['mis-ventas'],
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => false,
+                        'actions' => ['update'],
                         'roles' => ['@'],
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['update', 'delete'],
+                        'actions' => ['delete'],
                         'matchCallback' => function ($rule, $action) {
                             // Yii::debug(Yii::$app->request->queryParams['id']);
                             $model = Ventas::findOne(Yii::$app->request->queryParams['id']);
@@ -52,6 +74,20 @@ class VentasController extends Controller
                                 return true;
                             }
                             Yii::$app->session->setFlash('error', '¡No puedes modificar la venta de otra persona!');
+                            return false;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['solicitar-compra'],
+                        'matchCallback' => function ($rule, $action) {
+                            $venta = Ventas::findOne(Yii::$app->request->queryParams['idVenta']);
+                            $comprador = Usuarios::findOne(Yii::$app->user->id);
+                            if ($comprador->esVerificado()) {
+                                return true;
+                            }
+
+                            Yii::$app->session->setFlash('error', '¡No puedes crear la solicitud de compra sin verificar tu cuenta!');
                             return false;
                         },
                     ],
@@ -427,6 +463,35 @@ class VentasController extends Controller
             'nombreItem' => $nombreItem,
             'ventasProvider' => $ventasProvider,
         ]);
+    }
+
+    public function actionSolicitarCompra($idVenta)
+    {
+        $venta = Ventas::findOne($idVenta);
+        $vendedor = Usuarios::findOne($venta->vendedor_id);
+
+        $mail = Yii::$app->mailer->compose(
+            'confirmacionVenta',
+            [
+                'ventaId' => $venta->id,
+                'compradorId' => Yii::$app->user->id,
+            ]
+        )->setFrom('gamesandfriends2@gmail.com')
+        ->setTo($vendedor->email)
+        ->setSubject('Confirmacion de venta');
+
+        if ($mail->send()) {
+            Yii::$app->session->setFlash('info', '¡Se ha enviado la solicitud!');
+        }
+
+        return $this->redirect(['ventas/view', 'id' => $venta->id]);
+    }
+
+    public function actionFinalizarVenta()
+    {
+        // Aqui sera donde se haga el pago
+
+        return false;
     }
 
     /**
