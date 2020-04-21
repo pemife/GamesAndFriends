@@ -48,9 +48,21 @@ class ProductosController extends Controller
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
                             $model = Productos::findOne(Yii::$app->request->queryParams['id']);
-                            if (!Yii::$app->user->isGuest && ($model->propietario_id == Yii::$app->user->id)) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'No puedes modificar/borrar nada sin iniciar sesion');
+                                return false;
+                            }
+
+                            if ($model->propietario_id == Yii::$app->user->id) {
                                 return true;
                             }
+
+                            if (Ventas::find()->where(['producto_id' => $model->id])) {
+                                Yii::$app->session->setFlash('error', 'No puedes modificar/borrar un producto que esta en venta');
+                                return false;
+                            }
+
                             Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
                             return false;
                         },
