@@ -6,17 +6,17 @@ DROP TABLE IF EXISTS usuarios CASCADE;
 
 CREATE TABLE usuarios
 (
-    id              BIGSERIAL       PRIMARY KEY
-  , nombre          VARCHAR(32)     NOT NULL UNIQUE
-                                    CONSTRAINT ck_nombre_sin_espacios
-                                    CHECK (nombre NOT ILIKE '% %')
-  , password                        VARCHAR(60)   NOT NULL
-  , created_at      DATE            NOT NULL DEFAULT CURRENT_DATE
-  , requested_at    TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
-  , token           VARCHAR(32)
-  , email           VARCHAR(255)    NOT NULL UNIQUE
-  , biografia       TEXT
-  , fechanac        DATE            CHECK (fechanac < CURRENT_DATE)
+    id                  BIGSERIAL       PRIMARY KEY
+  , nombre              VARCHAR(32)     NOT NULL UNIQUE
+                                        CONSTRAINT ck_nombre_sin_espacios
+                                        CHECK (nombre NOT ILIKE '% %')
+  , password                            VARCHAR(60)   NOT NULL
+  , created_at          DATE            NOT NULL DEFAULT CURRENT_DATE
+  , requested_at        TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
+  , token               VARCHAR(32)
+  , email               VARCHAR(255)    NOT NULL UNIQUE
+  , biografia           TEXT
+  , fechanac            DATE            CHECK (fechanac < CURRENT_DATE)
 );
 
 DROP TABLE IF EXISTS plataformas CASCADE;
@@ -49,7 +49,7 @@ CREATE TABLE productos
   , nombre        VARCHAR(255)      NOT NULL UNIQUE
   , descripcion   TEXT              NOT NULL
   , stock         NUMERIC(5)        NOT NULL
-  , propietario_id   BIGINT            REFERENCES usuarios(id)
+  , propietario_id   BIGINT         REFERENCES usuarios(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
 );
@@ -170,7 +170,7 @@ CREATE TABLE copias
                                     REFERENCES juegos(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-  , propietario_id   BIGINT            REFERENCES usuarios(id)
+  , propietario_id   BIGINT         REFERENCES usuarios(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
   , clave         VARCHAR(17)       CONSTRAINT ck_patron_clave
@@ -211,6 +211,11 @@ CREATE TABLE ventas
     )
 );
 
+ALTER TABLE usuarios
+ADD COLUMN venta_solicitada     BIGINT      REFERENCES ventas(id)
+                                            ON DELETE CASCADE
+                                            ON UPDATE CASCADE
+;
 
 --INSERTS --
 
