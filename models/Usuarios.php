@@ -64,6 +64,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss'],
             [['requested_at'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['token'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
+            [['venta_solicitada'], 'safe'],
+            // [['venta_solicitada'], 'validarVentaTerminada'],
         ];
     }
 
@@ -82,8 +84,16 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'biografia' => 'Biografia',
             'fechanac' => 'Fecha de Nacimiento',
             'requested_at' => 'Miembro desde',
+            'venta_solicitada' => 'Id de venta solicitada',
         ];
     }
+
+    // public function validarVentaTerminada($atributo, $params)
+    // {
+    //     if (isset($this->solicitud->finished_at)) {
+    //         $this->addError('venta_solicitada', 'Esa venta ya esta terminada');
+    //     }
+    // }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -215,6 +225,11 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Productos::className(), ['propietario_id' => 'id'])->inverseOf('propietario');
     }
 
+    public function getSolicitud()
+    {
+        return $this->hasOne(Ventas::className(), ['id' => 'venta_solicitada']);
+    }
+
     public function creaToken()
     {
         return Yii::$app->security->generateRandomString(32);
@@ -256,5 +271,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function esMayorDeEdad()
     {
         return $prueba = $this->fechanac < (date('Y-m-d', strtotime('- 18 years')));
+    }
+
+    public function esVerificado()
+    {
+        return !isset($this->token);
     }
 }

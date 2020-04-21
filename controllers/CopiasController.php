@@ -7,6 +7,7 @@ use app\models\CopiasSearch;
 use app\models\Juegos;
 use app\models\Plataformas;
 use app\models\Usuarios;
+use app\models\Ventas;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -45,11 +46,24 @@ class CopiasController extends Controller
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
                             $model = Copias::findOne(Yii::$app->request->queryParams['id']);
-                            if (!Yii::$app->user->isGuest && ($model->propietario_id == Yii::$app->user->id)) {
-                                return true;
+
+                            // Yii::$app->session->setFlash('error', '');
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'No puedes modificar/borrar nada sin iniciar sesion');
+                                return false;
                             }
-                            Yii::$app->session->setFlash('error', '¡No puedes modificar la copia de otra persona!');
-                            return false;
+
+                            if ($model->propietario_id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar/borrar la copia de otra persona!');
+                                return false;
+                            }
+
+                            if (Ventas::find()->where(['copia_id' => $model->id])) {
+                                Yii::$app->session->setFlash('error', 'No puedes modificar/borrar una copia que esta en venta');
+                                return false;
+                            }
+
+                            return true;
                         },
                     ],
                 ],
