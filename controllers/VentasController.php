@@ -82,12 +82,67 @@ class VentasController extends Controller
                         'actions' => ['solicitar-compra'],
                         'matchCallback' => function ($rule, $action) {
                             $venta = Ventas::findOne(Yii::$app->request->queryParams['idVenta']);
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡No puedes solicitar nada sin iniciar sesion!');
+                                return false;
+                            }
+
                             $comprador = Usuarios::findOne(Yii::$app->user->id);
+
                             if ($comprador->esVerificado()) {
                                 return true;
                             }
 
+                            if (isset($comprador->solicitud)) {
+                                Yii::$app->session->setFlash('error', '¡Ya tienes una compra solicitada!');
+                                return false;
+                            }
+
+                            if (Yii::$app->user->id == $venta->vendedor->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes comprarte a ti mismo!');
+                                return false;
+                            }
+
+                            if (isset($venta->finished_at)) {
+                                Yii::$app->session->setFlash('error', '¡No puedes solicitar la compra de una venta terminada!');
+                                return false;
+                            }
+
                             Yii::$app->session->setFlash('error', '¡No puedes crear la solicitud de compra sin verificar tu cuenta!');
+                            return false;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['finalizar-venta'],
+                        'matchCallback' => function ($rule, $action) {
+                            $venta = Ventas::findOne(Yii::$app->request->queryParams['idVenta']);
+
+                            if (isset($venta->finished_at)) {
+                                Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta que ya esta acabada!');
+                                return false;
+                            }
+
+                            $comprador = Usuarios::findOne(Yii::$app->request->queryParams['idComprador']);
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta sin iniciar sesion!');
+                                return false;
+                            }
+
+                            if ($venta->vendedor->id == Yii::$app->user->id) {
+                                if ($venta->vendedor->esVerificado() && $comprador->esVerificado()) {
+                                    if ($comprador->solicitud->id == $venta->id) {
+                                        return true;
+                                    }
+                                    Yii::$app->session->setFlash('error', '¡El comprador no ha solicitado esta venta!');
+                                    return false;
+                                }
+                                Yii::$app->session->setFlash('error', '¡Los usuarios implicados en la venta deben estar verificados!');
+                                return false;
+                            }
+                            Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta que no es tuya!');
                             return false;
                         },
                     ],
@@ -469,28 +524,57 @@ class VentasController extends Controller
     {
         $venta = Ventas::findOne($idVenta);
         $vendedor = Usuarios::findOne($venta->vendedor_id);
+        $comprador = Usuarios::findOne(Yii::$app->user->id);
+        $comprador->venta_solicitada = $idVenta;
 
         $mail = Yii::$app->mailer->compose(
             'confirmacionVenta',
             [
-                'ventaId' => $venta->id,
-                'compradorId' => Yii::$app->user->id,
+                'idVenta' => $venta->id,
+                'idComprador' => Yii::$app->user->id,
             ]
-        )->setFrom('gamesandfriends2@gmail.com')
+        )
+        ->setFrom('gamesandfriends2@gmail.com')
         ->setTo($vendedor->email)
         ->setSubject('Confirmacion de venta');
 
-        if ($mail->send()) {
-            Yii::$app->session->setFlash('info', '¡Se ha enviado la solicitud!');
+        if ($comprador->save()) {
+            if ($mail->send()) {
+                Yii::$app->session->setFlash('info', '¡Se ha enviado la solicitud!');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'Ha ocurrido un error en la solicitud de compra');
         }
 
         return $this->redirect(['ventas/view', 'id' => $venta->id]);
     }
 
-    public function actionFinalizarVenta()
+    public function actionFinalizarVenta($idVenta, $idComprador)
     {
-        // Aqui sera donde se haga el pago
+        $venta = Ventas::findOne($idVenta);
+        $comprador = Usuarios::findOne($idComprador);
 
+        $item = $venta->producto ? Productos::findOne($venta->producto->id) : Copias::findOne($venta->copia->id);
+
+        $item->propietario_id = $comprador->id;
+        $venta->comprador_id = $comprador->id;
+        $comprador->venta_solicitada = null;
+        $venta->finished_at = date('Y-m-d H:i:s');
+
+        if ($item->validate() && $venta->validate() && $comprador->validate()) {
+            // Aqui se realizara el pago, una vez que la aplicacion soporte paypal
+
+            $item->save();
+            $venta->save();
+            $comprador->save();
+
+            Yii::$app->session->setFlash('success', 'Venta finalizada con exito');
+
+            $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+        } else {
+            Yii::$app->session->setFlash('error', 'Ha ocurrido un error procesando la venta');
+        }
+        Yii::debug($item, $venta, $comprador);
         return false;
     }
 
