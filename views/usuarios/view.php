@@ -230,8 +230,14 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
                     if (Yii::$app->user->id == $model->propietario_id){
                       return Html::a(
                         '<span class="glyphicon glyphicon-trash"></span>',
-                        ['ventas/delete', 'id' => $model->id],
-                        ['title' => 'ver en mercado']
+                        ['copias/delete', 'id' => $model->id],
+                        [
+                            'data' => [
+                              'method' => 'post',
+                              'confirm' => '¿Estas seguro de retirar copia?(Esta accion no se puede deshacer)',
+                            ],
+                            'title' => 'retirar copia de inventario',
+                        ]
                       );
                     }
                     return null;
