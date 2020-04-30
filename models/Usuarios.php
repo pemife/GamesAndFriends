@@ -179,6 +179,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
+
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {
@@ -230,6 +231,11 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasOne(Ventas::className(), ['id' => 'venta_solicitada']);
     }
 
+    public function getAmigos()
+    {
+        return $this->hasMany(self::className(), ['id' => 'amigo_id'])->viaTable('amigos', ['usuario_id' => 'id']);
+    }
+
     public function creaToken()
     {
         return Yii::$app->security->generateRandomString(32);
@@ -276,5 +282,27 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function esVerificado()
     {
         return !isset($this->token);
+    }
+
+    public function esAmigo($usuarioId, $amigoId)
+    {
+        $usuario = self::findOne($usuarioId);
+        $amigo = self::findOne($amigoId);
+        return in_array($usuario, $amigo->amigos);
+    }
+
+    public function anadirAmigo($usuarioId, $amigoId)
+    {
+        if (!$this->esAmigo($usuarioId, $amigoId)) {
+            $sql = 'insert into amigos(usuario_id, amigo_id) values(' . $usuarioId . ', ' . $amigoId . '), (' . $amigoId . ', ' . $usuarioId . ')';
+            if (Yii::$app->db->createCommand($sql)->execute()) {
+                Yii::$app->session->setFlash('info', 'Te has añadido satisfactoriamente como amigo');
+                return true;
+            }
+            Yii::$app->session->setFlash('error', 'Ha habido un error al añadirte como amigo');
+            return false;
+        }
+        Yii::$app->session->setFlash('error', 'Ya sois amigos!');
+        return false;
     }
 }

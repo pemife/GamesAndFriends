@@ -272,6 +272,52 @@ class UsuariosController extends Controller
         return $this->redirect(['site/login']);
     }
 
+    public function actionListaAmigos($usuarioId)
+    {
+        return $this->renderAjax('vistaAmigos', [
+          'listaAmigos' => $this->findModel($usuarioId)->amigos,
+        ]);
+    }
+
+    public function actionAnadirAmigo($amigoId, $usuarioId)
+    {
+        if (Yii::$app->user->id == $amigoId) {
+            $model = Usuarios::findOne(Yii::$app->user->id);
+            $model->anadirAmigo(Yii::$app->user->id, $usuarioId);
+        } else {
+            Yii::$app->session->setFlash('error', 'Peticion erronea!');
+        }
+
+        return $this->redirect(['view', 'id' => $amigoId]);
+    }
+
+    public function actionMandarPeticion($amigoId)
+    {
+        Yii::$app->mailer->compose()
+        ->setFrom('gamesandfriends2@gmail.com')
+        ->setTo($this->findModel($amigoId)->email)
+        ->setSubject('Peticion de amistad de ' . $this->findModel(Yii::$app->user->id)->nombre)
+        ->setHtmlBody('Para aceptar la peticion, pulsa '
+        . Html::a('aqui', Url::to(['usuarios/anadir-amigo', 'amigoId' => $amigoId, 'usuarioId' => Yii::$app->user->id], true), [
+          'data' => [
+            'method' => 'POST',
+            'params' => [
+              'token' => $this->findModel(Yii::$app->user->id)->token,
+            ],
+          ],
+        ]) . '.')
+        ->send();
+        Yii::$app->session->setFlash('info', 'Se ha mandado la peticion de amistad');
+        return $this->redirect(['view', 'id' => $amigoId]);
+    }
+
+    public function actionBorrarAmigo($amigoId)
+    {
+        $model = Usuarios::findOne(Yii::$app->user->id);
+        $model->borrarAmigo(Yii::$app->user->id, $amigoId);
+        return $this->redirect(['view', 'id' => $amigoId]);
+    }
+
     // https://jqueryui.com/sortable/
     // public fucntion actionListaDeseos($uId)
     // {

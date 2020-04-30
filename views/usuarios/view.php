@@ -21,6 +21,48 @@ $enlaceMod = $puedeModificar ? Url::to(['usuarios/update', 'id' => $model->id]) 
 $enlaceBor = $puedeModificar ? Url::to(['usuarios/delete', 'id' => $model->id]) : '#';
 $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model->id]) : '#';
 // $enlaceFoto = $enlaceFoto ? 'enlace' : 'https://www.library.caltech.edu/sites/default/files/styles/headshot/public/default_images/user.png?itok=1HlTtL2d';
+
+$url2 = Url::to(['lista-amigos', 'usuarioId' => $model->id]);
+
+// La lista de amigos solo son visibles para los amigos o para el propio usuario
+$esAmigo = $model->esAmigo(Yii::$app->user->id, $model->id);
+$puedeVerAmigos = $esAmigo || (Yii::$app->user->id == $model->id);
+$puedeVerAmigosJS = json_encode($puedeVerAmigos);
+
+$js = <<<EOF
+$('document').ready(function(){
+  actualizarLista();
+});
+
+var esAmigo = $puedeVerAmigosJS;
+$('#botonAmistad').click(function(e){
+  let mensaje = esAmigo ? "¿Estas seguro de borrar como amigo?" : "¿Estas seguro de añadir como amigo?";
+  if(confirm(mensaje)){
+    actualizarLista();
+  } else {
+    e.preventDefault();
+  }
+});
+
+function actualizarLista(){
+  if(esAmigo){
+    $.ajax({
+      method: 'GET',
+      url: '$url2',
+      data: {},
+        success: function(result){
+          if (result) {
+            $('#amigosAjax').html(result);
+          } else {
+            alert('Ha habido un error con la lista de asistentes(2)');
+          }
+        }
+      });
+  }
+}
+EOF;
+$this->registerJs($js);
+
 ?>
 
 <style>
@@ -55,6 +97,19 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
     <div class="nombreOpciones">
         <div class="titulo">
             <h1><?= Html::encode($model->nombre) ?></h1>
+            <p>&nbsp;&nbsp;&nbsp;</p>
+            <div class="opciones">
+              <?php
+              if(!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)){
+
+                if($model->esAmigo(Yii::$app->user->id, $model->id)){
+                  echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' =>'glyphicon glyphicon-remove']);
+                } else {
+                  echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' => 'glyphicon glyphicon-plus']);
+                }
+              }
+              ?>
+            </div>
         </div>
         <div class="opciones">
             <span class="dropdown">
@@ -99,6 +154,7 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
                 </ul>
             </span>
         </div>
+                            </div>
     </div>
 
     <img src="<?= $enlaceFoto ?>" width="150" height="150">
@@ -114,7 +170,9 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
         ],
     ]) ?>
 
-    </br></br>
+    <div id="amigosAjax">
+
+    </div>
 
     <h1>Inventario</h1>
 
