@@ -233,7 +233,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function getAmigos()
     {
-        return $this->hasMany(self::className(), ['id' => 'amigo_id'])->viaTable('amigos', ['usuario_id' => 'id']);
+        return $this->hasMany(self::className(), ['id' => 'amigo_id'])->viaTable('amigos', ['usuario_id' => 'id'])->inverseOf('amigos0');
+    }
+
+    public function getAmigos0()
+    {
+        return $this->hasMany(self::className(), ['id' => 'usuario_id'])->viaTable('amigos', ['amigo_id' => 'id']);
     }
 
     public function creaToken()
@@ -270,30 +275,43 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     public function esMayorDeEdad()
     {
         return $prueba = $this->fechanac < (date('Y-m-d', strtotime('- 18 years')));
     }
-
+    
     public function esVerificado()
     {
         return !isset($this->token);
     }
-
-    public function esAmigo($usuarioId, $amigoId)
+    
+    public function esAmigo($amigoId)
     {
-        $usuario = self::findOne($usuarioId);
+        $usuario = $this;
         $amigo = self::findOne($amigoId);
-        return in_array($usuario, $amigo->amigos);
-    }
 
+        var_dump($usuario->amigos);
+        var_dump($amigo->amigos);
+        exit;
+
+        if (in_array($usuario, $amigo->amigos)) {
+            return true;
+        }
+
+        if (in_array($amigo, $usuario->amigos)) {
+            return true;
+        }
+
+        return false;
+    }
+    
     public function anadirAmigo($usuarioId, $amigoId)
     {
-        if (!$this->esAmigo($usuarioId, $amigoId)) {
+        if (!$this->esAmigo($amigoId)) {
             $sql = 'insert into amigos(usuario_id, amigo_id) values(' . $usuarioId . ', ' . $amigoId . '), (' . $amigoId . ', ' . $usuarioId . ')';
             if (Yii::$app->db->createCommand($sql)->execute()) {
                 Yii::$app->session->setFlash('info', 'Te has añadido satisfactoriamente como amigo');
@@ -303,6 +321,21 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             return false;
         }
         Yii::$app->session->setFlash('error', 'Ya sois amigos!');
+        return false;
+    }
+    
+    public function borrarAmigo($usuarioId, $amigoId)
+    {
+        if ($this->esAmigo($amigoId)) {
+            $sql = 'delete from amigos where (usuario_id = ' . $usuarioId . ' and amigo_id =' . $amigoId . ') or (amigo_id =' . $usuarioId . ' and usuario_id = ' . $amigoId . ')';
+            if (Yii::$app->db->createCommand($sql)->execute()) {
+                Yii::$app->session->setFlash('info', 'Te has borrado satisfactoriamente como amigo');
+                return true;
+            }
+            Yii::$app->session->setFlash('error', 'Ha habido un error al borrarte como amigo');
+            return false;
+        }
+        Yii::$app->session->setFlash('error', 'No sois amigos!');
         return false;
     }
 }
