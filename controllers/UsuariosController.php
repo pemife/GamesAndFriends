@@ -35,7 +35,7 @@ class UsuariosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::classname(),
-                'only' => ['update', 'login', 'logout'],
+                'only' => ['update', 'delete',  'login', 'logout', 'mandar-peticion'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -51,13 +51,41 @@ class UsuariosController extends Controller
                         'allow' => true,
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
-                            $model = Usuarios::findOne(Yii::$app->request->queryParams['id']);
-                            if (!Yii::$app->user->isGuest && ($model->id == Yii::$app->user->id)) {
+                            $model = $this->findModel(Yii::$app->request->queryParams['id']);
+                            if (Yii::$app->user->id === 1){
                                 return true;
                             }
-                            Yii::$app->session->setFlash('error', '¡No puedes modificar el perfil de otra persona!');
-                            return false;
+
+                            if ($model->id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar el perfil de otra persona!');
+                                return false;
+                            }
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar perfiles sin iniciar sesión!');
+                                return false;
+                            }
+
+                            return true;
                         },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['mandar-peticion'],
+                        'matchCallback' => function ($rule, $action) {
+                            
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para añadir amigos');
+                                return false;
+                            }
+                        
+                            if (!$this->findModel(Yii::$app->user->id)->esVerificado()) {
+                                Yii::$app->session->setFlash('error', 'Tienes que verificar tu cuenta para añadir amigos');
+                                return false;
+                            }
+
+                            return true;
+                        }
                     ],
                   ],
             ],
@@ -155,24 +183,19 @@ class UsuariosController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($this->tienePermisos($model)) {
+        
+        if ($model->load(Yii::$app->request->post())) {
             $model->scenario = Usuarios::SCENARIO_UPDATE;
-
-            if ($model->load(Yii::$app->request->post())) {
-                if ($model->save()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
-
-            $model->password = '';
-
-            return $this->render('update', [
-              'model' => $model,
-            ]);
         }
-        Yii::$app->session->setFlash('danger', 'No puedes modificar el perfil de otra persona');
-        return $this->goHome();
+
+        $model->password = '';
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -186,13 +209,8 @@ class UsuariosController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->tienePermisos($model)) {
-            $model->delete();
-
-            return $this->redirect(['index']);
-        }
-
-        Yii::$app->session->setFlash('danger', 'No puedes borrar el perfil de otra persona');
+        $model->delete();
+            
         return $this->goHome();
     }
 
@@ -226,7 +244,7 @@ class UsuariosController extends Controller
     public function actionSolicitarVerificacion()
     {
         if (!Yii::$app->user->isGuest) {
-            $usuario = Usuarios::findOne(Yii::$app->user->id);
+            $usuario = $this->findModel(Yii::$app->user->id);
             $usuario->requested_at = date('Y-m-d H:i:s');
 
             $usuario->scenario = Usuarios::SCENARIO_VERIFICACION;
@@ -247,7 +265,7 @@ class UsuariosController extends Controller
     public function actionVerificar($token)
     {
         if (!Yii::$app->user->isGuest) {
-            $usuario = Usuarios::findOne(Yii::$app->user->id);
+            $usuario = $this->findModel(Yii::$app->user->id);
 
             $aTiempo = ((new \DateTime())->getTimestamp() - strtotime($usuario->requested_at)) < 3600;
 
@@ -279,42 +297,51 @@ class UsuariosController extends Controller
         ]);
     }
 
-    public function actionAnadirAmigo($amigoId, $usuarioId)
+    public function actionAnadirAmigo($usuarioId, $amigoId)
     {
-        if (Yii::$app->user->id == $amigoId) {
-            $model = Usuarios::findOne(Yii::$app->user->id);
-            $model->anadirAmigo(Yii::$app->user->id, $usuarioId);
-        } else {
-            Yii::$app->session->setFlash('error', 'Peticion erronea!');
+        $usuario = $this->findModel($usuarioId);
+        $amigo = $this->findModel($amigoId);
+
+        if ($usuario->esAmigo($amigoId)) {
+            Yii::$app->session->setFlash('error', 'Ya sois amigos!');
+            return $this->redirect(['view', 'id' => $amigoId]);
         }
 
+        $usuario->link('amigos', $amigo);
+        // $amigo->link('amigos', $usuario);
+
+        if (!$usuario->esAmigo($amigoId)) {
+            Yii::$app->session->setFlash('error', 'Ha ocurrido un error al añadirse como amigo');
+            return $this->redirect('view', ['id' => $amigoId]);
+        }
+
+        Yii::$app->session->setFlash('success', '¡Te has añadido satisfactoriamente como amigo!');
         return $this->redirect(['view', 'id' => $amigoId]);
     }
 
     public function actionMandarPeticion($amigoId)
     {
-        Yii::$app->mailer->compose()
-        ->setFrom('gamesandfriends2@gmail.com')
-        ->setTo($this->findModel($amigoId)->email)
-        ->setSubject('Peticion de amistad de ' . $this->findModel(Yii::$app->user->id)->nombre)
-        ->setHtmlBody('Para aceptar la peticion, pulsa '
-        . Html::a('aqui', Url::to(['usuarios/anadir-amigo', 'amigoId' => $amigoId, 'usuarioId' => Yii::$app->user->id], true), [
-          'data' => [
-            'method' => 'POST',
-            'params' => [
-              'token' => $this->findModel(Yii::$app->user->id)->token,
-            ],
-          ],
-        ]) . '.')
-        ->send();
-        Yii::$app->session->setFlash('info', 'Se ha mandado la peticion de amistad');
+        $this->enviaPeticionAmistad($amigoId);
         return $this->redirect(['view', 'id' => $amigoId]);
     }
 
     public function actionBorrarAmigo($amigoId)
     {
-        $model = Usuarios::findOne(Yii::$app->user->id);
-        $model->borrarAmigo(Yii::$app->user->id, $amigoId);
+        $usuario = $this->findModel(Yii::$app->user->id);
+        $amigo = $this->findModel($amigoId);
+
+        if (!$usuario->esAmigo($amigoId)) {
+            Yii::$app->session->setFlash('error', 'No sois amigos!');
+            return $this->redirect(['view', 'id' => $amigoId]);
+        }
+
+        $usuario->unlink('amigos', $amigo);
+
+        if ($usuario->esAmigo($amigoId)) {
+            Yii::$app->session->setFlash('error', 'Ha ocurrido un error al borrarse como amigo');
+            return $this->redirect('view', ['id' => $amigoId]);
+        }
+
         return $this->redirect(['view', 'id' => $amigoId]);
     }
 
@@ -340,16 +367,11 @@ class UsuariosController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    private function tienePermisos($model)
-    {
-        return Yii::$app->user->id === 1 || Yii::$app->user->id === $model->id;
-    }
-
     public function enviaCorreoConfirmacion($usuarioId)
     {
         Yii::$app->mailer->compose()
         ->setFrom('gamesandfriends2@gmail.com')
-        ->setTo(Usuarios::findOne($usuarioId)->email)
+        ->setTo($this->findModel($usuarioId)->email)
         ->setSubject('Confirmacion de registro')
         ->setHtmlBody('Confirma tu correo electronico con el siguiente enlace: '
         . Html::a(
@@ -357,7 +379,7 @@ class UsuariosController extends Controller
             Url::to(
                 [
                     'usuarios/verificar',
-                    'token' => Usuarios::findOne($usuarioId)->token,
+                    'token' => $this->findModel($usuarioId)->token,
                 ],
                 true
             )
@@ -371,14 +393,32 @@ class UsuariosController extends Controller
         Yii::$app->mailer->compose(
             'bienvenida',
             [
-                'nombre' => Usuarios::findOne($usuarioId)->nombre,
-                'token' => Usuarios::findOne($usuarioId)->token,
+                'nombre' => $this->findModel($usuarioId)->nombre,
+                'token' => $this->findModel($usuarioId)->token,
             ]
         )->setFrom('gamesandfriends2@gmail.com')
-        ->setTo(Usuarios::findOne($usuarioId)->email)
+        ->setTo($this->findModel($usuarioId)->email)
         ->setSubject('Bienvenid@ a GamesandFriends')
         ->send();
 
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
+    }
+
+    private function enviaPeticionAmistad($amigoId)
+    {
+        $correo = Yii::$app->mailer->compose()
+        ->setFrom('gamesandfriends2@gmail.com')
+        ->setTo($this->findModel($amigoId)->email)
+        ->setSubject('Peticion de amistad de ' . $this->findModel(Yii::$app->user->id)->nombre)
+        ->setHtmlBody('Para aceptar la peticion, pulsa '
+        . Html::a('aqui', Url::to(['usuarios/anadir-amigo', 'usuarioId' => Yii::$app->user->id, 'amigoId' => $amigoId], true)) . '.');
+
+        if ($correo->send()) {
+            Yii::$app->session->setFlash('info', 'Se ha mandado la peticion de amistad');
+            return true;
+        }
+
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al mandar la peticion de amistad');
+        return false;
     }
 }
