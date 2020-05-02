@@ -312,7 +312,7 @@ class UsuariosController extends Controller
 
         if (!$usuario->esAmigo($amigoId)) {
             Yii::$app->session->setFlash('error', 'Ha ocurrido un error al añadirse como amigo');
-            return $this->redirect('view', ['id' => $amigoId]);
+            return $this->redirect(['view', 'id' => $amigoId]);
         }
 
         Yii::$app->session->setFlash('success', '¡Te has añadido satisfactoriamente como amigo!');

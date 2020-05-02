@@ -27,7 +27,7 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
 $url2 = Url::to(['lista-amigos', 'usuarioId' => $model->id]);
 
 // La lista de amigos solo son visibles para los amigos o para el propio usuario
-$esAmigo = $model->esAmigo(Yii::$app->user->id);
+$esAmigo = Yii::$app->user->isGuest ? false : $model->esAmigo(Yii::$app->user->id);
 Yii::debug($esAmigo);
 $puedeVerAmigos = $esAmigo || (Yii::$app->user->id == $model->id);
 $puedeVerAmigosJS = json_encode($puedeVerAmigos);
