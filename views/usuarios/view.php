@@ -9,6 +9,8 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Usuarios */
 
+// Yii::debug($model->amigos);
+
 $this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -25,7 +27,8 @@ $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model-
 $url2 = Url::to(['lista-amigos', 'usuarioId' => $model->id]);
 
 // La lista de amigos solo son visibles para los amigos o para el propio usuario
-$esAmigo = $model->esAmigo(Yii::$app->user->id, $model->id);
+$esAmigo = $model->esAmigo(Yii::$app->user->id);
+Yii::debug($esAmigo);
 $puedeVerAmigos = $esAmigo || (Yii::$app->user->id == $model->id);
 $puedeVerAmigosJS = json_encode($puedeVerAmigos);
 
@@ -100,9 +103,9 @@ $this->registerJs($js);
             <p>&nbsp;&nbsp;&nbsp;</p>
             <div class="opciones">
               <?php
-              if(!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)){
+              if (!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)) {
 
-                if($model->esAmigo(Yii::$app->user->id, $model->id)){
+                if ($model->esAmigo(Yii::$app->user->id)) {
                   echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' =>'glyphicon glyphicon-remove']);
                 } else {
                   echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' => 'glyphicon glyphicon-plus']);
@@ -306,8 +309,4 @@ $this->registerJs($js);
             ]) ?>
           </div>
     </div>
-
-
-
-
 </div>

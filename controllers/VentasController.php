@@ -87,30 +87,30 @@ class VentasController extends Controller
                                 Yii::$app->session->setFlash('error', '¡No puedes solicitar nada sin iniciar sesion!');
                                 return false;
                             }
-
+                            
                             $comprador = Usuarios::findOne(Yii::$app->user->id);
 
-                            if ($comprador->esVerificado()) {
-                                return true;
+                            if (!$comprador->esVerificado()) {
+                                Yii::$app->session->setFlash('error', '¡No puedes crear la solicitud de compra sin verificar tu cuenta!');
+                                return false;
                             }
-
+                            
                             if (isset($comprador->solicitud)) {
                                 Yii::$app->session->setFlash('error', '¡Ya tienes una compra solicitada!');
                                 return false;
                             }
-
+                            
                             if (Yii::$app->user->id == $venta->vendedor->id) {
                                 Yii::$app->session->setFlash('error', '¡No puedes comprarte a ti mismo!');
                                 return false;
                             }
-
+                            
                             if (isset($venta->finished_at)) {
                                 Yii::$app->session->setFlash('error', '¡No puedes solicitar la compra de una venta terminada!');
                                 return false;
                             }
 
-                            Yii::$app->session->setFlash('error', '¡No puedes crear la solicitud de compra sin verificar tu cuenta!');
-                            return false;
+                            return true;
                         },
                     ],
                     [
