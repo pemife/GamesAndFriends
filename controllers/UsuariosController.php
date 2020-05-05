@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Copias;
 use app\models\LoginForm;
 use app\models\Productos;
+use app\models\Relaciones;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
@@ -52,7 +53,7 @@ class UsuariosController extends Controller
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
                             $model = $this->findModel(Yii::$app->request->queryParams['id']);
-                            if (Yii::$app->user->id === 1){
+                            if (Yii::$app->user->id === 1) {
                                 return true;
                             }
 
@@ -292,36 +293,53 @@ class UsuariosController extends Controller
 
     public function actionListaAmigos($usuarioId)
     {
+        $usuario = $this->findModel($usuarioId);
+
         return $this->renderAjax('vistaAmigos', [
-          'listaAmigos' => $this->findModel($usuarioId)->amigos,
+          'listaAmigos' => $usuario->arrayRelacionados(1),
         ]);
     }
 
     public function actionAnadirAmigo($usuarioId, $amigoId)
     {
         $usuario = $this->findModel($usuarioId);
-        $amigo = $this->findModel($amigoId);
 
         if ($usuario->esAmigo($amigoId)) {
             Yii::$app->session->setFlash('error', 'Ya sois amigos!');
-            return $this->redirect(['view', 'id' => $amigoId]);
+            return $this->redirect(['view', 'id' => $usuarioId]);
+        }
+        
+        $relacion = Relaciones::find()
+        ->where(['usuario1_id' => $usuarioId, 'usuario2_id' => $amigoId])
+        ->orWhere(['usuario1_id' => $amigoId, 'usuario2_id' => $usuarioId])
+        ->one();
+
+        $relacion->estado = 1;
+
+        if ($relacion->save()) {
+            Yii::$app->session->setFlash('success', '¡Te has añadido satisfactoriamente como amigo!');
+            return $this->redirect(['view', 'id' => $usuarioId]);
         }
 
-        $usuario->link('amigos', $amigo);
-        // $amigo->link('amigos', $usuario);
-
-        if (!$usuario->esAmigo($amigoId)) {
-            Yii::$app->session->setFlash('error', 'Ha ocurrido un error al añadirse como amigo');
-            return $this->redirect(['view', 'id' => $amigoId]);
-        }
-
-        Yii::$app->session->setFlash('success', '¡Te has añadido satisfactoriamente como amigo!');
-        return $this->redirect(['view', 'id' => $amigoId]);
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al añadirse como amigo');
+        return $this->redirect(['view', 'id' => $usuarioId]);
     }
 
     public function actionMandarPeticion($amigoId)
     {
-        $this->enviaPeticionAmistad($amigoId);
+        if ($this->enviaPeticionAmistad($amigoId)) {
+            $relacion = new Relaciones([
+                'usuario1_id' => Yii::$app->user->id,
+                'usuario2_id' => $amigoId,
+                'estado' => 0,
+            ]);
+
+            if ($relacion->save()) {
+                Yii::$app->session->setFlash('success', 'Petición de amistad guardada');
+                return $this->redirect(['view', 'id' => $amigoId]);
+            }
+        }
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al guardar la petición de amistad');
         return $this->redirect(['view', 'id' => $amigoId]);
     }
 
@@ -334,14 +352,20 @@ class UsuariosController extends Controller
             Yii::$app->session->setFlash('error', 'No sois amigos!');
             return $this->redirect(['view', 'id' => $amigoId]);
         }
+        
+        $relacion = Relaciones::find()
+        ->where(['estado' => 1, 'usuario1_id' => $usuario->id, 'usuario2_id' => $amigoId])
+        ->orWhere(['usuario1_id' => $amigoId, 'usuario2_id' => $usuario->id])
+        ->one();
 
-        $usuario->unlink('amigos', $amigo);
+        $relacion->delete();
 
         if ($usuario->esAmigo($amigoId)) {
             Yii::$app->session->setFlash('error', 'Ha ocurrido un error al borrarse como amigo');
             return $this->redirect('view', ['id' => $amigoId]);
         }
 
+        Yii::$app->session->setFlash('success', 'Te has borrado satisfactoriamente como amigo');
         return $this->redirect(['view', 'id' => $amigoId]);
     }
 
