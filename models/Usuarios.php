@@ -179,6 +179,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
+
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {
@@ -230,6 +231,11 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasOne(Ventas::className(), ['id' => 'venta_solicitada']);
     }
 
+    public function getRelaciones()
+    {
+        return $this->hasMany(Relaciones::className(), ['usuario1_id' => 'id']);
+    }
+
     public function creaToken()
     {
         return Yii::$app->security->generateRandomString(32);
@@ -264,17 +270,66 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     public function esMayorDeEdad()
     {
         return $prueba = $this->fechanac < (date('Y-m-d', strtotime('- 18 years')));
     }
-
+    
     public function esVerificado()
     {
         return !isset($this->token);
+    }
+
+    // Devuelve un array con los usuarios relacionados, con un estado concreto
+    // si estado==1, devuelve los amigos, y si estado==3 devuelve los usuarios bloqueados
+    public function arrayRelacionados($estado)
+    {
+        $relaciones = Relaciones::find()
+        ->where(['estado' => $estado])
+        ->orWhere(['usuario1_id' => $this->id, 'usuario2_id' => $this->id])
+        ->all();
+        
+        foreach ($relaciones as $relacion) {
+            $usuario1 = self::findOne($relacion->usuario1_id);
+            $usuario2 = self::findOne($relacion->usuario2_id);
+            if ($usuario1 == $this) {
+                $arrayRelacionados[] = $usuario2;
+                continue;
+            }
+            $arrayRelacionados[] = $usuario1;
+        }
+        
+        if (empty($arrayRelacionados)) {
+            return [];
+        }
+
+        return $arrayRelacionados;
+    }
+    
+    public function esAmigo($usuario2Id)
+    {
+        $usuario1 = $this;
+        $usuario2 = self::findOne($usuario2Id);
+
+        return in_array($usuario1, $usuario2->arrayRelacionados(1));
+    }
+
+    public function estadoRelacion($usuario2Id)
+    {
+        $relacion = Relaciones::find()
+        ->where(['usuario1_id' => $this->id, 'usuario2_id' => $usuario2Id])
+        ->orWhere(['usuario1_id' => $usuario2Id, 'usuario2_id' => $this->id])
+        ->one();
+
+        if (empty($relacion)) {
+            // Si no tiene valor que devolver, devuelve un estado inventado
+            return 5;
+        }
+
+        return $relacion->estado;
     }
 }

@@ -217,10 +217,27 @@ ADD COLUMN venta_solicitada     BIGINT      REFERENCES ventas(id)
                                             ON UPDATE CASCADE
 ;
 
+DROP TABLE IF EXISTS relaciones CASCADE;
+
+CREATE TABLE relaciones
+(
+      usuario1_id    BIGINT         REFERENCES usuarios(id)
+                                    ON DELETE NO ACTION
+                                    ON UPDATE CASCADE
+    , usuario2_id    BIGINT         REFERENCES usuarios(id)
+                                    ON DELETE NO ACTION
+                                    ON UPDATE CASCADE
+    , estado         SMALLINT       NOT NULL
+                                    DEFAULT 0
+    , PRIMARY KEY(usuario1_id, usuario2_id)
+    , CONSTRAINT CHK_SelfFriend CHECK (usuario1_id != usuario2_id)
+    , CONSTRAINT CHK_Estado_Valido CHECK (estado=0 OR estado=1 OR estado=2 OR estado=3)
+);
+
 --INSERTS --
 
 INSERT INTO usuarios (nombre, password, email, fechanac)
-VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'admin@aculturese.com', '1987-01-01'),
+VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com', '1987-01-01'),
 ('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org', '1995-12-03');
 
 INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ, cont_adul)
