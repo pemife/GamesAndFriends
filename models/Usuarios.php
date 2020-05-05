@@ -292,6 +292,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->where(['estado' => $estado])
         ->orWhere(['usuario1_id' => $this->id, 'usuario2_id' => $this->id])
         ->all();
+
+        // var_dump($relaciones);
+        // exit;
         
         foreach ($relaciones as $relacion) {
             $usuario1 = self::findOne($relacion->usuario1_id);

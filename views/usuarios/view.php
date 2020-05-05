@@ -98,34 +98,40 @@ $this->registerJs($js);
 </style>
 <div class="usuarios-view">
     <div class="nombreOpciones">
-        <div class="titulo">
-            <h1><?= Html::encode($model->nombre) ?></h1>
-            <p>&nbsp;&nbsp;&nbsp;</p>
-            <div class="opciones">
-              <?php
-              if (!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)) {
+      <div class="titulo">
+          <h1><?= Html::encode($model->nombre) ?></h1>
+          <p>&nbsp;&nbsp;&nbsp;</p>
+          <div class="opciones">
+            <?php
+            if (!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)) {
 
                 switch ($model->estadoRelacion(Yii::$app->user->id)) {
-                  case 0:
-                    echo Html::a('', '', ['class' =>'glyphicon glyphicon-time']);
-                  break;
-                  case 1:
-                    echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' =>'glyphicon glyphicon-remove']);
-                  break;
-                  case 2:
-                  case 3:
-                  break;
-                  case 5:
-                    echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' =>'glyphicon glyphicon-plus']);
-                  break;
+                    case 0:
+                        echo Html::a('', '', ['class' =>'glyphicon glyphicon-time']);
+                    break;
+                    case 1:
+                        echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-remove']);
+                    break;
+                    case 2:
+                    case 3:
+                    break;
+                    case 5:
+                        echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-plus']);
+                    break;
                 }
-              }
-              ?>
-            </div>
-        </div>
+            }
+            ?>
+          </div>
+      </div>
         <div class="opciones">
             <span class="dropdown">
-                <button class="glyphicon glyphicon-cog" type="button" data-toggle="dropdown" style="height: 30px; width: 35px;"></button>
+                <button 
+                  class="glyphicon glyphicon-cog"
+                  type="button"
+                  data-toggle="dropdown"
+                  style="height: 30px; width: 35px;"
+                  <?= Yii::$app->user->id == 1 || $model->id == Yii::$app->user->id ? "" : "hidden" ?>>
+                </button>
                 <ul class="dropdown-menu pull-right">
                     <li>
                         <?= Html::a('Modificar perfil', $enlaceMod, [
@@ -134,24 +140,14 @@ $this->registerJs($js);
                             ]) ?>
                     </li>
                     <li>
-                        <?= Html::a('Borrar perfil', $enlaceBor, [
-                            'class' => 'btn btn-link',
-                            'disabled' => !$puedeModificar,
-                            'data' => [
-                                'confirm' => 'Seguro que quieres borrar el perfil?',
-                                'method' => 'POST',
-                            ],
-                            ]) ?>
-                    </li>
-                    <li>
-                        <?= Html::a('Cambiar contraseña', $enlacePass, [
-                            'class' => 'btn btn-link',
-                            'disabled' => !$puedeModificar,
-                            'data-method' => 'POST',
-                            'data-params' => [
-                                'tokenUsuario' => $model->token,
-                            ],
-                            ]) ?>
+                      <?= Html::a('Cambiar contraseña', $enlacePass, [
+                        'class' => 'btn btn-link',
+                        'disabled' => !$puedeModificar,
+                        'data-method' => 'POST',
+                        'data-params' => [
+                          'tokenUsuario' => $model->token,
+                        ],
+                        ]) ?>
                     </li>
                     <li>
                         <?= Html::a('Verificar cuenta',
@@ -161,12 +157,26 @@ $this->registerJs($js);
                             [
                               'class' => 'btn btn-link',
                               'disabled' => !$puedeModificar || $model->token == null,
+                            ]
+                        ) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Borrar perfil', $enlaceBor, [
+                            'class' => 'btn btn-link',
+                            'disabled' => !$puedeModificar,
+                            'data' => [
+                                'confirm' => 'Seguro que quieres borrar el perfil?',
+                                'method' => 'POST',
+                            ],
+                            'style' => [
+                              'color' => 'red',
+                            ]
                             ]) ?>
                     </li>
                 </ul>
             </span>
         </div>
-                            </div>
+      </div>
     </div>
 
     <img src="<?= $enlaceFoto ?>" width="150" height="150">
@@ -185,6 +195,20 @@ $this->registerJs($js);
     <div id="amigosAjax">
 
     </div>
+
+    <?php if (Yii::$app->user->id != $model->id) { ?>
+      <div id="OpcionesUsuario">
+            <?= Html::a(
+                'Bloquear usuario',
+                [
+                  ''
+                ],
+                [
+                  'class' => 'btn btn-danger'
+                ]
+            ) ?>
+      </div>
+    <?php } ?>
 
     <h1>Inventario</h1>
 
