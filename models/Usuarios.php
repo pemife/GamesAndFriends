@@ -231,14 +231,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasOne(Ventas::className(), ['id' => 'venta_solicitada']);
     }
 
-    public function getAmigos()
+    public function getRelaciones()
     {
-        return $this->hasMany(self::className(), ['id' => 'amigo_id'])->viaTable('amigos', ['usuario_id' => 'id'])->inverseOf('amigos0');
-    }
-
-    public function getAmigos0()
-    {
-        return $this->hasMany(self::className(), ['id' => 'usuario_id'])->viaTable('amigos', ['amigo_id' => 'id']);
+        return $this->hasMany(Relaciones::className(), ['usuario1_id' => 'id']);
     }
 
     public function creaToken()
@@ -288,54 +283,53 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return !isset($this->token);
     }
-    
-    public function esAmigo($amigoId)
+
+    // Devuelve un array con los usuarios relacionados, con un estado concreto
+    // si estado==1, devuelve los amigos, y si estado==3 devuelve los usuarios bloqueados
+    public function arrayRelacionados($estado)
     {
-        $usuario = $this;
-        $amigo = self::findOne($amigoId);
-
-        var_dump($usuario->amigos);
-        var_dump($amigo->amigos);
-        exit;
-
-        if (in_array($usuario, $amigo->amigos)) {
-            return true;
+        $relaciones = Relaciones::find()
+        ->where(['estado' => $estado])
+        ->orWhere(['usuario1_id' => $this->id, 'usuario2_id' => $this->id])
+        ->all();
+        
+        foreach ($relaciones as $relacion) {
+            $usuario1 = self::findOne($relacion->usuario1_id);
+            $usuario2 = self::findOne($relacion->usuario2_id);
+            if ($usuario1 == $this) {
+                $arrayRelacionados[] = $usuario2;
+                continue;
+            }
+            $arrayRelacionados[] = $usuario1;
+        }
+        
+        if (empty($arrayRelacionados)) {
+            return [];
         }
 
-        if (in_array($amigo, $usuario->amigos)) {
-            return true;
-        }
-
-        return false;
+        return $arrayRelacionados;
     }
     
-    public function anadirAmigo($usuarioId, $amigoId)
+    public function esAmigo($usuario2Id)
     {
-        if (!$this->esAmigo($amigoId)) {
-            $sql = 'insert into amigos(usuario_id, amigo_id) values(' . $usuarioId . ', ' . $amigoId . '), (' . $amigoId . ', ' . $usuarioId . ')';
-            if (Yii::$app->db->createCommand($sql)->execute()) {
-                Yii::$app->session->setFlash('info', 'Te has añadido satisfactoriamente como amigo');
-                return true;
-            }
-            Yii::$app->session->setFlash('error', 'Ha habido un error al añadirte como amigo');
-            return false;
-        }
-        Yii::$app->session->setFlash('error', 'Ya sois amigos!');
-        return false;
+        $usuario1 = $this;
+        $usuario2 = self::findOne($usuario2Id);
+
+        return in_array($usuario1, $usuario2->arrayRelacionados(1));
     }
-    
-    public function borrarAmigo($usuarioId, $amigoId)
+
+    public function estadoRelacion($usuario2Id)
     {
-        if ($this->esAmigo($amigoId)) {
-            $sql = 'delete from amigos where (usuario_id = ' . $usuarioId . ' and amigo_id =' . $amigoId . ') or (amigo_id =' . $usuarioId . ' and usuario_id = ' . $amigoId . ')';
-            if (Yii::$app->db->createCommand($sql)->execute()) {
-                Yii::$app->session->setFlash('info', 'Te has borrado satisfactoriamente como amigo');
-                return true;
-            }
-            Yii::$app->session->setFlash('error', 'Ha habido un error al borrarte como amigo');
-            return false;
+        $relacion = Relaciones::find()
+        ->where(['usuario1_id' => $this->id, 'usuario2_id' => $usuario2Id])
+        ->orWhere(['usuario1_id' => $usuario2Id, 'usuario2_id' => $this->id])
+        ->one();
+
+        if (empty($relacion)) {
+            // Si no tiene valor que devolver, devuelve un estado inventado
+            return 5;
         }
-        Yii::$app->session->setFlash('error', 'No sois amigos!');
-        return false;
+
+        return $relacion->estado;
     }
 }

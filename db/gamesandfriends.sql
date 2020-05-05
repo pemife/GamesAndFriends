@@ -217,18 +217,21 @@ ADD COLUMN venta_solicitada     BIGINT      REFERENCES ventas(id)
                                             ON UPDATE CASCADE
 ;
 
-DROP TABLE IF EXISTS amigos CASCADE;
+DROP TABLE IF EXISTS relaciones CASCADE;
 
-CREATE TABLE amigos
+CREATE TABLE relaciones
 (
-      usuario_id    BIGINT          REFERENCES usuarios(id)
+      usuario1_id    BIGINT         REFERENCES usuarios(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-    , amigo_id    BIGINT            REFERENCES usuarios(id)
+    , usuario2_id    BIGINT         REFERENCES usuarios(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-    , PRIMARY KEY(usuario_id, amigo_id)
-    , CONSTRAINT CHK_SelfFriend CHECK (usuario_id != amigo_id)
+    , estado         SMALLINT       NOT NULL
+                                    DEFAULT 0
+    , PRIMARY KEY(usuario1_id, usuario2_id)
+    , CONSTRAINT CHK_SelfFriend CHECK (usuario1_id != usuario2_id)
+    , CONSTRAINT CHK_Estado_Valido CHECK (estado=0 OR estado=1 OR estado=2 OR estado=3)
 );
 
 --INSERTS --

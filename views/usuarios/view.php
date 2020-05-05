@@ -105,10 +105,19 @@ $this->registerJs($js);
               <?php
               if (!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)) {
 
-                if ($model->esAmigo(Yii::$app->user->id)) {
-                  echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' =>'glyphicon glyphicon-remove']);
-                } else {
-                  echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' => 'glyphicon glyphicon-plus']);
+                switch ($model->estadoRelacion(Yii::$app->user->id)) {
+                  case 0:
+                    echo Html::a('', '', ['class' =>'glyphicon glyphicon-time']);
+                  break;
+                  case 1:
+                    echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' =>'glyphicon glyphicon-remove']);
+                  break;
+                  case 2:
+                  case 3:
+                  break;
+                  case 5:
+                    echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => "botonAmistad", 'class' =>'glyphicon glyphicon-plus']);
+                  break;
                 }
               }
               ?>
