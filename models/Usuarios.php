@@ -289,8 +289,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function arrayRelacionados($estado)
     {
         $relaciones = Relaciones::find()
-        ->where(['estado' => $estado])
-        ->orWhere(['usuario1_id' => $this->id, 'usuario2_id' => $this->id])
+        ->where(['estado' => $estado, 'usuario1_id' => $this->id])
+        ->orWhere(['estado' => $estado, 'usuario2_id' => $this->id])
         ->all();
 
         // var_dump($relaciones);
@@ -323,6 +323,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function estadoRelacion($usuario2Id)
     {
+        $usuario2 = $this->findOne($usuario2Id);
+        
+        if ($this->estaBloqueadoPor($usuario2Id) || $usuario2->estaBloqueadoPor($this->id)) {
+            return 3;
+        }
+
         $relacion = Relaciones::find()
         ->where(['usuario1_id' => $this->id, 'usuario2_id' => $usuario2Id])
         ->orWhere(['usuario1_id' => $usuario2Id, 'usuario2_id' => $this->id])
@@ -334,5 +340,22 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         }
 
         return $relacion->estado;
+    }
+
+    public function relacionesCon($usuarioId)
+    {
+        $relaciones = Relaciones::find()
+        ->where(['usuario1_id' => $this->id, 'usuario2_id' => $usuarioId])
+        ->orWhere(['usuario1_id' => $usuarioId, 'usuario2_id' => $this->id])
+        ->all();
+
+        return $relaciones;
+    }
+
+    public function estaBloqueadoPor($usuarioId)
+    {
+        return Relaciones::find()
+        ->where(['usuario1_id' => $usuarioId, 'usuario2_id' => $this->id, 'estado' => 3])
+        ->exists();
     }
 }

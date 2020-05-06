@@ -113,10 +113,10 @@ $this->registerJs($js);
                         echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-remove']);
                     break;
                     case 2:
-                    case 3:
-                    break;
                     case 5:
                         echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-plus']);
+                    break;
+                    case 3:
                     break;
                 }
             }
@@ -196,17 +196,15 @@ $this->registerJs($js);
 
     </div>
 
-    <?php if (Yii::$app->user->id != $model->id) { ?>
+    <?php if (!Yii::$app->user->isGuest && Yii::$app->user->id != $model->id) { ?>
       <div id="OpcionesUsuario">
-            <?= Html::a(
-                'Bloquear usuario',
-                [
-                  ''
-                ],
-                [
-                  'class' => 'btn btn-danger'
-                ]
-            ) ?>
+            <?php
+            if ($model->estaBloqueadoPor(Yii::$app->user->id)) {
+                echo Html::a('Desbloquear usuario', ['desbloquear-usuario', 'usuarioId' => $model->id], ['class' => 'btn btn-danger']);
+            } else {
+                echo Html::a('Bloquear usuario', ['bloquear-usuario', 'usuarioId' => $model->id], ['class' => 'btn btn-danger']);
+            }
+            ?>
       </div>
     <?php } ?>
 
