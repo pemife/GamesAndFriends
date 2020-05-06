@@ -229,9 +229,11 @@ CREATE TABLE relaciones
                                     ON UPDATE CASCADE
     , estado         SMALLINT       NOT NULL
                                     DEFAULT 0
+    , old_estado     SMALLINT       DEFAULT 2
     , PRIMARY KEY(usuario1_id, usuario2_id)
     , CONSTRAINT CHK_SelfFriend CHECK (usuario1_id != usuario2_id)
     , CONSTRAINT CHK_Estado_Valido CHECK (estado=0 OR estado=1 OR estado=2 OR estado=3)
+    , CONSTRAINT CHK_Old_Estado_Valido CHECK (old_estado=0 OR old_estado=1 OR old_estado=2 OR old_estado=3)
 );
 
 --INSERTS --

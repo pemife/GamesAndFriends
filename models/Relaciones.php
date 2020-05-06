@@ -10,6 +10,7 @@ use Yii;
  * @property int $usuario1_id
  * @property int $usuario2_id
  * @property int $estado
+ * @property int|null $old_estado
  *
  * @property Usuarios $usuario1
  * @property Usuarios $usuario2
@@ -32,7 +33,8 @@ class Relaciones extends \yii\db\ActiveRecord
         return [
             [['usuario1_id', 'usuario2_id'], 'required'],
             [['usuario1_id', 'usuario2_id', 'estado'], 'default', 'value' => null],
-            [['usuario1_id', 'usuario2_id', 'estado'], 'integer'],
+            [['usuario1_id', 'usuario2_id', 'estado', 'old_estado'], 'integer'],
+            [['old_estado'], 'default', 'value' => 2],
             [['usuario1_id', 'usuario2_id'], 'unique', 'targetAttribute' => ['usuario1_id', 'usuario2_id']],
             [['usuario1_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario1_id' => 'id']],
             [['usuario2_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['usuario2_id' => 'id']],
@@ -48,6 +50,7 @@ class Relaciones extends \yii\db\ActiveRecord
             'usuario1_id' => 'Usuario1 ID',
             'usuario2_id' => 'Usuario2 ID',
             'estado' => 'Estado',
+            'old_estado' => 'Old Estado',
         ];
     }
 
