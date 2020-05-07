@@ -53,6 +53,7 @@ AppAsset::register($this);
             ['label' => '2ª Mano', 'url' => ['/ventas/index']],
             ['label' => 'Productos', 'url' => ['/productos/index']],
             ['label' => 'Juegos', 'url' => ['/juegos/index']],
+            ['label' => 'Usuarios', 'url' => ['/usuarios/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
             [

@@ -83,7 +83,8 @@ class ProductosController extends Controller
         $query = Productos::find();
 
         if (!Yii::$app->user->isGuest) {
-            $query->where(['!=', 'propietario_id', Yii::$app->user->id]);
+            $query->where(['!=', 'propietario_id', Yii::$app->user->id])
+            ->andWhere(['not in', 'propietario_id', Usuarios::findOne(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
         }
 
         $dataProvider = new ActiveDataProvider([

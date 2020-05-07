@@ -186,9 +186,11 @@ class VentasController extends Controller
         }
 
         if (!Yii::$app->user->isGuest) {
-            $queryCopias->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+            $queryCopias->andWhere(['!=', 'vendedor_id', Yii::$app->user->id])
+            ->andWhere(['not in', 'vendedor_id', Usuarios::findOne(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
 
-            $queryProductos->andWhere(['!=', 'vendedor_id', Yii::$app->user->id]);
+            $queryProductos->andWhere(['!=', 'vendedor_id', Yii::$app->user->id])
+            ->andWhere(['not in', 'vendedor_id', Usuarios::findOne(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
         }
 
         $copiasProvider = new ActiveDataProvider([
