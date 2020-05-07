@@ -10,6 +10,7 @@ use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\debug\models\timeline\DataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
@@ -36,17 +37,45 @@ class UsuariosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::classname(),
-                'only' => ['update', 'delete',  'login', 'logout', 'mandar-peticion'],
+                'only' => ['view', 'create', 'update', 'delete',  'login', 'logout', 'mandar-peticion', 'bloquear-usuario', 'anadir-amigo', 'desbloquear-usuario'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['login'],
+                        'actions' => ['login', 'create'],
                         'roles' => ['?'],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['logout'],
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('danger', 'Tienes que iniciar sesion para ver el perfil de un usuario');
+                                return false;
+                            }
+                            
+                            $model = $this->findModel(Yii::$app->request->queryParams['id']);
+                            
+                            if ($model->id == Yii::$app->user->id) {
+                                return true;
+                            }
+
+                            if (!$model->esAmigo(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', 'No puedes ver el perfil de un usuario que no sea tu amigo');
+                                return false;
+                            }
+
+                            if ($model->estadoRelacion(Yii::$app->user->id) == 3) {
+                                Yii::$app->session->setFlash('error', '¡Este perfil esta bloqueado!');
+                                return false;
+                            }
+
+                            return true;
+                        }
                     ],
                     [
                         'allow' => true,
@@ -85,6 +114,87 @@ class UsuariosController extends Controller
                                 return false;
                             }
 
+                            switch ($this->findModel(Yii::$app->user->id)->estadoRelacion(Yii::$app->request->queryParams['amigoId'])) {
+                                case 0:
+                                    Yii::$app->session->setFlash('danger', 'Ya teneis una peticion de amistad pendiente');
+                                    return false;
+                                case 1:
+                                    Yii::$app->session->setFlash('danger', '¡Ya sois amigos!');
+                                    return false;
+                                case 2:
+                                    return true;
+                                case 3:
+                                    Yii::$app->session->setFlash('error', 'No puedes enviar una peticion de amistad a este usuario');
+                                    return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['anadir-amigo'],
+                        'matchCallback' => function ($rule, $action) {
+                            $usuarioId = Yii::$app->request->queryParams['usuarioId'];
+                            $amigoId = Yii::$app->request->queryParams['amigoId'];
+
+                            $usuario = $this->findModel($usuarioId);
+
+                            switch ($usuario->estadoRelacion($amigoId)) {
+                                case 1:
+                                    Yii::$app->session->setFlash('error', '¡Ya sois amigos!');
+                                    return false;
+                                break;
+                                case 3:
+                                    Yii::$app->session->setFlash('error', 'No puedes ser amigo de este usuario [Bloqueado]');
+                                    return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['bloquear-usuario'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para bloquear usuarios');
+                                return false;
+                            }
+
+                            $usuario = $this->findModel(Yii::$app->request->queryParams['usuarioId']);
+
+                            if ($usuario->estaBloqueadoPor(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', 'Ya has bloqueado a ese usuario');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['desbloquear-usuario'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para desbloquear usuarios');
+                                return false;
+                            }
+
+                            $usuario = $this->findModel(Yii::$app->request->queryParams['usuarioId']);
+
+                            if (!$usuario->estaBloqueadoPor(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡A ese usuario no lo tenías bloqueado!');
+                                return false;
+                            }
+
+                            if ($this->findModel(Yii::$app->user->id)->relacionCon($usuario->id)->usuario1_id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', 'No puedes desbloquear a este usuario');
+                                return false;
+                            }
+
                             return true;
                         }
                     ],
@@ -99,8 +209,22 @@ class UsuariosController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->isGuest) {
+            $IdsUsuariosBloqueados = $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true);
+            if ($IdsUsuariosBloqueados) {
+                $query = Usuarios::find()
+                ->where(['not in', 'id', $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
+            }
+        } else {
+            $query = Usuarios::find();
+        }
+
         $searchModel = new UsuariosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -314,6 +438,7 @@ class UsuariosController extends Controller
         ->orWhere(['usuario1_id' => $amigoId, 'usuario2_id' => $usuarioId])
         ->one();
 
+        $relacion->old_estado = $relacion->estado;
         $relacion->estado = 1;
 
         if ($relacion->save()) {
@@ -336,21 +461,20 @@ class UsuariosController extends Controller
 
             if ($relacion->save()) {
                 Yii::$app->session->setFlash('success', 'Petición de amistad guardada');
-                return $this->redirect(['view', 'id' => $amigoId]);
+                return $this->redirect(['index']);
             }
         }
         Yii::$app->session->setFlash('error', 'Ha ocurrido un error al guardar la petición de amistad');
-        return $this->redirect(['view', 'id' => $amigoId]);
+        return $this->redirect(['index']);
     }
 
     public function actionBorrarAmigo($amigoId)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
-        $amigo = $this->findModel($amigoId);
 
         if (!$usuario->esAmigo($amigoId)) {
             Yii::$app->session->setFlash('error', 'No sois amigos!');
-            return $this->redirect(['view', 'id' => $amigoId]);
+            return $this->redirect(['index']);
         }
         
         $relacion = Relaciones::find()
@@ -362,11 +486,77 @@ class UsuariosController extends Controller
 
         if ($usuario->esAmigo($amigoId)) {
             Yii::$app->session->setFlash('error', 'Ha ocurrido un error al borrarse como amigo');
-            return $this->redirect('view', ['id' => $amigoId]);
+            return $this->redirect(['view', ['id' => $amigoId]]);
         }
 
-        Yii::$app->session->setFlash('success', 'Te has borrado satisfactoriamente como amigo');
-        return $this->redirect(['view', 'id' => $amigoId]);
+        Yii::$app->session->setFlash('info', 'Has borrado al usuario ' . $usuario->nombre . ' de tu lista de amigos');
+        return $this->redirect(['index']);
+    }
+
+    public function actionBloquearUsuario($usuarioId)
+    {
+        $usuario = $this->findModel($usuarioId);
+
+        $relaciones = $usuario->relacionesCon(Yii::$app->user->id);
+        
+        if (empty($relaciones)) {
+            $relacion = new Relaciones([
+                'usuario1_id' => Yii::$app->user->id,
+                'usuario2_id' => $usuario->id,
+                'estado' => 3,
+            ]);
+        } else {
+            if (sizeof($relaciones) == 1) {
+                $relacion = $relaciones[0];
+
+                if ($relacion->usuario1_id == Yii::$app->user->id) {
+                    $relacion->old_estado = $relacion->estado;
+                    $relacion->estado = 3;
+                } else {
+                    $relacion = new Relaciones([
+                        'usuario1_id' => Yii::$app->user->id,
+                        'usuario2_id' => $usuario->id,
+                        'estado' => 3,
+                    ]);
+                }
+            } else {
+                foreach ($relaciones as $relacion) {
+                    if ($relacion->estado == 1) {
+                        $relacion->delete();
+                        Yii::$app->session->setFlash('info', 'Has actualizado tu relación a "bloqueado"');
+                        return $this->redirect(['index']);
+                    }
+                }
+            }
+        }
+
+        if ($relacion->save()) {
+            Yii::$app->session->setFlash('info', 'Has bloqueado satisfactoriamente a ' . $usuario->nombre);
+            return $this->redirect(['index']);
+        }
+
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al bloquear al usuario ' . $usuario->nombre);
+        return $this->redirect(['index']);
+    }
+
+    public function actionDesbloquearUsuario($usuarioId)
+    {
+        $usuario = $this->findModel(Yii::$app->user->id);
+
+        $relacion = $usuario->relacionCon($usuarioId);
+
+        $relacion->delete();
+        Yii::$app->session->setFlash('success', 'Has desbloqueado satisfactoriamente este perfil');
+        return $this->redirect(['index']);
+    }
+
+    public function actionListaBloqueados($usuarioId)
+    {
+        $usuario = $this->findModel($usuarioId);
+
+        return $this->renderAjax('vistaBloqueados', [
+          'listaBloqueados' => $usuario->arrayRelacionados(3),
+        ]);
     }
 
     // https://jqueryui.com/sortable/

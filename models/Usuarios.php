@@ -289,9 +289,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function arrayRelacionados($estado)
     {
         $relaciones = Relaciones::find()
-        ->where(['estado' => $estado])
-        ->orWhere(['usuario1_id' => $this->id, 'usuario2_id' => $this->id])
+        ->where(['estado' => $estado, 'usuario1_id' => $this->id])
+        ->orWhere(['estado' => $estado, 'usuario2_id' => $this->id])
         ->all();
+
+        // var_dump($relaciones);
+        // exit;
         
         foreach ($relaciones as $relacion) {
             $usuario1 = self::findOne($relacion->usuario1_id);
@@ -320,6 +323,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function estadoRelacion($usuario2Id)
     {
+        $usuario2 = $this->findOne($usuario2Id);
+        
+        if ($this->estaBloqueadoPor($usuario2Id) || $usuario2->estaBloqueadoPor($this->id)) {
+            return 3;
+        }
+
         $relacion = Relaciones::find()
         ->where(['usuario1_id' => $this->id, 'usuario2_id' => $usuario2Id])
         ->orWhere(['usuario1_id' => $usuario2Id, 'usuario2_id' => $this->id])
@@ -331,5 +340,57 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         }
 
         return $relacion->estado;
+    }
+
+    public function relacionesCon($usuarioId)
+    {
+        $relaciones = Relaciones::find()
+        ->where(['usuario1_id' => $this->id, 'usuario2_id' => $usuarioId])
+        ->orWhere(['usuario1_id' => $usuarioId, 'usuario2_id' => $this->id])
+        ->all();
+
+        return $relaciones;
+    }
+
+    public function relacionCon($usuarioId)
+    {
+        return Relaciones::find()
+        ->where(['usuario1_id' => $this->id, 'usuario2_id' => $usuarioId])
+        ->one();
+    }
+
+    public function estaBloqueadoPor($usuarioId)
+    {
+        return Relaciones::find()
+        ->where(['usuario1_id' => $usuarioId, 'usuario2_id' => $this->id, 'estado' => 3])
+        ->exists();
+    }
+
+    public function arrayUsuariosBloqueados($devolverIds)
+    {
+        $relacionesBloqueo = Relaciones::find()
+        ->where(['estado' => 3, 'usuario1_id' => $this->id])
+        ->orWhere(['estado' => 3, 'usuario2_id' => $this->id])
+        ->all();
+
+        if (!empty($relacionesBloqueo)) {
+            foreach ($relacionesBloqueo as $relacion) {
+                if ($relacion->usuario1_id == $this->id) {
+                    $idsUsuariosBloqueados[] = $relacion->usuario2_id;
+                } else {
+                    $idsUsuariosBloqueados[] = $relacion->usuario1_id;
+                }
+            }
+
+            if ($devolverIds) {
+                return $idsUsuariosBloqueados;
+            }
+
+            return self::find()
+            ->where(['not in', 'id', $idsUsuariosBloqueados])
+            ->all();
+        }
+
+        return [];
     }
 }
