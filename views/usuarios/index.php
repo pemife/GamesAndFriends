@@ -99,6 +99,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
 
                     'bloquear' => function ($url, $model, $action) {
+                        if (Yii::$app->user->isGuest) {
+                            return '';
+                        }
+                        
                         if ($model->estadoRelacion(Yii::$app->user->id) == 3) {
                             return '';
                         }

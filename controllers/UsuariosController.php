@@ -211,12 +211,12 @@ class UsuariosController extends Controller
     {
         if (!Yii::$app->user->isGuest) {
             $IdsUsuariosBloqueados = $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true);
-            if (!$IdsUsuariosBloqueados) {
-                $query = Usuarios::find();
-            } else {
+            if ($IdsUsuariosBloqueados) {
                 $query = Usuarios::find()
                 ->where(['not in', 'id', $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
             }
+        } else {
+            $query = Usuarios::find();
         }
 
         $searchModel = new UsuariosSearch();
