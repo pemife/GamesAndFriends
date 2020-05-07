@@ -352,10 +352,45 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $relaciones;
     }
 
+    public function relacionCon($usuarioId)
+    {
+        return Relaciones::find()
+        ->where(['usuario1_id' => $this->id, 'usuario2_id' => $usuarioId])
+        ->one();
+    }
+
     public function estaBloqueadoPor($usuarioId)
     {
         return Relaciones::find()
         ->where(['usuario1_id' => $usuarioId, 'usuario2_id' => $this->id, 'estado' => 3])
         ->exists();
+    }
+
+    public function arrayUsuariosBloqueados($devolverIds)
+    {
+        $relacionesBloqueo = Relaciones::find()
+        ->where(['estado' => 3, 'usuario1_id' => $this->id])
+        ->orWhere(['estado' => 3, 'usuario2_id' => $this->id])
+        ->all();
+
+        if (!empty($relacionesBloqueo)) {
+            foreach ($relacionesBloqueo as $relacion) {
+                if ($relacion->usuario1_id == $this->id) {
+                    $idsUsuariosBloqueados[] = $relacion->usuario2_id;
+                } else {
+                    $idsUsuariosBloqueados[] = $relacion->usuario1_id;
+                }
+            }
+
+            if ($devolverIds) {
+                return $idsUsuariosBloqueados;
+            }
+
+            return self::find()
+            ->where(['not in', 'id', $idsUsuariosBloqueados])
+            ->all();
+        }
+
+        return [];
     }
 }
