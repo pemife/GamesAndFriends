@@ -24,17 +24,18 @@ $enlaceBor = $puedeModificar ? Url::to(['usuarios/delete', 'id' => $model->id]) 
 $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model->id]) : '#';
 // $enlaceFoto = $enlaceFoto ? 'enlace' : 'https://www.library.caltech.edu/sites/default/files/styles/headshot/public/default_images/user.png?itok=1HlTtL2d';
 
-$url2 = Url::to(['lista-amigos', 'usuarioId' => $model->id]);
+$urlAmigos = Url::to(['lista-amigos', 'usuarioId' => $model->id]);
+$urlBloqueados = Url::to(['lista-bloqueados', 'usuarioId' => $model->id]);
 
 // La lista de amigos solo son visibles para los amigos o para el propio usuario
 $esAmigo = Yii::$app->user->isGuest ? false : $model->esAmigo(Yii::$app->user->id);
-Yii::debug($esAmigo);
 $puedeVerAmigos = $esAmigo || (Yii::$app->user->id == $model->id);
 $puedeVerAmigosJS = json_encode($puedeVerAmigos);
 
 $js = <<<EOF
 $('document').ready(function(){
-  actualizarLista();
+  $('#bloqueadosAjax').hide();
+  actualizarListaAmigos();
 });
 
 var esAmigo = $puedeVerAmigosJS;
@@ -47,15 +48,37 @@ $('#botonAmistad').click(function(e){
   }
 });
 
-function actualizarLista(){
+$('#botonBloqueados').click(function(e){
+  actualizarListaBloqueados();
+  $('#bloqueadosAjax').show();
+});
+
+function actualizarListaAmigos(){
   if(esAmigo){
     $.ajax({
       method: 'GET',
-      url: '$url2',
+      url: '$urlAmigos',
       data: {},
         success: function(result){
           if (result) {
             $('#amigosAjax').html(result);
+          } else {
+            alert('Ha habido un error con la lista de asistentes(2)');
+          }
+        }
+      });
+  }
+}
+
+function actualizarListaBloqueados(){
+  if(esAmigo){
+    $.ajax({
+      method: 'GET',
+      url: '$urlBloqueados',
+      data: {},
+        success: function(result){
+          if (result) {
+            $('#bloqueadosAjax').html(result);
           } else {
             alert('Ha habido un error con la lista de asistentes(2)');
           }
@@ -106,15 +129,12 @@ $this->registerJs($js);
             if (!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)) {
 
                 switch ($model->estadoRelacion(Yii::$app->user->id)) {
-                    case 0:
-                        echo Html::a('', '', ['class' =>'glyphicon glyphicon-time']);
-                    break;
                     case 1:
-                        echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-remove']);
+                        echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-remove', 'title' => 'Borrar amigo']);
                     break;
                     case 2:
                     case 5:
-                        echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-plus']);
+                        echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-plus', 'title' => 'Mandar peticion de amistad']);
                     break;
                     case 3:
                     break;
@@ -161,6 +181,15 @@ $this->registerJs($js);
                         ) ?>
                     </li>
                     <li>
+                        <?= Html::a('Ver usuarios bloqueados', '#', [
+                            'class' => 'btn btn-link',
+                            'id' => 'botonBloqueados',
+                            'style' => [
+                              'color' => 'red',
+                            ]
+                            ]) ?>
+                    </li>
+                    <li>
                         <?= Html::a('Borrar perfil', $enlaceBor, [
                             'class' => 'btn btn-link',
                             'disabled' => !$puedeModificar,
@@ -192,8 +221,12 @@ $this->registerJs($js);
         ],
     ]) ?>
 
-    <div id="amigosAjax">
-
+    <div class="row">
+      <div class="col-6" id="amigosAjax">
+      </div>
+  
+      <div class="col-6" id="bloqueadosAjax">
+      </div>
     </div>
 
     <?php if (!Yii::$app->user->isGuest && Yii::$app->user->id != $model->id) { ?>
