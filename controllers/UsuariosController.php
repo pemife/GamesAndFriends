@@ -10,6 +10,7 @@ use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\debug\models\timeline\DataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -560,10 +561,16 @@ class UsuariosController extends Controller
     }
 
     // https://jqueryui.com/sortable/
-    // public fucntion actionListaDeseos($uId)
-    // {
-    //     return null;
-    // }
+    public function actionVerListaDeseos($uId)
+    {
+        $deseadosProvider = new ArrayDataProvider([
+            'allModels' => $this->findModel($uId)->juegosDeseados,
+        ]);
+
+        return $this->render('listaDeseos', [
+            'deseadosProvider' => $deseadosProvider,
+        ]);
+    }
 
     /**
      * Finds the Usuarios model based on its primary key value.
