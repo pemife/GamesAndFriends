@@ -236,6 +236,19 @@ CREATE TABLE relaciones
     , CONSTRAINT CHK_Old_Estado_Valido CHECK (old_estado=0 OR old_estado=1 OR old_estado=2 OR old_estado=3)
 );
 
+DROP TABLE IF EXISTS deseados CASCADE;
+
+CREATE TABLE deseados
+(
+    usuario_id  BIGINT  REFERENCES usuarios(id)
+                        ON DELETE NO ACTION
+                        ON UPDATE CASCADE
+  , juego_id    BIGINT  REFERENCES juegos(id)
+                        ON DELETE NO ACTION
+                        ON UPDATE CASCADE
+  , PRIMARY KEY(usuario_id, juego_id)
+);
+
 --INSERTS --
 
 INSERT INTO usuarios (nombre, password, email, fechanac)
