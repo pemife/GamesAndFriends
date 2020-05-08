@@ -663,7 +663,10 @@ class UsuariosController extends Controller
     public function actionVerListaDeseos($uId)
     {
         $deseadosProvider = new ArrayDataProvider([
-            'allModels' => $this->findModel($uId)->deseados,
+            'allModels' => Deseados::find()
+            ->where(['usuario_id' => $uId])
+            ->orderBy('orden')
+            ->all(),
         ]);
 
         return $this->render('listaDeseos', [
@@ -693,8 +696,10 @@ class UsuariosController extends Controller
 
         if ($deseo->save()) {
             if (Yii::$app->request->isAjax) {
+                $this->actualizarOrdenDeseados($uId);
                 return Json::encode('¡Has añadido el juego satisfactoriamente!');
             }
+            $this->actualizarOrdenDeseados($uId);
             Yii::$app->session->setFlash('success', '¡Has añadido el juego satisfactoriamente!');
             return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
         }
@@ -714,6 +719,8 @@ class UsuariosController extends Controller
         ->one();
 
         $deseo->delete();
+
+        $this->actualizarOrdenDeseados($uId);
         
         return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
     }
@@ -787,5 +794,31 @@ class UsuariosController extends Controller
 
         Yii::$app->session->setFlash('error', 'Ha ocurrido un error al mandar la peticion de amistad');
         return false;
+    }
+
+    private function actualizarOrdenDeseados($uId)
+    {
+        $deseados = Deseados::find()
+        ->where(['usuario_id' => $uId])
+        ->orderBy('orden')
+        ->all();
+
+        if (!$deseados) {
+            return false;
+        }
+
+        // var_dump($deseados);
+        // exit;
+
+        for ($i = 1; $i < count($deseados); $i++) {
+            $deseo = $deseados[$i];
+            $deseo->orden = $i+1;
+            if (!$deseo->save()) {
+                Yii::$app->session->setFlash('error', 'Ha ocurrido un error actualizando el orden de la lista de deseos');
+                return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+            }
+        }
+
+        return true;
     }
 }
