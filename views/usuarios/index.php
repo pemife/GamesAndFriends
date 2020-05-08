@@ -37,19 +37,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         switch ($model->estadoRelacion(Yii::$app->user->id)) {
                             case 0:
-                                return Html::a('', '', ['class' =>'glyphicon glyphicon-time', 'title' => 'Peticion de amistad pendiente']);
+                                return Html::a('', '#', ['class' =>'glyphicon glyphicon-time', 'title' => 'Peticion de amistad pendiente']);
                             break;
                             case 1:
                                 return Html::a('', ['borrar-amigo', 'amigoId' => $model->id], [
                                     'class' =>'glyphicon glyphicon-remove',
                                     'title' => 'Borrar amigo',
+                                    'style' => [
+                                        'color' => 'red',
+                                    ],
                                     'data-confirm' => 'Seguro que quieres borrar al usuario ' . $model->nombre . ' de tus amigos?'
                                 ]);
                             break;
                             case 2:
                             break;
                             case 3:
-                                return Html::a('', '', ['class' =>'glyphicon glyphicon-remove-circle', 'title' => 'Has bloqueado a este usuario']);
+                                return Html::a('', '#', [
+                                    'class' =>'glyphicon glyphicon-remove-circle',
+                                    'title' => 'Has bloqueado a este usuario',
+                                    'style' => [
+                                        'color' => 'red',
+                                    ],
+                                ]);
                             break;
                             case 5:
                                 return Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['class' => 'glyphicon glyphicon-plus', 'title' => 'Mandar peticion de amistad a ' . $model->nombre]);
@@ -62,12 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             return '';
                         }
                         
-                        if (Yii::$app->user->id == 1) {
+                        if (Yii::$app->user->id == 1 || $model->esAmigo(Yii::$app->user->id)) {
                             return Html::a('', ['view', 'id' => $model->id], ['class' => 'glyphicon glyphicon-eye-open']);
-                        }
-                        
-                        if (!$model->esAmigo(Yii::$app->user->id)) {
-                            return '';
                         }
                     },
 
@@ -77,7 +82,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                         
                         if (Yii::$app->user->id == 1 || Yii::$app->user->id == $model->id) {
-                            return Html::a('', ['update', 'id' => $model->id], ['class' => 'glyphicon glyphicon-pencil']);
+                            return Html::a('', ['update', 'id' => $model->id], [
+                                'class' => 'glyphicon glyphicon-pencil',
+                                'title' => 'Editar perfil',
+                                'style' => [
+                                    'color' => 'red',
+                                ],
+                            ]);
                         }
                     },
 
@@ -90,6 +101,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::a('', ['delete', 'id' => $model->id], [
                                 'class' => 'glyphicon glyphicon-trash',
                                 'title' => 'Borrar perfil',
+                                'style' => [
+                                    'color' => 'red',
+                                ],
                                 'data' => [
                                     'confirm' => 'Seguro que quieres borrar el perfil?',
                                     'method' => 'POST',
@@ -99,16 +113,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
 
                     'bloquear' => function ($url, $model, $action) {
-                        if (Yii::$app->user->isGuest) {
+                        if (Yii::$app->user->isGuest ||$model->estadoRelacion(Yii::$app->user->id) == 3 || $model->id == Yii::$app->user->id) {
                             return '';
-                        }
-                        
-                        if ($model->estadoRelacion(Yii::$app->user->id) == 3) {
-                            return '';
-                        }
+                        };
                         
                         return Html::a('', ['bloquear-usuario', 'usuarioId' => $model->id], [
                             'class' => 'glyphicon glyphicon-ban-circle',
+                            'title' => 'Bloquear usuario',
+                            'style' => [
+                                'color' => 'red',
+                            ],
                             'data-confirm' => '¿Confirmas querer bloquear al usuario ' . $model->nombre . '?',
                         ]);
                     }

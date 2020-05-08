@@ -236,6 +236,16 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Relaciones::className(), ['usuario1_id' => 'id']);
     }
 
+    /**
+     * Gets query for [[Juegos]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getJuegosDeseados()
+    {
+        return $this->hasMany(Juegos::className(), ['id' => 'juego_id'])->viaTable('deseados', ['usuario_id' => 'id']);
+    }
+
     public function creaToken()
     {
         return Yii::$app->security->generateRandomString(32);

@@ -36,8 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'id' => $model->id,
             'esProducto' => false
           ],
-          ['class' => 'btn btn-success']
-        ) ?>
+          ['class' => 'btn btn-success mr-2']
+      ) ?>
+      <?php 
+      if (!Yii::$app->user->isGuest) {
+          echo Html::a(
+            'Añadir a lista de deseados',
+            [
+              'usuarios/anadir-deseos',
+              'uId' => Yii::$app->user->id,
+              'jId' => $model->id
+            ],
+            ['class' => 'btn btn-info',]
+          );
+      }
+      ?>
     </span>
 
     </br></br>

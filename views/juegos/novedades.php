@@ -9,6 +9,8 @@ use yii\grid\GridView;
 
 $this->title = 'Novedades';
 $this->params['breadcrumbs'][] = $this->title;
+
+$uId = Yii::$app->user->isGuest ? 0 : Yii::$app->user->id;
 $js = <<<script
 var slideIndex = 0;
 showDivs(slideIndex);
@@ -66,6 +68,22 @@ function showDivs(n) {
   arraySelectores.checked = false;
   arraySelectores[slideIndex].checked = true;
 }
+$("[name='botonDeseos']").click(anadirDeseos);
+function anadirDeseos(e){
+  console.log(this.dataset.modelid);
+  $.ajax({
+    method: 'GET',
+    url: '/index.php?r=usuarios/anadir-deseos',
+    data: {jId: this.dataset.modelid, uId: $uId},
+    success: function(result){
+      if (result) {
+        alert(result);
+      } else {
+        alert('NOOOOOOOOOOO');
+      }
+    }
+  });
+}
 script;
 
 $this->registerJS($js);
@@ -121,13 +139,30 @@ $this->registerJS($js);
             'publ',
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{view} {vermercado}',
+              'template' => '{view} {vermercado} {anadirDeseos}',
               'buttons' => [
                 'vermercado' => function ($url, $model, $key){
                   return Html::a(
                     '<span class="glyphicon glyphicon-shopping-cart"></span>',
                     ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
                     ['title' => 'ver en mercado']
+                  );
+                },
+                'anadirDeseos' => function ($url, $model, $key) {
+                  if (Yii::$app->user->isGuest) {
+                    return '';
+                  }
+
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-heart"></span>',
+                    '#',
+                    [
+                      'title' => 'añadir a tu lista de deseos',
+                      'name' => 'botonDeseos',
+                      'data' => [
+                        'modelId' => $model->id,
+                      ]
+                    ]
                   );
                 },
               ],

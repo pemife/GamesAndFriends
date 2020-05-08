@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Copias;
+use app\models\Deseados;
+use app\models\Juegos;
 use app\models\LoginForm;
 use app\models\Productos;
 use app\models\Relaciones;
@@ -10,10 +12,12 @@ use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\debug\models\timeline\DataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -37,7 +41,13 @@ class UsuariosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::classname(),
-                'only' => ['view', 'create', 'update', 'delete',  'login', 'logout', 'mandar-peticion', 'bloquear-usuario', 'anadir-amigo', 'desbloquear-usuario'],
+                'only' => [
+                    'view', 'create', 'update', 'delete',
+                    'login', 'logout', 'mandar-peticion',
+                    'bloquear-usuario', 'anadir-amigo',
+                    'desbloquear-usuario', 'ver-lista-deseos',
+                    'index'
+                ],
                 'rules' => [
                     [
                         'allow' => true,
@@ -46,7 +56,7 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'index'],
                         'roles' => ['@'],
                     ],
                     [
@@ -64,13 +74,13 @@ class UsuariosController extends Controller
                                 return true;
                             }
 
-                            if (!$model->esAmigo(Yii::$app->user->id)) {
-                                Yii::$app->session->setFlash('error', 'No puedes ver el perfil de un usuario que no sea tu amigo');
+                            if ($model->estadoRelacion(Yii::$app->user->id) == 3) {
+                                Yii::$app->session->setFlash('error', '¡Este perfil esta bloqueado!');
                                 return false;
                             }
 
-                            if ($model->estadoRelacion(Yii::$app->user->id) == 3) {
-                                Yii::$app->session->setFlash('error', '¡Este perfil esta bloqueado!');
+                            if (!$model->esAmigo(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', 'No puedes ver el perfil de un usuario que no sea tu amigo');
                                 return false;
                             }
 
@@ -138,6 +148,16 @@ class UsuariosController extends Controller
                             $usuarioId = Yii::$app->request->queryParams['usuarioId'];
                             $amigoId = Yii::$app->request->queryParams['amigoId'];
 
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para aceptar peticiones de amistad');
+                                return false;
+                            }
+
+                            if (Yii::$app->user->id != $amigoId) {
+                                Yii::$app->session->setFlash('error', 'No puedes aceptar esta peticion de amistad');
+                                return false;
+                            }
+
                             $usuario = $this->findModel($usuarioId);
 
                             switch ($usuario->estadoRelacion($amigoId)) {
@@ -198,6 +218,89 @@ class UsuariosController extends Controller
                             return true;
                         }
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['ver-lista-deseos'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ver lista de deseos');
+                                return false;
+                            }
+
+                            if (Yii::$app->request->queryParams['uId'] == Yii::$app->user->id) {
+                                return true;
+                            }
+
+                            $usuario = $this->findModel(Yii::$app->request->queryParams['uId']);
+
+                            if ($usuario->estaBloqueadoPor(Yii::$app->user->id) || !$usuario->esAmigo(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡No puedes ver la lista de deseos de este usuario!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['anadir-deseos'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para añadir a lista de deseos');
+                                return false;
+                            }
+
+                            if (Yii::$app->request->queryParams['uId'] != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', 'No puedes añadir un juego a una lista de deseos que sea la tuya');
+                                return false;
+                            }
+
+                            if (!Juegos::find(Yii::$app->request->queryParams['jId'])) {
+                                Yii::$app->session->setFlash('error', 'No puedes añadir a la lista de deseos un juego que no existe');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['borrar-deseos'],
+                        'matchCallback' => function ($rule, $action) {
+                            
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para añadir a lista de deseos');
+                                return false;
+                            }
+
+                            $uId = Yii::$app->request->queryParams['uId'];
+
+                            if (Yii::$app->user->id != $uId) {
+                                Yii::$app->session->setFlash('error', '¡No puedes borrar un juego de la lista de deseos de otra persona!');
+                                return false;
+                            }
+
+                            $jId = Yii::$app->request->queryParams['jId'];
+                            
+                            if (!Juegos::find($jId)->one()) {
+                                Yii::$app->session->setFlash('error', '¡No puedes borrar de la lista un juego que no existe!');
+                                return false;
+                            }
+                            
+                            $deseo = Deseados::find()
+                            ->where(['usuario_id' => $uId, 'juego_id' => $jId])
+                            ->one();
+
+                            if (!$deseo) {
+                                Yii::$app->session->setFlash('error', '¡Ese juego no esta en tu lista de desos!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
                   ],
             ],
         ];
@@ -209,15 +312,12 @@ class UsuariosController extends Controller
      */
     public function actionIndex()
     {
-        if (!Yii::$app->user->isGuest) {
-            $IdsUsuariosBloqueados = $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true);
-            if ($IdsUsuariosBloqueados) {
-                $query = Usuarios::find()
-                ->where(['not in', 'id', $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
-            }
-        } else {
-            $query = Usuarios::find();
+        $IdsUsuariosBloqueados = $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true);
+        if ($IdsUsuariosBloqueados) {
+            $query = Usuarios::find()
+            ->where(['not in', 'id', $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
         }
+        $query = Usuarios::find();
 
         $searchModel = new UsuariosSearch();
         $dataProvider = new ActiveDataProvider([
@@ -560,10 +660,62 @@ class UsuariosController extends Controller
     }
 
     // https://jqueryui.com/sortable/
-    // public fucntion actionListaDeseos($uId)
-    // {
-    //     return null;
-    // }
+    public function actionVerListaDeseos($uId)
+    {
+        $deseadosProvider = new ArrayDataProvider([
+            'allModels' => $this->findModel($uId)->juegosDeseados,
+        ]);
+
+        return $this->render('listaDeseos', [
+            'deseadosProvider' => $deseadosProvider,
+            'usuario' => $this->findModel($uId),
+        ]);
+    }
+
+    public function actionAnadirDeseos($uId, $jId)
+    {
+        $repetido = Deseados::find()
+        ->where(['usuario_id' => $uId, 'juego_id' => $jId])
+        ->exists();
+
+        if ($repetido) {
+            if (Yii::$app->request->isAjax) {
+                return Json::encode('¡Ese juego ya esta en tu lista de deseados!');
+            }
+            Yii::$app->session->setFlash('error', '¡Ese juego ya esta en tu lista de deseados!');
+            $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+        }
+
+        $deseo = new Deseados([
+            'usuario_id' => $uId,
+            'juego_id' => $jId,
+        ]);
+
+        if ($deseo->save()) {
+            if (Yii::$app->request->isAjax) {
+                return Json::encode('¡Has añadido el juego satisfactoriamente!');
+            }
+            Yii::$app->session->setFlash('error', '¡Has añadido el juego satisfactoriamente!');
+            $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+        }
+        
+        if (Yii::$app->request->isAjax) {
+            return Json::encode('¡Ha ocurrido un error al añadir el juego!');
+        }
+        Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al añadir el juego!');
+        $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+    }
+
+    public function actionBorrarDeseos($uId, $jId)
+    {
+        $deseo = Deseados::find()
+        ->where(['usuario_id' => $uId, 'juego_id' => $jId])
+        ->one();
+
+        $deseo->delete();
+        
+        return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+    }
 
     /**
      * Finds the Usuarios model based on its primary key value.
