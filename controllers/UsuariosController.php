@@ -91,18 +91,18 @@ class UsuariosController extends Controller
                         'allow' => true,
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
-                            $model = $this->findModel(Yii::$app->request->queryParams['id']);
-                            if (Yii::$app->user->id === 1) {
-                                return true;
-                            }
-
-                            if ($model->id != Yii::$app->user->id) {
-                                Yii::$app->session->setFlash('error', '¡No puedes modificar el perfil de otra persona!');
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar perfiles sin iniciar sesión!');
                                 return false;
                             }
 
-                            if (Yii::$app->user->isGuest) {
-                                Yii::$app->session->setFlash('error', '¡No puedes modificar perfiles sin iniciar sesión!');
+                            if (Yii::$app->user->id === 1) {
+                                return true;
+                            }
+                            
+                            $model = $this->findModel(Yii::$app->request->queryParams['id']);
+                            if ($model->id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar el perfil de otra persona!');
                                 return false;
                             }
 
@@ -663,7 +663,7 @@ class UsuariosController extends Controller
     public function actionVerListaDeseos($uId)
     {
         $deseadosProvider = new ArrayDataProvider([
-            'allModels' => $this->findModel($uId)->juegosDeseados,
+            'allModels' => $this->findModel($uId)->deseados,
         ]);
 
         return $this->render('listaDeseos', [
@@ -683,7 +683,7 @@ class UsuariosController extends Controller
                 return Json::encode('¡Ese juego ya esta en tu lista de deseados!');
             }
             Yii::$app->session->setFlash('error', '¡Ese juego ya esta en tu lista de deseados!');
-            $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+            return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
         }
 
         $deseo = new Deseados([
@@ -695,15 +695,16 @@ class UsuariosController extends Controller
             if (Yii::$app->request->isAjax) {
                 return Json::encode('¡Has añadido el juego satisfactoriamente!');
             }
-            Yii::$app->session->setFlash('error', '¡Has añadido el juego satisfactoriamente!');
-            $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+            Yii::$app->session->setFlash('success', '¡Has añadido el juego satisfactoriamente!');
+            return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
         }
         
         if (Yii::$app->request->isAjax) {
             return Json::encode('¡Ha ocurrido un error al añadir el juego!');
         }
+
         Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al añadir el juego!');
-        $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+        return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
     }
 
     public function actionBorrarDeseos($uId, $jId)

@@ -236,11 +236,9 @@ CREATE TABLE relaciones
     , CONSTRAINT CHK_Old_Estado_Valido CHECK (old_estado=0 OR old_estado=1 OR old_estado=2 OR old_estado=3)
 );
 
+-- DROP SEQUENCE deseados_orden_seq CASCADE;
+
 DROP TABLE IF EXISTS deseados CASCADE;
-
--- DROP SEQUENCE IF EXISTS deseados_orden_seq;
-
--- CREATE SEQUENCE deseados_orden_seq;
 
 CREATE TABLE deseados
 (
@@ -250,10 +248,16 @@ CREATE TABLE deseados
   , juego_id    BIGINT        REFERENCES juegos(id)
                               ON DELETE NO ACTION
                               ON UPDATE CASCADE
--- , orden       SMALLSERIAL   NOT NULL UNIQUE
---                             DEFAULT nextval('deseados_orden_seq')
+  , orden       SMALLINT      NOT NULL
   , PRIMARY KEY(usuario_id, juego_id)
 );
+
+-- CREATE SEQUENCE deseados_orden_seq
+-- OWNED BY deseados.orden;
+
+-- CREATE OR REPLACE FUNCTION orden_correcto() returns TRIGGER AS $$
+-- BEGIN
+--     select 
 
 --INSERTS --
 
