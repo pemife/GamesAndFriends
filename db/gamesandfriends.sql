@@ -238,14 +238,20 @@ CREATE TABLE relaciones
 
 DROP TABLE IF EXISTS deseados CASCADE;
 
+-- DROP SEQUENCE IF EXISTS deseados_orden_seq;
+
+-- CREATE SEQUENCE deseados_orden_seq;
+
 CREATE TABLE deseados
 (
-    usuario_id  BIGINT  REFERENCES usuarios(id)
-                        ON DELETE NO ACTION
-                        ON UPDATE CASCADE
-  , juego_id    BIGINT  REFERENCES juegos(id)
-                        ON DELETE NO ACTION
-                        ON UPDATE CASCADE
+    usuario_id  BIGINT        REFERENCES usuarios(id)
+                              ON DELETE NO ACTION
+                              ON UPDATE CASCADE
+  , juego_id    BIGINT        REFERENCES juegos(id)
+                              ON DELETE NO ACTION
+                              ON UPDATE CASCADE
+-- , orden       SMALLSERIAL   NOT NULL UNIQUE
+--                             DEFAULT nextval('deseados_orden_seq')
   , PRIMARY KEY(usuario_id, juego_id)
 );
 

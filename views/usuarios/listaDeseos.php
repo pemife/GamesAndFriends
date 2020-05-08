@@ -1,25 +1,16 @@
 <?php
 // use yii\helpers\Html;
 
+use yii\helpers\Html;
 use yii\widgets\ListView;
-
-$js = <<<EOF
-$('document').ready(function(){
-  $( "#sortable" ).sortable();
-  $( "#sortable" ).disableSelection();
-});
-EOF;
-$this->registerJs($js);
+$this->title = 'Lista de deseos';
 ?>
+
+<h1>Lista de Deseos de <?= $usuario->nombre ?></h1>
 
 <?= ListView::widget([
     'dataProvider' => $deseadosProvider,
     'itemOptions' => ['class' => 'item'],
-    'itemView' => function ($model, $key, $index, $widget) {
-        <table>
-          <tr>
-            <th></th>
-          </tr>
-        </table>
-    },
+    'viewParams' => ['usuario' => $usuario],
+    'itemView' => 'juegoDeseado',
 ]) ?>
