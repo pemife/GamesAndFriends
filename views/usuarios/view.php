@@ -80,7 +80,7 @@ function actualizarListaBloqueados(){
           if (result) {
             $('#bloqueadosAjax').html(result);
           } else {
-            alert('Ha habido un error con la lista de asistentes(2)');
+            alert('Ha ocurrido un error');
           }
         }
       });
@@ -241,6 +241,9 @@ $this->registerJs($js);
                 echo Html::a('Desbloquear usuario', ['desbloquear-usuario', 'usuarioId' => $model->id], ['class' => 'btn btn-danger']);
             } else {
                 echo Html::a('Bloquear usuario', ['bloquear-usuario', 'usuarioId' => $model->id], ['class' => 'btn btn-danger']);
+            }
+            if ($model->esAmigo(Yii::$app->user->id)) {
+              echo Html::a('Ver lista deseos', ['ver-lista-deseos', 'uId' => $model->id], ['class' => 'btn btn-info ml-2']);
             }
             ?>
       </div>
