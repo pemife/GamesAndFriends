@@ -114,4 +114,14 @@ class Juegos extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Criticas::className(), ['juego_id' => 'id'])->inverseOf('juego');
     }
+    
+    /**
+     * Gets query for [[Deseados]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDeseados()
+    {
+        return $this->hasMany(Deseados::className(), ['juego_id' => 'id'])->inverseOf('juego');
+    }
 }
