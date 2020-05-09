@@ -90,11 +90,7 @@ class Posts extends \yii\db\ActiveRecord
 
     public function getVotos()
     {
-        $query = new Query;
-
-        $query->from('votos_posts')->where(['post_id' => $this->id]);
-        
-        return $query->count();
+        return VotosPosts::find()->where(['post_id' => $this->id])->count();
     }
 
     public function usuarioVotado($uId)

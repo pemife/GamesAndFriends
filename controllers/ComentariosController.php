@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Comentarios;
 use app\models\ComentariosSearch;
+use app\models\ReportesComentarios;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -86,16 +87,17 @@ class ComentariosController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($pId)
     {
         $model = new Comentarios();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['posts/view', 'id' => $pId]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'pId' => $pId,
         ]);
     }
 
@@ -111,7 +113,7 @@ class ComentariosController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['posts/view', 'id' => $model->post->id]);
         }
 
         return $this->render('update', [
@@ -128,9 +130,34 @@ class ComentariosController extends Controller
      */
     public function actionDelete($id)
     {
+        $post = $this->findModel($id)->post->id;
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['posts/view', 'id' => $post]);
+    }
+
+    public function actionReportar($cId)
+    {
+        $reporte = ReportesComentarios::find()->where(['comentario_id' => $cId, 'usuario_id' => Yii::$app->user->id])->exists();
+        $post = $this->findModel($cId)->post->id;
+
+        if ($reporte) {
+            Yii::$app->session->setFlash('error', 'Ya has reportado ese comentario');
+            return $this->redirect(['posts/view', 'id' => $post]);
+        }
+
+        $reporte = new ReportesComentarios([
+            'usuario_id' => Yii::$app->user->id,
+            'comentario_id' => $cId,
+        ]);
+
+        if ($reporte->save()) {
+            Yii::$app->session->setFlash('success', 'Has mandado un reporte correctamente');
+            return $this->redirect(['posts/view', 'id' => $post]);
+        }
+
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al procesar el reporte');
+        return $this->redirect(['posts/view', 'id' => $post]);
     }
 
     /**
