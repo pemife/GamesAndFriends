@@ -42,7 +42,15 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'publ')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'cont_adul')->checkbox(['checked' => false]) ?>
+    <?= $form->field($model, 'edad_minima')->widget(Select2::classname(), ([
+        'name' => 'Generos',
+        'data' => $edadesValidas,
+        'size' => Select2::SMALL,
+        'options' => ['placeholder' => 'Introduce la edad minima'],
+        'pluginOptions' => [
+            'allowClear' => false,
+        ],
+    ]))->label('Edad mínima') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

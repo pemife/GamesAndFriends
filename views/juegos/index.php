@@ -58,7 +58,8 @@ $this->registerJs($js);
             'fechalan',
             'dev',
             // 'publ',
-            'cont_adul:boolean',
+            // 'cont_adul:boolean',
+            'edad_minima',
             [
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {anadirDeseos}',

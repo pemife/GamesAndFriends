@@ -39,6 +39,8 @@ CREATE TABLE juegos
   , publ         VARCHAR(255)  NOT NULL
   , cont_adul    BOOLEAN       NOT NULL
                                DEFAULT false
+  , edad_minima  NUMERIC(2)    NOT NULL
+  , CONSTRAINT CHK_Edad_Minima_Correcta CHECK (edad_minima=3 OR edad_minima=7 OR edad_minima=12 OR edad_minima=16 OR edad_minima=18)
 );
 
 DROP TABLE productos CASCADE;
@@ -227,9 +229,9 @@ CREATE TABLE relaciones
     , usuario2_id    BIGINT         REFERENCES usuarios(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-    , estado         SMALLINT       NOT NULL
+    , estado         NUMERIC(1)     NOT NULL
                                     DEFAULT 0
-    , old_estado     SMALLINT       DEFAULT 2
+    , old_estado     NUMERIC(1)     DEFAULT 2
     , PRIMARY KEY(usuario1_id, usuario2_id)
     , CONSTRAINT CHK_SelfFriend CHECK (usuario1_id != usuario2_id)
     , CONSTRAINT CHK_Estado_Valido CHECK (estado=0 OR estado=1 OR estado=2 OR estado=3)
@@ -285,10 +287,10 @@ INSERT INTO usuarios (nombre, password, email, fechanac)
 VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com', '1987-01-01'),
 ('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org', '1995-12-03');
 
-INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ, cont_adul)
-VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix LLC', 'Psyonix LLC', false),
-('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.', 'Nicalis Inc.', false),
-('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve', false);
+INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ, cont_adul, edad_minima)
+VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix LLC', 'Psyonix LLC', false, 3),
+('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.', 'Nicalis Inc.', false, 12),
+('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve', false, 16);
 
 INSERT INTO productos (nombre, descripcion, stock, propietario_id)
 VALUES ('Funko POP de Psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 2);
