@@ -60,6 +60,9 @@ class JuegosSearch extends Juegos
         $query->andFilterWhere([
             'id' => $this->id,
             'fechalan' => $this->fechalan,
+            'titulo' => $this->titulo,
+            'dev' => $this->dev,
+            'publ' => $this->publ,
         ]);
 
         $query->andFilterWhere(['ilike', 'titulo', $this->titulo])

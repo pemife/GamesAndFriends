@@ -130,11 +130,9 @@ $this->registerJS($js);
 
     <?= GridView::widget([
         'dataProvider' => $juegosProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             'titulo',
-            'descripcion:ntext',
-            'fechalan',
+            'fechalan:date',
             'dev',
             'publ',
             [

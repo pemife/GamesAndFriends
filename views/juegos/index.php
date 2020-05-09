@@ -73,9 +73,9 @@ $this->registerJs($js);
         'columns' => [
             'titulo',
             // 'descripcion:ntext',
-            'fechalan',
+            'fechalan:date',
             'dev',
-            // 'publ',
+            'publ',
             // 'cont_adul:boolean',
             'edad_minima',
             [
