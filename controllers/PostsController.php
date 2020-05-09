@@ -5,7 +5,9 @@ namespace app\controllers;
 use app\models\Juegos;
 use app\models\Posts;
 use app\models\PostsSearch;
+use app\models\VotosPosts;
 use Yii;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -30,7 +32,7 @@ class PostsController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete'],
+                'only' => ['create', 'update', 'delete', 'votar'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -47,6 +49,18 @@ class PostsController extends Controller
                             }
                             Yii::$app->session->setFlash('error', '¡No puedes modificar el post de otra persona!');
                             return false;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['votar'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡No puedes votar sin iniciar sesion!');
+                                return false;
+                            }
+
+                            return true;
                         },
                     ],
                 ],
@@ -77,8 +91,11 @@ class PostsController extends Controller
      */
     public function actionView($id)
     {
+        $usuarioVotado = Yii::$app->user->isGuest ? false : $this->findModel($id)->usuarioVotado(Yii::$app->user->id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'usuarioHaVotado' => $usuarioVotado,
         ]);
     }
 
@@ -150,5 +167,31 @@ class PostsController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionVotar()
+    {
+        $requestPost = Yii::$app->request->post();
+        $uId = $requestPost['uId'];
+        $pId = $requestPost['pId'];
+        
+
+        $voto = VotosPosts::find()->where(['usuario_id' => $uId, 'post_id' => $pId])->one();
+        // Si el usuario habia votado, retira el voto
+        if ($voto) {
+            $voto->delete();
+
+            return $this->findModel($pId)->votos;
+        }
+
+        $voto = new VotosPosts([
+            'post_id' => $pId,
+            'usuario_id' => $uId
+        ]);
+
+        if (!$voto->save()) {
+            return $this->findModel($pId)->votos;
+        }
+        return $this->findModel($pId)->votos;
     }
 }
