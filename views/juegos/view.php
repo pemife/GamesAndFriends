@@ -75,7 +75,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'fechalan',
             'dev',
             'publ',
-            'cont_adul:boolean'
+            'cont_adul:boolean',
+            'edad_minima'
         ],
     ]) ?>
 

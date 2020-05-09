@@ -9,7 +9,12 @@ namespace app\models;
  * @property string $titulo
  * @property string $descripcion
  * @property string $fechalan
+ * @property string|null $descripcion
+ * @property string|null $fechalan
  * @property string $dev
+ * @property string $publ
+ * @property bool $cont_adul
+ * @property float $edad_minima
  *
  * @property Etiquetas[] $etiquetas
  * @property Posts[] $posts
@@ -34,11 +39,15 @@ class Juegos extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['titulo', 'dev', 'publ'], 'required'],
+            [['edad_minima'], 'default', 'value' => 3],
+            [['titulo', 'dev', 'publ', 'edad_minima'], 'required'],
             [['descripcion'], 'string'],
             [['fechalan'], 'safe'],
             [['titulo', 'dev', 'publ'], 'string', 'max' => 255],
             [['titulo'], 'unique'],
+            [['cont_adul'], 'default', 'value' => function ($model, $attribute) {
+                return $this->edad_minima == 18;
+            }],
             [['cont_adul'], 'boolean', 'trueValue' => true, 'falseValue' => false],
         ];
     }
@@ -56,6 +65,7 @@ class Juegos extends \yii\db\ActiveRecord
             'dev' => 'Desarrolladora',
             'publ' => 'Editora',
             'cont_adul' => 'Contenido adulto',
+            'edad_minima' => 'Edad Minima',
         ];
     }
 

@@ -153,6 +153,7 @@ class JuegosController extends Controller
         return $this->render('create', [
             'model' => $model,
             'generosArray' => $generosArray,
+            'edadesValidas' => [3=>3,7=>7,12=>12,16=>16,18=>18],
         ]);
     }
 
@@ -184,6 +185,7 @@ class JuegosController extends Controller
         return $this->render('update', [
             'model' => $model,
             'generosArray' => $generosArray,
+            'edadesValidas' => [3=>3,7=>7,12=>12,16=>16,18=>18],
         ]);
     }
 
