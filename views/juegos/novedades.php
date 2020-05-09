@@ -133,8 +133,7 @@ $this->registerJS($js);
         'filterModel' => $searchModel,
         'columns' => [
             'titulo',
-            'descripcion:ntext',
-            'fechalan',
+            'fechalan:date',
             'dev',
             'publ',
             [
