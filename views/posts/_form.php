@@ -16,13 +16,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'titulo')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'media')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'media')->hiddenInput()->label(false) ?>
 
     <?= $form->field($model, 'desarrollo')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'juego_id')->widget(Select2::className(),[
+    <?= $form->field($model, 'juego_id')->widget(Select2::className(), [
         'data' => $listaJuegos,
         'options' => ['placeholder' => 'Introduzca el juego del que trata el post'],
         'pluginOptions' => [
