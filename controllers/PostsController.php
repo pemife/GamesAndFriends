@@ -2,11 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Comentarios;
 use app\models\Juegos;
 use app\models\Posts;
 use app\models\PostsSearch;
 use app\models\VotosPosts;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -93,9 +95,16 @@ class PostsController extends Controller
     {
         $usuarioVotado = Yii::$app->user->isGuest ? false : $this->findModel($id)->usuarioVotado(Yii::$app->user->id);
 
+        $queryComentarios = Comentarios::find()->where(['post_id' => $id]);
+
+        $comentariosProvider = new ActiveDataProvider([
+            'query' => $queryComentarios,
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
             'usuarioHaVotado' => $usuarioVotado,
+            'comentariosProvider' => $comentariosProvider,
         ]);
     }
 
