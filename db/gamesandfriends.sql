@@ -265,12 +265,19 @@ CREATE TABLE votos_posts
   , PRIMARY KEY(usuario_id, post_id)
 );
 
--- CREATE SEQUENCE deseados_orden_seq
--- OWNED BY deseados.orden;
+DROP TABLE IF EXISTS reportes_comentarios CASCADE;
 
--- CREATE OR REPLACE FUNCTION orden_correcto() returns TRIGGER AS $$
--- BEGIN
---     select 
+CREATE TABLE reportes_comentarios
+(
+    usuario_id      BIGINT      REFERENCES usuarios(id)
+                                ON DELETE NO ACTION
+                                ON UPDATE CASCADE
+  , comentario_id   BIGINT      REFERENCES comentarios(id)
+                                ON DELETE NO ACTION
+                                ON UPDATE CASCADE
+  , razon       TEXT
+  , PRIMARY KEY(usuario_id, comentario_id)
+);
 
 --INSERTS --
 

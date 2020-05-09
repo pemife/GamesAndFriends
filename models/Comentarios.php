@@ -15,6 +15,8 @@ use Yii;
  *
  * @property Posts $post
  * @property Usuarios $usuario
+ * @property ReportesComentarios[] $reportesComentarios
+ * @property Usuarios[] $usuarios
  */
 class Comentarios extends \yii\db\ActiveRecord
 {
@@ -57,6 +59,8 @@ class Comentarios extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Post]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getPost()
@@ -65,10 +69,32 @@ class Comentarios extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Usuario]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getUsuario()
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'usuario_id'])->inverseOf('comentarios');
+    }
+
+    /**
+     * Gets query for [[ReportesComentarios]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReportesComentarios()
+    {
+        return $this->hasMany(ReportesComentarios::className(), ['comentario_id' => 'id'])->inverseOf('comentario');
+    }
+
+    /**
+     * Gets query for [[Usuarios]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUsuarios()
+    {
+        return $this->hasMany(Usuarios::className(), ['id' => 'usuario_id'])->viaTable('reportes_comentarios', ['comentario_id' => 'id']);
     }
 }
