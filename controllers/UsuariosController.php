@@ -46,7 +46,7 @@ class UsuariosController extends Controller
                     'login', 'logout', 'mandar-peticion',
                     'bloquear-usuario', 'anadir-amigo',
                     'desbloquear-usuario', 'ver-lista-deseos',
-                    'index'
+                    'index', 'ordenar-lista-deseos'
                 ],
                 'rules' => [
                     [
@@ -91,18 +91,18 @@ class UsuariosController extends Controller
                         'allow' => true,
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
-                            $model = $this->findModel(Yii::$app->request->queryParams['id']);
-                            if (Yii::$app->user->id === 1) {
-                                return true;
-                            }
-
-                            if ($model->id != Yii::$app->user->id) {
-                                Yii::$app->session->setFlash('error', '¡No puedes modificar el perfil de otra persona!');
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar perfiles sin iniciar sesión!');
                                 return false;
                             }
 
-                            if (Yii::$app->user->isGuest) {
-                                Yii::$app->session->setFlash('error', '¡No puedes modificar perfiles sin iniciar sesión!');
+                            if (Yii::$app->user->id === 1) {
+                                return true;
+                            }
+                            
+                            $model = $this->findModel(Yii::$app->request->queryParams['id']);
+                            if ($model->id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar el perfil de otra persona!');
                                 return false;
                             }
 
@@ -296,6 +296,26 @@ class UsuariosController extends Controller
                             if (!$deseo) {
                                 Yii::$app->session->setFlash('error', '¡Ese juego no esta en tu lista de desos!');
                                 return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['ordenar-lista-deseos'],
+                        'matchCallback' => function ($rule, $action) {
+                            
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ordenar la lista de deseos');
+                                return $this->redirect(['site/login']);
+                            }
+
+                            $uId = Yii::$app->request->post()['uId'];
+
+                            if (Yii::$app->user->id != $uId) {
+                                Yii::$app->session->setFlash('error', '¡No puedes ordenar la lista de deseos de otra persona!');
+                                return $this->redirect(['site/home']);
                             }
 
                             return true;
@@ -663,7 +683,10 @@ class UsuariosController extends Controller
     public function actionVerListaDeseos($uId)
     {
         $deseadosProvider = new ArrayDataProvider([
-            'allModels' => $this->findModel($uId)->juegosDeseados,
+            'allModels' => Deseados::find()
+            ->where(['usuario_id' => $uId])
+            ->orderBy('orden')
+            ->all(),
         ]);
 
         return $this->render('listaDeseos', [
@@ -683,7 +706,7 @@ class UsuariosController extends Controller
                 return Json::encode('¡Ese juego ya esta en tu lista de deseados!');
             }
             Yii::$app->session->setFlash('error', '¡Ese juego ya esta en tu lista de deseados!');
-            $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+            return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
         }
 
         $deseo = new Deseados([
@@ -693,17 +716,20 @@ class UsuariosController extends Controller
 
         if ($deseo->save()) {
             if (Yii::$app->request->isAjax) {
+                $this->actualizarOrdenDeseados($uId);
                 return Json::encode('¡Has añadido el juego satisfactoriamente!');
             }
-            Yii::$app->session->setFlash('error', '¡Has añadido el juego satisfactoriamente!');
-            $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+            $this->actualizarOrdenDeseados($uId);
+            Yii::$app->session->setFlash('success', '¡Has añadido el juego satisfactoriamente!');
+            return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
         }
         
         if (Yii::$app->request->isAjax) {
             return Json::encode('¡Ha ocurrido un error al añadir el juego!');
         }
+
         Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al añadir el juego!');
-        $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+        return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
     }
 
     public function actionBorrarDeseos($uId, $jId)
@@ -713,8 +739,45 @@ class UsuariosController extends Controller
         ->one();
 
         $deseo->delete();
+
+        $this->actualizarOrdenDeseados($uId);
         
         return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+    }
+
+    public function actionOrdenarListaDeseos()
+    {
+        $post = Yii::$app->request->post();
+        $uId = $post['uId'];
+        $nO = $post['nO'];
+
+        Yii::debug($nO);
+
+        $deseados = Deseados::find()
+        ->where(['usuario_id' => $uId])
+        ->orderBy('orden')
+        ->all();
+
+        if (!$deseados || (count($deseados) != (count($nO)-1))) {
+            Yii::debug('el usuario no tiene deseos o los arrays no coinciden');
+            return false;
+        }
+        Yii::debug('todo va bien');
+
+        for ($i = 0; $i < count($deseados); $i++) {
+            for ($j = 0; $j < count($nO); $j++) {
+                if ($deseados[$i]->juego->id == $nO[$j]) {
+                    $deseo = $deseados[$i];
+                    $deseo->orden = $j;
+                    if (!$deseo->save()) {
+                        Yii::$app->session->setFlash('error', 'Ha ocurrido un error actualizando el orden de la lista de deseos');
+                        return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -786,5 +849,31 @@ class UsuariosController extends Controller
 
         Yii::$app->session->setFlash('error', 'Ha ocurrido un error al mandar la peticion de amistad');
         return false;
+    }
+
+    private function actualizarOrdenDeseados($uId)
+    {
+        $deseados = Deseados::find()
+        ->where(['usuario_id' => $uId])
+        ->orderBy('orden')
+        ->all();
+
+        if (!$deseados) {
+            return false;
+        }
+
+        // var_dump($deseados);
+        // exit;
+
+        for ($i = 0; $i < count($deseados); $i++) {
+            $deseo = $deseados[$i];
+            $deseo->orden = $i+1;
+            if (!$deseo->save()) {
+                Yii::$app->session->setFlash('error', 'Ha ocurrido un error actualizando el orden de la lista de deseos');
+                return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+            }
+        }
+
+        return true;
     }
 }
