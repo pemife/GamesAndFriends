@@ -134,4 +134,9 @@ class Juegos extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Deseados::className(), ['juego_id' => 'id'])->inverseOf('juego');
     }
+
+    public function getIgnorados()
+    {
+        return $this->hasMany(Ignorados::className(), ['id' => 'usuario_id'])->viaTable('juegos_ignorados', ['juego_id' => 'id']);
+    }
 }

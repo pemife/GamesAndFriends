@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Copias;
 use app\models\Deseados;
+use app\models\Ignorados;
 use app\models\Juegos;
 use app\models\LoginForm;
 use app\models\Productos;
@@ -321,6 +322,83 @@ class UsuariosController extends Controller
                             return true;
                         }
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['anadir-ignorados'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ignorar un juego');
+                                return false;
+                            }
+
+                            if (Yii::$app->request->queryParams['uId'] != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', 'No puedes ignorar un juego con una cuenta que no sea tuya');
+                                return false;
+                            }
+
+                            if (!Juegos::find(Yii::$app->request->queryParams['jId'])) {
+                                Yii::$app->session->setFlash('error', 'No puedes añadir a la lista de deseos un juego que no existe');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['borrar-ignorados'],
+                        'matchCallback' => function ($rule, $action) {
+                            
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ignorar un juego');
+                                return false;
+                            }
+
+                            $uId = Yii::$app->request->queryParams['uId'];
+
+                            if (Yii::$app->user->id != $uId) {
+                                Yii::$app->session->setFlash('error', '¡No puedes ignorar un juego con la cuenta de otra persona!');
+                                return false;
+                            }
+
+                            $jId = Yii::$app->request->queryParams['jId'];
+                            
+                            if (!Juegos::find($jId)->one()) {
+                                Yii::$app->session->setFlash('error', '¡No puedes ignorar un juego que no existe!');
+                                return false;
+                            }
+                            
+                            $ignorado = Ignorados::find()
+                            ->where(['usuario_id' => $uId, 'juego_id' => $jId])
+                            ->one();
+
+                            if (!$ignorado) {
+                                Yii::$app->session-setFlash('error', '¡Ese juego no lo has ignorado!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['ver-lista-ignorados'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ver lista de ignorados');
+                                return false;
+                            }
+
+                            if (Yii::$app->request->queryParams['uId'] != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes ver la lista de ignorados de otra persona!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
                   ],
             ],
         ];
@@ -343,8 +421,6 @@ class UsuariosController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -778,6 +854,66 @@ class UsuariosController extends Controller
         }
 
         return true;
+    }
+    
+    public function actionVerListaIgnorados($uId)
+    {
+        $ignoradosProvider = new ArrayDataProvider([
+            'allModels' => Ignorados::find()
+            ->where(['usuario_id' => $uId])
+            ->all(),
+        ]);
+
+        return $this->render('listaIgnorados', [
+            'deseadosProvider' => $ignoradosProvider,
+            'usuario' => $this->findModel($uId),
+        ]);
+    }
+
+    public function actionAnadirIgnorados($uId, $jId)
+    {
+        $repetido = Ignorados::find()
+        ->where(['usuario_id' => $uId, 'juego_id' => $jId])
+        ->exists();
+
+        if ($repetido) {
+            if (Yii::$app->request->isAjax) {
+                return Json::encode('¡Ese juego ya lo has ignorado!');
+            }
+            Yii::$app->session->setFlash('error', '¡Ese juego ya lo has ignorado!');
+            return $this->redirect(['juegos/index']);
+        }
+
+        $ignorado = new Ignorados([
+            'usuario_id' => $uId,
+            'juego_id' => $jId,
+        ]);
+
+        if ($ignorado->save()) {
+            if (Yii::$app->request->isAjax) {
+                return Json::encode('¡Has ignorado el juego satisfactoriamente!');
+            }
+            Yii::$app->session->setFlash('success', '¡Has ignorado el juego satisfactoriamente!');
+            return $this->redirect(['juegos/index']);
+        }
+        
+        if (Yii::$app->request->isAjax) {
+            return Json::encode('¡Ha ocurrido un error al ignorar el juego!');
+        }
+
+        Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al ignorar el juego!');
+        return $this->redirect(['juegos/index']);
+    }
+
+    public function actionBorrarIgnorados($uId, $jId)
+    {
+        $ignorado = Ignorados::find()
+        ->where(['usuario_id' => $uId, 'juego_id' => $jId])
+        ->one();
+
+        $ignorado->delete();
+        
+        return $this->redirect(['juegos/index']);
     }
 
     /**

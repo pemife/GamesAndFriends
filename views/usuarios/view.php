@@ -165,6 +165,11 @@ $this->registerJs($js);
                         ]) ?>
                     </li>
                     <li>
+                        <?= Html::a('Ver lista ignorados', ['ver-lista-ignorados', 'uId' => $model->id], [
+                            'class' => 'btn btn-link',
+                        ]) ?>
+                    </li>
+                    <li>
                       <?= Html::a('Cambiar contraseña', $enlacePass, [
                         'class' => 'btn btn-link',
                         'disabled' => !$puedeModificar,

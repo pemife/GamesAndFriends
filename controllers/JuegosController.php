@@ -82,6 +82,8 @@ class JuegosController extends Controller
             if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
                 $query = Juegos::find();
             }
+            $query
+            ->andWhere(['not in', 'id', Usuarios::findOne(Yii::$app->user->id)->arrayIdJuegosIgnorados()]);
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -216,7 +218,10 @@ class JuegosController extends Controller
             if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
                 $queryJuegosNuevos->orWhere(['cont_adul' => true]);
             }
+            $queryJuegosNuevos
+            ->andWhere(['not in', 'id', Usuarios::findOne(Yii::$app->user->id)->arrayIdJuegosIgnorados()]);
         }
+
 
         $juegosProvider = new ActiveDataProvider([
             'query' => $queryJuegosNuevos,

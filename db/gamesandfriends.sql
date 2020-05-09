@@ -281,6 +281,19 @@ CREATE TABLE reportes_comentarios
   , PRIMARY KEY(usuario_id, comentario_id)
 );
 
+DROP TABLE IF EXISTS juegos_ignorados CASCADE;
+
+CREATE TABLE juegos_ignorados
+(
+    usuario_id      BIGINT        REFERENCES usuarios(id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , juego_id        BIGINT        REFERENCES juegos(id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , PRIMARY KEY(usuario_id, juego_id)
+);
+
 --INSERTS --
 
 INSERT INTO usuarios (nombre, password, email, fechanac)
