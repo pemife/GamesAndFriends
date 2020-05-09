@@ -256,6 +256,16 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Deseados::className(), ['usuario_id' => 'id'])->inverseOf('usuario');
     }
 
+    /**
+     * Gets query for [[JuegosIgnorados]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIgnorados()
+    {
+        return $this->hasMany(Ignorados::className(), ['usuario_id' => 'id'])->inverseOf('usuario');
+    }
+
     public function creaToken()
     {
         return Yii::$app->security->generateRandomString(32);
@@ -411,6 +421,19 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             ->all();
         }
 
+        return [];
+    }
+
+    public function arrayIdJuegosIgnorados()
+    {
+        foreach ($this->ignorados as $ignorado) {
+            $idsJuegosBloqueados[] = $ignorado->juego->id;
+        }
+
+        if (!empty($idsJuegosBloqueados)) {
+            return $idsJuegosBloqueados;
+        }
+        
         return [];
     }
 }

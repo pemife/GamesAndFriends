@@ -13,6 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $uId = Yii::$app->user->isGuest ? 0 : Yii::$app->user->id;
 $url = Url::to(['usuarios/anadir-deseos']);
+$url2 = Url::to(['usuarios/anadir-ignorados']);
+$url3 = Url::to(['juegos/index']);
 
 $js = <<<SCRIPT
 $(document).ready(function(){
@@ -28,6 +30,22 @@ function anadirDeseos(e){
     success: function(result){
       if (result) {
         alert(result);
+      } else {
+        alert('NOOOOOOOOOOO');
+      }
+    }
+  });
+}
+$("[name='botonIgnorados']").click(anadirIgnorados);
+function anadirIgnorados(e){
+  console.log(this.dataset.modelid);
+  $.ajax({
+    method: 'GET',
+    url: '$url2',
+    data: {jId: this.dataset.modelid, uId: $uId},
+    success: function(result){
+      if (result) {
+        window.location = '$url3';
       } else {
         alert('NOOOOOOOOOOO');
       }
@@ -62,7 +80,7 @@ $this->registerJs($js);
             'edad_minima',
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{view} {vermercado} {anadirDeseos}',
+              'template' => '{view} {vermercado} {anadirDeseos} {ignorar}',
               'buttons' => [
                 'vermercado' => function ($url, $model, $key) {
                   return Html::a(
@@ -82,6 +100,26 @@ $this->registerJs($js);
                     [
                       'title' => 'añadir a tu lista de deseos',
                       'name' => 'botonDeseos',
+                      'data' => [
+                        'modelId' => $model->id,
+                      ]
+                    ]
+                  );
+                },
+                'ignorar' => function ($url, $model, $key) {
+                  if (Yii::$app->user->isGuest) {
+                    return '';
+                  }
+
+                  return Html::a(
+                    '<span class="glyphicon glyphicon-warning-sign"></span>',
+                    '#',
+                    [
+                      'title' => 'Ignorar juego',
+                      'name' => 'botonIgnorados',
+                      'style' => [
+                          'color' => 'red',
+                      ],
                       'data' => [
                         'modelId' => $model->id,
                       ]
