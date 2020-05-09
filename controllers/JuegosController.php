@@ -224,7 +224,6 @@ class JuegosController extends Controller
         ]);
 
         return $this->render('novedades', [
-            'searchModel' => $searchModel,
             'juegosProvider' => $juegosProvider,
         ]);
     }
