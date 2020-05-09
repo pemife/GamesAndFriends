@@ -53,10 +53,10 @@ $this->registerJs($js);
         'filterModel' => $searchModel,
         'columns' => [
             'titulo',
-            'descripcion:ntext',
+            // 'descripcion:ntext',
             'fechalan',
             'dev',
-            'publ',
+            // 'publ',
             'cont_adul:boolean',
             [
               'class' => 'yii\grid\ActionColumn',

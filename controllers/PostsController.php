@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Juegos;
 use app\models\Posts;
 use app\models\PostsSearch;
 use Yii;
@@ -40,8 +41,8 @@ class PostsController extends Controller
                         'allow' => true,
                         'actions' => ['update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
-                            $model = Posts::findOne(Yii::$app->request->queryParams['id']);
-                            if (!Yii::$app->user->isGuest && ($model->usuario_id == Yii::$app->user->id)) {
+                            $model = $this->findModel(Yii::$app->request->queryParams['id']);
+                            if (!Yii::$app->user->isGuest && ($model->usuario->id == Yii::$app->user->id)) {
                                 return true;
                             }
                             Yii::$app->session->setFlash('error', '¡No puedes modificar el post de otra persona!');
@@ -96,6 +97,7 @@ class PostsController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'listaJuegos' => Juegos::listaAsociativa(),
         ]);
     }
 
@@ -116,6 +118,7 @@ class PostsController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'listaJuegos' => Juegos::listaAsociativa(),
         ]);
     }
 

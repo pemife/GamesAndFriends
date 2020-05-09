@@ -31,7 +31,7 @@ AppAsset::register($this);
     <?php
     $usuarioNombre = '';
     $usuarioId = '';
-    if(!Yii::$app->user->isGuest){
+    if (!Yii::$app->user->isGuest) {
         $usuarioNombre = Yii::$app->user->identity->nombre;
         $usuarioId = Yii::$app->user->identity->id;
     }
@@ -50,9 +50,15 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Novedades', 'url' => ['/juegos/novedades']],
-            ['label' => '2ª Mano', 'url' => ['/ventas/index']],
-            ['label' => 'Productos', 'url' => ['/productos/index']],
-            ['label' => 'Juegos', 'url' => ['/juegos/index']],
+            [
+                'label' => 'Mercado',
+                'items' => [
+                    ['label' => '2ª Mano', 'url' => ['/ventas/index']],
+                    ['label' => 'Productos', 'url' => ['/productos/index']],
+                    ['label' => 'Juegos', 'url' => ['/juegos/index']],
+                ],
+            ],
+            ['label' => 'Comunidad', 'url' => ['posts/index']],
             ['label' => 'Usuarios', 'url' => ['/usuarios/index'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
