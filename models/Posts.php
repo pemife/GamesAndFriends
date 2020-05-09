@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\db\pgsql\QueryBuilder;
+use yii\db\Query;
 
 /**
  * This is the model class for table "posts".
@@ -84,5 +86,19 @@ class Posts extends \yii\db\ActiveRecord
     public function getUsuario()
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'usuario_id'])->inverseOf('posts');
+    }
+
+    public function getVotos()
+    {
+        $query = new Query;
+
+        $query->from('votos_posts')->where(['post_id' => $this->id]);
+        
+        return $query->count();
+    }
+
+    public function usuarioVotado($uId)
+    {
+        return VotosPosts::find()->where(['post_id' => $this->id, 'usuario_id' => $uId])->exists();
     }
 }

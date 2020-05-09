@@ -252,6 +252,19 @@ CREATE TABLE deseados
   , PRIMARY KEY(usuario_id, juego_id)
 );
 
+DROP TABLE IF EXISTS votos_posts;
+
+CREATE TABLE votos_posts
+(
+    usuario_id  BIGINT      REFERENCES usuarios(id)
+                            ON DELETE NO ACTION
+                            ON UPDATE CASCADE
+  , post_id     BIGINT      REFERENCES posts(id)
+                            ON DELETE NO ACTION
+                            ON UPDATE CASCADE  
+  , PRIMARY KEY(usuario_id, post_id)
+);
+
 -- CREATE SEQUENCE deseados_orden_seq
 -- OWNED BY deseados.orden;
 

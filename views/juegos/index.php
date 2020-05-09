@@ -12,6 +12,7 @@ $this->title = 'Juegos';
 $this->params['breadcrumbs'][] = $this->title;
 
 $uId = Yii::$app->user->isGuest ? 0 : Yii::$app->user->id;
+$url = Url::to(['usuarios/anadir-deseos']);
 
 $js = <<<SCRIPT
 $(document).ready(function(){
@@ -22,7 +23,7 @@ function anadirDeseos(e){
   console.log(this.dataset.modelid);
   $.ajax({
     method: 'GET',
-    url: '/index.php?r=usuarios/anadir-deseos',
+    url: '$url',
     data: {jId: this.dataset.modelid, uId: $uId},
     success: function(result){
       if (result) {
