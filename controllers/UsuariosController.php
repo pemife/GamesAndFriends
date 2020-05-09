@@ -46,7 +46,7 @@ class UsuariosController extends Controller
                     'login', 'logout', 'mandar-peticion',
                     'bloquear-usuario', 'anadir-amigo',
                     'desbloquear-usuario', 'ver-lista-deseos',
-                    'index'
+                    'index', 'ordenar-lista-deseos'
                 ],
                 'rules' => [
                     [
@@ -296,6 +296,26 @@ class UsuariosController extends Controller
                             if (!$deseo) {
                                 Yii::$app->session->setFlash('error', '¡Ese juego no esta en tu lista de desos!');
                                 return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['ordenar-lista-deseos'],
+                        'matchCallback' => function ($rule, $action) {
+                            
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ordenar la lista de deseos');
+                                return $this->redirect(['site/login']);
+                            }
+
+                            $uId = Yii::$app->request->post()['uId'];
+
+                            if (Yii::$app->user->id != $uId) {
+                                Yii::$app->session->setFlash('error', '¡No puedes ordenar la lista de deseos de otra persona!');
+                                return $this->redirect(['site/home']);
                             }
 
                             return true;
@@ -725,6 +745,41 @@ class UsuariosController extends Controller
         return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
     }
 
+    public function actionOrdenarListaDeseos()
+    {
+        $post = Yii::$app->request->post();
+        $uId = $post['uId'];
+        $nO = $post['nO'];
+
+        Yii::debug($nO);
+
+        $deseados = Deseados::find()
+        ->where(['usuario_id' => $uId])
+        ->orderBy('orden')
+        ->all();
+
+        if (!$deseados || (count($deseados) != (count($nO)-1))) {
+            Yii::debug('el usuario no tiene deseos o los arrays no coinciden');
+            return false;
+        }
+        Yii::debug('todo va bien');
+
+        for ($i = 0; $i < count($deseados); $i++) {
+            for ($j = 0; $j < count($nO); $j++) {
+                if ($deseados[$i]->juego->id == $nO[$j]) {
+                    $deseo = $deseados[$i];
+                    $deseo->orden = $j;
+                    if (!$deseo->save()) {
+                        Yii::$app->session->setFlash('error', 'Ha ocurrido un error actualizando el orden de la lista de deseos');
+                        return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Finds the Usuarios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -810,7 +865,7 @@ class UsuariosController extends Controller
         // var_dump($deseados);
         // exit;
 
-        for ($i = 1; $i < count($deseados); $i++) {
+        for ($i = 0; $i < count($deseados); $i++) {
             $deseo = $deseados[$i];
             $deseo->orden = $i+1;
             if (!$deseo->save()) {
