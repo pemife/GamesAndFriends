@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-// use kartik\widgets\StarRating;
+use kartik\rating\StarRating as RatingStarRating;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Criticas */
@@ -21,14 +21,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'opinion')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'valoracion')->input('range', [
+    <?= $form->field($model, 'valoracion')->widget(RatingStarRating::classname(), [
+        'pluginOptions' => [
+            'step' => 1,
             'min' => 0,
-            'max' => 9,
-            'style' => [
-                'width' => '30%',
-                'align' => 'left',
+            'max' => 5,
+            'starCaptions' => [
+                1 => '1 Estrella',
+                2 => '2 Estrellas',
+                3 => '3 Estrellas',
+                4 => '4 Estrellas',
+                5 => '5 Estrellas',
+            ],
+            'starCaptionClasses' => [
+                1 => 'text-danger',
+                2 => 'text-warning',
+                3 => 'text-info',
+                4 => 'text-primary',
+                5 => 'text-success'
+            ],
             ]
-        ]) ?>
+    ]); ?>
 
     <?= $form->field($model, 'usuario_id')->label(false)->hiddenInput(['value' => Yii::$app->user->id]) ?>
     <?= $form->field($model, 'producto_id')->label(false)->hiddenInput(['value' => $producto->id]) ?>

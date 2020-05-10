@@ -36,7 +36,7 @@ class Criticas extends \yii\db\ActiveRecord
             [['opinion'], 'string'],
             [['created_at', 'last_update'], 'date', 'format' => 'Y-m-d'],
             [['created_at', 'last_update'], 'default', 'value' => date('Y-m-d')],
-            [['valoracion'], 'number', 'min' => 0, 'max' => 9],
+            [['valoracion'], 'number', 'min' => 1, 'max' => 5],
             [['usuario_id', 'producto_id'], 'integer'],
             [['juego_id', 'producto_id'], 'validarCopiaProducto'],
             [['producto_id'], 'exist', 'skipOnError' => true, 'targetClass' => Productos::className(), 'targetAttribute' => ['producto_id' => 'id']],

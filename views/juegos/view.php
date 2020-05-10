@@ -3,6 +3,7 @@
 use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use kartik\rating\StarRating as RatingStarRating;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Juegos */
@@ -17,9 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <span>
-      <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
-      <?php
-        if($precioMinimo != null){
+        <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
+        <?php
+        if ($precioMinimo != null) {
             ?>
                 <h3>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
             <?php
@@ -28,29 +29,29 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h3>No hay ninguna copia en venta actualmente</h3>
             <?php
         }
-      ?>
-      <?= Html::a(
-          'Ver en mercado',
-          [
-            'ventas/ventas-item',
-            'id' => $model->id,
-            'esProducto' => false
-          ],
-          ['class' => 'btn btn-success mr-2']
-      ) ?>
-      <?php 
-      if (!Yii::$app->user->isGuest) {
-          echo Html::a(
-            'Añadir a lista de deseados',
+        ?>
+        <?= Html::a(
+            'Ver en mercado',
             [
-              'usuarios/anadir-deseos',
-              'uId' => Yii::$app->user->id,
-              'jId' => $model->id
+              'ventas/ventas-item',
+              'id' => $model->id,
+              'esProducto' => false
             ],
-            ['class' => 'btn btn-info',]
-          );
-      }
-      ?>
+            ['class' => 'btn btn-success mr-2']
+        ) ?>
+        <?php
+        if (!Yii::$app->user->isGuest) {
+              echo Html::a(
+                  'Añadir a lista de deseados',
+                  [
+                    'usuarios/anadir-deseos',
+                    'uId' => Yii::$app->user->id,
+                    'jId' => $model->id
+                  ],
+                  ['class' => 'btn btn-info',]
+              );
+        }
+        ?>
     </span>
 
     </br></br>
@@ -72,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'descripcion:ntext',
-            'fechalan',
+            'fechalan:date',
             'dev',
             'publ',
             'cont_adul:boolean',
@@ -83,9 +84,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3>Críticas</h3>
 
     <p>
-        <?php if($tieneJuego){
-          echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
-        } ?>
+        <?php
+        if ($tieneJuego) {
+            echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
+        }
+        ?>
     </p>
 
     <?= GridView::widget([
@@ -93,44 +96,58 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'usuario.nombre',
             'opinion',
-            'valoracion',
+            [
+              'attribute' => 'valoracion',
+              'format' => 'raw',
+              'value' => function ($model) {
+                return RatingStarRating::widget([
+                  'name' => 'rating_35',
+                  'value' => $model->valoracion,
+                  'pluginOptions' => [
+                    'displayOnly' => true,
+                    'size' => 'm',
+                    'showCaption' => false,
+                  ]
+                ]);
+              }
+            ],
             'last_update:Date',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',
                 'buttons' => [
-                    'update' => function ($url, $model, $key){
-                        if(Yii::$app->user->id != $model->usuario->id){
-                          return "";
+                    'update' => function ($url, $model, $key) {
+                        if (Yii::$app->user->id != $model->usuario->id) {
+                            return '';
                         }
                         return Html::a(
-                          '<span class="glyphicon glyphicon-pencil"></span>',
-                          [
-                              '/criticas/update',
-                              'id' => $model->id,
-                          ],
-                          [
-                              'title' => 'editar crítica',
-                          ]
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            [
+                                '/criticas/update',
+                                'id' => $model->id,
+                            ],
+                            [
+                                'title' => 'editar crítica',
+                            ]
                         );
                     },
-                    'delete' => function ($url, $model, $key){
-                        if(Yii::$app->user->id != $model->usuario->id){
-                          return "";
+                    'delete' => function ($url, $model, $key) {
+                        if (Yii::$app->user->id != $model->usuario->id) {
+                            return '';
                         }
                         return Html::a(
-                          '<span class="glyphicon glyphicon-trash"></span>',
-                          [
-                              'criticas/delete',
-                              'id' => $model->id,
-                          ],
-                          [
-                              'data' => [
-                                'method' => 'post',
-                                'confirm' => '¿Estas seguro de borrar la crítica?(Esta accion no se puede deshacer)',
-                              ],
-                              'title' => 'borrar crítica',
-                          ]
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            [
+                                'criticas/delete',
+                                'id' => $model->id,
+                            ],
+                            [
+                                'data' => [
+                                  'method' => 'post',
+                                  'confirm' => '¿Estas seguro de borrar la crítica?(Esta accion no se puede deshacer)',
+                                ],
+                                'title' => 'borrar crítica',
+                            ]
                         );
                     }
                 ]
@@ -138,5 +155,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ]
     ]); ?>
 
+    
 
 </div>

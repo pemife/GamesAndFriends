@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'usuario_id')->textInput()->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'producto_id')->widget(Select2::className(),[
+    <?= $form->field($model, 'producto_id')->widget(Select2::className(), [
         'data' => $listaProductosUsuario,
         'pluginOptions' => [
           'allowClear' => false,
