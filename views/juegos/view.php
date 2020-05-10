@@ -4,6 +4,7 @@ use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use kartik\rating\StarRating as RatingStarRating;
+use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Juegos */
@@ -155,6 +156,28 @@ $this->params['breadcrumbs'][] = $this->title;
         ]
     ]); ?>
 
-    
+    <h3>Juegos similares a <?= Html::encode($model->titulo) ?></h3>
+
+    <div class="row">
+        <?= ListView::widget([
+            'dataProvider' => $similaresProvider,
+            'itemOptions' => ['class' => 'item',],
+            'summary' => '',
+            'itemView' => function ($model, $key, $index, $widget) {
+                ?>
+                <div class="col-md-4">
+                    <table>
+                        <tr>
+                            <th><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
+                        </tr>
+                        <tr>
+                            <td><?= implode(',', $model->generosNombres()) ?></td>
+                        </tr>
+                    </table>
+                </div>
+                <?php
+            }
+        ]) ?>
+    </div>
 
 </div>

@@ -121,11 +121,18 @@ class JuegosController extends Controller
 
         $tieneJuego = Yii::$app->user->isGuest ? false : Usuarios::findOne(Yii::$app->user->id)->tieneJuego($id);
 
+        //Juegos Similares
+        $model = $this->findModel($id);
+        $similaresProvider = new ActiveDataProvider([
+            'query' => $model->similares(),
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'precioMinimo' => $ventaMasBarata ? $ventaMasBarata->precio : null,
             'dataProvider' => $criticasProvider,
             'tieneJuego' => $tieneJuego,
+            'similaresProvider' => $similaresProvider,
         ]);
     }
 
