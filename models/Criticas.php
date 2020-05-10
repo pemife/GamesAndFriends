@@ -95,6 +95,11 @@ class Criticas extends \yii\db\ActiveRecord
         return $this->hasOne(Juegos::className(), ['id' => 'juego_id'])->inverseOf('criticas');
     }
 
+    public function getReportesCriticas()
+    {
+        return $this->hasMany(ReportesCriticas::className(), ['critica_id' => 'id'])->inverseOf('critica');
+    }
+
     public function esCriticaProducto()
     {
         return $this->producto_id != null;
