@@ -865,7 +865,7 @@ class UsuariosController extends Controller
         ]);
 
         return $this->render('listaIgnorados', [
-            'deseadosProvider' => $ignoradosProvider,
+            'ignoradosProvider' => $ignoradosProvider,
             'usuario' => $this->findModel($uId),
         ]);
     }
