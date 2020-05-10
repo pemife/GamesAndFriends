@@ -219,7 +219,8 @@ class JuegosController extends Controller
                 $queryJuegosNuevos->orWhere(['cont_adul' => true]);
             }
             $queryJuegosNuevos
-            ->andWhere(['not in', 'id', Usuarios::findOne(Yii::$app->user->id)->arrayIdJuegosIgnorados()]);
+            ->andWhere(['not in', 'id', Usuarios::findOne(Yii::$app->user->id)->arrayIdJuegosIgnorados()])
+            ->andWhere(['<', 'fechalan', date('Y-m-d')]);
         }
 
 
