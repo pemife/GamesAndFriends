@@ -76,7 +76,7 @@ $this->registerJs($js);
         'model' => $model,
         'attributes' => [
             'desarrollo:ntext',
-            'created_at:RelativeTime',
+            'created_at:RelativeTime:Creado',
             'juego.titulo:text:Juego',
             'usuario.nombre:text:Usuario',
             [

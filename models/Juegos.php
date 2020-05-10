@@ -139,4 +139,41 @@ class Juegos extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Ignorados::className(), ['id' => 'usuario_id'])->viaTable('juegos_ignorados', ['juego_id' => 'id']);
     }
+
+    public function generosId()
+    {
+        $etiquetas = $this->etiquetas;
+        if (!$etiquetas) {
+            return [];
+        }
+
+        foreach ($etiquetas as $genero) {
+            $generosIds[] = $genero->id;
+        }
+
+        return $generosIds;
+    }
+
+    public function generosNombres()
+    {
+        $etiquetas = $this->etiquetas;
+        if (!$etiquetas) {
+            return [];
+        }
+
+        foreach ($etiquetas as $genero) {
+            $generosNombres[] = $genero->nombre;
+        }
+
+        return $generosNombres;
+    }
+
+    public function similares()
+    {
+        return $this->find()
+        ->joinWith('etiquetas')
+        ->where(['in', 'etiqueta_id', $this->generosId()])
+        ->andWhere(['!=', 'juego_id', $this->id])
+        ->limit(4);
+    }
 }

@@ -121,11 +121,18 @@ class JuegosController extends Controller
 
         $tieneJuego = Yii::$app->user->isGuest ? false : Usuarios::findOne(Yii::$app->user->id)->tieneJuego($id);
 
+        //Juegos Similares
+        $model = $this->findModel($id);
+        $similaresProvider = new ActiveDataProvider([
+            'query' => $model->similares(),
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'precioMinimo' => $ventaMasBarata ? $ventaMasBarata->precio : null,
             'dataProvider' => $criticasProvider,
             'tieneJuego' => $tieneJuego,
+            'similaresProvider' => $similaresProvider,
         ]);
     }
 
@@ -215,13 +222,16 @@ class JuegosController extends Controller
         $queryJuegosNuevos = Juegos::find()->where(['cont_adul' => false])->orderBy('fechalan DESC')->limit(10)->offset(0);
 
         if (!Yii::$app->user->isGuest) {
-            if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
-                $queryJuegosNuevos->orWhere(['cont_adul' => true]);
+            $usuario = Usuarios::findOne(Yii::$app->user->identity->id);
+            if (!empty($usuario)) {
+                if ($usuario->esMayorDeEdad()) {
+                    $queryJuegosNuevos->orWhere(['cont_adul' => true]);
+                }
+                $queryJuegosNuevos
+                ->andWhere(['not in', 'id', $usuario->arrayIdJuegosIgnorados()])
+                ->andWhere(['<', 'fechalan', date('Y-m-d')]);
             }
-            $queryJuegosNuevos
-            ->andWhere(['not in', 'id', Usuarios::findOne(Yii::$app->user->id)->arrayIdJuegosIgnorados()]);
         }
-
 
         $juegosProvider = new ActiveDataProvider([
             'query' => $queryJuegosNuevos,

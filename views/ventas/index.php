@@ -33,18 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:RelativeTime:En venta desde',
             [
                 'label' => 'Generos',
-                'value' => function($model){
-                    foreach ($model->copia->juego->etiquetas as $genero) {
-                        $generos[] = $genero->nombre;
-                    }
-
-                    $cadenaGeneros = "";
-
-                    if (!empty($generos)) {
-                        $cadenaGeneros = implode(", ", $generos);
-                    }
-
-                    return $cadenaGeneros;
+                'value' => function ($model) {
+                    return Html::encode(implode(', ', $model->copia->juego->generosNombres()));
                 }
             ],
             'precio',
@@ -52,24 +42,24 @@ $this->params['breadcrumbs'][] = $this->title;
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {update} {delete}',
               'buttons' => [
-                'vermercado' => function ($url, $model, $key){
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                    ['ventas/ventas-item', 'id' => $model->copia->juego->id, 'esProducto' => false],
-                    ['title' => 'ventas de ' . $model->copia->juego->titulo]
-                  );
+                'vermercado' => function ($url, $model, $key) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                        ['ventas/ventas-item', 'id' => $model->copia->juego->id, 'esProducto' => false],
+                        ['title' => 'ventas de ' . $model->copia->juego->titulo]
+                    );
                 },
                 'update' => function ($url, $model, $key){
-                    if(Yii::$app->user->id == $model->vendedor->id) {
+                    if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
-                          '<span class="glyphicon glyphicon-pencil"></span>',
-                          ['ventas/update', 'id' => $model->id],
-                          ['title' => 'Actualizar']
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            ['ventas/update', 'id' => $model->id],
+                            ['title' => 'Actualizar']
                         );
                     }
                 },
                 'delete' => function ($url, $model, $key){
-                    if(Yii::$app->user->id == $model->vendedor->id) {
+                    if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>',
                             ['ventas/delete', 'id' => $model->id],
@@ -104,24 +94,24 @@ $this->params['breadcrumbs'][] = $this->title;
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {update} {delete}',
               'buttons' => [
-                'vermercado' => function ($url, $model, $key){
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                    ['ventas/ventas-item', 'id' => $model->producto->id, 'esProducto' => true],
-                    ['title' => 'ventas de ' . $model->producto->nombre]
-                  );
+                'vermercado' => function ($url, $model, $key) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                        ['ventas/ventas-item', 'id' => $model->producto->id, 'esProducto' => true],
+                        ['title' => 'ventas de ' . $model->producto->nombre]
+                    );
                 },
-                'update' => function ($url, $model, $key){
-                    if(Yii::$app->user->id == $model->vendedor->id) {
+                'update' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
-                          '<span class="glyphicon glyphicon-pencil"></span>',
-                          ['ventas/update', 'id' => $model->id],
-                          ['title' => 'Actualizar']
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            ['ventas/update', 'id' => $model->id],
+                            ['title' => 'Actualizar']
                         );
                     }
                 },
-                'delete' => function ($url, $model, $key){
-                    if(Yii::$app->user->id == $model->vendedor->id) {
+                'delete' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>',
                             ['ventas/delete', 'id' => $model->id],

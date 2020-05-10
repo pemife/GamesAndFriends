@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
+use kartik\rating\StarRating as RatingStarRating;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Productos */
@@ -72,7 +73,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'usuario.nombre',
             'opinion',
-            'valoracion',
+            [
+                'attribute' => 'valoracion',
+                'format' => 'raw',
+                'value' => function ($model) {
+                  return RatingStarRating::widget([
+                    'name' => 'rating_35',
+                    'value' => $model->valoracion,
+                    'pluginOptions' => [
+                      'displayOnly' => true,
+                      'size' => 'm',
+                      'showCaption' => false,
+                    ]
+                  ]);
+                }
+              ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',

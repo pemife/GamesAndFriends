@@ -67,7 +67,7 @@ CREATE TABLE criticas
   , last_update   DATE              NOT NULL
                                     DEFAULT CURRENT_TIMESTAMP
   , valoracion    NUMERIC(1)        NOT NULL
-                                    CHECK (valoracion >= 0)
+                                    CHECK (valoracion > 0 AND valoracion <6)
   , usuario_id    BIGINT            NOT NULL
                                     REFERENCES usuarios(id)
                                     ON DELETE CASCADE
