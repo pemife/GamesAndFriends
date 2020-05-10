@@ -106,7 +106,7 @@ class ProductosController extends Controller
      */
     public function actionView($id)
     {
-        $criticasQuery = Criticas::find()->where(['producto_id' => $id]);
+        $criticasQuery = Criticas::find()->joinWith('usuario')->where(['producto_id' => $id]);
 
         $criticasProvider = new ActiveDataProvider([
             'query' => $criticasQuery,
@@ -114,6 +114,11 @@ class ProductosController extends Controller
               'pagesize' => 10,
             ],
         ]);
+
+        $criticasProvider->sort->attributes['usuario.nombre'] = [
+            'asc' => ['usuarios.nombre' => SORT_ASC],
+            'desc' => ['usuarios.nombre' => SORT_DESC],
+        ];
 
         $tieneProducto = Yii::$app->user->isGuest ? false : Usuarios::findOne(Yii::$app->user->id)->tieneProducto($id);
 
