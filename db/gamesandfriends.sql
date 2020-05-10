@@ -281,6 +281,20 @@ CREATE TABLE reportes_comentarios
   , PRIMARY KEY(usuario_id, comentario_id)
 );
 
+DROP TABLE IF EXISTS reportes_criticas CASCADE;
+
+CREATE TABLE reportes_criticas
+(
+    usuario_id      BIGINT      REFERENCES usuarios(id)
+                                ON DELETE NO ACTION
+                                ON UPDATE CASCADE
+  , critica_id   BIGINT         REFERENCES criticas(id)
+                                ON DELETE NO ACTION
+                                ON UPDATE CASCADE
+  , razon       TEXT
+  , PRIMARY KEY(usuario_id, critica_id)
+);
+
 DROP TABLE IF EXISTS juegos_ignorados CASCADE;
 
 CREATE TABLE juegos_ignorados

@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'last_update:Date',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                'template' => '{update} {delete} {reportar}',
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
                         if (Yii::$app->user->id != $model->usuario->id) {
@@ -155,6 +155,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'title' => 'borrar crítica',
                             ]
                         );
+                    },
+                    'reportar' => function ($url, $model, $action) {
+                        if (Yii::$app->user->isGuest) {
+                            return '';
+                        };
+                        
+                        return Html::a('', ['criticas/reportar', 'cId' => $model->id], [
+                            'class' => 'glyphicon glyphicon-fire',
+                            'title' => 'Reportar critica',
+                            'style' => [
+                                'color' => 'red',
+                            ],
+                            'data-confirm' => '¿Confirmas querer reportar la crítica?',
+                        ]);
                     }
                 ]
             ],

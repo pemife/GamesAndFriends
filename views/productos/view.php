@@ -90,41 +90,55 @@ $this->params['breadcrumbs'][] = $this->title;
               ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                'template' => '{update} {delete} {reportar}',
                 'buttons' => [
-                    'update' => function ($url, $model, $key){
-                        if(Yii::$app->user->id != $model->usuario->id){
-                          return "";
+                    'update' => function ($url, $model, $key) {
+                        if (Yii::$app->user->id != $model->usuario->id) {
+                            return "";
                         }
                         return Html::a(
-                          '<span class="glyphicon glyphicon-pencil"></span>',
-                          [
-                              '/criticas/update',
-                              'id' => $model->id,
-                          ],
-                          [
-                              'title' => 'editar crítica',
-                          ]
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            [
+                                '/criticas/update',
+                                'id' => $model->id,
+                            ],
+                            [
+                                'title' => 'editar crítica',
+                            ]
                         );
                     },
                     'delete' => function ($url, $model, $key){
-                        if(Yii::$app->user->id != $model->usuario->id){
-                          return "";
+                        if (Yii::$app->user->id != $model->usuario->id) {
+                            return '';
                         }
                         return Html::a(
-                          '<span class="glyphicon glyphicon-trash"></span>',
-                          [
-                              'criticas/delete',
-                              'id' => $model->id,
-                          ],
-                          [
-                              'data' => [
-                                'method' => 'post',
-                                'confirm' => '¿Estas seguro de borrar la crítica?(Esta accion no se puede deshacer)',
-                              ],
-                              'title' => 'borrar crítica',
-                          ]
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            [
+                                'criticas/delete',
+                                'id' => $model->id,
+                            ],
+                            [
+                                'data' => [
+                                  'method' => 'post',
+                                  'confirm' => '¿Estas seguro de borrar la crítica?(Esta accion no se puede deshacer)',
+                                ],
+                                'title' => 'borrar crítica',
+                            ]
                         );
+                    },
+                    'reportar' => function ($url, $model, $action) {
+                        if (Yii::$app->user->isGuest) {
+                            return '';
+                        };
+                        
+                        return Html::a('', ['criticas/reportar', 'cId' => $model->id], [
+                            'class' => 'glyphicon glyphicon-fire',
+                            'title' => 'Reportar critica',
+                            'style' => [
+                                'color' => 'red',
+                            ],
+                            'data-confirm' => '¿Confirmas querer reportar la crítica?',
+                        ]);
                     }
                 ]
             ],

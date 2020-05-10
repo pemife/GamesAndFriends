@@ -4,10 +4,12 @@ namespace app\controllers;
 
 use app\models\Criticas;
 use app\models\Productos;
+use app\models\ReportesCriticas;
 use app\models\Usuarios;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -49,6 +51,28 @@ class CriticasController extends Controller
                             return false;
                         },
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['critica-producto'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'No puedes hacer una reseña sin iniciar sesion!');
+                                return false;
+                            }
+
+                            $producto_id = Yii::$app->request->queryParams['producto_id'];
+                    
+                            if (Criticas::find()->where(['usuario_id' => Yii::$app->user->id, 'producto_id' => $producto_id])->exists()) {
+                                Yii::$app->session->setFlash('error', 'Ya has hecho una reseña de ese producto');
+                                return false;
+                            }
+                    
+                            if (!Usuarios::findOne(Yii::$app->user->id)->tieneProducto($producto_id)) {
+                                Yii::$app->session->setFlash('error', 'No puedes hacer una reseña de un producto que no tienes');
+                                return false;
+                            }
+                        }
+                    ],
                 ],
             ],
         ];
@@ -79,7 +103,7 @@ class CriticasController extends Controller
     {
         if (Yii::$app->user->isGuest) {
             Yii::$app->session->setFlash('error', 'No puedes hacer una reseña sin iniciar sesion!');
-            return $this->redirect(['productos/view', 'id' => $producto_id]);
+            return $this->redirect(['site/login']);
         }
 
         $model = new Criticas();
@@ -145,23 +169,35 @@ class CriticasController extends Controller
         return $this->redirect($url);
     }
 
+    public function actionReportar($cId)
+    {
+        $reporte = ReportesCriticas::find()->where(['critica_id' => $cId, 'usuario_id' => Yii::$app->user->id])->exists();
+        $url = Url::to(
+            $this->findModel($cId)->juego ? 'juegos/view' : 'productos/view',
+            ['id' => $this->findModel($cId)->juego ? $this->findModel($cId)->juego->id : $this->findModel($cId)->producto->id]
+        );
+
+        if ($reporte) {
+            Yii::$app->session->setFlash('error', 'Ya has reportado esa critica');
+            return $this->redirect($url);
+        }
+
+        $reporte = new ReportesCriticas([
+            'usuario_id' => Yii::$app->user->id,
+            'critica_id' => $cId,
+        ]);
+
+        if ($reporte->save()) {
+            Yii::$app->session->setFlash('success', 'Has mandado un reporte correctamente');
+            return $this->redirect($url);
+        }
+
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al procesar el reporte');
+        return $this->redirect($url);
+    }
+
     public function actionCriticaProducto($producto_id)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña sin iniciar sesion!');
-            return $this->redirect(['productos/view', 'id' => $producto_id]);
-        }
-
-        if (Criticas::find()->where(['usuario_id' => Yii::$app->user->id, 'producto_id' => $producto_id])->one()) {
-            Yii::$app->session->setFlash('error', 'Ya has hecho una reseña de ese producto');
-            return $this->redirect(['productos/view', 'id' => $producto_id]);
-        }
-
-        if (!Usuarios::findOne(Yii::$app->user->id)->tieneProducto($producto_id)) {
-            Yii::$app->session->setFlash('error', 'No puedes hacer una reseña de un producto que no tienes');
-            return $this->redirect(['productos/view', 'id' => $producto_id]);
-        }
-
         $model = new Criticas();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
