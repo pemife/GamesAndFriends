@@ -78,7 +78,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'dev',
             'publ',
             'cont_adul:boolean',
-            'edad_minima'
+            'edad_minima',
+            [
+                'attribute' => 'etiquetas',
+                'label' => 'Generos',
+                'value' => Html::encode(implode(', ', $model->generosNombres())),
+            ]
         ],
     ]) ?>
 
@@ -166,12 +171,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'itemView' => function ($model, $key, $index, $widget) {
                 ?>
                 <div class="col-md-4">
-                    <table>
+                    <table class="border">
                         <tr>
-                            <th><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
+                            <th class="border-bottom"><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
                         </tr>
                         <tr>
-                            <td><?= implode(',', $model->generosNombres()) ?></td>
+                            <td><?= Html::encode(implode(', ', $model->generosNombres())) ?></td>
                         </tr>
                     </table>
                 </div>
