@@ -2,13 +2,12 @@
 // use yii\helpers\Html;
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\ListView;
 
 $this->title = 'Lista de juegos ignorados';
 ?>
 
-<h1>Lista de Deseos de <?= $usuario->nombre ?></h1>
+<h1>Lista de ignorados de <?= $usuario->nombre ?></h1>
 
 <div id="listaJuegos">
 
