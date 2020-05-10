@@ -110,7 +110,7 @@ class JuegosController extends Controller
         ->orderBy('precio')
         ->one();
 
-        $criticasQuery = Criticas::find()->where(['juego_id' => $id]);
+        $criticasQuery = Criticas::find()->joinWith('usuario')->where(['juego_id' => $id]);
 
         $criticasProvider = new ActiveDataProvider([
             'query' => $criticasQuery,
@@ -118,6 +118,11 @@ class JuegosController extends Controller
               'pagesize' => 10,
             ],
         ]);
+
+        $criticasProvider->sort->attributes['usuario.nombre'] = [
+            'asc' => ['usuarios.nombre' => SORT_ASC],
+            'desc' => ['usuarios.nombre' => SORT_DESC],
+        ];
 
         $tieneJuego = Yii::$app->user->isGuest ? false : Usuarios::findOne(Yii::$app->user->id)->tieneJuego($id);
 
