@@ -25,13 +25,46 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             'titulo',
-            'created_at:RelativeTime',
+            'juego.titulo:text:Juego',
             'usuario.nombre:text:Usuario',
-            'desarrollo:ntext',
+            'created_at:RelativeTime',
+            // 'desarrollo:ntext',
             // 'media',
-            //'juego_id',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'update' => function ($url, $model, $key) {
+                        if (Yii::$app->user->isGuest || Yii::$app->user->id != $model->usuario->id) {
+                            return '';
+                        }
+                        return Html::a('', ['update', 'id' => $model->id], [
+                            'class' => 'glyphicon glyphicon-pencil',
+                            'title' => 'Editar post',
+                            'style' => [
+                                'color' => 'red',
+                            ],
+                        ]);
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        if (Yii::$app->user->isGuest || Yii::$app->user->id != $model->usuario->id) {
+                            return '';
+                        }
+                        return Html::a('', ['delete', 'id' => $model->id], [
+                            'class' => 'glyphicon glyphicon-trash',
+                            'title' => 'Borrar post',
+                            'style' => [
+                                'color' => 'red',
+                            ],
+                            'data' => [
+                                'confirm' => 'Seguro que quieres borrar el post?',
+                                'method' => 'POST',
+                            ],
+                        ]);
+                    }
+                ]
+            ],
         ],
     ]); ?>
 

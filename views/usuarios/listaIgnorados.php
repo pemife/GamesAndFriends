@@ -36,7 +36,7 @@ $this->title = 'Lista de juegos ignorados';
                         [
                             'class' => 'glyphicon glyphicon-shopping-cart',
                             'title' => 'ver en mercado',
-                            ]
+                        ]
                     ) ?>
                 <?php
                 if ($model->usuario->id == Yii::$app->user->id) {
