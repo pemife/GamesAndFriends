@@ -4,6 +4,7 @@ use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use kartik\rating\StarRating as RatingStarRating;
+use yii\bootstrap4\Modal;
 use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
@@ -13,6 +14,31 @@ $this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Juegos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
+// Valor falso para javascript
+$usuarioHaCriticado = 0;
+if (!Yii::$app->user->isGuest) {
+    if ($tieneJuego) {
+        foreach ($criticasProvider->getModels() as $critica) {
+            if ($critica->usuario->id == Yii::$app->user->id) {
+                $usuarioHaCriticado = true;
+                break;
+            }
+        }
+    }
+}
+
+$js = <<<SCRIPT
+$(function() {
+    if (!$usuarioHaCriticado) {
+        setTimeout(function() {
+            $('#modalCritica').modal('show');
+        }, 3000);
+    }
+});
+SCRIPT;
+
+$this->registerJs($js);
 ?>
 <div class="juegos-view">
 
@@ -98,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $criticasProvider,
         'columns' => [
             'usuario.nombre',
             'opinion',
@@ -108,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'value' => function ($model) {
                 return RatingStarRating::widget([
                   'name' => 'rating_35',
-                  'value' => $model->valoracion,
+                  'value' => Html::encode($model->valoracion),
                   'pluginOptions' => [
                     'displayOnly' => true,
                     'size' => 'm',
@@ -156,6 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         );
                     },
+                    // https://www.w3schools.com/bootstrap/bootstrap_modal.asp
                     'reportar' => function ($url, $model, $action) {
                         if (Yii::$app->user->isGuest) {
                             return '';
@@ -198,5 +225,21 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         ]) ?>
     </div>
+
+    <?php
+    Modal::begin([
+        'id' => 'modalCritica',
+    ]);
+    ?>
+
+        <div id="contenidoModal">
+            <p>No has hecho una critica de este juego; ¿Te gustaria hacerla ahora?</p>
+            <br>
+            <?= Html::a('Crear crítica', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']) ?>
+        </div>
+
+    <?php
+    Modal::end();
+    ?>
 
 </div>

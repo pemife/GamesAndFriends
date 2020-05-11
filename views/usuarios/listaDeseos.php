@@ -22,7 +22,8 @@ $(function(){
     var contador = 1;
     var botonPrimeraVez = true;
     
-    $('#botonOrdenar').click(function (){
+    $('#botonOrdenar').click(function (e){
+        e.preventDefault();
         $('#listaJuegos').toggle();
         $('#tablasOrden').toggle();
         $('#botonGuardar').toggle();
@@ -33,6 +34,7 @@ $(function(){
     });
 
     $('.botonOrden').click(function (e){
+        e.preventDefault();
         // console.log(e.currentTarget.parentElement.parentElement);
         var jId = e.currentTarget.parentElement.parentElement.dataset.juegoid;
         var jOr = e.currentTarget.parentElement.parentElement.dataset.juegoorden;
@@ -48,11 +50,8 @@ $(function(){
         e.currentTarget.parentElement.parentElement.style.display = "none";
     });
 
-    $('#botonGuardar').click(function (){
-        // var nuevoOrdenRetocado = new Set(nuevoOrden);
-        // nuevoOrdenRetocado.delete(null);
-        // nuevoOrden = Array.from(nuevoOrdenRetocado);
-        // console.log(nuevoOrden);
+    $('#botonGuardar').click(function (e){
+        e.preventDefault();
         if (nuevoOrden.length != $totalJuegos+1) {
             alert('Primero ordena la lista completa!');
         } else {
@@ -80,7 +79,7 @@ $this->registerJS($js);
 
 <h1>Lista de Deseos de <?= $usuario->nombre ?></h1>
 
-<?= Html::a('Ordenar Lista', '#', ['class' => 'btn btn-info', 'id' => 'botonOrdenar']) ?>
+<?= Html::a('Ordenar Lista', '#', ['class' => 'btn btn-info', 'id' => 'botonOrdenar', 'hidden' => (Yii::$app->user->id == $uId)]) ?>
 <?= Html::a('Guardar Lista', '#', ['class' => 'btn btn-success ml-2', 'id' => 'botonGuardar']) ?>
 
 <div id="tablasOrden" class="row mt-2 mb-2">

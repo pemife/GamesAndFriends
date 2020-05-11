@@ -21,6 +21,7 @@ $pId = $model->id;
 $js = <<<SCRIPT
 $("#botonVoto").click(votar);
 function votar(e){
+  e.preventDefault();
   $.ajax({
     method: 'POST',
     url: '$url',

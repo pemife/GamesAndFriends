@@ -40,6 +40,7 @@ $('document').ready(function(){
 
 var esAmigo = $puedeVerAmigosJS;
 $('#botonAmistad').click(function(e){
+  e.preventDefault();
   let mensaje = esAmigo ? "¿Estas seguro de borrar como amigo?" : "¿Estas seguro de añadir como amigo?";
   if(confirm(mensaje)){
     actualizarLista();
@@ -49,6 +50,7 @@ $('#botonAmistad').click(function(e){
 });
 
 $('#botonBloqueados').click(function(e){
+  e.preventDefault();
   actualizarListaBloqueados();
   $('#bloqueadosAjax').show();
 });

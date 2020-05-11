@@ -275,7 +275,7 @@ CREATE TABLE reportes_comentarios
                                 ON DELETE NO ACTION
                                 ON UPDATE CASCADE
   , comentario_id   BIGINT      REFERENCES comentarios(id)
-                                ON DELETE NO ACTION
+                                ON DELETE CASCADE
                                 ON UPDATE CASCADE
   , razon       TEXT
   , PRIMARY KEY(usuario_id, comentario_id)
@@ -289,7 +289,7 @@ CREATE TABLE reportes_criticas
                                 ON DELETE NO ACTION
                                 ON UPDATE CASCADE
   , critica_id   BIGINT         REFERENCES criticas(id)
-                                ON DELETE NO ACTION
+                                ON DELETE CASCADE
                                 ON UPDATE CASCADE
   , razon       TEXT
   , PRIMARY KEY(usuario_id, critica_id)
