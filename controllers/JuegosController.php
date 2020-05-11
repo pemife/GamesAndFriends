@@ -59,6 +59,14 @@ class JuegosController extends Controller
                                 }
                                 return false;
                             }
+
+                            if (!Yii::$app->user->isGuest) {
+                                if ($model->edad_minima > (date_diff(date('Y-m-d'), Usuarios::findOne(Yii::$app->user->id)->fechanac))) {
+                                    Yii::$app->session->setFlash('error', '¡Tu edad no cumple con los criterios para ver este juego!');
+                                    return false;
+                                }
+                            }
+                            
                             return true;
                         },
                     ],

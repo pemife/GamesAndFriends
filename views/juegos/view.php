@@ -15,8 +15,10 @@ $this->params['breadcrumbs'][] = ['label' => 'Juegos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-// Valor falso para javascript
+// Valores falsos para javascript
 $usuarioHaCriticado = 0;
+$tieneJuegoJs = $tieneJuego ? true : 0;
+
 if (!Yii::$app->user->isGuest) {
     if ($tieneJuego) {
         foreach ($criticasProvider->getModels() as $critica) {
@@ -30,7 +32,7 @@ if (!Yii::$app->user->isGuest) {
 
 $js = <<<SCRIPT
 $(function() {
-    if (!$usuarioHaCriticado) {
+    if ($tieneJuegoJs && !$usuarioHaCriticado) {
         setTimeout(function() {
             $('#modalCritica').modal('show');
         }, 3000);

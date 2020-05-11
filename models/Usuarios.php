@@ -306,7 +306,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     
     public function esMayorDeEdad()
     {
-        return $prueba = $this->fechanac < (date('Y-m-d', strtotime('- 18 years')));
+        return ($this->fechanac < (date('Y-m-d', strtotime('- 18 years'))));
     }
     
     public function esVerificado()
