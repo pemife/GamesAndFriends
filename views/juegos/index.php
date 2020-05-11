@@ -85,48 +85,48 @@ $this->registerJs($js);
               'template' => '{view} {vermercado} {anadirDeseos} {ignorar}',
               'buttons' => [
                 'vermercado' => function ($url, $model, $key) {
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
-                    ['title' => 'ver en mercado']
-                  );
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                        ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
+                        ['title' => 'ver en mercado']
+                    );
                 },
                 'anadirDeseos' => function ($url, $model, $key) {
-                  if (Yii::$app->user->isGuest) {
-                    return '';
-                  }
+                    if (Yii::$app->user->isGuest) {
+                        return '';
+                    }
 
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-heart"></span>',
-                    '#',
-                    [
-                      'title' => 'añadir a tu lista de deseos',
-                      'name' => 'botonDeseos',
-                      'data' => [
-                        'modelId' => $model->id,
-                      ]
-                    ]
-                  );
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-heart"></span>',
+                        '#',
+                        [
+                          'title' => 'añadir a tu lista de deseos',
+                          'name' => 'botonDeseos',
+                          'data' => [
+                            'modelId' => $model->id,
+                          ]
+                        ]
+                    );
                 },
                 'ignorar' => function ($url, $model, $key) {
-                  if (Yii::$app->user->isGuest) {
-                    return '';
-                  }
+                    if (Yii::$app->user->isGuest) {
+                        return '';
+                    }
 
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-warning-sign"></span>',
-                    '#',
-                    [
-                      'title' => 'Ignorar juego',
-                      'name' => 'botonIgnorados',
-                      'style' => [
-                          'color' => 'red',
-                      ],
-                      'data' => [
-                        'modelId' => $model->id,
-                      ]
-                    ]
-                  );
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-warning-sign"></span>',
+                        '#',
+                        [
+                          'title' => 'Ignorar juego',
+                          'name' => 'botonIgnorados',
+                          'style' => [
+                              'color' => 'red',
+                          ],
+                          'data' => [
+                            'modelId' => $model->id,
+                          ]
+                        ]
+                    );
                 },
               ],
             ],
