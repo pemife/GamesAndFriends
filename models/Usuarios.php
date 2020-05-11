@@ -436,4 +436,17 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         
         return [];
     }
+
+    public function getGenerosPreferencia()
+    {
+        foreach ($this->etiquetas as $genero) {
+            $generos[] = $genero->nombre;
+        }
+
+        if (!empty($generos)) {
+            return $generos;
+        }
+
+        return [];
+    }
 }
