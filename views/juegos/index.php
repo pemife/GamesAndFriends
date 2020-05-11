@@ -22,6 +22,7 @@ $(document).ready(function(){
 });
 $("[name='botonDeseos']").click(anadirDeseos);
 function anadirDeseos(e){
+  e.preventDefault();
   console.log(this.dataset.modelid);
   $.ajax({
     method: 'GET',
@@ -38,6 +39,7 @@ function anadirDeseos(e){
 }
 $("[name='botonIgnorados']").click(anadirIgnorados);
 function anadirIgnorados(e){
+  e.preventDefault();
   console.log(this.dataset.modelid);
   $.ajax({
     method: 'GET',

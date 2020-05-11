@@ -13,6 +13,46 @@ $this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Juegos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
+$usuarioHaCriticado = false;
+if (!Yii::$app->user->isGuest) {
+    foreach ($criticasProvider->getModels() as $critica) {
+        if ($critica->usuario->id == Yii::$app->user->id) {
+            $usuarioHaCriticado = true;
+            break;
+        }
+    }
+}
+
+$js = <<<SCRIPT
+$(function() {
+    $('.popup-modal').click(function(e) {
+        e.preventDefault();
+        var modal = $('#modal-delete').modal('show');
+        modal.find('.modal-body').load($('.modal-dialog'));
+        var that = $(this);
+        //var id = that.data('id');
+        //var name = that.data('name');
+        var url = that.data('url');
+        //modal.find('.modal-title').text('Eliminar el item \"' + name + '\"');
+        modal.find('.modal-title').text('¿Está seguro?');
+
+        document.getElementById("delete-confirm").href=url;
+
+        $('#delete-confirm').click(function(e) {
+            e.preventDefault();
+            window.location = url;
+        });
+
+
+        $('#cancel-confirm').click(function(e) {
+            e.preventDefault();
+            this.hide();
+        });
+
+    });
+});
+SCRIPT;
 ?>
 <div class="juegos-view">
 
@@ -98,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $criticasProvider,
         'columns' => [
             'usuario.nombre',
             'opinion',

@@ -70,6 +70,7 @@ function showDivs(n) {
 }
 $("[name='botonDeseos']").click(anadirDeseos);
 function anadirDeseos(e){
+  e.preventDefault();
   console.log(this.dataset.modelid);
   $.ajax({
     method: 'GET',

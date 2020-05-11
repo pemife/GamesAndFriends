@@ -135,7 +135,7 @@ class JuegosController extends Controller
         return $this->render('view', [
             'model' => $model,
             'precioMinimo' => $ventaMasBarata ? $ventaMasBarata->precio : null,
-            'dataProvider' => $criticasProvider,
+            'criticasProvider' => $criticasProvider,
             'tieneJuego' => $tieneJuego,
             'similaresProvider' => $similaresProvider,
         ]);
