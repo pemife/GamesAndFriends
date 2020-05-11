@@ -101,13 +101,13 @@ $this->registerJS($js);
             foreach ($juegosProvider->getModels() as $juego) : ?>
                 <h3 class="nombresJuegos"><?= Html::encode($juego->titulo) ?></h3>
                 <?= Html::a(
-                        Html::img(
-                            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Video-Game-Controller-Icon-D-Edit.svg/480px-Video-Game-Controller-Icon-D-Edit.svg.png',
-                            ['class' => 'imagenesJuegos'],
-                            ['style' => 'width:30%']
-                        ),
-                        ['juegos/view', 'id' => $juego->id]
-                    ) ?>
+                    Html::img(
+                        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Video-Game-Controller-Icon-D-Edit.svg/480px-Video-Game-Controller-Icon-D-Edit.svg.png',
+                        ['class' => 'imagenesJuegos'],
+                        ['style' => 'width:30%']
+                    ),
+                    ['juegos/view', 'id' => $juego->id]
+                ) ?>
 
             <?php endforeach; ?>
             <!-- <img class="imagenesJuegos" src="imagenJuego.jpg" style="width:30%"> -->
@@ -140,32 +140,79 @@ $this->registerJS($js);
               'template' => '{view} {vermercado} {anadirDeseos}',
               'buttons' => [
                 'vermercado' => function ($url, $model, $key){
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
-                    ['title' => 'ver en mercado']
-                  );
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                        ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
+                        ['title' => 'ver en mercado']
+                    );
                 },
                 'anadirDeseos' => function ($url, $model, $key) {
-                  if (Yii::$app->user->isGuest) {
-                    return '';
-                  }
+                    if (Yii::$app->user->isGuest) {
+                        return '';
+                    }
 
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-heart"></span>',
-                    '#',
-                    [
-                      'title' => 'añadir a tu lista de deseos',
-                      'name' => 'botonDeseos',
-                      'data' => [
-                        'modelId' => $model->id,
-                      ]
-                    ]
-                  );
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-heart"></span>',
+                        '#',
+                        [
+                          'title' => 'añadir a tu lista de deseos',
+                          'name' => 'botonDeseos',
+                          'data' => [
+                            'modelId' => $model->id,
+                          ]
+                        ]
+                    );
                 },
               ],
             ],
         ],
     ]); ?>
+
+<?php
+
+if (!Yii::$app->user->isGuest) {
+    echo GridView::widget([
+            'dataProvider' => $recomendacionesProvider,
+            'columns' => [
+                'titulo',
+                'fechalan:date',
+                'dev',
+                'publ',
+                [
+                  'class' => 'yii\grid\ActionColumn',
+                  'template' => '{view} {vermercado} {anadirDeseos}',
+                  'buttons' => [
+                    'vermercado' => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                            ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
+                            ['title' => 'ver en mercado']
+                        );
+                    },
+                    'anadirDeseos' => function ($url, $model, $key) {
+                        if (Yii::$app->user->isGuest) {
+                            return '';
+                        }
+    
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-heart"></span>',
+                            '#',
+                            [
+                              'title' => 'añadir a tu lista de deseos',
+                              'name' => 'botonDeseos',
+                              'data' => [
+                                'modelId' => $model->id,
+                              ]
+                            ]
+                        );
+                    },
+                  ],
+                ],
+            ],
+      ]);
+
+}
+
+?>
 
 </div>

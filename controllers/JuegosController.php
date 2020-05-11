@@ -79,11 +79,12 @@ class JuegosController extends Controller
         $query = Juegos::find()->where(['cont_adul' => false]);
 
         if (!Yii::$app->user->isGuest) {
-            if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
-                $query = Juegos::find();
+            $usuario = Usuarios::findOne(Yii::$app->user->id);
+            if ($usuario->esMayorDeEdad()) {
+                $query->orWhere(['cont_adul' => true]);
             }
             $query
-            ->andWhere(['not in', 'id', Usuarios::findOne(Yii::$app->user->id)->arrayIdJuegosIgnorados()]);
+            ->andWhere(['not in', 'id', $usuario->arrayIdJuegosIgnorados()]);
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -225,15 +226,26 @@ class JuegosController extends Controller
     {
         $searchModel = new JuegosSearch();
         $queryJuegosNuevos = Juegos::find()->where(['cont_adul' => false])->orderBy('fechalan DESC')->limit(10)->offset(0);
+        $queryRecomendaciones = Juegos::find()->where(['cont_adul' => false])->orderBy('fechalan DESC')->limit(10)->offset(0);
 
         if (!Yii::$app->user->isGuest) {
             $usuario = Usuarios::findOne(Yii::$app->user->identity->id);
+
+            $queryRecomendaciones = Juegos::find()
+            ->joinWith('etiquetas')
+            ->where(['in', 'nombre', $usuario->generosPreferencia])
+            ->andWhere(['cont_adul' => true]);
+
             if (!empty($usuario)) {
                 if ($usuario->esMayorDeEdad()) {
                     $queryJuegosNuevos->orWhere(['cont_adul' => true]);
+                    $queryRecomendaciones->orWhere(['cont_adul' => true]);
                 }
                 $queryJuegosNuevos
                 ->andWhere(['not in', 'id', $usuario->arrayIdJuegosIgnorados()])
+                ->andWhere(['<', 'fechalan', date('Y-m-d')]);
+                $queryRecomendaciones
+                ->andWhere(['not in', 'juegos.id', $usuario->arrayIdJuegosIgnorados()])
                 ->andWhere(['<', 'fechalan', date('Y-m-d')]);
             }
         }
@@ -243,8 +255,13 @@ class JuegosController extends Controller
             'pagination' => false,
         ]);
 
+        $recomendacionesProvider = new ActiveDataProvider([
+            'query' => $queryRecomendaciones,
+        ]);
+
         return $this->render('novedades', [
             'juegosProvider' => $juegosProvider,
+            'recomendacionesProvider' => $recomendacionesProvider,
         ]);
     }
 
