@@ -4,6 +4,7 @@ use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use kartik\rating\StarRating as RatingStarRating;
+use yii\bootstrap4\Modal;
 use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
@@ -14,45 +15,30 @@ $this->params['breadcrumbs'][] = ['label' => 'Juegos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-$usuarioHaCriticado = false;
+// Valor falso para javascript
+$usuarioHaCriticado = 0;
 if (!Yii::$app->user->isGuest) {
-    foreach ($criticasProvider->getModels() as $critica) {
-        if ($critica->usuario->id == Yii::$app->user->id) {
-            $usuarioHaCriticado = true;
-            break;
+    if ($tieneJuego) {
+        foreach ($criticasProvider->getModels() as $critica) {
+            if ($critica->usuario->id == Yii::$app->user->id) {
+                $usuarioHaCriticado = true;
+                break;
+            }
         }
     }
 }
 
 $js = <<<SCRIPT
 $(function() {
-    $('.popup-modal').click(function(e) {
-        e.preventDefault();
-        var modal = $('#modal-delete').modal('show');
-        modal.find('.modal-body').load($('.modal-dialog'));
-        var that = $(this);
-        //var id = that.data('id');
-        //var name = that.data('name');
-        var url = that.data('url');
-        //modal.find('.modal-title').text('Eliminar el item \"' + name + '\"');
-        modal.find('.modal-title').text('¿Está seguro?');
-
-        document.getElementById("delete-confirm").href=url;
-
-        $('#delete-confirm').click(function(e) {
-            e.preventDefault();
-            window.location = url;
-        });
-
-
-        $('#cancel-confirm').click(function(e) {
-            e.preventDefault();
-            this.hide();
-        });
-
-    });
+    if (!$usuarioHaCriticado) {
+        setTimeout(function() {
+            $('#modalCritica').modal('show');
+        }, 3000);
+    }
 });
 SCRIPT;
+
+$this->registerJs($js);
 ?>
 <div class="juegos-view">
 
@@ -148,7 +134,7 @@ SCRIPT;
               'value' => function ($model) {
                 return RatingStarRating::widget([
                   'name' => 'rating_35',
-                  'value' => $model->valoracion,
+                  'value' => Html::encode($model->valoracion),
                   'pluginOptions' => [
                     'displayOnly' => true,
                     'size' => 'm',
@@ -196,6 +182,7 @@ SCRIPT;
                             ]
                         );
                     },
+                    // https://www.w3schools.com/bootstrap/bootstrap_modal.asp
                     'reportar' => function ($url, $model, $action) {
                         if (Yii::$app->user->isGuest) {
                             return '';
@@ -238,5 +225,21 @@ SCRIPT;
             }
         ]) ?>
     </div>
+
+    <?php
+    Modal::begin([
+        'id' => 'modalCritica',
+    ]);
+    ?>
+
+        <div id="contenidoModal">
+            <p>No has hecho una critica de este juego; ¿Te gustaria hacerla ahora?</p>
+            <br>
+            <?= Html::a('Crear crítica', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']) ?>
+        </div>
+
+    <?php
+    Modal::end();
+    ?>
 
 </div>
