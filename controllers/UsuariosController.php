@@ -410,10 +410,12 @@ class UsuariosController extends Controller
      */
     public function actionIndex()
     {
-        $IdsUsuariosBloqueados = $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true);
+        $usuario = $this->findModel(Yii::$app->user->id);
+
+        $IdsUsuariosBloqueados = $usuario->arrayUsuariosBloqueados(true);
         if ($IdsUsuariosBloqueados) {
             $query = Usuarios::find()
-            ->where(['not in', 'id', $this->findModel(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
+            ->where(['not in', 'id', $usuario->arrayUsuariosBloqueados(true)]);
         }
         $query = Usuarios::find();
 

@@ -162,24 +162,24 @@ $this->registerJs($js);
                             ]) ?>
                     </li>
                     <li>
-                        <?= Html::a('Ver lista deseos', ['ver-lista-deseos', 'uId' => $model->id], [
+                        <?= Html::a('Juegos deseados', ['ver-lista-deseos', 'uId' => $model->id], [
                             'class' => 'btn btn-link',
                         ]) ?>
                     </li>
                     <li>
-                        <?= Html::a('Ver lista ignorados', ['ver-lista-ignorados', 'uId' => $model->id], [
+                        <?= Html::a('Juegos ignorados', ['ver-lista-ignorados', 'uId' => $model->id], [
                             'class' => 'btn btn-link',
                         ]) ?>
                     </li>
                     <li>
-                      <?= Html::a('Cambiar contraseña', $enlacePass, [
-                        'class' => 'btn btn-link',
-                        'disabled' => !$puedeModificar,
-                        'data-method' => 'POST',
-                        'data-params' => [
-                          'tokenUsuario' => $model->token,
-                        ],
-                        ]) ?>
+                        <?= Html::a('Cambiar contraseña', $enlacePass, [
+                          'class' => 'btn btn-link',
+                          'disabled' => !$puedeModificar,
+                          'data-method' => 'POST',
+                          'data-params' => [
+                            'tokenUsuario' => $model->token,
+                          ],
+                          ]) ?>
                     </li>
                     <li>
                         <?= Html::a('Verificar cuenta',
@@ -250,7 +250,7 @@ $this->registerJs($js);
                 echo Html::a('Bloquear usuario', ['bloquear-usuario', 'usuarioId' => $model->id], ['class' => 'btn btn-danger']);
             }
             if ($model->esAmigo(Yii::$app->user->id)) {
-              echo Html::a('Ver lista deseos', ['ver-lista-deseos', 'uId' => $model->id], ['class' => 'btn btn-info ml-2']);
+                echo Html::a('Ver lista deseos', ['ver-lista-deseos', 'uId' => $model->id], ['class' => 'btn btn-info ml-2']);
             }
             ?>
       </div>
