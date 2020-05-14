@@ -178,19 +178,19 @@ class VentasController extends Controller
             'copia_id' => null,
         ]);
 
+        $usuario = Usuarios::findOne(Yii::$app->user->id);
+
         // Si el usuario es menor de edad, no muestra los juegos de contenido adulto
         if (!Yii::$app->user->isGuest) {
-            if (!Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
+            if (!$usuario->esMayorDeEdad()) {
                 $queryCopias->joinWith('copia.juego')->andWhere(['cont_adul' => false]);
             }
-        }
 
-        if (!Yii::$app->user->isGuest) {
             $queryCopias->andWhere(['!=', 'vendedor_id', Yii::$app->user->id])
-            ->andWhere(['not in', 'vendedor_id', Usuarios::findOne(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
+            ->andWhere(['not in', 'vendedor_id', $usuario->arrayUsuariosBloqueados(true)]);
 
             $queryProductos->andWhere(['!=', 'vendedor_id', Yii::$app->user->id])
-            ->andWhere(['not in', 'vendedor_id', Usuarios::findOne(Yii::$app->user->id)->arrayUsuariosBloqueados(true)]);
+            ->andWhere(['not in', 'vendedor_id', $usuario->arrayUsuariosBloqueados(true)]);
         }
 
         $copiasProvider = new ActiveDataProvider([
