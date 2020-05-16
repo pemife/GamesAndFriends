@@ -416,18 +416,13 @@ class UsuariosController extends Controller
         if ($IdsUsuariosBloqueados) {
             $query = Usuarios::find()
             ->where(['not in', 'id', $usuario->arrayUsuariosBloqueados(true)]);
+        } else {
+            $query = Usuarios::find();
         }
-        $query = Usuarios::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
-        if (Yii::$app->request->isAjax) {
-            return $this->renderPartial('gridUsuarios', [
-                'dataProvider' => $dataProvider,
-            ]);
-        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -920,6 +915,35 @@ class UsuariosController extends Controller
         $ignorado->delete();
         
         return $this->redirect(['juegos/index']);
+    }
+
+    public function actionIndexFiltrado($texto)
+    {
+        $usuario = $this->findModel(Yii::$app->user->id);
+
+        $IdsUsuariosBloqueados = $usuario->arrayUsuariosBloqueados(true);
+        if ($IdsUsuariosBloqueados) {
+            $query = Usuarios::find()
+            ->where(['not in', 'id', $IdsUsuariosBloqueados]);
+        } else {
+            $query = Usuarios::find();
+        }
+
+        if ($texto) {
+            if (filter_var($texto, FILTER_VALIDATE_EMAIL)) {
+                $query->andWhere(['ilike', 'email', $texto]);
+            } else {
+                $query->andWhere(['ilike', 'nombre', $texto]);
+            }
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $this->renderPartial('gridUsuarios', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
