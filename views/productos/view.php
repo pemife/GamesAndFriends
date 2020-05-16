@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
-use kartik\rating\StarRating as RatingStarRating;
+use kartik\rating\StarRating;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Productos */
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?php if($model->propietario_id == Yii::$app->user->id){
+        <?php if ($model->propietario_id == Yii::$app->user->id) {
             echo Html::a('Actualizar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']);
             echo Html::a('Borrar', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger mr-2',
@@ -53,8 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
               'label' => 'Propietario',
               'format' => 'raw',
               'value' => Html::a(
-                $model->propietario->nombre,
-                ['usuarios/view', 'id' => $model->propietario->id]
+                  $model->propietario->nombre,
+                  ['usuarios/view', 'id' => $model->propietario->id]
               ),
             ]
         ],
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3>Críticas</h3>
 
     <p>
-        <?php if($tieneProducto){
+        <?php if ($tieneProducto) {
           echo Html::a('Opinar', ['criticas/critica-producto', 'producto_id' => $model->id], ['class' => 'btn btn-success']);
         } ?>
     </p>
@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'valoracion',
                 'format' => 'raw',
                 'value' => function ($model) {
-                  return RatingStarRating::widget([
+                  return StarRating::widget([
                     'name' => 'rating_35',
                     'value' => $model->valoracion,
                     'pluginOptions' => [
