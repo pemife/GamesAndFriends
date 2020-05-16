@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['title' => 'ventas de ' . $model->copia->juego->titulo]
                     );
                 },
-                'update' => function ($url, $model, $key){
+                'update' => function ($url, $model, $key) {
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     }
                 },
-                'delete' => function ($url, $model, $key){
+                'delete' => function ($url, $model, $key) {
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>',

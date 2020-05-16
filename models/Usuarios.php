@@ -318,6 +318,18 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     // si estado==1, devuelve los amigos, y si estado==3 devuelve los usuarios bloqueados
     public function arrayRelacionados($estado)
     {
+        // Se pueden modificar las querys para que devuelvan datos formateados:
+        /*
+        $out = ['results' => ['id' => '', 'text' => '']];
+        $query = new Query;
+        $query->select('id, name AS text')
+            ->from('city')
+            ->where(['like', 'name', $q])
+            ->limit(20);
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+        $out['results'] = array_values($data);
+        */
         $relaciones = Relaciones::find()
         ->where(['estado' => $estado, 'usuario1_id' => $this->id])
         ->orWhere(['estado' => $estado, 'usuario2_id' => $this->id])
