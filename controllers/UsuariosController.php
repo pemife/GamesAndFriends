@@ -419,13 +419,17 @@ class UsuariosController extends Controller
         }
         $query = Usuarios::find();
 
-        $searchModel = new UsuariosSearch();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
+        if (Yii::$app->request->isAjax) {
+            return $this->renderPartial('gridUsuarios', [
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
