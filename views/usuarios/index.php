@@ -14,17 +14,20 @@ $url = Url::to(['usuarios/index-filtrado']);
 $js = <<<SCRIPT
 $(document).ready(function (){
     actualizarIndex();
-    $("input[name='textoInput']").keyup(function(e){
+    $("input[name='textoInput']").change(function(e){
         if (typeof cuentaAtras !== 'undefined') {
             clearTimeout(cuentaAtras);
         }
-        cuentaAtras = setTimeout(actualizarIndex, 2000);
+        cuentaAtras = setTimeout(actualizarIndex, 1000);
+        $("#cargando").show();
     });
+    $("#cargando").hide();
 });
 
 cuentaAtras = setTimeout(actualizarIndex, 1000000000);
 
 function actualizarIndex(){
+    $("#cargando").hide();
     var texto = $("input[name='textoInput']").val();
     $.ajax({
     method: 'GET',
@@ -53,6 +56,9 @@ $this->registerJs($js);
         'class' => 'form-control mb-3 mt-4'
     ]) ?>
 
+    <div id="cargando" align="center">
+        <span><img src="https://acs-web.com/blog/wp-content/uploads/2014/09/Loading-circles-acs-rectangles.gif" alt="" width="50" height="50"></span>
+    </div>
 
     <div id="gridUsuarios">
 

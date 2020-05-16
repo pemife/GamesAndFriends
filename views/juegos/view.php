@@ -59,6 +59,8 @@ $this->registerJs($js);
             <?php
         }
         ?>
+        <p>Valoraciones Positivas Globales: <?= Html::encode($valPosGlob) ?></p>
+        <p>Valoraciones Positivas Recientes: <?= Html::encode($valPosRec) ?></p>
         <?= Html::a(
             'Ver en mercado',
             [

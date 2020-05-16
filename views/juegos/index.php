@@ -23,7 +23,6 @@ $(document).ready(function(){
 $("[name='botonDeseos']").click(anadirDeseos);
 function anadirDeseos(e){
   e.preventDefault();
-  console.log(this.dataset.modelid);
   $.ajax({
     method: 'GET',
     url: '$url',
@@ -32,7 +31,7 @@ function anadirDeseos(e){
       if (result) {
         alert(result);
       } else {
-        alert('NOOOOOOOOOOO');
+        alert('Ha ocurrido un error al añadir deseos');
       }
     }
   });
@@ -49,7 +48,7 @@ function anadirIgnorados(e){
       if (result) {
         window.location = '$url3';
       } else {
-        alert('NOOOOOOOOOOO');
+        alert('Ha ocurrido un error al añadir ignorados');
       }
     }
   });

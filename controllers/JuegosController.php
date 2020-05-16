@@ -116,12 +116,15 @@ class JuegosController extends Controller
     public function actionView($id)
     {
         $ventaMasBarata = Ventas::find()
+        ->select('precio')
         ->joinWith('copia')
         ->where(['juego_id' => $id])
         ->orderBy('precio')
-        ->one();
+        ->scalar();
 
-        $criticasQuery = Criticas::find()->joinWith('usuario')->where(['juego_id' => $id]);
+        $criticasQuery = Criticas::find()
+        ->joinWith('usuario')
+        ->where(['juego_id' => $id]);
 
         $criticasProvider = new ActiveDataProvider([
             'query' => $criticasQuery,
@@ -129,6 +132,16 @@ class JuegosController extends Controller
               'pagesize' => 10,
             ],
         ]);
+
+        // Valoraciones positivas globales
+        $criticasQuery = $criticasQuery
+        ->andWhere(['>', 'valoracion', 3]);
+        $valPosGlob = $criticasQuery->count();
+
+        // Valoraciones positivas recientes
+        $haceUnMes = date('Y-m-d', date('now') - strtotime('-1 month'));
+        $valPosRec = $criticasQuery
+        ->andWhere(['>', 'last_update', $haceUnMes])->count();
 
         $criticasProvider->sort->attributes['usuario.nombre'] = [
             'asc' => ['usuarios.nombre' => SORT_ASC],
@@ -145,10 +158,12 @@ class JuegosController extends Controller
 
         return $this->render('view', [
             'model' => $model,
-            'precioMinimo' => $ventaMasBarata ? $ventaMasBarata->precio : null,
+            'precioMinimo' => $ventaMasBarata,
             'criticasProvider' => $criticasProvider,
             'tieneJuego' => $tieneJuego,
             'similaresProvider' => $similaresProvider,
+            'valPosGlob' => $valPosGlob,
+            'valPosRec' => $valPosRec,
         ]);
     }
 
