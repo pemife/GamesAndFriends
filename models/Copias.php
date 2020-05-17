@@ -116,4 +116,10 @@ class Copias extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Ventas::className(), ['copia_id' => 'id'])->inverseOf('copia');
     }
+
+    public function cambiarPropietario($pId)
+    {
+        $this->unlink('propietario', $this->propietario);
+        $this->link('propietario', Usuarios::findOne($pId));
+    }
 }

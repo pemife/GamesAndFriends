@@ -34,12 +34,31 @@ class CopiasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'mis-copias'],
+                'only' => ['create', 'update', 'delete', 'mis-copias', 'view', 'finalizar-regalo', 'regalar-copia', 'crear-regalo'],
                 'rules' => [
                     [
                         'allow' => true,
                         'actions' => ['create', 'mis-copias'],
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['view'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡Debes iniciar sesión para ver este contenido!');
+                                return false;
+                            }
+
+                            $copia = $this->findModel(Yii::$app->request->queryParams['id']);
+                            if (Yii::$app->user->id != $copia->propietario_id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes ver esa copia!');
+                                return false;
+                            }
+
+                            return true;
+                        },
                     ],
                     [
                         'allow' => true,
@@ -63,6 +82,41 @@ class CopiasController extends Controller
                                 return false;
                             }
 
+                            return true;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['regalar-copia', 'finalizar-regalo'],
+                        'matchCallback' => function ($rule, $action) {
+                            
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'No puedes regalar nada sin iniciar sesion');
+                                return false;
+                            }
+                            
+                            if (Yii::$app->request->queryParams['uId'] == Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', 'No puedes regalarte nada a ti mismo');
+                                return false;
+                            }
+                            
+                            $copia = Copias::findOne(Yii::$app->request->queryParams['cId']);
+                            if (!$copia) {
+                                Yii::$app->session->setFlash('error', 'No puedes regalar una copia que no existe!');
+                                return false;
+                            }
+
+                            $usuario = Usuarios::findOne(Yii::$app->request->queryParams['uId']);
+                            if (!$usuario) {
+                                Yii::$app->session->setFlash('error', 'No puedes regalarle nada a un usuario que no existe!');
+                                return false;
+                            }
+
+                            if (!$usuario->esVerificado()) {
+                                Yii::$app->session->setFlash('error', 'No puedes regalar nada a un usuario que no esta verificado!');
+                                return false;
+                            }
+                            
                             return true;
                         },
                     ],
@@ -107,13 +161,10 @@ class CopiasController extends Controller
      */
     public function actionView($id)
     {
-        if (Yii::$app->user->id == $this->findModel($id)->propietario_id) {
-            return $this->render('view', [
-              'model' => $this->findModel($id),
-            ]);
-        }
-        Yii::$app->session->setFlash('error', '¡No tienes acceso a esa copia!');
-        return $this->goBack();
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+            'amigos' => Usuarios::findOne(Yii::$app->user->id)->arrayRelacionados(1),
+        ]);
     }
 
     /**
@@ -192,6 +243,17 @@ class CopiasController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionRegalarCopia($cId, $uId)
+    {
+
+    }
+
+    // $cId, $uId, $acepta (post)
+    public function actionFinalizarRegalo()
+    {
+
     }
 
     /**
