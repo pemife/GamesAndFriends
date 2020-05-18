@@ -47,7 +47,8 @@ class UsuariosController extends Controller
                     'login', 'logout', 'mandar-peticion',
                     'bloquear-usuario', 'anadir-amigo',
                     'desbloquear-usuario', 'ver-lista-deseos',
-                    'index', 'ordenar-lista-deseos'
+                    'index', 'ordenar-lista-deseos',
+                    'array-amigos'
                 ],
                 'rules' => [
                     [
@@ -57,7 +58,7 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'array-amigos'],
                         'roles' => ['@'],
                     ],
                     [
@@ -374,7 +375,7 @@ class UsuariosController extends Controller
                             ->one();
 
                             if (!$ignorado) {
-                                Yii::$app->session-setFlash('error', '¡Ese juego no lo has ignorado!');
+                                Yii::$app->session->setFlash('error', '¡Ese juego no lo has ignorado!');
                                 return false;
                             }
 
@@ -944,6 +945,12 @@ class UsuariosController extends Controller
         return $this->renderPartial('gridUsuarios', [
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionArrayAmigos()
+    {
+        Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+        return $this->findModel(Yii::$app->user->id)->arrayRelacionados(1);
     }
 
     /**

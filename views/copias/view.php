@@ -2,9 +2,9 @@
 
 use kartik\select2\Select2;
 use yii\bootstrap4\ActiveForm;
-use yii\bootstrap4\Dropdown;
 use yii\bootstrap4\Modal;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -15,11 +15,37 @@ $this->params['breadcrumbs'][] = ['label' => 'Copias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
+$url = Url::to(['usuarios/array-amigos']);
 $js = <<<SCRIPT
 $(function() {
 });
-$('#botonModal').click(function(){
-    $('#modalRegalo').modal('show');
+$('#botonModal').click(function(e){
+    e.preventDefault();
+    $.ajax({
+        method: 'GET',
+        url: '$url',
+        data: {},
+        success: function(result){
+          if (result) {
+            if (result.length == 0) {
+                alert('No tienes amigos con los que hacer regalos!');
+            } else {
+                result.forEach(function(amigo, index) {
+                    $('#selectAmigos').append(
+                        '<option value="' + amigo['id'] + '">' + amigo['nombre'] + '</option>'
+                    );
+                });
+                $('#modalRegalo').modal('show');
+            }
+          } else {
+            alert('Ha ocurrido un error con el menú de regalos');
+          }
+        }
+    });
+});
+
+$('#botonRegalar').click(function(e){
+    e.preventDefault();
 });
 SCRIPT;
 
@@ -69,16 +95,13 @@ $this->registerJs($js);
 
         <div id="contenidoModal">
             <h1>Regalar copia</h1>
+            <hr>
+            <h3>Selecciona un amigo:</h3>
             <?php
-            $form = ActiveForm::begin([
-                'method' => 'POST',
-                'action' => 'regalar-copia'
-            ]);
-
-            $form->field($regalo, 'recipiente')->widget(Select2::className(), [
-                
-            ])
+            echo Html::dropDownList('listaAmigos', null, [], ['class' => 'dropdown', 'id' => 'selectAmigos']);
             ?>
+            <hr>
+            <?= Html::a('Regalar', '#', ['class' => 'btn btn-success', 'id' => 'botonRegalar']) ?>
         </div>
 
     <?php
