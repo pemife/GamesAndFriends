@@ -169,8 +169,9 @@ $this->registerJS($js);
         ],
     ]); ?>
 
-<?php
+<h2>Novedades Recomendadas</h2>
 
+<?php
 if (!Yii::$app->user->isGuest) {
     echo GridView::widget([
             'dataProvider' => $recomendacionesProvider,
