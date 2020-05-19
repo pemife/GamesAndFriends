@@ -112,7 +112,7 @@ $this->registerJS($js);
 
             <?php endforeach; ?>
             <!-- <img class="imagenesJuegos" src="imagenJuego.jpg" style="width:30%"> -->
-            <button class="w3-button w3-black w3-display-left" id="flechaIzda">&#10094;</button>
+            <button class="w3-button w3-black w3-display-left" id="flechaIzda"><span class="glyphicon glyphicon-arrow-left"></span></button>
             <?php
             for ($i=0; $i < $juegosProvider->getCount(); $i++) {
                 echo Html::radio(
@@ -125,7 +125,7 @@ $this->registerJS($js);
                 );
             }
              ?>
-            <button class="w3-button w3-black w3-display-right" id="flechaDcha">&#10095;</button>
+            <button class="w3-button w3-black w3-display-right" id="flechaDcha"><span class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
     </center>
 
