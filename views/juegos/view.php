@@ -188,7 +188,7 @@ $this->registerJs($js);
                     },
                     // https://www.w3schools.com/bootstrap/bootstrap_modal.asp
                     'reportar' => function ($url, $model, $action) {
-                        if (Yii::$app->user->isGuest) {
+                        if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario_id) {
                             return '';
                         };
                         

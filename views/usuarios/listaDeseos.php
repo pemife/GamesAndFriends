@@ -79,17 +79,16 @@ $this->registerJS($js);
 
 <h1>Lista de Deseos de <?= $usuario->nombre ?></h1>
 
-<?= Html::a('Ordenar Lista', '#', ['class' => 'btn btn-info', 'id' => 'botonOrdenar', 'hidden' => (Yii::$app->user->id == $uId)]) ?>
+<?= Html::a('Ordenar Lista', '#', ['class' => 'btn btn-info', 'id' => 'botonOrdenar', 'hidden' => (Yii::$app->user->id != $uId)]) ?>
 <?= Html::a('Guardar Lista', '#', ['class' => 'btn btn-success ml-2', 'id' => 'botonGuardar']) ?>
 
 <div id="tablasOrden" class="row mt-2 mb-2">
     <div class="col-md-4">
         <h3>Orden antes</h3>
-        <table border="1" align="left">
+        <table border="1" align="left" class="table">
             <tr>
                 <th>Orden</th>
                 <th>Juego</th>
-                <th></th>
             </tr>
             <?php foreach ($deseadosProvider->getModels() as $model) { ?>
                 <tr
@@ -107,7 +106,7 @@ $this->registerJS($js);
     </div>
     <div class="col-md-4">
         <h3>Orden Despues</h3>
-        <table border="1" id="tablaDespues">
+        <table border="1" id="tablaDespues" class="table">
             <tr>
                 <th>Orden</th>
                 <th>Juego</th>
