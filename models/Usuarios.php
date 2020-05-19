@@ -449,10 +449,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return [];
     }
 
-    public function getGenerosPreferencia()
+    public function generosPreferencia($devuelveIds)
     {
         foreach ($this->etiquetas as $genero) {
-            $generos[] = $genero->nombre;
+            $generos[] = $devuelveIds ? $genero->id : $genero->nombre;
         }
 
         if (!empty($generos)) {

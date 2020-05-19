@@ -258,13 +258,12 @@ class JuegosController extends Controller
 
             $queryRecomendaciones = Juegos::find()
             ->joinWith('etiquetas')
-            ->where(['in', 'nombre', $usuario->generosPreferencia])
-            ->andWhere(['cont_adul' => true]);
-
+            ->where(['in', 'etiquetas.id', $usuario->generosPreferencia(true)]);
+            
             if (!empty($usuario)) {
-                if ($usuario->esMayorDeEdad()) {
-                    $queryJuegosNuevos->orWhere(['cont_adul' => true]);
-                    $queryRecomendaciones->orWhere(['cont_adul' => true]);
+                if (!$usuario->esMayorDeEdad()) {
+                    $queryJuegosNuevos->andWhere(['cont_adul' => false]);
+                    $queryRecomendaciones->andWhere(['cont_adul' => false]);
                 }
                 $queryJuegosNuevos
                 ->andWhere(['not in', 'id', $usuario->arrayIdJuegosIgnorados()])
@@ -274,15 +273,17 @@ class JuegosController extends Controller
                 ->andWhere(['<', 'fechalan', date('Y-m-d')]);
             }
         }
-
+        
         $juegosProvider = new ActiveDataProvider([
             'query' => $queryJuegosNuevos,
             'pagination' => false,
         ]);
-
+        
         $recomendacionesProvider = new ActiveDataProvider([
             'query' => $queryRecomendaciones,
         ]);
+                
+        Yii::debug($queryRecomendaciones->all());
 
         return $this->render('novedades', [
             'juegosProvider' => $juegosProvider,
