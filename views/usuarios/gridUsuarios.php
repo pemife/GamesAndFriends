@@ -19,7 +19,7 @@ use yii\helpers\Html;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{relaciones} {view} {bloquear} {update} {delete}',
+                'template' => '{relaciones} {view} {bloquear} {update} {delete} {seguir}',
                 'buttons' => [
                     'relaciones' => function ($url, $model, $key) {
                         if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->id) {
@@ -37,18 +37,19 @@ use yii\helpers\Html;
                                     'style' => [
                                         'color' => 'red',
                                     ],
-                                    'data-confirm' => 'Seguro que quieres borrar al usuario ' . $model->nombre . ' de tus amigos?'
+                                    'data-confirm' => '¿Seguro que quieres borrar al usuario ' . $model->nombre . ' de tus amigos?'
                                 ]);
                             break;
                             case 2:
                             break;
                             case 3:
-                                return Html::a('', '#', [
+                                return Html::a('', ['desbloquear-usuario', 'usuarioId' => $model->id], [
                                     'class' =>'glyphicon glyphicon-remove-circle',
-                                    'title' => 'Has bloqueado a este usuario',
+                                    'title' => 'Desbloquear usuario',
                                     'style' => [
                                         'color' => 'red',
                                     ],
+                                    'data-confirm' => '¿Seguro que quieres desbloquear al usuario ' . $model->nombre . '?'
                                 ]);
                             break;
                             case 5:
@@ -116,7 +117,26 @@ use yii\helpers\Html;
                             ],
                             'data-confirm' => '¿Confirmas querer bloquear al usuario ' . $model->nombre . '?',
                         ]);
-                    }
+                    },
+
+                    // 'seguir' => function ($url, $model, $action) {
+                    //     if (Yii::$app->user->isGuest || !$model->es_critico) {
+                    //         if ($model->esSeguidoPor(Yii::$app->user->id)) {
+                    //             return Html::a('', ['anadir-quitar-critico', 'usuarioId' => $model->id], [
+                    //                 'class' => 'glyphicon glyphicon-star-empty',
+                    //                 'title' => 'Dejar de seguir crítico',
+                    //                 'data-confirm' => '¿Confirmas dejar de seguir al crítico ' . $model->nombre . '?',
+                    //             ]);
+                    //         }
+                    //         return '';
+                    //     }
+
+                    //     return Html::a('', ['anadir-quitar-critico', 'usuarioId' => $model->id], [
+                    //         'class' => 'glyphicon glyphicon-star',
+                    //         'title' => 'Seguir crítico',
+                    //         'data-confirm' => '¿Confirmas querer seguir al crítico ' . $model->nombre . '?',
+                    //     ]);
+                    // }
                 ]
             ],
         ],

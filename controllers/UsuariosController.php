@@ -951,6 +951,7 @@ class UsuariosController extends Controller
 
         return $this->renderPartial('gridUsuarios', [
             'dataProvider' => $dataProvider,
+            'tipoLista' => $tipoLista,
         ]);
     }
 
