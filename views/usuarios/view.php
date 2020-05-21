@@ -90,7 +90,8 @@ function actualizarListaBloqueados(){
 }
 EOF;
 $this->registerJs($js);
-
+Yii::debug($model->esCritico());
+Yii::debug($model->puntuacionCritico());
 ?>
 
 <style>
@@ -124,7 +125,7 @@ $this->registerJs($js);
 <div class="usuarios-view">
     <div class="nombreOpciones">
       <div class="titulo">
-          <h1><?= Html::encode($model->nombre) ?><?= $model->esCritico() ? '<span class="glyphicon glyphicon-education"> </span>' : '' ?></h1>
+          <h1><?= Html::encode($model->nombre) ?> <?= $model->esCritico() ? '<span class="glyphicon glyphicon-education" title="Insignia de Crítico de Juegos/Productos"> </span>' : '' ?></h1>
           <p>&nbsp;&nbsp;&nbsp;</p>
           <div class="opciones">
             <?php
