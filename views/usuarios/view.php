@@ -180,6 +180,7 @@ $this->registerJs($js);
                           ],
                           ]) ?>
                     </li>
+                    <?php if ($model->token != null) : ?>
                     <li>
                         <?= Html::a(
                             'Verificar cuenta',
@@ -188,10 +189,11 @@ $this->registerJs($js);
                             ],
                             [
                               'class' => 'btn btn-link',
-                              'disabled' => !$puedeModificar || $model->token == null,
+                              'disabled' => !$puedeModificar && $model->token == null,
                             ]
                         ) ?>
                     </li>
+                    <?php endif; ?>
                     <li>
                         <?= Html::a('Ver usuarios bloqueados', '#', [
                             'class' => 'btn btn-link',

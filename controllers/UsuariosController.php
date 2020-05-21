@@ -577,7 +577,7 @@ class UsuariosController extends Controller
                 Yii::debug($usuario);
             }
 
-            return $this->actionView(Yii::$app->user->id);
+            return $this->redirect(['view', 'id' => Yii::$app->user->id]);
         }
 
         Yii::$app->session->setFlash('error', 'Debes iniciar sesion para solicitar la verificacion de tu cuenta');
