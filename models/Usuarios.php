@@ -465,8 +465,28 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     // Un usuario se considerará Crítico de juegos/productos cuando la suma
     // de votos positivos de su conjunto de criticas supere 500.
     // (para probar que funciona, lo limitaré a 5 votos positivos)
+
+    // Query para la suma de votos
+    // select count(*) from criticas c join reportes_criticas rc on c.id=rc.critica_id join usuarios u on u.id=c.usuario_id where rc.voto_positivo=true and u.id='$usuarioId';
     public function esCritico()
     {
-        // TODO
+        $votosCriticas = Criticas::find()
+        ->joinWith('usuario')
+        ->joinWith('reportesCriticas')
+        ->where(['usuarios.id' => $this->id, 'reportes_criticas.voto_positivo' => true])
+        ->count();
+
+        return $votosCriticas > 5;
+    }
+
+    public function puntuacionCritico()
+    {
+        $votosCriticas = Criticas::find()
+        ->joinWith('usuario')
+        ->joinWith('reportesCriticas')
+        ->where(['usuarios.id' => $this->id, 'reportes_criticas.voto_positivo' => true])
+        ->count();
+
+        return $votosCriticas;
     }
 }

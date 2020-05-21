@@ -374,7 +374,7 @@ class UsuariosController extends Controller
                             ->one();
 
                             if (!$ignorado) {
-                                Yii::$app->session-setFlash('error', '¡Ese juego no lo has ignorado!');
+                                Yii::$app->session->setFlash('error', '¡Ese juego no lo has ignorado!');
                                 return false;
                             }
 

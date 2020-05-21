@@ -6,6 +6,7 @@ use app\models\Criticas;
 use app\models\Productos;
 use app\models\ProductosSearch;
 use app\models\Usuarios;
+use app\models\Ventas;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;

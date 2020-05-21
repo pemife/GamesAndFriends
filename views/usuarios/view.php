@@ -124,12 +124,11 @@ $this->registerJs($js);
 <div class="usuarios-view">
     <div class="nombreOpciones">
       <div class="titulo">
-          <h1><?= Html::encode($model->nombre) ?></h1>
+          <h1><?= Html::encode($model->nombre) ?><?= $model->esCritico() ? '<span class="glyphicon glyphicon-education"> </span>' : '' ?></h1>
           <p>&nbsp;&nbsp;&nbsp;</p>
           <div class="opciones">
             <?php
             if (!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)) {
-
                 switch ($model->estadoRelacion(Yii::$app->user->id)) {
                     case 1:
                         echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-remove', 'title' => 'Borrar amigo']);
@@ -152,7 +151,7 @@ $this->registerJs($js);
                   type="button"
                   data-toggle="dropdown"
                   style="height: 30px; width: 35px;"
-                  <?= Yii::$app->user->id == 1 || $model->id == Yii::$app->user->id ? "" : "hidden" ?>>
+                  <?= Yii::$app->user->id == 1 || $model->id == Yii::$app->user->id ? '' : 'hidden' ?>>
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li>
@@ -182,7 +181,8 @@ $this->registerJs($js);
                           ]) ?>
                     </li>
                     <li>
-                        <?= Html::a('Verificar cuenta',
+                        <?= Html::a(
+                            'Verificar cuenta',
                             [
                               'solicitar-verificacion',
                             ],
@@ -280,7 +280,7 @@ $this->registerJs($js);
               'class' => 'yii\grid\ActionColumn',
               'template' => '{vermercado} {view} {delete}',
               'buttons' => [
-                  'vermercado' => function ($url, $model, $key){
+                  'vermercado' => function ($url, $model, $key) {
                       return Html::a(
                           '<span class="glyphicon glyphicon-shopping-cart"></span>',
                           ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
@@ -295,23 +295,23 @@ $this->registerJs($js);
                       );
                   },
                 'delete' => function ($url, $model, $key) {
-                  if (Yii::$app->user->id == $model->propietario_id){
-                    return Html::a(
-                      '<span class="glyphicon glyphicon-trash"></span>',
-                      [
-                          'productos/delete',
-                          'id' => $model->id,
-                      ],
-                      [
-                          'data' => [
-                            'method' => 'post',
-                            'confirm' => '¿Estas seguro de retirar el producto?(Esta accion no se puede deshacer)',
-                          ],
-                          'title' => 'retirar producto de inventario',
-                      ]
-                    );
-                  }
-                  return null;
+                    if (Yii::$app->user->id == $model->propietario_id) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            [
+                                'productos/delete',
+                                'id' => $model->id,
+                            ],
+                            [
+                                'data' => [
+                                  'method' => 'post',
+                                  'confirm' => '¿Estas seguro de retirar el producto?(Esta accion no se puede deshacer)',
+                                ],
+                                'title' => 'retirar producto de inventario',
+                            ]
+                        );
+                    }
+                    return null;
                 }
               ]
             ],
@@ -320,72 +320,72 @@ $this->registerJs($js);
         </div>
         <div class="col">
           <h3>Juegos</h3>
-          <?= GridView::widget([
-            'dataProvider' => $copiasProvider,
-            'columns' => [
-              'juego.titulo',
-              [
-                  'header' => 'Estado',
+            <?= GridView::widget([
+              'dataProvider' => $copiasProvider,
+              'columns' => [
+                'juego.titulo',
+                [
+                    'header' => 'Estado',
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{estado}',
+                    'buttons' => [
+                        'estado' => function ($url, $model, $key) {
+                            //TODO
+                        }
+                    ],
+                ],
+                [
                   'class' => 'yii\grid\ActionColumn',
-                  'template' => '{estado}',
+                  'template' => '{vermercado} {view} {update} {delete}',
                   'buttons' => [
-                      'estado' => function ($url, $model, $key) {
-                          //TODO
-                      }
-                  ],
-              ],
-              [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{vermercado} {view} {update} {delete}',
-                'buttons' => [
-                  'view' => function ($url, $model, $key) {
-                    return Html::a(
-                      '<span class="glyphicon glyphicon-eye-open"></span>',
-                      ['copias/view', 'id' => $model->id],
-                      ['title' => 'ver copia']
-                    );
-                  },
-                  'vermercado' => function ($url, $model, $key){
-                    return Html::a(
-                      '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                      [
-                        'ventas/ventas-item',
-                        'id' => $model->id,
-                        'esProducto' => false,
-                      ],
-                      ['title' => 'ver en mercado']
-                    );
-                  },
-                  'update' => function ($url, $model, $key) {
-                    if (Yii::$app->user->id == $model->propietario_id){
-                      return Html::a(
-                        '<span class="glyphicon glyphicon-pencil"></span>',
-                        ['ventas/update', 'id' => $model->id],
-                        ['title' => 'ver en mercado']
-                      );
-                    }
-                    return null;
-                  },
-                  'delete' => function ($url, $model, $key) {
-                    if (Yii::$app->user->id == $model->propietario_id){
-                      return Html::a(
-                        '<span class="glyphicon glyphicon-trash"></span>',
-                        ['copias/delete', 'id' => $model->id],
-                        [
-                            'data' => [
-                              'method' => 'post',
-                              'confirm' => '¿Estas seguro de retirar copia?(Esta accion no se puede deshacer)',
+                    'view' => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            ['copias/view', 'id' => $model->id],
+                            ['title' => 'ver copia']
+                        );
+                    },
+                    'vermercado' => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                            [
+                              'ventas/ventas-item',
+                              'id' => $model->id,
+                              'esProducto' => false,
                             ],
-                            'title' => 'retirar copia de inventario',
-                        ]
-                      );
+                            ['title' => 'ver en mercado']
+                        );
+                    },
+                    'update' => function ($url, $model, $key) {
+                        if (Yii::$app->user->id == $model->propietario_id) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-pencil"></span>',
+                                ['ventas/update', 'id' => $model->id],
+                                ['title' => 'ver en mercado']
+                            );
+                        }
+                        return null;
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        if (Yii::$app->user->id == $model->propietario_id) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-trash"></span>',
+                                ['copias/delete', 'id' => $model->id],
+                                [
+                                    'data' => [
+                                      'method' => 'post',
+                                      'confirm' => '¿Estas seguro de retirar copia?(Esta accion no se puede deshacer)',
+                                    ],
+                                    'title' => 'retirar copia de inventario',
+                                ]
+                            );
+                        }
+                        return null;
                     }
-                    return null;
-                  }
-                ]
+                  ]
+                ],
               ],
-            ],
-            ]) ?>
+              ]) ?>
           </div>
     </div>
 </div>

@@ -282,8 +282,6 @@ class JuegosController extends Controller
         $recomendacionesProvider = new ActiveDataProvider([
             'query' => $queryRecomendaciones,
         ]);
-                
-        Yii::debug($queryRecomendaciones->all());
 
         return $this->render('novedades', [
             'juegosProvider' => $juegosProvider,
