@@ -200,6 +200,14 @@ class CriticasController extends Controller
         if ($reporte->save()) {
             if ($esVotoPositivo) {
                 Yii::$app->session->setFlash('success', 'Has dado megusta a esta critica correctamente');
+
+                // Hace critico al usuario que ha escrito la critica votada
+                // si cumple las condiciones y si no lo es ya
+                if (Usuarios::findOne($this->findModel($cId)->usuario_id)->esCritico() && !Usuarios::findOne($this->findModel($cId)->usuario_id)->es_critico) {
+                    $usuario = Usuarios::findOne($this->findModel($cId)->usuario_id);
+                    $usuario->es_critico = true;
+                    $usuario->save();
+                }
             } else {
                 Yii::$app->session->setFlash('success', 'Has mandado un reporte correctamente');
             }

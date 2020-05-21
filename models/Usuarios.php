@@ -61,7 +61,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['email'], 'email'],
             [['email'], 'unique'],
             [['nombre'], 'unique'],
-            [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss'],
+            [['es_critico'], 'boolean'],
+            [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss', 'on' => [self::SCENARIO_VERIFICACION]],
             [['requested_at'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['token'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['venta_solicitada'], 'safe'],
@@ -84,6 +85,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'biografia' => 'Biografia',
             'fechanac' => 'Fecha de Nacimiento',
             'requested_at' => 'Miembro desde',
+            'es_critico' => 'Es Critico',
             'venta_solicitada' => 'Id de venta solicitada',
         ];
     }

@@ -17,6 +17,7 @@ CREATE TABLE usuarios
   , email               VARCHAR(255)    NOT NULL UNIQUE
   , biografia           TEXT
   , fechanac            DATE            CHECK (fechanac < CURRENT_DATE)
+  , es_critico          BOOLEAN         DEFAULT false
 );
 
 DROP TABLE IF EXISTS plataformas CASCADE;
