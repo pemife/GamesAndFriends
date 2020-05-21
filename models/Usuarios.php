@@ -462,7 +462,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return [];
     }
 
-    // Un usuario se considerará Crítico de juegos cuando la suma
+    // Un usuario se considerará Crítico de juegos/productos cuando la suma
     // de votos positivos de su conjunto de criticas supere 500.
     // (para probar que funciona, lo limitaré a 5 votos positivos)
     public function esCritico()

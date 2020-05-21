@@ -169,30 +169,44 @@ class CriticasController extends Controller
         return $this->redirect($url);
     }
 
-    public function actionReportar($cId)
+    public function actionReportar($cId, $esVotoPositivo)
     {
-        $reporte = ReportesCriticas::find()->where(['critica_id' => $cId, 'usuario_id' => Yii::$app->user->id])->exists();
-        $url = Url::to(
-            $this->findModel($cId)->juego ? 'juegos/view' : 'productos/view',
-            ['id' => $this->findModel($cId)->juego ? $this->findModel($cId)->juego->id : $this->findModel($cId)->producto->id]
+        $reporte = ReportesCriticas::find()->where(['critica_id' => $cId, 'usuario_id' => Yii::$app->user->id])->one();
+        $url = Url::to([
+                $this->findModel($cId)->juego ? 'juegos/view' : 'productos/view',
+                'id' => $this->findModel($cId)->juego ? $this->findModel($cId)->juego->id : $this->findModel($cId)->producto->id
+            ]
         );
 
         if ($reporte) {
-            Yii::$app->session->setFlash('error', 'Ya has reportado esa critica');
-            return $this->redirect($url);
+            if ($reporte->voto_positivo && $esVotoPositivo) {
+                Yii::$app->session->setFlash('error', 'Ya le has dado megusta a esa crítica');
+                return $this->redirect($url);
+            } elseif (!$reporte->voto_positivo && !$esVotoPositivo) {
+                Yii::$app->session->setFlash('error', 'Ya has reportado esa critica');
+                return $this->redirect($url);
+            } else {
+                $reporte->voto_positivo = $esVotoPositivo;
+            }
+        } else {
+            $reporte = new ReportesCriticas([
+                'usuario_id' => Yii::$app->user->id,
+                'critica_id' => $cId,
+                'voto_positivo' => $esVotoPositivo,
+            ]);
         }
 
-        $reporte = new ReportesCriticas([
-            'usuario_id' => Yii::$app->user->id,
-            'critica_id' => $cId,
-        ]);
 
         if ($reporte->save()) {
-            Yii::$app->session->setFlash('success', 'Has mandado un reporte correctamente');
+            if ($esVotoPositivo) {
+                Yii::$app->session->setFlash('success', 'Has dado megusta a esta critica correctamente');
+            } else {
+                Yii::$app->session->setFlash('success', 'Has mandado un reporte correctamente');
+            }
             return $this->redirect($url);
         }
 
-        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al procesar el reporte');
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al procesar el reporte / megusta');
         return $this->redirect($url);
     }
 

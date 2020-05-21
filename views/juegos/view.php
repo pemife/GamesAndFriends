@@ -130,6 +130,23 @@ $this->registerJs($js);
     <?= GridView::widget([
         'dataProvider' => $criticasProvider,
         'columns' => [
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{like}',
+                'visible' => !Yii::$app->user->isGuest,
+                'buttons' => [
+                    'like' => function ($url, $model, $key) {
+                        if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario->id) {
+                            return '';
+                        }
+
+                        return Html::a(
+                            '<span class=" glyphicon glyphicon-thumbs-up"></span>',
+                            ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => true]
+                        );
+                    }
+                ]
+            ],
             'usuario.nombre',
             'opinion',
             [
@@ -192,7 +209,7 @@ $this->registerJs($js);
                             return '';
                         };
                         
-                        return Html::a('', ['criticas/reportar', 'cId' => $model->id], [
+                        return Html::a('', ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => false], [
                             'class' => 'glyphicon glyphicon-fire',
                             'title' => 'Reportar critica',
                             'style' => [

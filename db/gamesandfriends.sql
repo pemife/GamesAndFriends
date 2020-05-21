@@ -285,13 +285,14 @@ DROP TABLE IF EXISTS reportes_criticas CASCADE;
 
 CREATE TABLE reportes_criticas
 (
-    usuario_id      BIGINT      REFERENCES usuarios(id)
-                                ON DELETE NO ACTION
-                                ON UPDATE CASCADE
-  , critica_id   BIGINT         REFERENCES criticas(id)
-                                ON DELETE CASCADE
-                                ON UPDATE CASCADE
-  , razon       TEXT
+    usuario_id        BIGINT         REFERENCES usuarios(id)
+                                     ON DELETE NO ACTION
+                                     ON UPDATE CASCADE
+  , critica_id        BIGINT         REFERENCES criticas(id)
+                                     ON DELETE CASCADE
+                                     ON UPDATE CASCADE
+  , razon             TEXT
+  , voto_positivo     BOOLEAN        DEFAULT false
   , PRIMARY KEY(usuario_id, critica_id)
 );
 
