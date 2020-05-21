@@ -172,7 +172,8 @@ class CriticasController extends Controller
     public function actionReportar($cId, $esVotoPositivo)
     {
         $reporte = ReportesCriticas::find()->where(['critica_id' => $cId, 'usuario_id' => Yii::$app->user->id])->one();
-        $url = Url::to([
+        $url = Url::to(
+            [
                 $this->findModel($cId)->juego ? 'juegos/view' : 'productos/view',
                 'id' => $this->findModel($cId)->juego ? $this->findModel($cId)->juego->id : $this->findModel($cId)->producto->id
             ]

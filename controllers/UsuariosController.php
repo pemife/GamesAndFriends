@@ -47,7 +47,8 @@ class UsuariosController extends Controller
                     'login', 'logout', 'mandar-peticion',
                     'bloquear-usuario', 'anadir-amigo',
                     'desbloquear-usuario', 'ver-lista-deseos',
-                    'index', 'ordenar-lista-deseos'
+                    'index', 'ordenar-lista-deseos',
+                    'vista-criticos', 'vista-bloqueados'
                 ],
                 'rules' => [
                     [
@@ -57,7 +58,7 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'vista-criticos', 'vista-bloqueados'],
                         'roles' => ['@'],
                     ],
                     [
@@ -426,6 +427,7 @@ class UsuariosController extends Controller
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'tipoLista' => 'normal'
         ]);
     }
 
@@ -917,16 +919,22 @@ class UsuariosController extends Controller
         return $this->redirect(['juegos/index']);
     }
 
-    public function actionIndexFiltrado($texto)
+    public function actionIndexFiltrado($texto, $tipoLista)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
 
         $IdsUsuariosBloqueados = $usuario->arrayUsuariosBloqueados(true);
-        if ($IdsUsuariosBloqueados) {
-            $query = Usuarios::find()
-            ->where(['not in', 'id', $IdsUsuariosBloqueados]);
-        } else {
-            $query = Usuarios::find();
+        $query = Usuarios::find();
+        switch ($tipoLista) {
+            case 'bloqueados':
+                $query->where(['in', 'id', $IdsUsuariosBloqueados]);
+            break;
+            case 'criticos':
+                $query->where(['es_critico' => true])
+                ->andWhere(['not in', 'id', $IdsUsuariosBloqueados]);
+            break;
+            default:
+                $query->where(['not in', 'id', $IdsUsuariosBloqueados]);
         }
 
         if ($texto) {
@@ -943,6 +951,38 @@ class UsuariosController extends Controller
 
         return $this->renderPartial('gridUsuarios', [
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionVistaBloqueados()
+    {
+        $usuario = $this->findModel(Yii::$app->user->id);
+
+        $query = Usuarios::find()
+        ->where(['in', 'id', $usuario->arrayUsuariosBloqueados(true)]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'tipoLista' => 'bloqueados'
+        ]);
+    }
+
+    public function actionVistaCriticos()
+    {
+        $query = Usuarios::find()
+        ->where(['es_critico' => true]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'tipoLista' => 'criticos'
         ]);
     }
 

@@ -6,10 +6,19 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UsuariosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Usuarios';
+switch ($tipoLista) {
+    case 'criticos':
+        $tituloParcial = 'críticos';
+    break;
+    case 'bloqueados':
+        $tituloParcial = 'bloqueados';
+    break;
+    default:
+        $tituloParcial = '';
+}
+$this->title = 'Usuarios ' . $tituloParcial;
 $this->params['breadcrumbs'][] = $this->title;
-$url = Url::to(['usuarios/index-filtrado']);
+$url = Url::to(['usuarios/index-filtrado', 'tipoLista' => $tipoLista]);
 
 $js = <<<SCRIPT
 $(document).ready(function (){
