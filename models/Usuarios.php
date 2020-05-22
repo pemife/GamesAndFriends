@@ -336,9 +336,6 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->where(['estado' => $estado, 'usuario1_id' => $this->id])
         ->orWhere(['estado' => $estado, 'usuario2_id' => $this->id])
         ->all();
-
-        // var_dump($relaciones);
-        // exit;
         
         foreach ($relaciones as $relacion) {
             $usuario1 = self::findOne($relacion->usuario1_id);
@@ -359,10 +356,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     
     public function esAmigo($usuario2Id)
     {
-        $usuario1 = $this;
         $usuario2 = self::findOne($usuario2Id);
 
-        return in_array($usuario1, $usuario2->arrayRelacionados(1));
+        return in_array($this, $usuario2->arrayRelacionados(1));
     }
 
     public function estadoRelacion($usuario2Id)
@@ -371,6 +367,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         
         if ($this->estaBloqueadoPor($usuario2Id) || $usuario2->estaBloqueadoPor($this->id)) {
             return 3;
+        }
+
+        if ($this->estaSeguidoPor($usuario2Id)) {
+            return 4;
         }
 
         $relacion = Relaciones::find()
@@ -410,6 +410,13 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->exists();
     }
 
+    public function estaSeguidoPor($usuarioId)
+    {
+        return Relaciones::find()
+        ->where(['usuario1_id' => $usuarioId, 'usuario2_id' => $this->id, 'estado' => 4])
+        ->exists();
+    }
+
     public function arrayUsuariosBloqueados($devolverIds)
     {
         $relacionesBloqueo = Relaciones::find()
@@ -431,7 +438,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             }
 
             return self::find()
-            ->where(['not in', 'id', $idsUsuariosBloqueados])
+            ->where(['in', 'id', $idsUsuariosBloqueados])
             ->all();
         }
 
@@ -490,5 +497,29 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->count();
 
         return $votosCriticas;
+    }
+
+    public function listaSeguidores()
+    {
+        if ($this->es_critico) {
+            return $this->arrayRelacionados(4);
+        }
+        return false;
+    }
+
+    public function listaIdsBloqueados()
+    {
+        return Relaciones::find()
+        ->where(['usuario1_id' => $this->id, 'estado' => 3])
+        ->select('usuario2_id as id')
+        ->asArray()
+        ->all();
+    }
+
+    public function listaBloqueados()
+    {
+        return self::find()
+        ->where(['in', 'id', $this->listaIdsBloqueados()])
+        ->all();
     }
 }

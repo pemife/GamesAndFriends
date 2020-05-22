@@ -26,34 +26,92 @@ use yii\helpers\Html;
                             return '';
                         }
 
+                        $botones['seguir-critico'] = Html::a(
+                            '',
+                            ['seguir-critico', 'usuarioId' => $model->id],
+                            [
+                                'class' => 'glyphicon glyphicon-star',
+                                'title' => 'Seguir crítico',
+                                'data-confirm' => '¿Confirmas querer seguir al crítico ' . $model->nombre . '?',
+                            ]
+                        );
+
+                        $botones['peticion-amistad-pendiente'] = Html::a(
+                            '',
+                            '#',
+                            [
+                                'class' =>'glyphicon glyphicon-time',
+                                'title' => 'Peticion de amistad pendiente'
+                            ]
+                        );
+
+                        $botones['borrar-amigo'] = Html::a(
+                            '',
+                            ['borrar-amigo','amigoId' => $model->id],
+                            [
+                                'class' =>'glyphicon glyphicon-remove',
+                                'title' => 'Borrar amigo',
+                                'style' => [
+                                    'color' => 'red',
+                                ],
+                                'data-confirm' => '¿Seguro que quieres borrar al usuario ' . $model->nombre . ' de tus amigos?'
+                            ]
+                        );
+
+                        $botones['desbloquear-usuario'] = Html::a(
+                            '',
+                            ['desbloquear-usuario', 'usuarioId' => $model->id],
+                            [
+                                'class' =>'glyphicon glyphicon-remove-circle',
+                                'title' => 'Desbloquear usuario',
+                                'style' => [
+                                    'color' => 'red',
+                                ],
+                                'data-confirm' => '¿Seguro que quieres desbloquear al usuario ' . $model->nombre . '?'
+                            ]
+                        );
+
+                        $botones['abandonar-critico'] = Html::a(
+                            '',
+                            ['abandonar-critico', 'usuarioId' => $model->id],
+                            [
+                                'class' => 'glyphicon glyphicon-star-empty',
+                                'title' => 'Dejar de seguir crítico',
+                                'data-confirm' => '¿Confirmas dejar de seguir al crítico ' . $model->nombre . '?',
+                            ]
+                        );
+
+                        $botones['mandar-peticion-amistad'] = Html::a(
+                            '',
+                            ['mandar-peticion', 'amigoId' => $model->id],
+                            [
+                                'class' => 'glyphicon glyphicon-plus',
+                                'title' => 'Mandar peticion de amistad a ' . $model->nombre
+                            ]
+                        );
+
                         switch ($model->estadoRelacion(Yii::$app->user->id)) {
                             case 0:
-                                return Html::a('', '#', ['class' =>'glyphicon glyphicon-time', 'title' => 'Peticion de amistad pendiente']);
+                                return $botones['peticion-amistad-pendiente'];
                             break;
                             case 1:
-                                return Html::a('', ['borrar-amigo', 'amigoId' => $model->id], [
-                                    'class' =>'glyphicon glyphicon-remove',
-                                    'title' => 'Borrar amigo',
-                                    'style' => [
-                                        'color' => 'red',
-                                    ],
-                                    'data-confirm' => '¿Seguro que quieres borrar al usuario ' . $model->nombre . ' de tus amigos?'
-                                ]);
+                                return
+                                ($model->es_critico ? $botones['seguir-critico'] : '') . ' ' .
+                                $botones['borrar-amigo'];
                             break;
                             case 2:
                             break;
                             case 3:
-                                return Html::a('', ['desbloquear-usuario', 'usuarioId' => $model->id], [
-                                    'class' =>'glyphicon glyphicon-remove-circle',
-                                    'title' => 'Desbloquear usuario',
-                                    'style' => [
-                                        'color' => 'red',
-                                    ],
-                                    'data-confirm' => '¿Seguro que quieres desbloquear al usuario ' . $model->nombre . '?'
-                                ]);
+                                return $botones['desbloquear-usuario'];
+                            break;
+                            case 4:
+                                return $botones['abandonar-critico'] . ' ' .
+                                $botones['mandar-peticion-amistad'];
                             break;
                             case 5:
-                                return Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['class' => 'glyphicon glyphicon-plus', 'title' => 'Mandar peticion de amistad a ' . $model->nombre]);
+                                return
+                                ($model->es_critico ? $botones['seguir-critico'] : '') . ' ' .
+                                $botones['mandar-peticion-amistad'];
                             break;
                         }
                     },

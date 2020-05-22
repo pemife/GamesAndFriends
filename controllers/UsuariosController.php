@@ -400,6 +400,31 @@ class UsuariosController extends Controller
                             return true;
                         }
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['seguir-critico'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para seguir a un crítico');
+                                return false;
+                            }
+
+                            $usuarioCritico = $this->findModel(Yii::$app->request->queryParams['uId']);
+
+                            if (!$usuarioCritico->es_critico) {
+                                Yii::$app->session->setFlash('error', 'Ese usuario no es crítico');
+                                return false;
+                            }
+
+                            if ($usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡Ya sigues a ese crítico!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
                   ],
             ],
         ];
@@ -754,7 +779,7 @@ class UsuariosController extends Controller
         $usuario = $this->findModel($usuarioId);
 
         return $this->renderAjax('vistaBloqueados', [
-          'listaBloqueados' => $usuario->arrayRelacionados(3),
+          'listaBloqueados' => $usuario->listaBloqueados(),
         ]);
     }
 
@@ -927,7 +952,7 @@ class UsuariosController extends Controller
         $query = Usuarios::find();
         switch ($tipoLista) {
             case 'bloqueados':
-                $query->where(['in', 'id', $IdsUsuariosBloqueados]);
+                $query->where(['in', 'id', $usuario->listaIdsBloqueados()]);
             break;
             case 'criticos':
                 $query->where(['es_critico' => true])
@@ -960,7 +985,7 @@ class UsuariosController extends Controller
         $usuario = $this->findModel(Yii::$app->user->id);
 
         $query = Usuarios::find()
-        ->where(['in', 'id', $usuario->arrayUsuariosBloqueados(true)]);
+        ->where(['in', 'id', $usuario->listaIdsBloqueados()]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -985,6 +1010,18 @@ class UsuariosController extends Controller
             'dataProvider' => $dataProvider,
             'tipoLista' => 'criticos'
         ]);
+    }
+
+    public function actionSeguirCritico($uId)
+    {
+        $usuario = $this->findModel($uId);
+
+        $relaciones = $usuario->relacionesCon(Yii::$app->user->id);
+    }
+
+    public function actionAbandonarCritico($uId)
+    {
+
     }
 
     /**
