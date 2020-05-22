@@ -17,6 +17,7 @@ CREATE TABLE usuarios
   , email               VARCHAR(255)    NOT NULL UNIQUE
   , biografia           TEXT
   , fechanac            DATE            CHECK (fechanac < CURRENT_DATE)
+  , es_critico          BOOLEAN         DEFAULT false
 );
 
 DROP TABLE IF EXISTS plataformas CASCADE;
@@ -234,8 +235,8 @@ CREATE TABLE relaciones
     , old_estado     NUMERIC(1)     DEFAULT 2
     , PRIMARY KEY(usuario1_id, usuario2_id)
     , CONSTRAINT CHK_SelfFriend CHECK (usuario1_id != usuario2_id)
-    , CONSTRAINT CHK_Estado_Valido CHECK (estado=0 OR estado=1 OR estado=2 OR estado=3)
-    , CONSTRAINT CHK_Old_Estado_Valido CHECK (old_estado=0 OR old_estado=1 OR old_estado=2 OR old_estado=3)
+    , CONSTRAINT CHK_Estado_Valido CHECK (estado=0 OR estado=1 OR estado=2 OR estado=3 OR estado=4)
+    , CONSTRAINT CHK_Old_Estado_Valido CHECK (old_estado=0 OR old_estado=1 OR old_estado=2 OR old_estado=3 OR old_estado=4)
 );
 
 -- DROP SEQUENCE deseados_orden_seq CASCADE;
@@ -285,13 +286,14 @@ DROP TABLE IF EXISTS reportes_criticas CASCADE;
 
 CREATE TABLE reportes_criticas
 (
-    usuario_id      BIGINT      REFERENCES usuarios(id)
-                                ON DELETE NO ACTION
-                                ON UPDATE CASCADE
-  , critica_id   BIGINT         REFERENCES criticas(id)
-                                ON DELETE CASCADE
-                                ON UPDATE CASCADE
-  , razon       TEXT
+    usuario_id        BIGINT         REFERENCES usuarios(id)
+                                     ON DELETE NO ACTION
+                                     ON UPDATE CASCADE
+  , critica_id        BIGINT         REFERENCES criticas(id)
+                                     ON DELETE CASCADE
+                                     ON UPDATE CASCADE
+  , razon             TEXT
+  , voto_positivo     BOOLEAN        DEFAULT false
   , PRIMARY KEY(usuario_id, critica_id)
 );
 

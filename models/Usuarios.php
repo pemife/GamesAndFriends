@@ -61,7 +61,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['email'], 'email'],
             [['email'], 'unique'],
             [['nombre'], 'unique'],
-            [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss'],
+            [['es_critico'], 'boolean'],
+            [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss', 'on' => [self::SCENARIO_VERIFICACION]],
             [['requested_at'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['token'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['venta_solicitada'], 'safe'],
@@ -83,7 +84,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'email' => 'Email',
             'biografia' => 'Biografia',
             'fechanac' => 'Fecha de Nacimiento',
-            'requested_at' => 'Miembro desde',
+            'requested_at' => 'Pedido el',
+            'es_critico' => 'Es Critico',
             'venta_solicitada' => 'Id de venta solicitada',
         ];
     }
@@ -334,9 +336,6 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->where(['estado' => $estado, 'usuario1_id' => $this->id])
         ->orWhere(['estado' => $estado, 'usuario2_id' => $this->id])
         ->all();
-
-        // var_dump($relaciones);
-        // exit;
         
         foreach ($relaciones as $relacion) {
             $usuario1 = self::findOne($relacion->usuario1_id);
@@ -357,10 +356,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     
     public function esAmigo($usuario2Id)
     {
-        $usuario1 = $this;
         $usuario2 = self::findOne($usuario2Id);
 
-        return in_array($usuario1, $usuario2->arrayRelacionados(1));
+        return in_array($this, $usuario2->arrayRelacionados(1));
     }
 
     public function estadoRelacion($usuario2Id)
@@ -369,6 +367,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         
         if ($this->estaBloqueadoPor($usuario2Id) || $usuario2->estaBloqueadoPor($this->id)) {
             return 3;
+        }
+
+        if ($this->estaSeguidoPor($usuario2Id)) {
+            return 4;
         }
 
         $relacion = Relaciones::find()
@@ -408,6 +410,13 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->exists();
     }
 
+    public function estaSeguidoPor($usuarioId)
+    {
+        return Relaciones::find()
+        ->where(['usuario1_id' => $usuarioId, 'usuario2_id' => $this->id, 'estado' => 4])
+        ->exists();
+    }
+
     public function arrayUsuariosBloqueados($devolverIds)
     {
         $relacionesBloqueo = Relaciones::find()
@@ -429,7 +438,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             }
 
             return self::find()
-            ->where(['not in', 'id', $idsUsuariosBloqueados])
+            ->where(['in', 'id', $idsUsuariosBloqueados])
             ->all();
         }
 
@@ -460,5 +469,66 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         }
 
         return [];
+    }
+
+    // Un usuario se considerará Crítico de juegos/productos cuando la suma
+    // de votos positivos de su conjunto de criticas supere 500.
+    // (para probar que funciona, lo limitaré a 5 votos positivos)
+
+    // Query para la suma de votos
+    // select count(*) from criticas c join reportes_criticas rc on c.id=rc.critica_id join usuarios u on u.id=c.usuario_id where rc.voto_positivo=true and u.id='$usuarioId';
+    public function cumpleRequisitoDeCritico()
+    {
+        $votosCriticas = Criticas::find()
+        ->joinWith('usuario')
+        ->joinWith('reportesCriticas')
+        ->where(['usuarios.id' => $this->id, 'reportes_criticas.voto_positivo' => true])
+        ->count();
+
+        return $votosCriticas > 5;
+    }
+
+    public function puntuacionCritico()
+    {
+        $votosCriticas = Criticas::find()
+        ->joinWith('usuario')
+        ->joinWith('reportesCriticas')
+        ->where(['usuarios.id' => $this->id, 'reportes_criticas.voto_positivo' => true])
+        ->count();
+
+        return $votosCriticas;
+    }
+
+    public function listaCriticosSeguidosId()
+    {
+        return Relaciones::find()
+        ->where(['estado' => 4, 'usuario1_id' => $this->id])
+        ->select('usuario2_id as id')
+        ->column();
+    }
+
+    public function listaSeguidoresId()
+    {
+        return Relaciones::find()
+        ->where(['estado' => 4, 'usuario2_id' => $this->id])
+        ->select('usuario1_id')
+        ->asArray()
+        ->all();
+    }
+
+    public function listaIdsBloqueados()
+    {
+        return Relaciones::find()
+        ->where(['usuario1_id' => $this->id, 'estado' => 3])
+        ->select('usuario2_id as id')
+        ->asArray()
+        ->all();
+    }
+
+    public function listaBloqueados()
+    {
+        return self::find()
+        ->where(['in', 'id', $this->listaIdsBloqueados()])
+        ->all();
     }
 }

@@ -7,6 +7,7 @@ use app\models\Productos;
 use app\models\ReportesCriticas;
 use app\models\Usuarios;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
@@ -32,11 +33,11 @@ class CriticasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete'],
+                'only' => ['create', 'update', 'delete', 'index'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create'],
+                        'actions' => ['create', 'index'],
                         'roles' => ['@'],
                     ],
                     [
@@ -80,7 +81,19 @@ class CriticasController extends Controller
 
     public function actionIndex()
     {
-        return $this->goBack();
+        $usuario = Usuarios::findOne(Yii::$app->user->id);
+        Yii::debug($usuario->listaCriticosSeguidosId());
+        $query = Criticas::find()
+        ->where(['in', 'usuario_id', $usuario->listaCriticosSeguidosId()])
+        ->orderBy('last_update');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider
+        ]);
     }
 
     /**
@@ -169,30 +182,53 @@ class CriticasController extends Controller
         return $this->redirect($url);
     }
 
-    public function actionReportar($cId)
+    public function actionReportar($cId, $esVotoPositivo)
     {
-        $reporte = ReportesCriticas::find()->where(['critica_id' => $cId, 'usuario_id' => Yii::$app->user->id])->exists();
+        $reporte = ReportesCriticas::find()->where(['critica_id' => $cId, 'usuario_id' => Yii::$app->user->id])->one();
         $url = Url::to(
-            $this->findModel($cId)->juego ? 'juegos/view' : 'productos/view',
-            ['id' => $this->findModel($cId)->juego ? $this->findModel($cId)->juego->id : $this->findModel($cId)->producto->id]
+            [
+                $this->findModel($cId)->juego ? 'juegos/view' : 'productos/view',
+                'id' => $this->findModel($cId)->juego ? $this->findModel($cId)->juego->id : $this->findModel($cId)->producto->id
+            ]
         );
 
         if ($reporte) {
-            Yii::$app->session->setFlash('error', 'Ya has reportado esa critica');
-            return $this->redirect($url);
+            if ($reporte->voto_positivo && $esVotoPositivo) {
+                Yii::$app->session->setFlash('error', 'Ya le has dado megusta a esa crítica');
+                return $this->redirect($url);
+            } elseif (!$reporte->voto_positivo && !$esVotoPositivo) {
+                Yii::$app->session->setFlash('error', 'Ya has reportado esa critica');
+                return $this->redirect($url);
+            } else {
+                $reporte->voto_positivo = $esVotoPositivo;
+            }
+        } else {
+            $reporte = new ReportesCriticas([
+                'usuario_id' => Yii::$app->user->id,
+                'critica_id' => $cId,
+                'voto_positivo' => $esVotoPositivo,
+            ]);
         }
 
-        $reporte = new ReportesCriticas([
-            'usuario_id' => Yii::$app->user->id,
-            'critica_id' => $cId,
-        ]);
 
         if ($reporte->save()) {
-            Yii::$app->session->setFlash('success', 'Has mandado un reporte correctamente');
+            if ($esVotoPositivo) {
+                Yii::$app->session->setFlash('success', 'Has dado megusta a esta critica correctamente');
+
+                // Hace critico al usuario que ha escrito la critica votada
+                // si cumple las condiciones y si no lo es ya
+                if (Usuarios::findOne($this->findModel($cId)->usuario_id)->cumpleRequisitoDeCritico() && !Usuarios::findOne($this->findModel($cId)->usuario_id)->es_critico) {
+                    $usuario = Usuarios::findOne($this->findModel($cId)->usuario_id);
+                    $usuario->es_critico = true;
+                    $usuario->save();
+                }
+            } else {
+                Yii::$app->session->setFlash('success', 'Has mandado un reporte correctamente');
+            }
             return $this->redirect($url);
         }
 
-        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al procesar el reporte');
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al procesar el reporte / megusta');
         return $this->redirect($url);
     }
 

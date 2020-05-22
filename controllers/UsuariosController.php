@@ -47,7 +47,9 @@ class UsuariosController extends Controller
                     'login', 'logout', 'mandar-peticion',
                     'bloquear-usuario', 'anadir-amigo',
                     'desbloquear-usuario', 'ver-lista-deseos',
-                    'index', 'ordenar-lista-deseos'
+                    'index', 'ordenar-lista-deseos',
+                    'vista-criticos', 'vista-bloqueados',
+                    'seguir-critico', 'abandonar-critico'
                 ],
                 'rules' => [
                     [
@@ -57,7 +59,7 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'vista-criticos', 'vista-bloqueados'],
                         'roles' => ['@'],
                     ],
                     [
@@ -374,7 +376,7 @@ class UsuariosController extends Controller
                             ->one();
 
                             if (!$ignorado) {
-                                Yii::$app->session-setFlash('error', '¡Ese juego no lo has ignorado!');
+                                Yii::$app->session->setFlash('error', '¡Ese juego no lo has ignorado!');
                                 return false;
                             }
 
@@ -393,6 +395,61 @@ class UsuariosController extends Controller
 
                             if (Yii::$app->request->queryParams['uId'] != Yii::$app->user->id) {
                                 Yii::$app->session->setFlash('error', '¡No puedes ver la lista de ignorados de otra persona!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['seguir-critico'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para seguir a un crítico');
+                                return false;
+                            }
+
+                            $usuarioCritico = $this->findModel(Yii::$app->request->queryParams['uId']);
+
+                            if (!$usuarioCritico->es_critico) {
+                                Yii::$app->session->setFlash('error', 'Ese usuario no es crítico');
+                                return false;
+                            }
+
+                            if ($usuarioCritico->estadoRelacion(Yii::$app->user->id == 3)) {
+                                Yii::$app->session->setFlash('error', 'No puedes seguir a ese crítico [Bloqueado]');
+                                return false;
+                            }
+
+                            if ($usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡Ya sigues a ese crítico!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['abandonar-critico'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para abandonar a un crítico');
+                                return false;
+                            }
+
+                            $usuarioCritico = $this->findModel(Yii::$app->request->queryParams['uId']);
+
+                            if (!$usuarioCritico->es_critico) {
+                                Yii::$app->session->setFlash('error', 'Ese usuario no es crítico');
+                                return false;
+                            }
+
+                            if (!$usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡No sigues a ese crítico!');
                                 return false;
                             }
 
@@ -426,6 +483,7 @@ class UsuariosController extends Controller
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'tipoLista' => 'normal'
         ]);
     }
 
@@ -577,7 +635,7 @@ class UsuariosController extends Controller
                 Yii::debug($usuario);
             }
 
-            return $this->actionView(Yii::$app->user->id);
+            return $this->redirect(['view', 'id' => Yii::$app->user->id]);
         }
 
         Yii::$app->session->setFlash('error', 'Debes iniciar sesion para solicitar la verificacion de tu cuenta');
@@ -655,13 +713,12 @@ class UsuariosController extends Controller
                 'usuario2_id' => $amigoId,
                 'estado' => 0,
             ]);
-
             if ($relacion->save()) {
                 Yii::$app->session->setFlash('success', 'Petición de amistad guardada');
                 return $this->redirect(['index']);
             }
         }
-        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al guardar la petición de amistad');
+        // Yii::$app->session->setFlash('error', 'Ha ocurrido un error al guardar la petición de amistad');
         return $this->redirect(['index']);
     }
 
@@ -752,7 +809,7 @@ class UsuariosController extends Controller
         $usuario = $this->findModel($usuarioId);
 
         return $this->renderAjax('vistaBloqueados', [
-          'listaBloqueados' => $usuario->arrayRelacionados(3),
+          'listaBloqueados' => $usuario->listaBloqueados(),
         ]);
     }
 
@@ -917,16 +974,22 @@ class UsuariosController extends Controller
         return $this->redirect(['juegos/index']);
     }
 
-    public function actionIndexFiltrado($texto)
+    public function actionIndexFiltrado($texto, $tipoLista)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
 
         $IdsUsuariosBloqueados = $usuario->arrayUsuariosBloqueados(true);
-        if ($IdsUsuariosBloqueados) {
-            $query = Usuarios::find()
-            ->where(['not in', 'id', $IdsUsuariosBloqueados]);
-        } else {
-            $query = Usuarios::find();
+        $query = Usuarios::find();
+        switch ($tipoLista) {
+            case 'bloqueados':
+                $query->where(['in', 'id', $usuario->listaIdsBloqueados()]);
+            break;
+            case 'criticos':
+                $query->where(['es_critico' => true])
+                ->andWhere(['not in', 'id', $IdsUsuariosBloqueados]);
+            break;
+            default:
+                $query->where(['not in', 'id', $IdsUsuariosBloqueados]);
         }
 
         if ($texto) {
@@ -943,7 +1006,96 @@ class UsuariosController extends Controller
 
         return $this->renderPartial('gridUsuarios', [
             'dataProvider' => $dataProvider,
+            'tipoLista' => $tipoLista,
         ]);
+    }
+
+    public function actionVistaBloqueados()
+    {
+        $usuario = $this->findModel(Yii::$app->user->id);
+
+        $query = Usuarios::find()
+        ->where(['in', 'id', $usuario->listaIdsBloqueados()]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'tipoLista' => 'bloqueados'
+        ]);
+    }
+
+    public function actionVistaCriticos()
+    {
+        $query = Usuarios::find()
+        ->where(['es_critico' => true]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'tipoLista' => 'criticos'
+        ]);
+    }
+
+    public function actionSeguirCritico($uId)
+    {
+        $usuario = $this->findModel(Yii::$app->user->id);
+
+        if ($usuario->esAmigo($uId)) {
+            $relacion = $usuario->relacionCon($uId);
+            $relacion->estado = 4;
+        } else {
+            $relacion = new Relaciones([
+                'usuario1_id' => Yii::$app->user->id,
+                'usuario2_id' => $uId,
+                'estado' => 4
+            ]);
+        }
+
+        if ($relacion->save()) {
+            if (Yii::$app->request->isAjax) {
+                return Json::encode('Has comenzado a seguir al crítico');
+            }
+            Yii::$app->session->setFlash('success', 'Has comenzado a seguir al crítico');
+            return $this->redirect(['vista-criticos']);
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return Json::encode('Ha ocurrido un error al intentar seguir al crítico');
+        }
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al intentar seguir al crítico');
+        return $this->redirect(['vista-criticos']);
+    }
+
+    public function actionAbandonarCritico($uId)
+    {
+        $relacion = Relaciones::find()
+        ->where([
+            'usuario1_id' => Yii::$app->user->id,
+            'usuario2_id' => $uId,
+            'estado' => 4
+        ])->one();
+
+        if ($relacion->delete()) {
+            if (Yii::$app->request->isAjax) {
+                return Json::encode('Has dejado de seguir al crítico');
+            }
+
+            Yii::$app->session->setFlash('success', 'Has dejado de seguir al crítico');
+            return $this->redirect(['vista-criticos']);
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return Json::encode('Ha ocurrido un error al intentar abandonar al crítico');
+        }
+
+        Yii::$app->session->setFlash('success', 'Ha ocurrido un error al intentar abandonar al crítico');
+        return $this->redirect(['vista-criticos']);
     }
 
     /**

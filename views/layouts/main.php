@@ -58,8 +58,22 @@ AppAsset::register($this);
                     ['label' => 'Juegos', 'url' => ['/juegos/index']],
                 ],
             ],
-            ['label' => 'Comunidad', 'url' => ['posts/index']],
-            ['label' => 'Usuarios', 'url' => ['/usuarios/index'], 'visible' => !Yii::$app->user->isGuest],
+            [
+                'label' => 'Comunidad',
+                'items' => [
+                    ['label' => 'Posts', 'url' => ['posts/index']],
+                    ['label' => 'Opiniones de Críticos', 'url' => ['criticas/index']]
+                ]
+            ],
+            [
+                'label' => 'Usuarios',
+                'visible' => !Yii::$app->user->isGuest,
+                'items' => [
+                    ['label' => 'Usuarios', 'url' => ['usuarios/index']],
+                    ['label' => 'Bloqueados', 'url' => ['usuarios/vista-bloqueados']],
+                    ['label' => 'Críticos', 'url' => ['usuarios/vista-criticos']]
+                ]
+            ],
             ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],
             ['label' => 'Registrar', 'url' => ['/usuarios/create'], 'visible' => Yii::$app->user->isGuest],
             [
@@ -71,8 +85,9 @@ AppAsset::register($this);
                  ['label' => 'Añadir a inventario', 'url' => ['usuarios/anadir-inventario']],
                  Html::beginForm(['site/logout'], 'post')
                  . Html::submitButton(
-                    '&nbsp;&nbsp;Logout (' . $usuarioNombre . ')',
-                    ['class' => 'btn btn-link logout'])
+                     '&nbsp;&nbsp;Logout (' . $usuarioNombre . ')',
+                     ['class' => 'btn btn-link logout']
+                 )
                  . Html::endForm()],
                  'visible' => !Yii::$app->user->isGuest
             ]
