@@ -682,13 +682,12 @@ class UsuariosController extends Controller
                 'usuario2_id' => $amigoId,
                 'estado' => 0,
             ]);
-
             if ($relacion->save()) {
                 Yii::$app->session->setFlash('success', 'Petición de amistad guardada');
                 return $this->redirect(['index']);
             }
         }
-        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al guardar la petición de amistad');
+        // Yii::$app->session->setFlash('error', 'Ha ocurrido un error al guardar la petición de amistad');
         return $this->redirect(['index']);
     }
 
@@ -1014,14 +1013,51 @@ class UsuariosController extends Controller
 
     public function actionSeguirCritico($uId)
     {
-        $usuario = $this->findModel($uId);
+        $relacion = new Relaciones([
+            'usuario1_id' => Yii::$app->user->id,
+            'usuario2_id' => $uId,
+            'estado' => 4
+        ]);
 
-        $relaciones = $usuario->relacionesCon(Yii::$app->user->id);
+        if ($relacion->save()) {
+            if (Yii::$app->request->isAjax) {
+                return Json::encode('Has comenzado a seguir al crítico');
+            }
+            Yii::$app->session->setFlash('success', 'Has comenzado a seguir al crítico');
+            return $this->redirect(['vista-criticos']);
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return Json::encode('Ha ocurrido un error al intentar seguir al crítico');
+        }
+        Yii::$app->session->setFlash('error', 'Ha ocurrido un error al intentar seguir al crítico');
+        return $this->redirect(['vista-criticos']);
     }
 
     public function actionAbandonarCritico($uId)
     {
+        $relacion = Relaciones::find()
+        ->where([
+            'usuario1_id' => Yii::$app->user->id,
+            'usuario2_id' => $uId,
+            'estado' => 4
+        ])->one();
 
+        if ($relacion->delete()) {
+            if (Yii::$app->request->isAjax) {
+                return Json::encode('Has dejado de seguir al crítico');
+            }
+
+            Yii::$app->session->setFlash('success', 'Has dejado de seguir al crítico');
+            return $this->redirect(['vista-criticos']);
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return Json::encode('Ha ocurrido un error al intentar abandonar al crítico');
+        }
+
+        Yii::$app->session->setFlash('success', 'Ha ocurrido un error al intentar abandonar al crítico');
+        return $this->redirect(['vista-criticos']);
     }
 
     /**

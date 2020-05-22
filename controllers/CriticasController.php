@@ -204,7 +204,7 @@ class CriticasController extends Controller
 
                 // Hace critico al usuario que ha escrito la critica votada
                 // si cumple las condiciones y si no lo es ya
-                if (Usuarios::findOne($this->findModel($cId)->usuario_id)->esCritico() && !Usuarios::findOne($this->findModel($cId)->usuario_id)->es_critico) {
+                if (Usuarios::findOne($this->findModel($cId)->usuario_id)->cumpleRequisitoDeCritico() && !Usuarios::findOne($this->findModel($cId)->usuario_id)->es_critico) {
                     $usuario = Usuarios::findOne($this->findModel($cId)->usuario_id);
                     $usuario->es_critico = true;
                     $usuario->save();

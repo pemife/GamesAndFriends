@@ -477,7 +477,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     // Query para la suma de votos
     // select count(*) from criticas c join reportes_criticas rc on c.id=rc.critica_id join usuarios u on u.id=c.usuario_id where rc.voto_positivo=true and u.id='$usuarioId';
-    public function esCritico()
+    public function cumpleRequisitoDeCritico()
     {
         $votosCriticas = Criticas::find()
         ->joinWith('usuario')
@@ -501,10 +501,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function listaSeguidores()
     {
-        if ($this->es_critico) {
-            return $this->arrayRelacionados(4);
-        }
-        return false;
+        //TODO;
     }
 
     public function listaIdsBloqueados()

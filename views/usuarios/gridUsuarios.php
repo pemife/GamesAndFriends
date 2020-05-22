@@ -26,22 +26,21 @@ use yii\helpers\Html;
                             return '';
                         }
 
-                        $botones['seguir-critico'] = Html::a(
-                            '',
-                            ['seguir-critico', 'usuarioId' => $model->id],
-                            [
-                                'class' => 'glyphicon glyphicon-star',
-                                'title' => 'Seguir crítico',
-                                'data-confirm' => '¿Confirmas querer seguir al crítico ' . $model->nombre . '?',
-                            ]
-                        );
-
                         $botones['peticion-amistad-pendiente'] = Html::a(
                             '',
                             '#',
                             [
                                 'class' =>'glyphicon glyphicon-time',
                                 'title' => 'Peticion de amistad pendiente'
+                            ]
+                        );
+
+                        $botones['mandar-peticion-amistad'] = Html::a(
+                            '',
+                            ['mandar-peticion', 'amigoId' => $model->id],
+                            [
+                                'class' => 'glyphicon glyphicon-plus',
+                                'title' => 'Mandar peticion de amistad a ' . $model->nombre
                             ]
                         );
 
@@ -71,22 +70,23 @@ use yii\helpers\Html;
                             ]
                         );
 
+                        $botones['seguir-critico'] = Html::a(
+                            '',
+                            ['seguir-critico', 'uId' => $model->id],
+                            [
+                                'class' => 'glyphicon glyphicon-star',
+                                'title' => 'Seguir crítico',
+                                'data-confirm' => '¿Confirmas querer seguir al crítico ' . $model->nombre . '?',
+                            ]
+                        );
+
                         $botones['abandonar-critico'] = Html::a(
                             '',
-                            ['abandonar-critico', 'usuarioId' => $model->id],
+                            ['abandonar-critico', 'uId' => $model->id],
                             [
                                 'class' => 'glyphicon glyphicon-star-empty',
                                 'title' => 'Dejar de seguir crítico',
                                 'data-confirm' => '¿Confirmas dejar de seguir al crítico ' . $model->nombre . '?',
-                            ]
-                        );
-
-                        $botones['mandar-peticion-amistad'] = Html::a(
-                            '',
-                            ['mandar-peticion', 'amigoId' => $model->id],
-                            [
-                                'class' => 'glyphicon glyphicon-plus',
-                                'title' => 'Mandar peticion de amistad a ' . $model->nombre
                             ]
                         );
 
