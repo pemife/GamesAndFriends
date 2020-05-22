@@ -48,7 +48,8 @@ class UsuariosController extends Controller
                     'bloquear-usuario', 'anadir-amigo',
                     'desbloquear-usuario', 'ver-lista-deseos',
                     'index', 'ordenar-lista-deseos',
-                    'vista-criticos', 'vista-bloqueados'
+                    'vista-criticos', 'vista-bloqueados',
+                    'seguir-critico', 'abandonar-critico'
                 ],
                 'rules' => [
                     [
@@ -417,8 +418,38 @@ class UsuariosController extends Controller
                                 return false;
                             }
 
+                            if ($usuarioCritico->estadoRelacion(Yii::$app->user->id == 3)) {
+                                Yii::$app->session->setFlash('error', 'No puedes seguir a ese crítico [Bloqueado]');
+                                return false;
+                            }
+
                             if ($usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
                                 Yii::$app->session->setFlash('error', '¡Ya sigues a ese crítico!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['abandonar-critico'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para abandonar a un crítico');
+                                return false;
+                            }
+
+                            $usuarioCritico = $this->findModel(Yii::$app->request->queryParams['uId']);
+
+                            if (!$usuarioCritico->es_critico) {
+                                Yii::$app->session->setFlash('error', 'Ese usuario no es crítico');
+                                return false;
+                            }
+
+                            if (!$usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', '¡No sigues a ese crítico!');
                                 return false;
                             }
 
@@ -1013,11 +1044,18 @@ class UsuariosController extends Controller
 
     public function actionSeguirCritico($uId)
     {
-        $relacion = new Relaciones([
-            'usuario1_id' => Yii::$app->user->id,
-            'usuario2_id' => $uId,
-            'estado' => 4
-        ]);
+        $usuario = $this->findModel(Yii::$app->user->id);
+
+        if ($usuario->esAmigo($uId)) {
+            $relacion = $usuario->relacionCon($uId);
+            $relacion->estado = 4;
+        } else {
+            $relacion = new Relaciones([
+                'usuario1_id' => Yii::$app->user->id,
+                'usuario2_id' => $uId,
+                'estado' => 4
+            ]);
+        }
 
         if ($relacion->save()) {
             if (Yii::$app->request->isAjax) {

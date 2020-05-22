@@ -58,7 +58,13 @@ AppAsset::register($this);
                     ['label' => 'Juegos', 'url' => ['/juegos/index']],
                 ],
             ],
-            ['label' => 'Comunidad', 'url' => ['posts/index']],
+            [
+                'label' => 'Comunidad',
+                'items' => [
+                    ['label' => 'Posts', 'url' => ['posts/index']],
+                    ['label' => 'Opiniones de Críticos', 'url' => ['criticas/index']]
+                ]
+            ],
             [
                 'label' => 'Usuarios',
                 'visible' => !Yii::$app->user->isGuest,

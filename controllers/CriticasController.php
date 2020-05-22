@@ -7,6 +7,7 @@ use app\models\Productos;
 use app\models\ReportesCriticas;
 use app\models\Usuarios;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
@@ -32,11 +33,11 @@ class CriticasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete'],
+                'only' => ['create', 'update', 'delete', 'index'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create'],
+                        'actions' => ['create', 'index'],
                         'roles' => ['@'],
                     ],
                     [
@@ -80,7 +81,19 @@ class CriticasController extends Controller
 
     public function actionIndex()
     {
-        return $this->goBack();
+        $usuario = Usuarios::findOne(Yii::$app->user->id);
+        Yii::debug($usuario->listaCriticosSeguidosId());
+        $query = Criticas::find()
+        ->where(['in', 'usuario_id', $usuario->listaCriticosSeguidosId()])
+        ->orderBy('last_update');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider
+        ]);
     }
 
     /**

@@ -76,7 +76,7 @@ use yii\helpers\Html;
                             [
                                 'class' => 'glyphicon glyphicon-star',
                                 'title' => 'Seguir crítico',
-                                'data-confirm' => '¿Confirmas querer seguir al crítico ' . $model->nombre . '?',
+                                'data-confirm' => '¿Confirmas querer seguir al crítico ' . $model->nombre . '? (Si el critico es un amigo, dejara de serlo)',
                             ]
                         );
 

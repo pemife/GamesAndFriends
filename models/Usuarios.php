@@ -499,9 +499,21 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $votosCriticas;
     }
 
-    public function listaSeguidores()
+    public function listaCriticosSeguidosId()
     {
-        //TODO;
+        return Relaciones::find()
+        ->where(['estado' => 4, 'usuario1_id' => $this->id])
+        ->select('usuario2_id as id')
+        ->column();
+    }
+
+    public function listaSeguidoresId()
+    {
+        return Relaciones::find()
+        ->where(['estado' => 4, 'usuario2_id' => $this->id])
+        ->select('usuario1_id')
+        ->asArray()
+        ->all();
     }
 
     public function listaIdsBloqueados()
