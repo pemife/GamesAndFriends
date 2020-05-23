@@ -49,7 +49,7 @@ class UsuariosController extends Controller
                     'desbloquear-usuario', 'ver-lista-deseos',
                     'index', 'ordenar-lista-deseos',
                     'seguir-critico', 'abandonar-critico',
-                    'index-filtrado'
+                    'index-filtrado', 'lista-seguidos'
                 ],
                 'rules' => [
                     [
@@ -59,7 +59,7 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'lista-seguidos'],
                         'roles' => ['@'],
                     ],
                     [
@@ -980,8 +980,10 @@ class UsuariosController extends Controller
                 ->andWhere(['not in', 'id', $IdsUsuariosBloqueados]);
             break;
             case 'seguidores':
-                Yii::debug($usuario->listaSeguidoresId());
                 $query->where(['in', 'id', $usuario->listaSeguidoresId()]);
+            break;
+            case 'seguidos':
+                $query->where(['in', 'id', $usuario->listaCriticosSeguidosId()]);
             break;
             default:
                 $query->where(['not in', 'id', $IdsUsuariosBloqueados]);

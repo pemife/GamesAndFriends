@@ -13,6 +13,12 @@ switch ($tipoLista) {
     case 'bloqueados':
         $tituloParcial = 'bloqueados';
     break;
+    case 'seguidores':
+        $tituloParcial = 'seguidores';
+    break;
+    case 'seguidos':
+        $tituloParcial = 'seguidos';
+    break;
     default:
         $tituloParcial = '';
 }
