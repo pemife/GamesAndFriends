@@ -12,6 +12,8 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -87,7 +89,7 @@ class CopiasController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['regalar-copia', 'finalizar-regalo'],
+                        'actions' => ['regalar-copia'],
                         'matchCallback' => function ($rule, $action) {
                             
                             if (Yii::$app->user->isGuest) {
@@ -95,23 +97,28 @@ class CopiasController extends Controller
                                 return false;
                             }
                             
-                            if (Yii::$app->request->queryParams['uId'] == Yii::$app->user->id) {
+                            if (Yii::$app->request->post()['uId'] == Yii::$app->user->id) {
                                 Yii::$app->session->setFlash('error', 'No puedes regalarte nada a ti mismo');
                                 return false;
                             }
                             
-                            $copia = Copias::findOne(Yii::$app->request->queryParams['cId']);
+                            $copia = Copias::findOne(Yii::$app->request->post()['cId']);
                             if (!$copia) {
                                 Yii::$app->session->setFlash('error', 'No puedes regalar una copia que no existe!');
                                 return false;
                             }
 
-                            $usuario = Usuarios::findOne(Yii::$app->request->queryParams['uId']);
+                            if ($copia->propietario_id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', 'No puedes regalar una copia que no te pertenece!');
+                                return false;
+                            }
+
+                            $usuario = Usuarios::findOne(Yii::$app->request->post()['uId']);
                             if (!$usuario) {
                                 Yii::$app->session->setFlash('error', 'No puedes regalarle nada a un usuario que no existe!');
                                 return false;
                             }
-
+                            
                             if (!$usuario->esVerificado()) {
                                 Yii::$app->session->setFlash('error', 'No puedes regalar nada a un usuario que no esta verificado!');
                                 return false;
@@ -120,6 +127,13 @@ class CopiasController extends Controller
                             return true;
                         },
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['finalizar-regalo'],
+                        'matchCallback' => function ($rule, $action) {
+                            return false;
+                        }
+                    ]
                 ],
             ],
         ];
@@ -245,15 +259,23 @@ class CopiasController extends Controller
         ]);
     }
 
-    public function actionRegalarCopia($cId, $uId)
+    // Esta accion dejará la copia sin dueño temporalmente y
+    // mandará un email al usuario receptor para que acepte/rechace el regalo
+    public function actionRegalarCopia()
     {
-
+        $post = Yii::$app->request->post();
+        $cId = $post['cId'];
+        $uId = $post['uId'];
+        $copia = $this->findModel($cId);
+        $copia->unlink('propietario', Usuarios::findOne(Yii::$app->user->id));
+        $this->correoRegalo($copia, $uId);
+        return true;
     }
 
     // $cId, $uId, $acepta (post)
     public function actionFinalizarRegalo()
     {
-
+        //TODO
     }
 
     /**
@@ -270,5 +292,54 @@ class CopiasController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function correoRegalo($copia, $uId)
+    {
+        $enlaceAcepta = Html::a(
+            'este',
+            Url::to(
+                [
+                    'criticas/finalizar-regalo',
+                    'regaladorId' => Yii::$app->user->id,
+                    'receptorId' => $uId,
+                    'cId' => $copia->id,
+                    'acepta' => true
+                ],
+                true
+            ),
+            [
+                'data-method' => 'POST'
+            ]
+        );
+        $enlaceRechaza = Html::a(
+            'este',
+            Url::to(
+                [
+                    'criticas/finalizar-regalo',
+                    'regaladorId' => Yii::$app->user->id,
+                    'receptorId' => $uId,
+                    'cId' => $copia->id,
+                    'acepta' => false
+                ],
+                true
+            ),
+            [
+                'data-method' => 'POST'
+            ]
+        )
+
+        Yii::$app->mailer->compose()
+        ->setFrom('gamesandfriends2@gmail.com')
+        ->setTo(Usuarios::findOne($uId)->email)
+        ->setSubject('¡Has recibido un regalo!')
+        ->setHtmlBody('El usuario ' . Html::encode(Usuarios::findOne(Yii::$app->user->id)->nombre)
+        . ' te ha regalado una copia de '
+        . $copia->juego->titulo
+        . '<br><br>Para <b>aceptar</b> el regalo, pulsa ' . $enlaceAcepta . ' enlace.'
+        . '<br><br>Paca <b>rechazar</b> el regalo, pulsa ' . $enlaceRechaza . ' enlace.' .
+        )->send();
+
+        Yii::$app->session->setFlash('success', 'Se ha enviado el correo del regalo');
     }
 }

@@ -16,6 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
 $url = Url::to(['usuarios/array-amigos']);
+$url2 = Url::to(['copias/regalar-copia']);
+$url3 = Url::to(['usuarios/view', 'id' => Yii::$app->user->id]);
+$copiaId = $model->id;
 $js = <<<SCRIPT
 $(function() {
 });
@@ -46,6 +49,20 @@ $('#botonModal').click(function(e){
 
 $('#botonRegalar').click(function(e){
     e.preventDefault();
+    var uId = $('#selectAmigos').val();
+    var cId = $copiaId;
+    $.ajax({
+        method: 'POST',
+        url: '$url2',
+        data: {cId: cId, uId: uId},
+        success: function(result){
+          if (result) {
+            window.location = '$url3';
+          } else {
+            alert('Ha ocurrido un error con el menú de regalos');
+          }
+        }
+    });
 });
 SCRIPT;
 
