@@ -70,8 +70,8 @@ AppAsset::register($this);
                 'visible' => !Yii::$app->user->isGuest,
                 'items' => [
                     ['label' => 'Usuarios', 'url' => ['usuarios/index']],
-                    ['label' => 'Bloqueados', 'url' => ['usuarios/vista-bloqueados']],
-                    ['label' => 'Críticos', 'url' => ['usuarios/vista-criticos']]
+                    ['label' => 'Bloqueados', 'url' => ['usuarios/index-filtrado', 'texto' => false, 'tipoLista' => 'bloqueados']],
+                    ['label' => 'Críticos', 'url' => ['usuarios/index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']]
                 ]
             ],
             ['label' => 'Login', 'url' => ['/site/login'], 'visible' => Yii::$app->user->isGuest],

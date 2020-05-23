@@ -105,8 +105,11 @@ use yii\helpers\Html;
                                 return $botones['desbloquear-usuario'];
                             break;
                             case 4:
-                                return $botones['abandonar-critico'] . ' ' .
-                                $botones['mandar-peticion-amistad'];
+                                if ($model->es_critico) {
+                                    return $botones['abandonar-critico'] . ' ' .
+                                    $botones['mandar-peticion-amistad'];
+                                }
+                                return $botones['mandar-peticion-amistad'];
                             break;
                             case 5:
                                 return

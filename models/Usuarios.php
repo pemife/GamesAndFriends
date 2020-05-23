@@ -511,9 +511,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return Relaciones::find()
         ->where(['estado' => 4, 'usuario2_id' => $this->id])
-        ->select('usuario1_id')
-        ->asArray()
-        ->all();
+        ->select('usuario1_id as id')
+        ->column();
     }
 
     public function listaIdsBloqueados()
@@ -521,8 +520,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return Relaciones::find()
         ->where(['usuario1_id' => $this->id, 'estado' => 3])
         ->select('usuario2_id as id')
-        ->asArray()
-        ->all();
+        ->column();
     }
 
     public function listaBloqueados()

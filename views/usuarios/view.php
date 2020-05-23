@@ -258,6 +258,12 @@ Yii::debug($model->puntuacionCritico());
       </div>
     <?php } ?>
 
+    <?php
+    if ($model->es_critico) {
+        echo Html::a('Ver lista de seguidores', ['index-filtrado', 'texto' => false, 'tipoLista' => 'seguidores'], ['class' => 'btn btn-success mb-4 mb-2']);
+    }
+    ?>
+
     <h1>Inventario</h1>
 
     <div class="row">

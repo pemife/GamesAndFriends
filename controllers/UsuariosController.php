@@ -48,8 +48,8 @@ class UsuariosController extends Controller
                     'bloquear-usuario', 'anadir-amigo',
                     'desbloquear-usuario', 'ver-lista-deseos',
                     'index', 'ordenar-lista-deseos',
-                    'vista-criticos', 'vista-bloqueados',
-                    'seguir-critico', 'abandonar-critico'
+                    'seguir-critico', 'abandonar-critico',
+                    'index-filtrado'
                 ],
                 'rules' => [
                     [
@@ -59,7 +59,7 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout', 'index', 'vista-criticos', 'vista-bloqueados'],
+                        'actions' => ['logout', 'index'],
                         'roles' => ['@'],
                     ],
                     [
@@ -326,8 +326,9 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['anadir-ignorados'],
+                        'actions' => ['anadir-ignorados', 'borrar-ignorados'],
                         'matchCallback' => function ($rule, $action) {
+                            $palabraAccion = explode('-', $action->id)[0];
 
                             if (Yii::$app->user->isGuest) {
                                 Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ignorar un juego');
@@ -335,49 +336,33 @@ class UsuariosController extends Controller
                             }
 
                             if (Yii::$app->request->queryParams['uId'] != Yii::$app->user->id) {
-                                Yii::$app->session->setFlash('error', 'No puedes ignorar un juego con una cuenta que no sea tuya');
+                                Yii::$app->session->setFlash('error', 'No puedes ' . $palabraAccion . ' un juego en la lista de ignorados de otra persona');
                                 return false;
                             }
 
                             if (!Juegos::find(Yii::$app->request->queryParams['jId'])) {
-                                Yii::$app->session->setFlash('error', 'No puedes añadir a la lista de deseos un juego que no existe');
-                                return false;
-                            }
-
-                            return true;
-                        }
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['borrar-ignorados'],
-                        'matchCallback' => function ($rule, $action) {
-                            
-                            if (Yii::$app->user->isGuest) {
-                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ignorar un juego');
+                                Yii::$app->session->setFlash('error', 'No puedes ' . $palabraAccion . ' en la lista de ignorados un juego que no existe');
                                 return false;
                             }
 
                             $uId = Yii::$app->request->queryParams['uId'];
 
-                            if (Yii::$app->user->id != $uId) {
-                                Yii::$app->session->setFlash('error', '¡No puedes ignorar un juego con la cuenta de otra persona!');
-                                return false;
-                            }
-
                             $jId = Yii::$app->request->queryParams['jId'];
-                            
-                            if (!Juegos::find($jId)->one()) {
-                                Yii::$app->session->setFlash('error', '¡No puedes ignorar un juego que no existe!');
-                                return false;
-                            }
                             
                             $ignorado = Ignorados::find()
                             ->where(['usuario_id' => $uId, 'juego_id' => $jId])
-                            ->one();
+                            ->exists();
 
                             if (!$ignorado) {
-                                Yii::$app->session->setFlash('error', '¡Ese juego no lo has ignorado!');
-                                return false;
+                                if ($palabraAccion == 'borrar') {
+                                    Yii::$app->session->setFlash('error', '¡Ese juego no lo has ignorado!');
+                                    return false;
+                                }
+                            } else {
+                                if ($palabraAccion == 'anadir') {
+                                    Yii::$app->session->setFlash('error', '¡Ese juego ya lo has ignorado!');
+                                    return false;
+                                }
                             }
 
                             return true;
@@ -403,11 +388,12 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['seguir-critico'],
+                        'actions' => ['seguir-critico', 'abandonar-critico'],
                         'matchCallback' => function ($rule, $action) {
+                            $palabraAccion = explode('-', $action->id)[0];
 
                             if (Yii::$app->user->isGuest) {
-                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para seguir a un crítico');
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ' . $palabraAccion . ' a un crítico');
                                 return false;
                             }
 
@@ -418,14 +404,24 @@ class UsuariosController extends Controller
                                 return false;
                             }
 
-                            if ($usuarioCritico->estadoRelacion(Yii::$app->user->id == 3)) {
+                            if ($usuarioCritico->estadoRelacion(Yii::$app->user->id) == 3) {
                                 Yii::$app->session->setFlash('error', 'No puedes seguir a ese crítico [Bloqueado]');
                                 return false;
                             }
 
-                            if ($usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
-                                Yii::$app->session->setFlash('error', '¡Ya sigues a ese crítico!');
-                                return false;
+                            switch ($palabraAccion) {
+                                case 'seguir':
+                                    if ($usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
+                                        Yii::$app->session->setFlash('error', '¡Ya sigues a ese crítico!');
+                                        return false;
+                                    }
+                                break;
+                                case 'abandonar':
+                                    if (!$usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
+                                        Yii::$app->session->setFlash('error', '¡No sigues a ese crítico!');
+                                        return false;
+                                    }
+                                break;
                             }
 
                             return true;
@@ -433,24 +429,19 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['abandonar-critico'],
+                        'actions' => ['index-filtrado'],
                         'matchCallback' => function ($rule, $action) {
-
+                            
                             if (Yii::$app->user->isGuest) {
-                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para abandonar a un crítico');
+                                Yii::$app->session->setFlash('error', 'Debes iniciar sesión para ver lista de usuarios');
                                 return false;
                             }
-
-                            $usuarioCritico = $this->findModel(Yii::$app->request->queryParams['uId']);
-
-                            if (!$usuarioCritico->es_critico) {
-                                Yii::$app->session->setFlash('error', 'Ese usuario no es crítico');
-                                return false;
-                            }
-
-                            if (!$usuarioCritico->estaSeguidoPor(Yii::$app->user->id)) {
-                                Yii::$app->session->setFlash('error', '¡No sigues a ese crítico!');
-                                return false;
+                            
+                            $tipoLista = Yii::$app->request->queryParams['tipoLista'];
+                            if ($tipoLista == 'seguidores') {
+                                if (!$this->findModel(Yii::$app->user->id)->es_critico) {
+                                    return false;
+                                }
                             }
 
                             return true;
@@ -988,6 +979,10 @@ class UsuariosController extends Controller
                 $query->where(['es_critico' => true])
                 ->andWhere(['not in', 'id', $IdsUsuariosBloqueados]);
             break;
+            case 'seguidores':
+                Yii::debug($usuario->listaSeguidoresId());
+                $query->where(['in', 'id', $usuario->listaSeguidoresId()]);
+            break;
             default:
                 $query->where(['not in', 'id', $IdsUsuariosBloqueados]);
         }
@@ -1004,41 +999,15 @@ class UsuariosController extends Controller
             'query' => $query,
         ]);
 
-        return $this->renderPartial('gridUsuarios', [
-            'dataProvider' => $dataProvider,
-            'tipoLista' => $tipoLista,
-        ]);
-    }
-
-    public function actionVistaBloqueados()
-    {
-        $usuario = $this->findModel(Yii::$app->user->id);
-
-        $query = Usuarios::find()
-        ->where(['in', 'id', $usuario->listaIdsBloqueados()]);
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
+        if (Yii::$app->request->isAjax) {
+            return $this->renderPartial('gridUsuarios', [
+                'dataProvider' => $dataProvider,
+                'tipoLista' => $tipoLista,
+            ]);
+        }
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'tipoLista' => 'bloqueados'
-        ]);
-    }
-
-    public function actionVistaCriticos()
-    {
-        $query = Usuarios::find()
-        ->where(['es_critico' => true]);
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'tipoLista' => 'criticos'
+            'tipoLista' => $tipoLista
         ]);
     }
 
@@ -1048,28 +1017,28 @@ class UsuariosController extends Controller
 
         if ($usuario->esAmigo($uId)) {
             $relacion = $usuario->relacionCon($uId);
-            $relacion->estado = 4;
-        } else {
-            $relacion = new Relaciones([
-                'usuario1_id' => Yii::$app->user->id,
-                'usuario2_id' => $uId,
-                'estado' => 4
-            ]);
+            $relacion->delete();
         }
+
+        $relacion = new Relaciones([
+            'usuario1_id' => Yii::$app->user->id,
+            'usuario2_id' => $uId,
+            'estado' => 4
+        ]);
 
         if ($relacion->save()) {
             if (Yii::$app->request->isAjax) {
                 return Json::encode('Has comenzado a seguir al crítico');
             }
             Yii::$app->session->setFlash('success', 'Has comenzado a seguir al crítico');
-            return $this->redirect(['vista-criticos']);
+            return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
         }
 
         if (Yii::$app->request->isAjax) {
             return Json::encode('Ha ocurrido un error al intentar seguir al crítico');
         }
         Yii::$app->session->setFlash('error', 'Ha ocurrido un error al intentar seguir al crítico');
-        return $this->redirect(['vista-criticos']);
+        return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
     }
 
     public function actionAbandonarCritico($uId)
@@ -1087,7 +1056,7 @@ class UsuariosController extends Controller
             }
 
             Yii::$app->session->setFlash('success', 'Has dejado de seguir al crítico');
-            return $this->redirect(['vista-criticos']);
+            return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
         }
 
         if (Yii::$app->request->isAjax) {
@@ -1095,7 +1064,7 @@ class UsuariosController extends Controller
         }
 
         Yii::$app->session->setFlash('success', 'Ha ocurrido un error al intentar abandonar al crítico');
-        return $this->redirect(['vista-criticos']);
+        return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
     }
 
     /**
