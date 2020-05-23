@@ -2,6 +2,7 @@
 
 use yii\bootstrap4\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\JuegosSearch */
@@ -11,6 +12,8 @@ $this->title = 'Novedades';
 $this->params['breadcrumbs'][] = $this->title;
 
 $uId = Yii::$app->user->isGuest ? 0 : Yii::$app->user->id;
+$url1 = Url::to(['usuarios/anadir-ignorados']);
+$url2 = Url::to(['juegos/novedades']);
 $js = <<<script
 var slideIndex = 0;
 showDivs(slideIndex);
@@ -85,6 +88,23 @@ function anadirDeseos(e){
     }
   });
 }
+$("[name='botonIgnorados']").click(anadirIgnorados);
+function anadirIgnorados(e){
+  e.preventDefault();
+  console.log(this.dataset.modelid);
+  $.ajax({
+    method: 'GET',
+    url: '$url1',
+    data: {jId: this.dataset.modelid, uId: $uId},
+    success: function(result){
+      if (result) {
+        window.location = '$url2';
+      } else {
+        alert('Ha ocurrido un error al añadir ignorados');
+      }
+    }
+  });
+}
 script;
 
 $this->registerJS($js);
@@ -138,7 +158,7 @@ $this->registerJS($js);
             'publ',
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{view} {vermercado} {anadirDeseos}',
+              'template' => '{view} {vermercado} {anadirDeseos} {ignorar}',
               'buttons' => [
                 'vermercado' => function ($url, $model, $key){
                     return Html::a(
@@ -164,6 +184,26 @@ $this->registerJS($js);
                         ]
                     );
                 },
+                'ignorar' => function ($url, $model, $key) {
+                    if (Yii::$app->user->isGuest) {
+                        return '';
+                    }
+
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-warning-sign"></span>',
+                        '#',
+                        [
+                          'title' => 'Ignorar juego',
+                          'name' => 'botonIgnorados',
+                          'style' => [
+                              'color' => 'red',
+                          ],
+                          'data' => [
+                            'modelId' => $model->id,
+                          ]
+                        ]
+                    );
+              },
               ],
             ],
         ],
