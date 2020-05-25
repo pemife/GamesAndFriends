@@ -20,8 +20,8 @@ showDivs(slideIndex);
 
 function plusDivs(n) {
     showDivs(slideIndex += n);
-    console.log("plusDivs");
-    console.log(slideIndex);
+    // console.log("plusDivs");
+    // console.log(slideIndex);
 }
 
 $(document).ready(function(){
@@ -36,8 +36,8 @@ $(document).ready(function(){
         var arraySelectores = document.getElementsByName("grupoSelectores");
 
         slideIndex = parseInt(this.value);
-        console.log("selector onclick");
-        console.log(slideIndex);
+        // console.log("selector onclick");
+        // console.log(slideIndex);
         showDivs(slideIndex);
 
         for (i=0; i < arraySelectores.length -1; i++) {
@@ -55,8 +55,8 @@ function showDivs(n) {
 
   if (n > arrayImagenes.length - 1) {slideIndex = 0}
   if (n < 0) {slideIndex = arrayImagenes.length -1}
-  console.log("showDivs");
-  console.log(slideIndex);
+  // console.log("showDivs");
+  // console.log(slideIndex);
 
   for (i = 0; i < arrayImagenes.length; i++) {
     arrayImagenes[i].style.display = "none";
@@ -74,7 +74,7 @@ function showDivs(n) {
 $("[name='botonDeseos']").click(anadirDeseos);
 function anadirDeseos(e){
   e.preventDefault();
-  console.log(this.dataset.modelid);
+  // console.log(this.dataset.modelid);
   $.ajax({
     method: 'GET',
     url: '/index.php?r=usuarios/anadir-deseos',
@@ -91,7 +91,7 @@ function anadirDeseos(e){
 $("[name='botonIgnorados']").click(anadirIgnorados);
 function anadirIgnorados(e){
   e.preventDefault();
-  console.log(this.dataset.modelid);
+  // console.log(this.dataset.modelid);
   $.ajax({
     method: 'GET',
     url: '$url1',
@@ -151,11 +151,28 @@ $this->registerJS($js);
 
     <?= GridView::widget([
         'dataProvider' => $juegosProvider,
+        'rowOptions' => [
+            'itemscope' => true,
+            'itemtype' => 'https://schema.org/VideoGame',
+        ],
         'columns' => [
-            'titulo',
-            'fechalan:date',
-            'dev',
-            'publ',
+            [
+              'attribute' => 'titulo',
+              'contentOptions' => ['itemprop' => 'name']
+            ],
+            [
+              'attribute' => 'fechalan',
+              'format' => 'date',
+              'contentOptions' => ['itemprop' => 'datePublished']
+            ],
+            [
+              'attribute' => 'dev',
+              'contentOptions' => ['itemprop' => 'creator']
+            ],
+            [
+              'attribute' => 'publ',
+              'contentOptions' => ['itemprop' => 'publisher']
+            ],
             [
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {anadirDeseos} {ignorar}',
@@ -215,11 +232,28 @@ if (!Yii::$app->user->isGuest) {
 
     echo GridView::widget([
             'dataProvider' => $recomendacionesProvider,
+            'rowOptions' => [
+                'itemscope' => true,
+                'itemtype' => 'https://schema.org/VideoGame',
+            ],
             'columns' => [
-                'titulo',
-                'fechalan:date',
-                'dev',
-                'publ',
+                [
+                  'attribute' => 'titulo',
+                  'contentOptions' => ['itemprop' => 'name']
+                ],
+                [
+                  'attribute' => 'fechalan',
+                  'format' => 'date',
+                  'contentOptions' => ['itemprop' => 'datePublished']
+                ],
+                [
+                  'attribute' => 'dev',
+                  'contentOptions' => ['itemprop' => 'creator']
+                ],
+                [
+                  'attribute' => 'publ',
+                  'contentOptions' => ['itemprop' => 'publisher']
+                ],
                 [
                   'class' => 'yii\grid\ActionColumn',
                   'template' => '{view} {vermercado} {anadirDeseos}',

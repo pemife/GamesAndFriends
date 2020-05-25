@@ -71,13 +71,28 @@ $this->registerJs($js);
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions' => [
+            'itemscope' => true,
+            'itemtype' => 'https://schema.org/VideoGame',
+        ],
         'columns' => [
-            'titulo',
-            // 'descripcion:ntext',
-            'fechalan:date',
-            'dev',
-            'publ',
-            // 'cont_adul:boolean',
+            [
+              'attribute' => 'titulo',
+              'contentOptions' => ['itemprop' => 'name']
+            ],
+            [
+              'attribute' => 'fechalan',
+              'format' => 'date',
+              'contentOptions' => ['itemprop' => 'datePublished']
+            ],
+            [
+              'attribute' => 'dev',
+              'contentOptions' => ['itemprop' => 'creator']
+            ],
+            [
+              'attribute' => 'publ',
+              'contentOptions' => ['itemprop' => 'publisher']
+            ],
             'edad_minima',
             [
               'class' => 'yii\grid\ActionColumn',

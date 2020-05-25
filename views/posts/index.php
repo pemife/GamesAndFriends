@@ -25,7 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             'titulo',
-            'juego.titulo:text:Juego',
+            [
+                'attribute' => 'juego.titulo',
+                'format' => 'text',
+                'label' => 'Juego',
+                'contentOptions' => [
+                    'itemscope' => true,
+                    'itemtype' => 'https://schema.org/VideoGame',
+                    'itemprop' => 'name'
+                ]
+            ],
             'usuario.nombre:text:Usuario',
             'created_at:RelativeTime',
             // 'desarrollo:ntext',

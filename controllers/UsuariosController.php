@@ -805,6 +805,7 @@ class UsuariosController extends Controller
     }
 
     // https://jqueryui.com/sortable/
+    // https://www.yiiframework.com/extension/yiisoft/yii2-jui/doc/api/2.0/yii-jui-draggable
     public function actionVerListaDeseos($uId)
     {
         $deseadosProvider = new ArrayDataProvider([
