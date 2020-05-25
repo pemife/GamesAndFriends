@@ -72,10 +72,18 @@ $(function(){
               });
         }
     });
+
+    $('#listaJuegos').sortable();
+    $('#listaJuegos').disableSelection();
+
+    // var appendTo = $( ".juego" ).sortable( "option", "appendTo" );
+ 
+    // $( ".juego" ).sortable( "option", "appendTo", $('.listaJuegos') );
 }); 
 SCRIPT;
 $this->registerJS($js);
 ?>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js  " defer></script>
 
 <h1>Lista de Deseos de <?= $usuario->nombre ?></h1>
 
@@ -123,8 +131,10 @@ $this->registerJS($js);
         'itemView' => function ($model, $key, $index, $widget) {
             $urlImagen = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.icon-icons.com%2Ficons2%2F510%2FPNG%2F512%2Fgame-controller-b_icon-icons.com_50382.png&f=1&nofb=1¡';
             ?>
-            <h3><?= Html::encode($model->juego->titulo) ?></h3>
-            <div class="row">
+            <div class="row juego">
+                <div class="row col-md-12">
+                    <h3><?= Html::encode($model->juego->titulo) ?></h3>
+                </div>
                 <div class="col-md-1">
                     <h1><?= Html::encode($model->orden) ?></h1>
                 </div>
@@ -147,27 +157,27 @@ $this->registerJS($js);
                             'title' => 'ver en mercado',
                             ]
                     ) ?>
-                <?php
-                if ($model->usuario->id == Yii::$app->user->id) {
-                    echo Html::a(
-                        '',
-                        [
-                            'usuarios/borrar-deseos',
-                            'jId' => $model->juego->id,
-                            'uId' => Yii::$app->user->id
-                        ],
-                        [
-                            'class' => 'glyphicon glyphicon-remove-circle',
-                            'title' => 'Borrar de tu lista de deseados',
-                            'data-confirm' => '¿Estas seguro de que quieres borrarlo?',
-                        ]
-                    );
-                }
-                ?>
+                    <?php
+                    if ($model->usuario->id == Yii::$app->user->id) {
+                        echo Html::a(
+                            '',
+                            [
+                                'usuarios/borrar-deseos',
+                                'jId' => $model->juego->id,
+                                'uId' => Yii::$app->user->id
+                            ],
+                            [
+                                'class' => 'glyphicon glyphicon-remove-circle',
+                                'title' => 'Borrar de tu lista de deseados',
+                                'data-confirm' => '¿Estas seguro de que quieres borrarlo?',
+                            ]
+                        );
+                    }
+                    ?>
                 </div>
+                <hr>
             </div>
-            <hr>
             <?php
         },
         ]) ?>
-</div>
+</ul>
