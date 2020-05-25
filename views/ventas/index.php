@@ -27,17 +27,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $copiasProvider,
+        'rowOptions' => [
+            'itemscope' => true,
+            'itemtype' => 'https://schema.org/VideoGame',
+        ],
         'columns' => [
-            'copia.juego.titulo',
+            [
+                'attribute' => 'copia.juego.titulo',
+                'contentOptions' => ['itemprop' => 'name']
+            ],
             'vendedor.nombre:ntext:Vendedor',
             'created_at:RelativeTime:En venta desde',
             [
                 'label' => 'Generos',
                 'value' => function ($model) {
                     return Html::encode(implode(', ', $model->copia->juego->generosNombres()));
-                }
+                },
+                'contentOptions' => ['itemprop' => 'genre']
             ],
-            'precio',
+            [
+                'attribute' => 'precio',
+                'contentOptions' => ['itemprop' => 'price']
+            ],
             [
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {update} {delete}',
@@ -85,11 +96,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= Gridview::widget([
         'dataProvider' => $productosProvider,
+        'rowOptions' => [
+            'itemscope' => true,
+            'itemtype' => 'http://schema.org/Product',
+        ],
         'columns' => [
-            'producto.nombre',
+            [
+                'attribute' => 'producto.nombre',
+                'contentOptions' => ['itemprop' => 'name']
+            ],
             'vendedor.nombre:ntext:Vendedor',
             'created_at:RelativeTime:En venta desde',
-            'precio',
+            [
+                'attribute' => 'precio',
+                'contentOptions' => ['itemprop' => 'price']
+            ],
             [
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {update} {delete}',

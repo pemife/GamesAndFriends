@@ -272,8 +272,15 @@ Yii::debug($model->puntuacionCritico());
         <h3>Productos</h3>
         <?= GridView::widget([
           'dataProvider' => $productosProvider,
+          'rowOptions' => [
+              'itemscope' => true,
+              'itemtype' => 'http://schema.org/Product',
+          ],
           'columns' => [
-            'nombre',
+            [
+              'attribute' => 'nombre',
+              'contentOptions' => ['itemprop' => 'name']
+            ],
             'stock',
             [
                 'header' => 'Estado',
@@ -331,8 +338,15 @@ Yii::debug($model->puntuacionCritico());
           <h3>Juegos</h3>
             <?= GridView::widget([
               'dataProvider' => $copiasProvider,
+              'rowOptions' => [
+                  'itemscope' => true,
+                  'itemtype' => 'http://schema.org/Product',
+              ],
               'columns' => [
-                'juego.titulo',
+                [
+                    'attribute' => 'juego.titulo',
+                    'contentOptions' => ['itemprop' => 'name']
+                ],
                 [
                     'header' => 'Estado',
                     'class' => 'yii\grid\ActionColumn',

@@ -78,7 +78,16 @@ $this->registerJs($js);
         'attributes' => [
             'desarrollo:ntext',
             'created_at:RelativeTime:Creado',
-            'juego.titulo:text:Juego',
+            [
+              'attribute' => 'juego.titulo',
+              'format' => 'text',
+              'label' => 'Juego',
+              'contentOptions' => [
+                  'itemscope' => true,
+                  'itemtype' => 'https://schema.org/VideoGame',
+                  'itemprop' => 'name'
+              ]
+            ],
             'usuario.nombre:text:Usuario',
             [
                 'attribute' => 'votos',
@@ -103,38 +112,38 @@ $this->registerJs($js);
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete} {reportar}',
                 'buttons' => [
-                    'update' => function ($url, $model, $key){
+                    'update' => function ($url, $model, $key) {
                         if (Yii::$app->user->id != $model->usuario->id) {
-                          return "";
+                            return '';
                         }
                         return Html::a(
-                          '<span class="glyphicon glyphicon-pencil"></span>',
-                          [
-                              '/comentarios/update',
-                              'id' => $model->id,
-                          ],
-                          [
-                              'title' => 'editar comentario',
-                          ]
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            [
+                                '/comentarios/update',
+                                'id' => $model->id,
+                            ],
+                            [
+                                'title' => 'editar comentario',
+                            ]
                         );
                     },
                     'delete' => function ($url, $model, $key){
-                        if(Yii::$app->user->id != $model->usuario->id){
-                          return "";
+                        if (Yii::$app->user->id != $model->usuario->id) {
+                            return '';
                         }
                         return Html::a(
-                          '<span class="glyphicon glyphicon-trash"></span>',
-                          [
-                              'comentarios/delete',
-                              'id' => $model->id,
-                          ],
-                          [
-                              'data' => [
-                                'method' => 'post',
-                                'confirm' => '¿Estas seguro de borrar el comentario?(Esta accion no se puede deshacer)',
-                              ],
-                              'title' => 'borrar comentario',
-                          ]
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            [
+                                'comentarios/delete',
+                                'id' => $model->id,
+                            ],
+                            [
+                                'data' => [
+                                  'method' => 'post',
+                                  'confirm' => '¿Estas seguro de borrar el comentario?(Esta accion no se puede deshacer)',
+                                ],
+                                'title' => 'borrar comentario',
+                            ]
                         );
                     },
                     'reportar' => function ($url, $model, $action) {

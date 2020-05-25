@@ -23,10 +23,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $misProductosProvider,
+        'rowOptions' => [
+            'itemscope' => true,
+            'itemtype' => 'https://schema.org/Product'
+        ],
         'columns' => [
-            'producto.nombre',
+            [
+                'attribute' => 'producto.nombre',
+                'contentOptions' => ['itemprop' => 'name']
+            ],
             'created_at:RelativeTime:En venta desde',
-            'precio',
+            [
+                'attribute' => 'precio',
+                'contentOptions' => ['itemprop' => 'price']
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
@@ -36,26 +46,38 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $misCopiasProvider,
+        'rowOptions' => [
+            'itemscope' => true,
+            'itemtype' => 'https://schema.org/VideoGame'
+        ],
         'columns' => [
-            'copia.juego.titulo',
+            [
+                'attribute' => 'copia.juego.titulo',
+                'label' => 'Juego',
+                'contentOptions' => ['itemprop' => 'name']
+            ],
             'created_at:RelativeTime:En venta desde',
             [
                 'label' => 'Generos',
-                'value' => function($model){
+                'value' => function ($model) {
                     foreach ($model->copia->juego->etiquetas as $genero) {
                         $generos[] = $genero->nombre;
                     }
 
-                    $cadenaGeneros = "";
+                    $cadenaGeneros = '';
 
                     if (!empty($generos)) {
-                        $cadenaGeneros = implode(", ", $generos);
+                        $cadenaGeneros = implode(', ', $generos);
                     }
 
                     return $cadenaGeneros;
-                }
+                },
+                'contentOptions' => ['itemprop' => 'genre']
             ],
-            'precio',
+            [
+                'attribute' => 'precio',
+                'contentOptions' => ['itemprop' => 'price']
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ]
     ]); ?>
