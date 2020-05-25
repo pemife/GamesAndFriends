@@ -116,6 +116,7 @@ $this->registerJS($js);
 
     <h2>Novedades</h2>
 
+    <!-- http://qnimate.com/creating-a-slider-using-html-and-css-only/ -->
     <center>
         <div class="w3-content w3-display-container">
             <?php
@@ -124,7 +125,7 @@ $this->registerJS($js);
                 <?= Html::a(
                     Html::img(
                         'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Video-Game-Controller-Icon-D-Edit.svg/480px-Video-Game-Controller-Icon-D-Edit.svg.png',
-                        ['class' => 'imagenesJuegos'],
+                        ['class' => 'imagenesJuegos mb-2 mt-2'],
                         ['style' => 'width:30%']
                     ),
                     ['juegos/view', 'id' => $juego->id]
