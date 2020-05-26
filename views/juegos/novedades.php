@@ -83,7 +83,7 @@ function anadirDeseos(e){
       if (result) {
         alert(result);
       } else {
-        alert('NOOOOOOOOOOO');
+        alert('Ha ocurrido un error');
       }
     }
   });
@@ -145,7 +145,7 @@ $this->registerJS($js);
                     ]
                 );
             }
-             ?>
+            ?>
             <button class="w3-button w3-black w3-display-right" id="flechaDcha"><span class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
     </center>
@@ -178,7 +178,7 @@ $this->registerJS($js);
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {anadirDeseos} {ignorar}',
               'buttons' => [
-                'vermercado' => function ($url, $model, $key){
+                'vermercado' => function ($url, $model, $key) {
                     return Html::a(
                         '<span class="glyphicon glyphicon-shopping-cart"></span>',
                         ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
@@ -221,7 +221,7 @@ $this->registerJS($js);
                           ]
                         ]
                     );
-              },
+                },
               ],
             ],
         ],
@@ -287,7 +287,6 @@ if (!Yii::$app->user->isGuest) {
                 ],
             ],
       ]);
-
 }
 
 ?>
