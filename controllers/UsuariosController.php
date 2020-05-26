@@ -884,7 +884,7 @@ class UsuariosController extends Controller
         ->orderBy('orden')
         ->all();
 
-        if (!$deseados || (count($deseados) != (count($nO)-1))) {
+        if (!$deseados || (count($deseados) != (count($nO)))) {
             Yii::debug('el usuario no tiene deseos o los arrays no coinciden');
             return false;
         }
@@ -894,7 +894,7 @@ class UsuariosController extends Controller
             for ($j = 0; $j < count($nO); $j++) {
                 if ($deseados[$i]->juego->id == $nO[$j]) {
                     $deseo = $deseados[$i];
-                    $deseo->orden = $j;
+                    $deseo->orden = $j+1;
                     if (!$deseo->save()) {
                         Yii::$app->session->setFlash('error', 'Ha ocurrido un error actualizando el orden de la lista de deseos');
                         return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
