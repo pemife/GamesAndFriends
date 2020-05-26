@@ -73,7 +73,25 @@ $(function(){
         }
     });
 
-    $('#listaJuegos').sortable();
+    $('#listaJuegos').sortable({
+        update: function(e, ui){
+            $('#botonGuardar').show();
+            nuevoOrden = devolverNuevoOrden();
+
+        }
+    });
+
+    function devolverNuevoOrden(){
+        var juegos = document.getElementsByClassName('juego');
+        console.log(juegos);
+        var ordenJuegos = new Array();
+        juegos.forEach(function () {
+            console.log(this);
+        });
+
+        return ordenJuegos;
+    }
+
     $('#listaJuegos').disableSelection();
 
     // var appendTo = $( ".juego" ).sortable( "option", "appendTo" );
@@ -87,8 +105,10 @@ $this->registerJS($js);
 
 <h1>Lista de Deseos de <?= $usuario->nombre ?></h1>
 
-<?= Html::a('Ordenar Lista', '#', ['class' => 'btn btn-info', 'id' => 'botonOrdenar', 'hidden' => (Yii::$app->user->id != $uId)]) ?>
-<?= Html::a('Guardar Lista', '#', ['class' => 'btn btn-success ml-2', 'id' => 'botonGuardar']) ?>
+<p>Puedes ordenar la lista arrastrando los juegos</p>
+
+<?= Html::a('Ordenar Lista', '#', ['class' => 'btn btn-info mb-2', 'id' => 'botonOrdenar', 'hidden' => (Yii::$app->user->id != $uId)]) ?>
+<?= Html::a('Guardar Orden', '#', ['class' => 'btn btn-success ml-2 mb-2', 'id' => 'botonGuardar']) ?>
 
 <div id="tablasOrden" class="row mt-2 mb-2">
     <div class="col-md-4">
@@ -131,12 +151,14 @@ $this->registerJS($js);
         'itemView' => function ($model, $key, $index, $widget) {
             $urlImagen = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.icon-icons.com%2Ficons2%2F510%2FPNG%2F512%2Fgame-controller-b_icon-icons.com_50382.png&f=1&nofb=1¡';
             ?>
-            <div class="row juego">
+            <div class="row juego" border="1">
                 <div class="row col-md-12">
                     <h3><?= Html::encode($model->juego->titulo) ?></h3>
                 </div>
                 <div class="col-md-1">
-                    <h1><?= Html::encode($model->orden) ?></h1>
+                    <div><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+                    <div><h1><?= Html::encode($model->orden) ?></h1></div>
+                    <div><span class="glyphicon glyphicon-menu-hamburger"></span></div>
                 </div>
                 <div class="col-md-3">
                     <img src="<?= $urlImagen ?>" width="150" height="125">
