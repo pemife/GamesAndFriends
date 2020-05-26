@@ -327,7 +327,7 @@ class CopiasController extends Controller
             [
                 'data-method' => 'POST'
             ]
-        )
+        );
 
         Yii::$app->mailer->compose()
         ->setFrom('gamesandfriends2@gmail.com')
@@ -337,7 +337,7 @@ class CopiasController extends Controller
         . ' te ha regalado una copia de '
         . $copia->juego->titulo
         . '<br><br>Para <b>aceptar</b> el regalo, pulsa ' . $enlaceAcepta . ' enlace.'
-        . '<br><br>Paca <b>rechazar</b> el regalo, pulsa ' . $enlaceRechaza . ' enlace.' .
+        . '<br><br>Paca <b>rechazar</b> el regalo, pulsa ' . $enlaceRechaza . ' enlace.'
         )->send();
 
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo del regalo');
