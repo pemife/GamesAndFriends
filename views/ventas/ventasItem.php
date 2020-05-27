@@ -21,17 +21,17 @@ if($esProducto){
         'class' => 'yii\grid\ActionColumn',
         'template' => '{view} {update} {delete}',
         'buttons' => [
-            'update' => function ($url, $model, $key){
-                if(Yii::$app->user->id == $model->vendedor->id) {
+            'update' => function ($url, $model, $key) {
+                if (Yii::$app->user->id == $model->vendedor->id) {
                     return Html::a(
-                      '<span class="glyphicon glyphicon-pencil"></span>',
-                      ['ventas/update', 'id' => $model->id],
-                      ['title' => 'Actualizar']
+                        '<span class="glyphicon glyphicon-pencil"></span>',
+                        ['ventas/update', 'id' => $model->id],
+                        ['title' => 'Actualizar']
                     );
                 }
             },
-            'delete' => function ($url, $model, $key){
-                if(Yii::$app->user->id == $model->vendedor->id) {
+            'delete' => function ($url, $model, $key) {
+                if (Yii::$app->user->id == $model->vendedor->id) {
                     return Html::a(
                         '<span class="glyphicon glyphicon-trash"></span>',
                         ['ventas/delete', 'id' => $model->id],
@@ -48,53 +48,53 @@ if($esProducto){
     ],
   ];
 } else {
-  $columns = [
-    'copia.juego.titulo',
-    'vendedor.nombre:ntext:Vendedor',
-    'created_at:RelativeTime:En venta desde',
-    [
-        'label' => 'Generos',
-        'value' => function($model){
-            foreach ($model->copia->juego->etiquetas as $genero) {
-                $generos[] = $genero->nombre;
-            }
-
-            $cadenaGeneros = implode(", ", $generos);
-
-            return $cadenaGeneros;
-        }
-    ],
-    'precio',
-    [
-        'class' => 'yii\grid\ActionColumn',
-        'template' => '{view} {update} {delete}',
-        'buttons' => [
-            'update' => function ($url, $model, $key){
-                if(Yii::$app->user->id == $model->vendedor->id) {
-                    return Html::a(
-                      '<span class="glyphicon glyphicon-pencil"></span>',
-                      ['ventas/update', 'id' => $model->id],
-                      ['title' => 'Actualizar']
-                    );
+    $columns = [
+        'copia.juego.titulo',
+        'vendedor.nombre:ntext:Vendedor',
+        'created_at:RelativeTime:En venta desde',
+        [
+            'label' => 'Generos',
+            'value' => function ($model) {
+                foreach ($model->copia->juego->etiquetas as $genero) {
+                    $generos[] = $genero->nombre;
                 }
-            },
-            'delete' => function ($url, $model, $key){
-                if(Yii::$app->user->id == $model->vendedor->id) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-trash"></span>',
-                        ['ventas/delete', 'id' => $model->id],
-                        [
-                            'title' => 'Eliminar',
-                            'data-method' => 'POST',
-                            'confirm' => 'Esta seguro de que quiere eliminar la venta?'
-                        ]
-                    );
-                }
-                return null;
+
+                $cadenaGeneros = implode(', ', $generos);
+
+                return $cadenaGeneros;
             }
-        ]
-    ],
-  ];
+        ],
+        'precio',
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{view} {update} {delete}',
+            'buttons' => [
+                'update' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->vendedor->id) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            ['ventas/update', 'id' => $model->id],
+                            ['title' => 'Actualizar']
+                        );
+                    }
+                },
+                'delete' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->vendedor->id) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            ['ventas/delete', 'id' => $model->id],
+                            [
+                                'title' => 'Eliminar',
+                                'data-method' => 'POST',
+                                'confirm' => 'Esta seguro de que quiere eliminar la venta?'
+                            ]
+                        );
+                    }
+                    return null;
+                }
+            ]
+        ],
+    ];
 }
 ?>
 

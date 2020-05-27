@@ -261,7 +261,7 @@ class CopiasController extends Controller
 
     // Esta accion dejará la copia sin dueño temporalmente y
     // mandará un email al usuario receptor para que acepte/rechace el regalo
-    public function actionRegalarCopia()
+    public function actionRegalarCopia() 
     {
         $post = Yii::$app->request->post();
         $cId = $post['cId'];
@@ -275,7 +275,7 @@ class CopiasController extends Controller
     // $cId, $uId, $acepta (post)
     public function actionFinalizarRegalo()
     {
-        //TODO
+        
     }
 
     /**
@@ -296,36 +296,43 @@ class CopiasController extends Controller
 
     protected function correoRegalo($copia, $uId)
     {
+        $regalo = [
+            'regaladorId' => Yii::$app->user->id,
+            'receptorId' => $uId,
+            'cId' => $copia->id
+        ];
+
         $enlaceAcepta = Html::a(
             'este',
             Url::to(
                 [
-                    'criticas/finalizar-regalo',
-                    'regaladorId' => Yii::$app->user->id,
-                    'receptorId' => $uId,
-                    'cId' => $copia->id,
-                    'acepta' => true
+                    'copias/finalizar-regalo',
                 ],
                 true
             ),
             [
-                'data-method' => 'POST'
+                'data-method' => 'POST',
+                'data-params' => [
+                    'regalo' => $regalo,
+                    'acepta' => true
+                ]
             ]
         );
-        $enlaceRechaza = Html::a(
+        $enlaceRechaza =  Html::a(
             'este',
             Url::to(
                 [
-                    'criticas/finalizar-regalo',
-                    'regaladorId' => Yii::$app->user->id,
-                    'receptorId' => $uId,
-                    'cId' => $copia->id,
-                    'acepta' => false
+                    'copias/finalizar-regalo',
                 ],
                 true
             ),
             [
-                'data-method' => 'POST'
+                'class' => 'btn btn-primary',
+                'data-method' => 'POST',
+                'data-params' => [
+                    'regalo' => $regalo,
+                    'acepta' => false
+                ]
             ]
         );
 
@@ -333,11 +340,12 @@ class CopiasController extends Controller
         ->setFrom('gamesandfriends2@gmail.com')
         ->setTo(Usuarios::findOne($uId)->email)
         ->setSubject('¡Has recibido un regalo!')
-        ->setHtmlBody('El usuario ' . Html::encode(Usuarios::findOne(Yii::$app->user->id)->nombre)
-        . ' te ha regalado una copia de '
-        . $copia->juego->titulo
-        . '<br><br>Para <b>aceptar</b> el regalo, pulsa ' . $enlaceAcepta . ' enlace.'
-        . '<br><br>Paca <b>rechazar</b> el regalo, pulsa ' . $enlaceRechaza . ' enlace.'
+        ->setHtmlBody(
+            'El usuario ' . Html::encode(Usuarios::findOne(Yii::$app->user->id)->nombre)
+            . ' te ha regalado una copia de '
+            . $copia->juego->titulo
+            . '<br><br>Para <b>aceptar</b> el regalo, pulsa ' . $enlaceAcepta . ' enlace.'
+            . '<br><br>Paca <b>rechazar</b> el regalo, pulsa ' . $enlaceRechaza . ' enlace.'
         )->send();
 
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo del regalo');

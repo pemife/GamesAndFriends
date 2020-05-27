@@ -32,24 +32,24 @@ $this->params['breadcrumbs'][] = $this->title;
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {update} {delete} {vermercado}',
               'buttons' => [
-                'vermercado' => function ($url, $model, $key){
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                    ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
-                    ['title' => 'ver en mercado']
-                  );
+                'vermercado' => function ($url, $model, $key) {
+                    return Html::a(
+                        '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                        ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
+                        ['title' => 'ver en mercado']
+                    );
                 },
-                'update' => function ($url, $model, $key){
-                    if(Yii::$app->user->id == $model->propietario->id) {
+                'update' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->propietario->id) {
                         return Html::a(
-                          '<span class="glyphicon glyphicon-pencil"></span>',
-                          ['ventas/update', 'id' => $model->id],
-                          ['title' => 'Actualizar']
+                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            ['ventas/update', 'id' => $model->id],
+                            ['title' => 'Actualizar']
                         );
                     }
                 },
-                'delete' => function ($url, $model, $key){
-                    if(Yii::$app->user->id == $model->propietario->id) {
+                'delete' => function ($url, $model, $key) {
+                    if (Yii::$app->user->id == $model->propietario->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>',
                             ['ventas/delete', 'id' => $model->id],

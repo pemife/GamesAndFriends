@@ -981,10 +981,17 @@ class UsuariosController extends Controller
             Url::to(
                 [
                     'usuarios/verificar',
-                    'token' => $this->findModel($usuarioId)->token,
                 ],
                 true
-            )
+            ),
+            [
+                'data' => [
+                    'method' => 'POST',
+                    'params' => [
+                        'token' => $this->findModel($usuarioId)->token
+                    ]
+                ]
+            ]
         ))->send();
 
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
