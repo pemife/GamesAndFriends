@@ -109,6 +109,35 @@ function anadirIgnorados(e){
 script;
 
 $this->registerJS($js);
+
+$credentials = new Aws\Credentials\Credentials(getenv('KEY'), getenv('SECRET'));
+
+$s3 = new S3Client([
+    'version'     => 'latest',
+    'region'      => 'eu-west-2',
+    'credentials' => $credentials
+]);
+
+$sharedConfig = [
+  'profile' => 'default',
+  'region' => 'us-east-2',
+  'version' => 'latest'
+];
+
+// Create an SDK class used to share configuration across clients.
+$sdk = new Aws\Sdk($sharedConfig);
+
+// Use an Aws\Sdk class to create the S3Client object.
+$s3Client = $sdk->createS3();
+
+// Download the contents of the object.
+$result = $s3Client->getObject([
+  'Bucket' => 'gamesandfriends',
+  'Key' => 'Prueba/rocket-league.jpg'
+]);
+
+// Print the body of the result by indexing into the result object.
+echo $result['Body'];
 ?>
 <div class="juegos-novedades">
     <style>
