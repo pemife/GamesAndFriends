@@ -1,7 +1,7 @@
 <?php
-// use yii\helpers\Html;
+// use yii\bootstrap4\Html;
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\ListView;
 
 $this->title = 'Lista de juegos ignorados';

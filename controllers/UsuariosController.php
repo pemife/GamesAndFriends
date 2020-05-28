@@ -17,7 +17,7 @@ use yii\data\ArrayDataProvider;
 use yii\debug\models\timeline\DataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;

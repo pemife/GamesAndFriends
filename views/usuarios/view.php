@@ -2,7 +2,7 @@
 
 use yii\grid\GridView;
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
 

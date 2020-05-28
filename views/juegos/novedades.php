@@ -3,6 +3,7 @@
 use yii\bootstrap4\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use Aws\S3\S3Client;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\JuegosSearch */

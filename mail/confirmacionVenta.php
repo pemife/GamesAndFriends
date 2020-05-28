@@ -2,7 +2,7 @@
 
 use app\models\Usuarios;
 use app\models\Ventas;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
@@ -44,14 +44,14 @@ $usuario = Usuarios::findOne(Yii::$app->user->id);
 
 <p>Para confirmar la venta del producto a este usuario, pulsa el siguiente enlace</p>
 <?= Html::a(
-            'Confirmar venta',
-            Url::to(
-                [
-                    'ventas/finalizar-venta',
-                    'idVenta' => $venta->id,
-                    'idComprador' => $idComprador,
-                ],
-                true
-            ),
-            ['class' => 'btn btn-danger']
-        ); ?>
+        'Confirmar venta',
+        Url::to(
+            [
+                'ventas/finalizar-venta',
+                'idVenta' => $venta->id,
+                'idComprador' => $idComprador,
+            ],
+            true
+        ),
+        ['class' => 'btn btn-danger']
+); ?>
