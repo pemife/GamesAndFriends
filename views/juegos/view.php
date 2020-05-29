@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use kartik\rating\StarRating as RatingStarRating;
 use yii\bootstrap4\Modal;
 use yii\widgets\ListView;
+use Aws\S3\S3Client;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Juegos */
@@ -14,6 +15,23 @@ $this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Juegos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+
+// Url imagen AWS
+
+// $s3 = new S3Client([
+//     'version'     => 'latest',
+//     'region'      => 'eu-west-2',
+//     'credentials' => $credentials
+// ]);
+
+// $cmd = $s3->getCommand('GetObject', [
+//     'Bucket' => 'gamesandfriends',
+//     'Key' => $model->img_key
+// ]);
+  
+// $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+  
+// $urlImagen = (string)$request->getUri();
 
 // Valores falsos para javascript
 $usuarioHaCriticado = 0;
@@ -47,7 +65,7 @@ $this->registerJs($js);
     <h1><?= Html::encode($this->title) ?></h1>
 
     <span>
-        <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
+        <?= Html::img(isset($urlImagen) ? $urlImagen : '', ['height' => 200, 'width' => 300]) ?>
         <?php
         if ($precioMinimo != null) {
             ?>

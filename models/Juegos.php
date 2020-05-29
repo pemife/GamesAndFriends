@@ -15,6 +15,7 @@ namespace app\models;
  * @property string $publ
  * @property bool $cont_adul
  * @property float $edad_minima
+ * @property string|null $img_key
  *
  * @property Etiquetas[] $etiquetas
  * @property Posts[] $posts
@@ -43,8 +44,9 @@ class Juegos extends \yii\db\ActiveRecord
             [['titulo', 'dev', 'publ', 'edad_minima'], 'required'],
             [['descripcion'], 'string'],
             [['fechalan'], 'safe'],
-            [['titulo', 'dev', 'publ'], 'string', 'max' => 255],
+            [['titulo', 'dev', 'publ', 'img_key'], 'string', 'max' => 255],
             [['titulo'], 'unique'],
+            [['img_key'], 'unique'],
             [['cont_adul'], 'default', 'value' => function ($model, $attribute) {
                 return $this->edad_minima == 18;
             }],
