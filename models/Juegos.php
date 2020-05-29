@@ -23,8 +23,6 @@ namespace app\models;
  */
 class Juegos extends \yii\db\ActiveRecord
 {
-    //TODO:
-    //public $imagen;
 
     /**
      * {@inheritdoc}

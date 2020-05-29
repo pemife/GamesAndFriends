@@ -108,61 +108,6 @@ function anadirIgnorados(e){
 script;
 
 $this->registerJS($js);
-
-// $sharedConfig = [
-//   'profile' => 'default',
-//   'region' => 'us-east-2',
-//   'version' => 'latest'
-// ];
-
-// Create an SDK class used to share configuration across clients.
-// $sdk = new Aws\Sdk($sharedConfig);
-
-// // Use an Aws\Sdk class to create the S3Client object.
-// $s3Client = $sdk->createS3();
-// $cmd = $s3->getCommand('GetObject', [
-//   'Bucket' => 'gamesandfriends',
-//   'Key' => 'Juegos/rocket-league.jpg'
-// ]);
-
-// $request = $s3->createPresignedRequest($cmd, '+20 minutes');
-
-// $presignedUrl = (string)$request->getUri();
-
-// echo '<img src="' . $presignedUrl . '"/>';
-
-// try {
-
-//     // Download the contents of the object.
-//     $result = $s3->getObject([
-//       'Bucket' => 'gamesandfriends',
-//       'Key' => 'Prueba/rocket-league.jpg',
-//       'ResponseContentType' => 'image/jpg'
-//     ]);
-  
-//     // Print the body of the result by indexing into the result object.
-//     // echo $result['Body'];
-//     echo $result['ObjectURL'] . PHP_EOL;
-// } catch (S3Exception $e) {
-//     echo $e->getMessage() . PHP_EOL;
-// }
-// $bucket = 'gamesandfriends';
-// $keyname = 'Prueba/hola-mundo.txt';
-
-// try {
-//     // Upload data.
-//     $result = $s3->putObject([
-//         'Bucket' => $bucket,
-//         'Key'    => $keyname,
-//         'Body'   => 'Hello, world!',
-//         'ACL'    => 'public-read'
-//     ]);
-
-//     // Print the URL to the object.
-//     echo $result['ObjectURL'] . PHP_EOL;
-// } catch (S3Exception $e) {
-//     echo $e->getMessage() . PHP_EOL;
-// }
 ?>
 <div class="juegos-novedades">
     <style>
@@ -175,10 +120,20 @@ $this->registerJS($js);
         <div class="w3-content w3-display-container">
             <?php
             foreach ($juegosProvider->getModels() as $juego) : ?>
+                <?php
+                $cmd = $s3->getCommand('GetObject', [
+                  'Bucket' => 'gamesandfriends',
+                  'Key' => $juego->img_key
+                ]);
+
+                $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+                $urlImagen = (string)$request->getUri();
+                ?>
                 <h3 class="nombresJuegos"><?= Html::encode($juego->titulo) ?></h3>
                 <?= Html::a(
                     Html::img(
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Video-Game-Controller-Icon-D-Edit.svg/480px-Video-Game-Controller-Icon-D-Edit.svg.png',
+                        $urlImagen,
                         ['class' => 'imagenesJuegos'],
                         ['style' => 'width:30%']
                     ),
@@ -199,7 +154,7 @@ $this->registerJS($js);
                     ]
                 );
             }
-             ?>
+            ?>
             <button class="w3-button w3-black w3-display-right" id="flechaDcha"><span class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
     </center>
@@ -232,7 +187,7 @@ $this->registerJS($js);
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {anadirDeseos} {ignorar}',
               'buttons' => [
-                'vermercado' => function ($url, $model, $key){
+                'vermercado' => function ($url, $model, $key) {
                     return Html::a(
                         '<span class="glyphicon glyphicon-shopping-cart"></span>',
                         ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
@@ -275,7 +230,7 @@ $this->registerJS($js);
                           ]
                         ]
                     );
-              },
+                },
               ],
             ],
         ],
@@ -341,7 +296,6 @@ if (!Yii::$app->user->isGuest) {
                 ],
             ],
       ]);
-
 }
 
 ?>

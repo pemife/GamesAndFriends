@@ -14,6 +14,8 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use Aws\S3\S3Client;
+use Aws\Credentials\Credentials;
 
 /**
  * JuegosController implements the CRUD actions for Juegos model.
@@ -164,6 +166,7 @@ class JuegosController extends Controller
             'similaresProvider' => $similaresProvider,
             'valPosGlob' => $valPosGlob,
             'valPosRec' => $valPosRec,
+            's3' => $this->clienteS3(),
         ]);
     }
 
@@ -286,6 +289,7 @@ class JuegosController extends Controller
         return $this->render('novedades', [
             'juegosProvider' => $juegosProvider,
             'recomendacionesProvider' => $recomendacionesProvider,
+            's3' => $this->clienteS3(),
         ]);
     }
 
@@ -303,5 +307,23 @@ class JuegosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    private function clienteS3()
+    {
+        // $credentials = new Credentials(getenv('KEY'), getenv('SECRET'));
+        
+        $s3 = new S3Client([
+            'version'     => 'latest',
+            'region'      => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null
+            ]
+        ]);
+
+        return $s3;
     }
 }

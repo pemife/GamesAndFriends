@@ -17,21 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
 // Url imagen AWS
-
-// $s3 = new S3Client([
-//     'version'     => 'latest',
-//     'region'      => 'eu-west-2',
-//     'credentials' => $credentials
-// ]);
-
-// $cmd = $s3->getCommand('GetObject', [
-//     'Bucket' => 'gamesandfriends',
-//     'Key' => $model->img_key
-// ]);
+$cmd = $s3->getCommand('GetObject', [
+    'Bucket' => 'gamesandfriends',
+    'Key' => $model->img_key
+]);
   
-// $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+$request = $s3->createPresignedRequest($cmd, '+20 minutes');
   
-// $urlImagen = (string)$request->getUri();
+$urlImagen = (string)$request->getUri();
 
 // Valores falsos para javascript
 $usuarioHaCriticado = 0;

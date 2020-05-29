@@ -11,6 +11,7 @@ use app\models\Productos;
 use app\models\Relaciones;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
+use Aws\S3\S3Client;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -1165,5 +1166,21 @@ class UsuariosController extends Controller
         }
 
         return true;
+    }
+
+    private function clienteS3()
+    {
+        $s3 = new S3Client([
+            'version'     => 'latest',
+            'region'      => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null
+            ]
+        ]);
+
+        return $s3;
     }
 }
