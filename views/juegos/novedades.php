@@ -53,86 +53,6 @@ function anadirIgnorados(e){
 SCRIPT;
 
 $this->registerJS($js);
-
-$css = <<<CSS
-.slider-holder
-{
-    width: 800px;
-    height: 400px;
-    background-color: yellow;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0px;
-    text-align: center;
-    overflow: hidden;
-}
-
-.image-holder
-{
-    width: 2400px;
-    background-color: red;
-    height: 400px;
-    clear: both;
-    position: relative;
-    
-    -webkit-transition: left 1s;
-    -moz-transition: left 1s;
-    -o-transition: left 1s;
-    transition: left 1s;
-}
-
-.slider-image
-{
-    float: left;
-    margin: 0px;
-    padding: 0px;
-    position: relative;
-}
-
-#slider-image-1:target ~ .image-holder
-{
-    left: 0px;
-}
-
-#slider-image-2:target ~ .image-holder
-{
-    left: -800px;
-}
-
-#slider-image-3:target ~ .image-holder
-{
-    left: -1600px;
-}
-
-.button-holder
-{
-    position: relative;
-    top: -20px;
-}
-
-.slider-change
-{
-    display: inline-block;
-    height: 10px;
-    width: 10px;
-    border-radius: 5px;
-    background-color: brown;
-}
-CSS;
-$this->registerCSS($css);
-
-// No es mas que un array de URLs de prueba mas adelante lo suprimiré
-$imagenesJuego = [
-  'https://i.ytimg.com/vi/hWE7MrcekGY/maxresdefault.jpg',
-  'https://i.ytimg.com/vi/pR6Op9xBcfY/maxresdefault.jpg',
-  'https://mmogamerstore.com/wp-content/uploads/2018/04/ss_counter-stike-global-offensive_00.jpg',
-  'https://i.ytimg.com/vi/hWE7MrcekGY/maxresdefault.jpg',
-  'https://i.ytimg.com/vi/pR6Op9xBcfY/maxresdefault.jpg',
-  'https://mmogamerstore.com/wp-content/uploads/2018/04/ss_counter-stike-global-offensive_00.jpg',
-  'https://i.ytimg.com/vi/hWE7MrcekGY/maxresdefault.jpg',
-  'https://i.ytimg.com/vi/pR6Op9xBcfY/maxresdefault.jpg',
-  'https://mmogamerstore.com/wp-content/uploads/2018/04/ss_counter-stike-global-offensive_00.jpg',
-];
 ?>
 <div class="juegos-novedades">
     <style>
@@ -141,37 +61,12 @@ $imagenesJuego = [
 
     <h2>Novedades</h2>
 
-    <!-- http://qnimate.com/creating-a-slider-using-html-and-css-only/ -->
-    <div class="slider-holder mb-4 mt-4">
-        <?php
-        $contador = 1;
-        foreach ($juegosProvider->getModels() as $juego) {
-        ?>
-
-            <span id="slider-image-<?= $contador ?>"></span>
-            <?php $contador++ ?>
-
-        <?php } ?>
-
-        <div class="image-holder">
-            <?php
-            $contador = 0;
-            foreach ($juegosProvider->getModels() as $juego) { ?>
-                <img src="<?= $imagenesJuego[$contador] ?>" class="slider-image" width="800" height="400"/>
-                <?php $contador++ ?>
-            <?php } ?>
-        </div>
-        <div class="button-holder">
-            <?php
-            $contador = 1;
-            foreach ($juegosProvider->getModels() as $juego) {
-            ?>
-
-                <a href="#slider-image-<?= $contador ?>" class="slider-change"></a>
-                <?php $contador++ ?>
-
-            <?php } ?>
-        </div>
+    <div class="slider">
+      <ul>
+        <?php foreach ($juegosProvider->getModels() as $juego) : ?>
+          <li><img src="<?= $juego->urlImagen ?>" alt="<?= $juego->titulo ?>" height="400" width="800"></li>
+        <?php endforeach; ?>
+      </ul>
     </div>
 
     <?= GridView::widget([

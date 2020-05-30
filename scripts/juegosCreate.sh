@@ -63,13 +63,15 @@ case $url in
 
         pub=`grep -m1 'publisher' .paginaJuego.html | cut -d">" -f2 | cut -d"<" -f1`
 
+        edad_minima=3
+
         echo "Titulo: " ${nombreJuego}
         echo "Descripcion: " ${descripcionJuego}
         echo "FechaLanzamiento: " ${fechaFormateada}
         echo "Desarrolladora: " ${dev}
         echo "Editora: " ${pub}
 
-        sudo -u postgres psql -d gamesandfriends -c "INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ) VALUES ('${nombreJuego}', '${descripcionJuego}', '${fechaFormateada}', '${dev}', '${pub}');"
+        sudo -u postgres psql -d gamesandfriends -c "INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ, edad_minima) VALUES ('${nombreJuego}', '${descripcionJuego}', '${fechaFormateada}', '${dev}', '${pub}', ${edad_minima});"
         # 2>/dev/null
     ;;
     nintendo )
