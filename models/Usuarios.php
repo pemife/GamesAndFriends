@@ -88,6 +88,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'requested_at' => 'Pedido el',
             'es_critico' => 'Es Critico',
             'venta_solicitada' => 'Id de venta solicitada',
+            'img_key' => 'Imagen de usuario',
         ];
     }
 
