@@ -53,6 +53,26 @@ function anadirIgnorados(e){
 SCRIPT;
 
 $this->registerJS($js);
+
+$css = <<<CSS
+.carousel {
+  width: 70% ;
+  height: 50% ;
+  margin-left: auto ;
+  margin-right: auto ;
+}
+
+.imagenJuego {
+  text-align: center;
+  opacity: 0.6;
+  transition: 0.3s;
+}
+
+.imagenJuego:hover {opacity: 1}
+
+CSS;
+
+$this->registerCSS($css);
 ?>
 <div class="juegos-novedades">
     <style>
@@ -61,12 +81,46 @@ $this->registerJS($js);
 
     <h2>Novedades</h2>
 
-    <div class="slider">
-      <ul>
-        <?php foreach ($juegosProvider->getModels() as $juego) : ?>
-          <li><img src="<?= $juego->urlImagen ?>" alt="<?= $juego->titulo ?>" height="400" width="800"></li>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <?php for ($i = 0; $i < $juegosProvider->count; $i++) : ?>
+          <li data-target="#carouselExampleIndicators" data-slide-to="<?= $i ?>" <?= $i == 0 ? 'class="active"' : '' ?>></li>
+        <?php endfor; ?>
+      </ol>
+        <div class="carousel-inner">
+        <?php
+        $esPrimero = true;
+        foreach ($juegosProvider->getModels() as $juego) : ?>
+          <div class="carousel-item<?= $esPrimero ? ' active' : '' ?>">
+            <?php
+            echo Html::a(
+                Html::img($juego->urlImagen, [
+                  'class' => 'd-block w-100 imagenJuego',
+                  'alt' => $juego->titulo,
+                  'width' => 800,
+                  'height' => 400,
+                ]),
+                [
+                  'juegos/view', 'id' => $juego->id
+                ]
+            );
+            $esPrimero = false;
+            ?>
+            <div class="carousel-caption d-none d-md-block">
+              <h5 class="bg-dark rounded-pill d-inline-block p-2"><?= $juego->titulo ?></h5>
+            </div>
+
+          </div>
         <?php endforeach; ?>
-      </ul>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
 
     <?= GridView::widget([
