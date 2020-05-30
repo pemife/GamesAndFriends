@@ -106,9 +106,6 @@ $this->registerCSS($css);
             );
             $esPrimero = false;
             ?>
-            <div class="carousel-caption d-none d-md-block">
-              <h5 class="bg-dark rounded-pill d-inline-block p-2"><?= $juego->titulo ?></h5>
-            </div>
 
           </div>
         <?php endforeach; ?>
