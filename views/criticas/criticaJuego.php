@@ -1,7 +1,7 @@
 <?php
 
 use kartik\rating\StarRating as RatingStarRating;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */

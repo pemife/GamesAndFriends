@@ -2,7 +2,7 @@
 
 use yii\grid\GridView;
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\VentasSearch */

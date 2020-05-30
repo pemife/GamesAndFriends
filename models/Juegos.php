@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Aws\S3\S3Client;
+
 /**
  * This is the model class for table "juegos".
  *
@@ -15,6 +17,7 @@ namespace app\models;
  * @property string $publ
  * @property bool $cont_adul
  * @property float $edad_minima
+ * @property string|null $img_key
  *
  * @property Etiquetas[] $etiquetas
  * @property Posts[] $posts
@@ -22,8 +25,6 @@ namespace app\models;
  */
 class Juegos extends \yii\db\ActiveRecord
 {
-    //TODO:
-    //public $imagen;
 
     /**
      * {@inheritdoc}
@@ -43,8 +44,9 @@ class Juegos extends \yii\db\ActiveRecord
             [['titulo', 'dev', 'publ', 'edad_minima'], 'required'],
             [['descripcion'], 'string'],
             [['fechalan'], 'safe'],
-            [['titulo', 'dev', 'publ'], 'string', 'max' => 255],
+            [['titulo', 'dev', 'publ', 'img_key'], 'string', 'max' => 255],
             [['titulo'], 'unique'],
+            [['img_key'], 'unique'],
             [['cont_adul'], 'default', 'value' => function ($model, $attribute) {
                 return $this->edad_minima == 18;
             }],
@@ -175,5 +177,28 @@ class Juegos extends \yii\db\ActiveRecord
         ->where(['in', 'etiqueta_id', $this->generosId()])
         ->andWhere(['!=', 'juego_id', $this->id])
         ->limit(4);
+    }
+
+    public function getUrlImagen()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        $cmd = $s3->getCommand('GetObject', [
+            'Bucket' => 'gamesandfriends',
+            'Key' => 'Juegos/' . $this->img_key,
+        ]);
+
+        $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+        return (string)$request->getUri();
     }
 }

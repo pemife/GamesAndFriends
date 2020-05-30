@@ -2,7 +2,7 @@
 
 use yii\grid\GridView;
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
 
@@ -15,8 +15,6 @@ $this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
-
-$enlaceFoto = null; // Cambiar con enlace de AWS
 
 $puedeModificar = (Yii::$app->user->id === 1 || Yii::$app->user->id === $model->id);
 $enlaceMod = $puedeModificar ? Url::to(['usuarios/update', 'id' => $model->id]) : '#';
@@ -90,7 +88,7 @@ function actualizarListaBloqueados(){
 }
 EOF;
 $this->registerJs($js);
-Yii::debug($model->puntuacionCritico());
+Yii::debug($model);
 ?>
 
 <style>
@@ -151,7 +149,7 @@ Yii::debug($model->puntuacionCritico());
                   type="button"
                   data-toggle="dropdown"
                   style="height: 30px; width: 35px;"
-                  <?= Yii::$app->user->id == 1 || $model->id == Yii::$app->user->id ? '' : 'hidden' ?>>
+                    <?= Yii::$app->user->id == 1 || $model->id == Yii::$app->user->id ? '' : 'hidden' ?>>
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li>
@@ -222,7 +220,7 @@ Yii::debug($model->puntuacionCritico());
       </div>
     </div>
 
-    <img src="<?= $enlaceFoto ?>" width="150" height="150">
+    <img src="<?= $model->urlImagen ?>" width="150" height="150">
     <br><br>
     <?= DetailView::widget([
         'model' => $model,

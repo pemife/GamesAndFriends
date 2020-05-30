@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -16,8 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?php if($model->vendedor_id == Yii::$app->user->id){
-
+        <?php
+        if ($model->vendedor_id == Yii::$app->user->id) {
             echo Html::a('Retirar del mercado', ['delete', 'id' => $model->id], [
               'class' => 'btn btn-danger',
               'data' => [
@@ -25,11 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
               ],
             ]);
-          }
+        }
         ?>
     </p>
 
-    <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
+    <?= Html::img(empty($model->producto_id) ? $model->copia->juego->urlImagen : $model->producto->urlImagen, ['height' => 200, 'width' => 300]) ?>
     </br></br>
     <p>
       <span style="font-weight: bold;">Vendedor: </span> <?= Html::a($model->vendedor->nombre, ['usuarios/view', 'id' => $model->vendedor_id]) ?>
@@ -37,10 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
       <span style="font-weight: bold;">Precio: </span> <?= Html::encode($model->precio) ?>
     </p>
-    <?php if(!Yii::$app->user->isGuest){
-      echo Html::a('Solicitar compra', ['solicitar-compra', 'idVenta' => $model->id], [
-        'class' => 'btn btn-success',
-      ]);
+    <?php if (!Yii::$app->user->isGuest) {
+        echo Html::a('Solicitar compra', ['solicitar-compra', 'idVenta' => $model->id], [
+          'class' => 'btn btn-success',
+        ]);
     } ?>
 
 </div>

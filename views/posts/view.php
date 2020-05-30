@@ -1,7 +1,7 @@
 <?php
 
 use yii\grid\GridView;
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\widgets\ListView;

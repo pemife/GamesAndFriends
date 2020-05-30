@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\web\IdentityInterface;
+use Aws\S3\S3Client;
 
 /**
  * This is the model class for table "usuarios".
@@ -17,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property string $biografia
  * @property string $fechanac
  * @property string $requested_at
+ * @property string|null $img_key
  *
  * @property Comentarios[] $comentarios
  * @property Criticas[] $criticas
@@ -65,7 +67,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss', 'on' => [self::SCENARIO_VERIFICACION]],
             [['requested_at'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['token'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
-            [['venta_solicitada'], 'safe'],
+            [['venta_solicitada'], 'default', 'value' => null],
+            [['venta_solicitada'], 'integer'],
+            [['img_key'], 'default', 'value' => 'sin-imagen.jpg'],
+            [['img_key'], 'string', 'max'=> 255]
             // [['venta_solicitada'], 'validarVentaTerminada'],
         ];
     }
@@ -76,7 +81,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'nombre' => 'Nombre',
+            'nombre' => 'Nombre de usuario',
             'password' => 'Contraseña',
             'password_repeat' => 'Repite Contraseña',
             'created_at' => 'Miembro desde',
@@ -87,6 +92,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'requested_at' => 'Pedido el',
             'es_critico' => 'Es Critico',
             'venta_solicitada' => 'Id de venta solicitada',
+            'img_key' => 'Imagen de usuario',
         ];
     }
 
@@ -528,5 +534,30 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return self::find()
         ->where(['in', 'id', $this->listaIdsBloqueados()])
         ->all();
+    }
+
+    public function getUrlImagen()
+    {
+        $urlImagen = ($this->img_key == 'sin-imagen.jpg') ? $this->img_key : $this->nombre . '/' . $this->img_key;
+
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        $cmd = $s3->getCommand('GetObject', [
+            'Bucket' => 'gamesandfriends',
+            'Key' => 'Usuarios/' . $urlImagen,
+        ]);
+
+        $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+        return (string)$request->getUri();
     }
 }
