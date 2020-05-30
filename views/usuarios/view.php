@@ -88,7 +88,7 @@ function actualizarListaBloqueados(){
 }
 EOF;
 $this->registerJs($js);
-Yii::debug($model->puntuacionCritico());
+Yii::debug($model);
 ?>
 
 <style>
@@ -149,7 +149,7 @@ Yii::debug($model->puntuacionCritico());
                   type="button"
                   data-toggle="dropdown"
                   style="height: 30px; width: 35px;"
-                  <?= Yii::$app->user->id == 1 || $model->id == Yii::$app->user->id ? '' : 'hidden' ?>>
+                    <?= Yii::$app->user->id == 1 || $model->id == Yii::$app->user->id ? '' : 'hidden' ?>>
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li>

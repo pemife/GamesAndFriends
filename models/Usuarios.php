@@ -18,6 +18,7 @@ use Aws\S3\S3Client;
  * @property string $biografia
  * @property string $fechanac
  * @property string $requested_at
+ * @property string|null $img_key
  *
  * @property Comentarios[] $comentarios
  * @property Criticas[] $criticas
@@ -66,7 +67,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss', 'on' => [self::SCENARIO_VERIFICACION]],
             [['requested_at'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['token'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
-            [['venta_solicitada'], 'safe'],
+            [['venta_solicitada'], 'default', 'value' => null],
+            [['venta_solicitada'], 'integer'],
+            [['img_key'], 'default', 'value' => 'sin-imagen.jpg'],
+            [['img_key'], 'string', 'max'=> 255]
             // [['venta_solicitada'], 'validarVentaTerminada'],
         ];
     }
@@ -534,6 +538,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function getUrlImagen()
     {
+        $urlImagen = ($this->img_key == 'sin-imagen.jpg') ? $this->img_key : $this->nombre . '/' . $this->img_key;
+
         $s3 = new S3Client([
             'version' => 'latest',
             'region' => 'eu-west-2',
@@ -547,7 +553,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
         $cmd = $s3->getCommand('GetObject', [
             'Bucket' => 'gamesandfriends',
-            'Key' => 'Usuarios/' . $this->nombre . '/' . $this->img_key,
+            'Key' => 'Usuarios/' . $urlImagen,
         ]);
 
         $request = $s3->createPresignedRequest($cmd, '+20 minutes');
