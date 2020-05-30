@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 
@@ -21,7 +21,7 @@ use kartik\date\DatePicker;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'biografia')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'biografia')->textarea(['rows' => 6])->label('Información sobre ti') ?>
 
     <?= $form->field($model, 'fechanac')->widget(DatePicker::classname(), [
       'options' => ['placeholder' => 'Introduzca su fecha de nacimiento'],

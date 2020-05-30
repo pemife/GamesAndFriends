@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap4\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Cambiar contraseña del usuario ' . $model->nombre;

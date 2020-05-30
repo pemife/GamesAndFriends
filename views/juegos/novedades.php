@@ -123,7 +123,7 @@ $this->registerJS($js);
                 <h3 class="nombresJuegos"><?= Html::encode($juego->titulo) ?></h3>
                 <?= Html::a(
                     Html::img(
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Video-Game-Controller-Icon-D-Edit.svg/480px-Video-Game-Controller-Icon-D-Edit.svg.png',
+                        $juego->urlImagen,
                         ['class' => 'imagenesJuegos'],
                         ['style' => 'width:30%']
                     ),
@@ -144,7 +144,7 @@ $this->registerJS($js);
                     ]
                 );
             }
-             ?>
+            ?>
             <button class="w3-button w3-black w3-display-right" id="flechaDcha"><span class="glyphicon glyphicon-arrow-right"></span></button>
         </div>
     </center>
@@ -177,7 +177,7 @@ $this->registerJS($js);
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {vermercado} {anadirDeseos} {ignorar}',
               'buttons' => [
-                'vermercado' => function ($url, $model, $key){
+                'vermercado' => function ($url, $model, $key) {
                     return Html::a(
                         '<span class="glyphicon glyphicon-shopping-cart"></span>',
                         ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
@@ -220,7 +220,7 @@ $this->registerJS($js);
                           ]
                         ]
                     );
-              },
+                },
               ],
             ],
         ],
@@ -286,7 +286,6 @@ if (!Yii::$app->user->isGuest) {
                 ],
             ],
       ]);
-
 }
 
 ?>

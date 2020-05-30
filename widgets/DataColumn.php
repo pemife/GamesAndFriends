@@ -3,7 +3,7 @@
 namespace app\widgets;
 
 use yii\base\Model;
-use yii\Helpers\Html;
+use yii\bootstrap4\Html;
 
 class DataColumn extends \yii\grid\DataColumn
 {
