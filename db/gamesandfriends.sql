@@ -57,6 +57,7 @@ CREATE TABLE productos
   , propietario_id   BIGINT         REFERENCES usuarios(id)
                                     ON DELETE CASCADE
                                     ON UPDATE CASCADE
+  , img_key       VARCHAR(255)      UNIQUE
 );
 
 DROP TABLE IF EXISTS criticas CASCADE;
@@ -315,16 +316,16 @@ CREATE TABLE juegos_ignorados
 --INSERTS --
 
 INSERT INTO usuarios (nombre, password, email, fechanac, img_key)
-VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com', '1987-01-01', 'Usuarios/admin.jpg'),
-('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org', '1995-12-03', 'Usuarios/pepe.jpg');
+VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com', '1987-01-01', 'admin.jpg'),
+('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org', '1995-12-03', 'pepe.jpg');
 
 INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ, cont_adul, edad_minima, img_key)
-VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix LLC', 'Psyonix LLC', false, 3, 'Juegos/rocket-league.jpg'),
-('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.', 'Nicalis Inc.', false, 12, 'Juegos/isaac.jpg'),
-('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve', false, 16, 'Juegos/csgo.jpg');
+VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix LLC', 'Psyonix LLC', false, 3, 'rocket-league.jpg'),
+('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.', 'Nicalis Inc.', false, 12, 'isaac.jpg'),
+('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve', false, 16, 'csgo.jpg');
 
-INSERT INTO productos (nombre, descripcion, stock, propietario_id)
-VALUES ('Funko POP de Psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 2);
+INSERT INTO productos (nombre, descripcion, stock, propietario_id, img_key)
+VALUES ('Funko POP de Psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 2, 'psycho.jpg');
 
 INSERT INTO criticas (opinion, created_at, valoracion, usuario_id, producto_id)
 VALUES ('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 1);

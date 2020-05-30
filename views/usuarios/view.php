@@ -16,8 +16,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-$enlaceFoto = null; // Cambiar con enlace de AWS
-
 $puedeModificar = (Yii::$app->user->id === 1 || Yii::$app->user->id === $model->id);
 $enlaceMod = $puedeModificar ? Url::to(['usuarios/update', 'id' => $model->id]) : '#';
 $enlaceBor = $puedeModificar ? Url::to(['usuarios/delete', 'id' => $model->id]) : '#';
@@ -222,7 +220,7 @@ Yii::debug($model->puntuacionCritico());
       </div>
     </div>
 
-    <img src="<?= $enlaceFoto ?>" width="150" height="150">
+    <img src="<?= $model->urlImagen ?>" width="150" height="150">
     <br><br>
     <?= DetailView::widget([
         'model' => $model,

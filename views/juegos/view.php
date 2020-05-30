@@ -16,16 +16,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Juegos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
-// Url imagen AWS
-$cmd = $s3->getCommand('GetObject', [
-    'Bucket' => 'gamesandfriends',
-    'Key' => $model->img_key
-]);
-  
-$request = $s3->createPresignedRequest($cmd, '+20 minutes');
-  
-$urlImagen = (string)$request->getUri();
-
 // Valores falsos para javascript
 $usuarioHaCriticado = 0;
 $tieneJuegoJs = $tieneJuego ? true : 0;
@@ -58,7 +48,7 @@ $this->registerJs($js);
     <h1><?= Html::encode($this->title) ?></h1>
 
     <span>
-        <?= Html::img(isset($urlImagen) ? $urlImagen : '', ['height' => 200, 'width' => 300]) ?>
+        <?= Html::img($model->urlImagen, ['height' => 200, 'width' => 300]) ?>
         <?php
         if ($precioMinimo != null) {
             ?>

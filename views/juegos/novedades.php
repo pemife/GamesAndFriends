@@ -120,20 +120,10 @@ $this->registerJS($js);
         <div class="w3-content w3-display-container">
             <?php
             foreach ($juegosProvider->getModels() as $juego) : ?>
-                <?php
-                $cmd = $s3->getCommand('GetObject', [
-                  'Bucket' => 'gamesandfriends',
-                  'Key' => $juego->img_key
-                ]);
-
-                $request = $s3->createPresignedRequest($cmd, '+20 minutes');
-
-                $urlImagen = (string)$request->getUri();
-                ?>
                 <h3 class="nombresJuegos"><?= Html::encode($juego->titulo) ?></h3>
                 <?= Html::a(
                     Html::img(
-                        $urlImagen,
+                        $juego->urlImagen,
                         ['class' => 'imagenesJuegos'],
                         ['style' => 'width:30%']
                     ),

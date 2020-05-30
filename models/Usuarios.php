@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\web\IdentityInterface;
+use Aws\S3\S3Client;
 
 /**
  * This is the model class for table "usuarios".
@@ -76,7 +77,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'nombre' => 'Nombre',
+            'nombre' => 'Nombre de usuario',
             'password' => 'Contraseña',
             'password_repeat' => 'Repite Contraseña',
             'created_at' => 'Miembro desde',
@@ -528,5 +529,28 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return self::find()
         ->where(['in', 'id', $this->listaIdsBloqueados()])
         ->all();
+    }
+
+    public function getUrlImagen()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        $cmd = $s3->getCommand('GetObject', [
+            'Bucket' => 'gamesandfriends',
+            'Key' => 'Usuarios/' . $this->nombre . '/' . $this->img_key,
+        ]);
+
+        $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+        return (string)$request->getUri();
     }
 }

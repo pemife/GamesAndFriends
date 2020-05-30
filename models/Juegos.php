@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Aws\S3\S3Client;
+
 /**
  * This is the model class for table "juegos".
  *
@@ -175,5 +177,28 @@ class Juegos extends \yii\db\ActiveRecord
         ->where(['in', 'etiqueta_id', $this->generosId()])
         ->andWhere(['!=', 'juego_id', $this->id])
         ->limit(4);
+    }
+
+    public function getUrlImagen()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        $cmd = $s3->getCommand('GetObject', [
+            'Bucket' => 'gamesandfriends',
+            'Key' => 'Juegos/' . $this->img_key,
+        ]);
+
+        $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+        return (string)$request->getUri();
     }
 }
