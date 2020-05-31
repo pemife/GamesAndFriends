@@ -88,7 +88,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'created_at' => 'Miembro desde',
             'token' => 'Token',
             'email' => 'Email',
-            'biografia' => 'Biografia',
+            'biografia' => 'Información del usuario',
             'fechanac' => 'Fecha de Nacimiento',
             'requested_at' => 'Pedido el',
             'es_critico' => 'Es Critico',

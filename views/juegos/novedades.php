@@ -57,13 +57,13 @@ $this->registerJS($js);
 $css = <<<CSS
 .carousel {
   width: 70% ;
-  height: 50% ;
   margin-left: auto ;
   margin-right: auto ;
 }
 
 .imagenJuego {
   text-align: center;
+  height: 40vh ;
   opacity: 0.6;
   transition: 0.3s;
 }
