@@ -55,84 +55,24 @@ SCRIPT;
 $this->registerJS($js);
 
 $css = <<<CSS
-.slider-holder
-{
-    width: 800px;
-    height: 400px;
-    background-color: yellow;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0px;
-    text-align: center;
-    overflow: hidden;
+.carousel {
+  width: 70% ;
+  height: 50% ;
+  margin-left: auto ;
+  margin-right: auto ;
 }
 
-.image-holder
-{
-    width: 2400px;
-    background-color: red;
-    height: 400px;
-    clear: both;
-    position: relative;
-    
-    -webkit-transition: left 1s;
-    -moz-transition: left 1s;
-    -o-transition: left 1s;
-    transition: left 1s;
+.imagenJuego {
+  text-align: center;
+  opacity: 0.6;
+  transition: 0.3s;
 }
 
-.slider-image
-{
-    float: left;
-    margin: 0px;
-    padding: 0px;
-    position: relative;
-}
+.imagenJuego:hover {opacity: 1}
 
-#slider-image-1:target ~ .image-holder
-{
-    left: 0px;
-}
-
-#slider-image-2:target ~ .image-holder
-{
-    left: -800px;
-}
-
-#slider-image-3:target ~ .image-holder
-{
-    left: -1600px;
-}
-
-.button-holder
-{
-    position: relative;
-    top: -20px;
-}
-
-.slider-change
-{
-    display: inline-block;
-    height: 10px;
-    width: 10px;
-    border-radius: 5px;
-    background-color: brown;
-}
 CSS;
-$this->registerCSS($css);
 
-// No es mas que un array de URLs de prueba mas adelante lo suprimiré
-$imagenesJuego = [
-  'https://i.ytimg.com/vi/hWE7MrcekGY/maxresdefault.jpg',
-  'https://i.ytimg.com/vi/pR6Op9xBcfY/maxresdefault.jpg',
-  'https://mmogamerstore.com/wp-content/uploads/2018/04/ss_counter-stike-global-offensive_00.jpg',
-  'https://i.ytimg.com/vi/hWE7MrcekGY/maxresdefault.jpg',
-  'https://i.ytimg.com/vi/pR6Op9xBcfY/maxresdefault.jpg',
-  'https://mmogamerstore.com/wp-content/uploads/2018/04/ss_counter-stike-global-offensive_00.jpg',
-  'https://i.ytimg.com/vi/hWE7MrcekGY/maxresdefault.jpg',
-  'https://i.ytimg.com/vi/pR6Op9xBcfY/maxresdefault.jpg',
-  'https://mmogamerstore.com/wp-content/uploads/2018/04/ss_counter-stike-global-offensive_00.jpg',
-];
+$this->registerCSS($css);
 ?>
 <div class="juegos-novedades">
     <style>
@@ -141,37 +81,43 @@ $imagenesJuego = [
 
     <h2>Novedades</h2>
 
-    <!-- http://qnimate.com/creating-a-slider-using-html-and-css-only/ -->
-    <div class="slider-holder mb-4 mt-4">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <?php for ($i = 0; $i < $juegosProvider->count; $i++) : ?>
+          <li data-target="#carouselExampleIndicators" data-slide-to="<?= $i ?>" <?= $i == 0 ? 'class="active"' : '' ?>></li>
+        <?php endfor; ?>
+      </ol>
+        <div class="carousel-inner">
         <?php
-        $contador = 1;
-        foreach ($juegosProvider->getModels() as $juego) {
-        ?>
-
-            <span id="slider-image-<?= $contador ?>"></span>
-            <?php $contador++ ?>
-
-        <?php } ?>
-
-        <div class="image-holder">
+        $esPrimero = true;
+        foreach ($juegosProvider->getModels() as $juego) : ?>
+          <div class="carousel-item<?= $esPrimero ? ' active' : '' ?>">
             <?php
-            $contador = 0;
-            foreach ($juegosProvider->getModels() as $juego) { ?>
-                <img src="<?= $imagenesJuego[$contador] ?>" class="slider-image" width="800" height="400"/>
-                <?php $contador++ ?>
-            <?php } ?>
-        </div>
-        <div class="button-holder">
-            <?php
-            $contador = 1;
-            foreach ($juegosProvider->getModels() as $juego) {
+            echo Html::a(
+                Html::img($juego->urlImagen, [
+                  'class' => 'd-block w-100 imagenJuego',
+                  'alt' => $juego->titulo,
+                  'width' => 800,
+                  'height' => 400,
+                ]),
+                [
+                  'juegos/view', 'id' => $juego->id
+                ]
+            );
+            $esPrimero = false;
             ?>
 
-                <a href="#slider-image-<?= $contador ?>" class="slider-change"></a>
-                <?php $contador++ ?>
-
-            <?php } ?>
-        </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
 
     <?= GridView::widget([

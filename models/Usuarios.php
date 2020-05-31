@@ -64,6 +64,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['nombre'], 'unique'],
             [['es_critico'], 'boolean'],
+            // [['requested_at'], 'default', 'value' => date('Y-m-d h:i:s'), 'on' => [self::SCENARIO_CREATE]],
             [['requested_at'], 'datetime', 'format' => 'yyyy-mm-dd HH:mm:ss', 'on' => [self::SCENARIO_VERIFICACION]],
             [['requested_at'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['token'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],

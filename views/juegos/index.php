@@ -68,6 +68,7 @@ $this->registerJs($js);
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

@@ -46,6 +46,7 @@ class Juegos extends \yii\db\ActiveRecord
             [['fechalan'], 'safe'],
             [['titulo', 'dev', 'publ', 'img_key'], 'string', 'max' => 255],
             [['titulo'], 'unique'],
+            [['img_key'], 'default', 'value' => 'sin-imagen.jpg'],
             [['img_key'], 'unique'],
             [['cont_adul'], 'default', 'value' => function ($model, $attribute) {
                 return $this->edad_minima == 18;
