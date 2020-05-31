@@ -12,13 +12,13 @@ CREATE TABLE usuarios
                                         CHECK (nombre NOT ILIKE '% %')
   , password                            VARCHAR(60)   NOT NULL
   , created_at          DATE            NOT NULL DEFAULT CURRENT_DATE
-  , requested_at        TIMESTAMP       DEFAULT CURRENT_TIMESTAMP
+  , requested_at        TIMESTAMP(0)    DEFAULT CURRENT_TIMESTAMP
   , token               VARCHAR(32)
   , email               VARCHAR(255)    NOT NULL UNIQUE
   , biografia           TEXT
   , fechanac            DATE            CHECK (fechanac < CURRENT_DATE)
   , es_critico          BOOLEAN         DEFAULT false
-  , img_key             VARCHAR(255)    UNIQUE
+  , img_key             VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS plataformas CASCADE;
@@ -325,10 +325,10 @@ VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohet
 ('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve', false, 16, 'csgo.jpg');
 
 INSERT INTO productos (nombre, descripcion, stock, propietario_id, img_key)
-VALUES ('Funko POP de Psyco de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psyco, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 2, 'psycho.jpg');
+VALUES ('Funko POP de Psycho de Borderlands 3', 'De los juegos de Borderlands, llega el Funko POP de Psycho, los maniaticos al frente de los grupos hostiles en Pandora.', 5, 2, 'psycho.jpg');
 
 INSERT INTO criticas (opinion, created_at, valoracion, usuario_id, producto_id)
-VALUES ('Pues a mi los Funkos no me gustan, pero tener un psyco en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 1);
+VALUES ('Pues a mi los Funkos no me gustan, pero tener un psycho en mi cuarto me mola', CURRENT_TIMESTAMP, 5, 2, 1);
 
 INSERT INTO posts (titulo, created_at, desarrollo, juego_id, usuario_id)
 VALUES ('Primer post', CURRENT_TIMESTAMP, 'Cuando empece el proyecto hice este post, para crear una prueba y aqui se quedó la prueba por ahora, ya la cambiare, pero por ahora, asi se mantendrá.', 2, 2);

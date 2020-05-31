@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
         } ?>
     </p>
 
-    <?= Html::img('urlDeImagen', ['height' => 200, 'width' => 300]) ?>
+    <?= Html::img($model->urlImagen, ['height' => 200, 'width' => 300]) ?>
 
     </br></br>
 
@@ -94,15 +94,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'valoracion',
                 'format' => 'raw',
                 'value' => function ($model) {
-                  return StarRating::widget([
-                    'name' => 'rating_35',
-                    'value' => $model->valoracion,
-                    'pluginOptions' => [
-                      'displayOnly' => true,
-                      'size' => 'm',
-                      'showCaption' => false,
-                    ]
-                  ]);
+                    return StarRating::widget([
+                        'name' => 'rating_35',
+                        'value' => $model->valoracion,
+                        'pluginOptions' => [
+                        'displayOnly' => true,
+                        'size' => 'm',
+                        'showCaption' => false,
+                        ]
+                    ]);
                 }
               ],
             [
@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         );
                     },
-                    'delete' => function ($url, $model, $key){
+                    'delete' => function ($url, $model, $key) {
                         if (Yii::$app->user->id != $model->usuario->id) {
                             return '';
                         }

@@ -88,7 +88,6 @@ function actualizarListaBloqueados(){
 }
 EOF;
 $this->registerJs($js);
-Yii::debug($model);
 ?>
 
 <style>

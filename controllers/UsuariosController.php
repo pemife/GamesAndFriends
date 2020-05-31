@@ -616,7 +616,7 @@ class UsuariosController extends Controller
     {
         if (!Yii::$app->user->isGuest) {
             $usuario = $this->findModel(Yii::$app->user->id);
-            $usuario->requested_at = date('Y-m-d H:i:s');
+            $usuario->requested_at = (new \DateTime('now', new \DateTimeZone('Europe/Madrid')))->format('Y-m-d H:i:s');
 
             $usuario->scenario = Usuarios::SCENARIO_VERIFICACION;
             if ($usuario->save()) {
@@ -638,12 +638,13 @@ class UsuariosController extends Controller
         if (!Yii::$app->user->isGuest) {
             $usuario = $this->findModel(Yii::$app->user->id);
 
-            $aTiempo = ((new \DateTime())->getTimestamp() - strtotime($usuario->requested_at)) < 3600;
+            $aTiempo = (time() - strtotime($usuario->requested_at)) < 3600;
 
             if ($usuario->token === $token && $aTiempo) {
                 $usuario->token = null;
 
                 $usuario->scenario = Usuarios::SCENARIO_VERIFICACION;
+                Yii::debug($usuario);
                 if ($usuario->save()) {
                     Yii::$app->session->setFlash('success', 'Tu cuenta ha sido verificada');
                     return $this->redirect(['site/index']);
