@@ -7,14 +7,20 @@ use yii\helpers\Url;
 
 <p>Si quieres verificar tu cuenta, pincha en
     <?= Html::a(
-    'este',
-    Url::to(
+        'este',
+        Url::to(
+            ['usuarios/verificar'],
+            true
+        ),
         [
-                    'usuarios/verificar',
+            'data' => [
+                'method' => 'POST',
+                'params' => [
                     'token' => $token,
-                ],
-        true
-    )
+                ]
+            ]
+
+        ]
 )?> enlace</p>
 
 <p>

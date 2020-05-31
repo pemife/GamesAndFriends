@@ -131,7 +131,7 @@ class CopiasController extends Controller
                         'allow' => true,
                         'actions' => ['finalizar-regalo'],
                         'matchCallback' => function ($rule, $action) {
-                            return false;
+                            return true;
                         }
                     ]
                 ],
@@ -261,13 +261,12 @@ class CopiasController extends Controller
 
     // Esta accion dejará la copia sin dueño temporalmente y
     // mandará un email al usuario receptor para que acepte/rechace el regalo
-    public function actionRegalarCopia() 
+    public function actionRegalarCopia()
     {
         $post = Yii::$app->request->post();
         $cId = $post['cId'];
         $uId = $post['uId'];
         $copia = $this->findModel($cId);
-        $copia->unlink('propietario', Usuarios::findOne(Yii::$app->user->id));
         $this->correoRegalo($copia, $uId);
         return true;
     }
@@ -275,7 +274,8 @@ class CopiasController extends Controller
     // $cId, $uId, $acepta (post)
     public function actionFinalizarRegalo()
     {
-        
+        var_dump(Yii::$app->request->post());
+        exit;
     }
 
     /**
@@ -311,10 +311,12 @@ class CopiasController extends Controller
                 true
             ),
             [
-                'data-method' => 'POST',
-                'data-params' => [
-                    'regalo' => $regalo,
-                    'acepta' => true
+                'data' => [
+                    'method' => 'POST',
+                    'params' => [
+                        'regalo' => $regalo,
+                        'acepta' => true
+                    ]
                 ]
             ]
         );
@@ -328,10 +330,12 @@ class CopiasController extends Controller
             ),
             [
                 'class' => 'btn btn-primary',
-                'data-method' => 'POST',
-                'data-params' => [
-                    'regalo' => $regalo,
-                    'acepta' => false
+                'data' => [
+                    'method' => 'POST',
+                    'params' => [
+                        'regalo' => $regalo,
+                        'acepta' => false
+                    ]
                 ]
             ]
         );
