@@ -117,6 +117,13 @@ $this->registerJs($js);
     width: 32%;
     padding: 10px;
   }
+
+  .botonEdit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 </style>
 <div class="usuarios-view">
     <div class="nombreOpciones">
@@ -219,8 +226,26 @@ $this->registerJs($js);
       </div>
     </div>
 
-    <img src="<?= $model->urlImagen ?>" width="150" height="150">
-    <br><br>
+    <div class="imagenPerfil mb-4 mt-2">
+        <?= Html::img(
+            $model->urlImagen,
+            [
+              'class' => 'rounded-circle',
+              'width' => 150,
+              'height' => 150,
+            ]
+        ) ?>
+        <div class="botonImagen">
+            <?= Html::a(
+                '',
+                '#',
+                [
+                  'class' => 'glyphicon glyphicon-edit rounded-circle botonEdit'
+                ]
+            ) ?>
+        </div>
+    </div>
+    
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
