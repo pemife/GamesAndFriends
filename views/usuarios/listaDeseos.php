@@ -69,7 +69,7 @@ $this->registerJS($js);
 
 <p>Puedes ordenar la lista arrastrando los juegos</p>
 
-<?= Html::a('Guardar Orden', '#', ['class' => 'btn btn-success ml-2 mb-2', 'id' => 'botonGuardar']) ?>
+<?= Html::a('Guardar Orden', 'javascript:void(0)', ['class' => 'btn btn-success ml-2 mb-2', 'id' => 'botonGuardar']) ?>
 
 <div id="listaJuegos">
 

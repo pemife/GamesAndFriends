@@ -28,7 +28,7 @@ use yii\bootstrap4\Html;
 
                         $botones['peticion-amistad-pendiente'] = Html::a(
                             '',
-                            '#',
+                            'javascript:void(0)',
                             [
                                 'class' =>'glyphicon glyphicon-time',
                                 'title' => 'Peticion de amistad pendiente'

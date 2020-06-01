@@ -113,7 +113,7 @@ $this->registerJs($js);
 
                     return Html::a(
                         '<span class="glyphicon glyphicon-heart"></span>',
-                        '#',
+                        'javascript:void(0)',
                         [
                           'title' => 'añadir a tu lista de deseos',
                           'name' => 'botonDeseos',
@@ -130,7 +130,7 @@ $this->registerJs($js);
 
                     return Html::a(
                         '<span class="glyphicon glyphicon-warning-sign"></span>',
-                        '#',
+                        'javascript:void(0)',
                         [
                           'title' => 'Ignorar juego',
                           'name' => 'botonIgnorados',

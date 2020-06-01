@@ -17,10 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
 $puedeModificar = (Yii::$app->user->id === 1 || Yii::$app->user->id === $model->id);
-$enlaceMod = $puedeModificar ? Url::to(['usuarios/update', 'id' => $model->id]) : '#';
-$enlaceBor = $puedeModificar ? Url::to(['usuarios/delete', 'id' => $model->id]) : '#';
-$enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model->id]) : '#';
-$enlaceFotos = $puedeModificar ? Url::to(['usuarios/cambio-imagen', 'id' => $model->id]) : '#';
+$enlaceMod = $puedeModificar ? Url::to(['usuarios/update', 'id' => $model->id]) : 'javascript:void(0)';
+$enlaceBor = $puedeModificar ? Url::to(['usuarios/delete', 'id' => $model->id]) : 'javascript:void(0)';
+$enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model->id]) : 'javascript:void(0)';
+$enlaceFotos = $puedeModificar ? Url::to(['usuarios/cambio-imagen', 'id' => $model->id]) : 'javascript:void(0)';
 
 $urlAmigos = Url::to(['lista-amigos', 'usuarioId' => $model->id]);
 $urlBloqueados = Url::to(['lista-bloqueados', 'usuarioId' => $model->id]);
@@ -57,18 +57,6 @@ $('#botonEdit').click(function(){
   ventanaAux = window.open('$enlaceFotos', 'aux', 'width=530, height=450');
   ventanaAux.moveBy(350,250);
   ventanaAux.focus();
-  // $.ajax({
-  //   method: 'GET',
-  //   url: '$enlaceFotos',
-  //   data: {},
-  //     success: function(result){
-  //       if (result) {
-  //         ventanaAux = window.open('', 'aux', 'top=');
-  //       } else {
-  //         alert('Ha habido un error con la lista de asistentes(2)');
-  //       }
-  //     }
-  // });
 });
 
 function actualizarListaAmigos(){
@@ -231,7 +219,7 @@ $this->registerJs($js);
                     </li>
                     <?php endif; ?>
                     <li>
-                        <?= Html::a('Ver usuarios bloqueados', '#', [
+                        <?= Html::a('Ver usuarios bloqueados', 'javascript:void(0)', [
                             'class' => 'btn btn-link',
                             'id' => 'botonBloqueados',
                             'style' => [
@@ -270,7 +258,7 @@ $this->registerJs($js);
         <div class="botonImagen bg-light rounded-circle p-2">
             <?= Html::a(
                 '',
-                '#',
+                'javascript:void(0)',
                 [
                   'class' => 'glyphicon glyphicon-edit rounded-circle',
                   'id' => 'botonEdit'
