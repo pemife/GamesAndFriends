@@ -316,8 +316,8 @@ CREATE TABLE juegos_ignorados
 --INSERTS --
 
 INSERT INTO usuarios (nombre, password, email, fechanac, img_key)
-VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com', '1987-01-01', 'admin.jpg'),
-('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org', '1995-12-03', 'pepe.jpg');
+VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com', '1987-01-01', 'animalCrossing/1.jpg'),
+('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org', '1995-12-03', 'zelda/3.jpg');
 
 INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ, cont_adul, edad_minima, img_key)
 VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix LLC', 'Psyonix LLC', false, 3, 'rocket-league.jpg'),

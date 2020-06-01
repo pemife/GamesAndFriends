@@ -54,7 +54,9 @@ $('#botonBloqueados').click(function(e){
 });
 
 $('#botonEdit').click(function(){
-  ventanaAux = window.open('$enlaceFotos', 'aux', 'width=450, height=450');
+  ventanaAux = window.open('$enlaceFotos', 'aux', 'width=530, height=450');
+  ventanaAux.moveBy(350,250);
+  ventanaAux.focus();
   // $.ajax({
   //   method: 'GET',
   //   url: '$enlaceFotos',

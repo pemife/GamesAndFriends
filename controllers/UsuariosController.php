@@ -1074,7 +1074,7 @@ class UsuariosController extends Controller
 
     public function actionCambioImagen($id)
     {
-        $this->layout = false;
+        // $this->layout = false;
 
         $model = $this->findModel($id);
         
@@ -1204,10 +1204,5 @@ class UsuariosController extends Controller
         ]);
 
         return $s3;
-    }
-
-    private function arrayCarpetasImagenes()
-    {
-        
     }
 }
