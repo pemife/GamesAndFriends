@@ -1,7 +1,41 @@
 <?php
 
 use yii\bootstrap4\Html;
+use yii\helpers\Url;
 
+$url = Url::to(['cambio-imagen', 'id' => $model->id], true);
+
+$js = <<<SCRIPT
+
+$('[name="botonSeleccionar"]').click(function () {
+  $('.imagenPerfil').removeClass('imagenSeleccionada');
+  $(this).parent().siblings('.imagenPerfil').toggleClass('imagenSeleccionada');
+  // $(this).toogleClass('imagenSeleccionada');
+  $('#botonGuardar').show();
+});
+
+$('#botonGuardar').click(function () {
+  // console.log($('.imagenSeleccionada').attr('name'));
+  var imagenSrc = $('.imagenSeleccionada').attr('src');
+  var imagenName = $('.imagenSeleccionada').attr('name');
+  $(window.opener.document).find('.imagenPerfil').attr('src', imagenSrc);
+  $.post(
+    '$url',
+    { img_key: imagenName },
+    function (data) {
+      if (data) {
+        document.html = data;
+      } else {
+        window.opener.location.reload();
+        window.close();
+      }
+    }
+  );
+});
+
+SCRIPT;
+
+$this->registerJS($js);
 ?>
 <style>
   .contenedorImagen {
@@ -22,8 +56,25 @@ use yii\bootstrap4\Html;
     transition: 0.3s ;
   }
 
+  .imagenSeleccionada {
+    border-style: solid;
+    border-color: green;
+    border-width: 4px;
+  }
+
   .contenedorImagen:hover > .imagenPerfil {opacity: 0.6 }
   .contenedorImagen:hover > .botonImagen {opacity: 1}
+
+  #botonGuardar {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: none;
+  }
+
+  .navbar {
+    display: none;
+  }
 
 </style>
 
@@ -52,13 +103,15 @@ use yii\bootstrap4\Html;
             <span class="botonImagen bg-light rounded-circle p-2">
                 <?= Html::a(
                     '',
-                    '#',
+                    'javascript:void(0)',
                     [
-                    'class' => 'glyphicon glyphicon-edit rounded-circle',
-                    'id' => 'botonEdit'
+                    'class' => 'glyphicon glyphicon-ok',
+                    'name' => 'botonSeleccionar'
                     ]
                 ) ?>
             </span>
         </span>
     <?php endfor; ?>
 <?php endforeach; ?>
+
+<?= Html::a('Guardar', 'javascript:void(0)', ['class' => 'btn btn-success', 'id' => 'botonGuardar']) ?>

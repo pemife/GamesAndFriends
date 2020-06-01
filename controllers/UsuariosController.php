@@ -1074,18 +1074,17 @@ class UsuariosController extends Controller
 
     public function actionCambioImagen($id)
     {
-        // $this->layout = false;
-
         $model = $this->findModel($id);
         
-        if ($model->load(Yii::$app->request->post())) {
+        if (!empty(Yii::$app->request->post())) {
+            $model->img_key = Yii::$app->request->post()['img_key'];
             $model->scenario = Usuarios::SCENARIO_UPDATE;
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                Yii::$app->session->setFlash('success', 'Se ha guardado la imagen correctamente');
+                return false;
             }
+            Yii::$app->session->setFlash('error', 'Algo ha fallado al guardar la imagen');
         }
-
-        $model->password = '';
 
         return $this->render('cambio-imagen', [
             'model' => $model,
