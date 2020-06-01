@@ -1079,12 +1079,15 @@ class UsuariosController extends Controller
         if (!empty(Yii::$app->request->post())) {
             $model->img_key = Yii::$app->request->post()['img_key'];
             $model->scenario = Usuarios::SCENARIO_UPDATE;
+            $model->password = '';
+            Yii::debug($model);
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Se ha guardado la imagen correctamente');
                 return false;
             }
             Yii::$app->session->setFlash('error', 'Algo ha fallado al guardar la imagen');
         }
+
 
         return $this->render('cambio-imagen', [
             'model' => $model,
