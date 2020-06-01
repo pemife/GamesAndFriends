@@ -11,6 +11,7 @@ use app\models\Productos;
 use app\models\Relaciones;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
+use Aws\S3\S3Client;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
@@ -1071,6 +1072,26 @@ class UsuariosController extends Controller
         return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
     }
 
+    public function actionCambioImagen($id)
+    {
+        $model = $this->findModel($id);
+        
+        if (!empty(Yii::$app->request->post())) {
+            $model->img_key = Yii::$app->request->post()['img_key'];
+            $model->scenario = Usuarios::SCENARIO_UPDATE;
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Se ha guardado la imagen correctamente');
+                return false;
+            }
+            Yii::$app->session->setFlash('error', 'Algo ha fallado al guardar la imagen');
+        }
+
+        return $this->render('cambio-imagen', [
+            'model' => $model,
+            's3' => $this->clienteS3(),
+        ]);
+    }
+
     /**
      * Finds the Usuarios model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -1166,5 +1187,21 @@ class UsuariosController extends Controller
         }
 
         return true;
+    }
+
+    private function clienteS3()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        return $s3;
     }
 }

@@ -17,10 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
 $puedeModificar = (Yii::$app->user->id === 1 || Yii::$app->user->id === $model->id);
-$enlaceMod = $puedeModificar ? Url::to(['usuarios/update', 'id' => $model->id]) : '#';
-$enlaceBor = $puedeModificar ? Url::to(['usuarios/delete', 'id' => $model->id]) : '#';
-$enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model->id]) : '#';
-// $enlaceFoto = $enlaceFoto ? 'enlace' : 'https://www.library.caltech.edu/sites/default/files/styles/headshot/public/default_images/user.png?itok=1HlTtL2d';
+$enlaceMod = $puedeModificar ? Url::to(['usuarios/update', 'id' => $model->id]) : 'javascript:void(0)';
+$enlaceBor = $puedeModificar ? Url::to(['usuarios/delete', 'id' => $model->id]) : 'javascript:void(0)';
+$enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model->id]) : 'javascript:void(0)';
+$enlaceFotos = $puedeModificar ? Url::to(['usuarios/cambio-imagen', 'id' => $model->id]) : 'javascript:void(0)';
 
 $urlAmigos = Url::to(['lista-amigos', 'usuarioId' => $model->id]);
 $urlBloqueados = Url::to(['lista-bloqueados', 'usuarioId' => $model->id]);
@@ -51,6 +51,12 @@ $('#botonBloqueados').click(function(e){
   e.preventDefault();
   actualizarListaBloqueados();
   $('#bloqueadosAjax').show();
+});
+
+$('#botonEdit').click(function(){
+  ventanaAux = window.open('$enlaceFotos', 'aux', 'width=530, height=450');
+  ventanaAux.moveBy(350,250);
+  ventanaAux.focus();
 });
 
 function actualizarListaAmigos(){
@@ -117,6 +123,27 @@ $this->registerJs($js);
     width: 32%;
     padding: 10px;
   }
+
+  .contenedorImagen {
+    display: inline-block;
+    position: relative ;
+  }
+
+  .imagenPerfil {
+    transition: 0.3s ;
+  }
+
+  .botonImagen {
+    position: absolute ;
+    top: 50% ;
+    left: 50% ;
+    transform: translate(-50%, -50%) ;
+    opacity: 0 ;
+    transition: 0.3s ;
+  }
+
+  .contenedorImagen:hover > .imagenPerfil {opacity: 0.6 }
+  .contenedorImagen:hover > .botonImagen {opacity: 1}
 </style>
 <div class="usuarios-view">
     <div class="nombreOpciones">
@@ -192,7 +219,7 @@ $this->registerJs($js);
                     </li>
                     <?php endif; ?>
                     <li>
-                        <?= Html::a('Ver usuarios bloqueados', '#', [
+                        <?= Html::a('Ver usuarios bloqueados', 'javascript:void(0)', [
                             'class' => 'btn btn-link',
                             'id' => 'botonBloqueados',
                             'style' => [
@@ -219,8 +246,27 @@ $this->registerJs($js);
       </div>
     </div>
 
-    <img src="<?= $model->urlImagen ?>" width="150" height="150">
-    <br><br>
+    <div class="contenedorImagen mb-4 mt-2">
+        <?= Html::img(
+            $model->urlImagen,
+            [
+              'class' => 'rounded-circle imagenPerfil',
+              'width' => 150,
+              'height' => 150,
+            ]
+        ) ?>
+        <div class="botonImagen bg-light rounded-circle p-2">
+            <?= Html::a(
+                '',
+                'javascript:void(0)',
+                [
+                  'class' => 'glyphicon glyphicon-edit rounded-circle',
+                  'id' => 'botonEdit'
+                ]
+            ) ?>
+        </div>
+    </div>
+    
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [

@@ -88,7 +88,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'created_at' => 'Miembro desde',
             'token' => 'Token',
             'email' => 'Email',
-            'biografia' => 'Biografia',
+            'biografia' => 'Información del usuario',
             'fechanac' => 'Fecha de Nacimiento',
             'requested_at' => 'Pedido el',
             'es_critico' => 'Es Critico',
@@ -539,8 +539,6 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function getUrlImagen()
     {
-        $urlImagen = ($this->img_key == 'sin-imagen.jpg') ? $this->img_key : $this->nombre . '/' . $this->img_key;
-
         $s3 = new S3Client([
             'version' => 'latest',
             'region' => 'eu-west-2',
@@ -554,11 +552,73 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 
         $cmd = $s3->getCommand('GetObject', [
             'Bucket' => 'gamesandfriends',
-            'Key' => 'Usuarios/' . $urlImagen,
+            'Key' => 'Usuarios/default/' . $this->img_key,
         ]);
 
         $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
         return (string)$request->getUri();
+    }
+
+    public function getArrayCarpetasImagenes()
+    {
+        return [
+            'animalCrossing' => [
+                'nombre' => 'Animal Crossing',
+                'total' => 9,
+            ],
+            'anime' =>[
+                'nombre' => 'Anime',
+                'total' => 15
+            ],
+            'colossus' => [
+                'nombre' => 'Shadow of the Colossus',
+                'total' => 2
+            ],
+            'csgo' => [
+                'nombre' => 'Counter Strike: Global Offensive',
+                'total' => 8
+            ],
+            'isaac' => [
+                'nombre' => 'The binding of Isaac',
+                'total' => 4
+            ],
+            'kirby' => [
+                'nombre' => 'Kirby',
+                'total' => 6
+            ],
+            'locoroco' => [
+                'nombre' => 'LocoRoco',
+                'total' => 3
+            ],
+            'marioBros' => [
+                'nombre' => 'Super Mario Bros.',
+                'total' => 13
+            ],
+            'minecraft' => [
+                'nombre' => 'Minecraft',
+                'total' => 6
+            ],
+            'pokemon' => [
+                'nombre' => 'Pokemon',
+                'total' => 3
+            ],
+            'retro' => [
+                'nombre' => 'Retro',
+                'total' => 11,
+            ],
+            'rocketLeague' => [
+                'nombre' => 'Rocket League',
+                'total' => 3
+            ],
+            'terraria' => [
+                'nombre' => 'Terraria',
+                'total' => 3
+            ],
+            'zelda' => [
+                'nombre' => 'The legend of Zelda',
+                'total' => 27
+            ]
+        ];
     }
 }

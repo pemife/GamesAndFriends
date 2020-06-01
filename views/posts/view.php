@@ -66,7 +66,7 @@ $this->registerJs($js);
     <?php endif ?>
 
     <h3>
-        <?= Html::a('', '#', [
+        <?= Html::a('', 'javascript:void(0)', [
         'class' => $usuarioHaVotado ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty',
         'title' => 'Votar Post',
         'id' => 'botonVoto',
