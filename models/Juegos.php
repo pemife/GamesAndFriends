@@ -193,13 +193,59 @@ class Juegos extends \yii\db\ActiveRecord
             ],
         ]);
 
+        $carpeta = '';
+
+        if ($this->img_key != 'sin-imagen.jpg') {
+            $carpeta = str_replace(' ', '_', $this->titulo) . '/';
+        }
+
         $cmd = $s3->getCommand('GetObject', [
             'Bucket' => 'gamesandfriends',
-            'Key' => 'Juegos/' . $this->img_key,
+            'Key' => 'Juegos/' . $carpeta . $this->img_key,
         ]);
 
         $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
         return (string)$request->getUri();
+    }
+
+    public function getTrailers()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        // El numero de trailers que tiene cada juego en AmazonS3
+        switch ($this->id) {
+            case 1:
+            case 2:
+                $numeroTrailers = 2;
+            break;
+            case 3:
+                $numeroTrailers = 3;
+            break;
+            default:
+                $numeroTrailers = 0;
+        }
+
+        $carpeta = str_replace(' ', '_', $this->titulo) . '/Trailers';
+
+        for ($i = 1; $i <= $numeroTrailers; $i++) {
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => 'gamesandfriends',
+                'Key' => 'Juegos/' . $carpeta . '/trailer' . $i . '.mp4',
+            ]);
+    
+            $urlTrailers[] = (string)$s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
+        }
+
+        return $urlTrailers;
     }
 }

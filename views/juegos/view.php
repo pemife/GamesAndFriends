@@ -41,50 +41,75 @@ $(function() {
 });
 SCRIPT;
 
+$css = <<<CSS
+.descripcion {
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trailer {
+    height: 50vh;
+}
+CSS;
+
 $this->registerJs($js);
+$this->registerCSS($css);
 ?>
 <div class="juegos-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <span>
-        <?= Html::img($model->urlImagen, ['height' => 200, 'width' => 300]) ?>
-        <?php
-        if ($precioMinimo != null) {
-            ?>
-                <h3>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
+    <div class="row mt-4 bg-dark pt-4 pb-4 text-light">
+        <div container>
+            <?php foreach ($model->trailers as $trailer) : ?>
+                <video class="trailer" controls>
+                    <source src="<?= $trailer ?>">
+                </video>
+            <?php endforeach; ?>
+        </div>
+        <div class="col">
+            <?= Html::img($model->urlImagen, ['class' => 'img-fluid mb-2']) ?>
+            <p class="descripcion">
+                <?= Html::encode($model->descripcion) ?>
+            </p>
             <?php
-        } else {
+            if ($precioMinimo != null) {
+                ?>
+                    <h3>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
+                <?php
+            } else {
+                ?>
+                    <h3>No hay ninguna copia en el mercado actualmente</h3>
+                <?php
+            }
             ?>
-                <h3>No hay ninguna copia en venta actualmente</h3>
-            <?php
-        }
-        ?>
-        <p>Valoraciones Positivas Globales: <?= Html::encode($valPosGlob) ?></p>
-        <p>Valoraciones Positivas Recientes: <?= Html::encode($valPosRec) ?></p>
+            <p>Valoraciones Positivas Globales: <?= Html::encode($valPosGlob) ?></p>
+            <p>Valoraciones Positivas Recientes: <?= Html::encode($valPosRec) ?></p>
+        </div>
+    </div>
         <?= Html::a(
-            'Ver en mercado',
-            [
-              'ventas/ventas-item',
-              'id' => $model->id,
-              'esProducto' => false
-            ],
-            ['class' => 'btn btn-success mr-2']
-        ) ?>
+                'Ver en mercado',
+                [
+                'ventas/ventas-item',
+                'id' => $model->id,
+                'esProducto' => false
+                ],
+                ['class' => 'btn btn-success mr-2 mt-4']
+            ) ?>
         <?php
         if (!Yii::$app->user->isGuest) {
-              echo Html::a(
-                  'Añadir a lista de deseados',
-                  [
+                echo Html::a(
+                    'Añadir a lista de deseados',
+                    [
                     'usuarios/anadir-deseos',
                     'uId' => Yii::$app->user->id,
                     'jId' => $model->id
-                  ],
-                  ['class' => 'btn btn-info',]
-              );
+                    ],
+                    ['class' => 'btn btn-info',]
+                );
         }
         ?>
-    </span>
 
     </br></br>
 
