@@ -173,19 +173,19 @@ $this->registerCSS($css);
         </div>
     </div>
 
-    
+    <div class="row">
+        <div class="col">
+            <h3>Críticas</h3>
+        
+            <p>
+                <?php
+                if ($tieneJuego) {
+                    echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
+                }
+                ?>
+            </p>
 
-    <h3>Críticas</h3>
-
-    <p>
-        <?php
-        if ($tieneJuego) {
-            echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
-        }
-        ?>
-    </p>
-
-    <?= GridView::widget([
+            <?= GridView::widget([
         'dataProvider' => $criticasProvider,
         'columns' => [
             [
@@ -280,33 +280,40 @@ $this->registerCSS($css);
             ],
         ]
     ]); ?>
-
-    <h3>Juegos similares a <?= Html::encode($model->titulo) ?></h3>
+        </div>
+    </div>
 
     <div class="row">
-        <?= ListView::widget([
-            'dataProvider' => $similaresProvider,
-            'itemOptions' => ['class' => 'item'],
-            'summary' => '',
-            'itemView' => function ($model, $key, $index, $widget) {
-                ?>
-                <div class="col-md-4">
-                    <table class="border">
-                        <tr>
-                            <?= Html::img($model->urlImagen, ['class' => 'img-fluid pr-2']) ?>
-                        </tr>
-                        <tr>
-                            <th class="border-bottom"><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
-                        </tr>
-                        <tr>
-                            <td><?= Html::encode(implode(', ', $model->generosNombres())) ?></td>
-                        </tr>
-                    </table>
-                </div>
-                <?php
-            }
-        ]) ?>
+        <div class="col">
+            <h3>Juegos similares a <?= Html::encode($model->titulo) ?></h3>
+
+            <?= ListView::widget([
+                'dataProvider' => $similaresProvider,
+                'itemOptions' => ['class' => 'item'],
+                'summary' => '',
+                'itemView' => function ($model, $key, $index, $widget) {
+                    ?>
+                    <div class="col-md-4">
+                        <table class="border">
+                            <tr>
+                                <?= Html::img($model->urlImagen, ['class' => 'img-fluid pr-2']) ?>
+                            </tr>
+                            <tr>
+                                <th class="border-bottom"><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
+                            </tr>
+                            <tr>
+                                <td><?= Html::encode(implode(', ', $model->generosNombres())) ?></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <?php
+                }
+            ]) ?>
+            
+        </div>
     </div>
+    
+
 
     <?php
     Modal::begin([

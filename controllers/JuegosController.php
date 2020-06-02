@@ -304,4 +304,9 @@ class JuegosController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    private function generaClave()
+    {
+        
+    }
 }
