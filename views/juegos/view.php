@@ -31,6 +31,9 @@ if (!Yii::$app->user->isGuest) {
     }
 }
 
+// Numero total de trailers
+$totalTrailers = sizeof($model->trailers);
+
 $js = <<<SCRIPT
 $(function() {
     if ($tieneJuegoJs && !$usuarioHaCriticado) {
@@ -38,7 +41,30 @@ $(function() {
             $('#modalCritica').modal('show');
         }, 3000);
     }
+
+    $('.trailer').hide();
+    $('[name="video1"]').show();
+
+    $('.trailer').each(function () {
+        this.volume = 0.2;
+    });
 });
+
+$('.selector').click(function(e) {
+    seleccionarTrailer(this.dataset.numerotrailer);
+});
+
+function pausaVideos() {
+    $('.trailer').each(function() {
+        this.pause();
+    });
+}
+
+function seleccionarTrailer(numero) {
+    pausaVideos();
+    $('.trailer').hide();
+    $('[name="video' + numero + '"]').show();
+}
 SCRIPT;
 
 $css = <<<CSS
@@ -49,7 +75,7 @@ $css = <<<CSS
 }
 
 .trailer {
-    height: 50vh;
+    width: 100%;
 }
 CSS;
 
@@ -60,43 +86,62 @@ $this->registerCSS($css);
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="row mt-4 bg-dark pt-4 pb-4 text-light">
-        <div container>
-            <?php foreach ($model->trailers as $trailer) : ?>
-                <video class="trailer" controls>
-                    <source src="<?= $trailer ?>">
-                </video>
-            <?php endforeach; ?>
-        </div>
-        <div class="col">
-            <?= Html::img($model->urlImagen, ['class' => 'img-fluid mb-2']) ?>
-            <p class="descripcion">
-                <?= Html::encode($model->descripcion) ?>
-            </p>
-            <?php
-            if ($precioMinimo != null) {
-                ?>
-                    <h3>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
+    <div class="container">
+        <div class="row mt-4 bg-dark pt-4 pb-4 text-light">
+            <div class="col-md-8 mt-2">
                 <?php
-            } else {
-                ?>
+                $count = 1;
+                foreach ($model->trailers as $trailer) : ?>
+                    <video class="trailer" controls name="video<?= $count ?>">
+                        <source src="<?= $trailer ?>">
+                    </video>
+                    <?php $count++ ?>
+                <?php endforeach; ?>
+                <span class="d-flex justify-content-center">
+                    <?php
+                    $count = 1;
+                    foreach ($model->trailers as $trailer) : ?>
+                        <?= Html::radio('selector', $count > 1 ? false : true, [
+                                'class' => 'selector mr-2',
+                                'id' => 'selectorRadio' . $count,
+                                'data' => [
+                                    'numeroTrailer' => $count
+                                ]
+                            ]) ?>
+                        <?php $count++ ?>
+                    <?php endforeach; ?>
+                </span>
+            </div>
+            <div class="col-md-4 mt-2">
+
+                <?= Html::img($model->urlImagen, ['class' => 'img-fluid']) ?>
+
+                <p class="descripcion mt-2">
+                    <?= Html::encode($model->descripcion) ?>
+                </p>
+
+                <?php if ($precioMinimo != null) { ?>
+                    <h4>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
+                <?php } else { ?>
                     <h3>No hay ninguna copia en el mercado actualmente</h3>
-                <?php
-            }
-            ?>
-            <p>Valoraciones Positivas Globales: <?= Html::encode($valPosGlob) ?></p>
-            <p>Valoraciones Positivas Recientes: <?= Html::encode($valPosRec) ?></p>
+                <?php } ?>
+
+                <p>
+                    Valoraciones Positivas Globales: <?= Html::encode($valPosGlob) ?><br>
+                    Valoraciones Positivas Recientes: <?= Html::encode($valPosRec) ?>
+                </p>
+            </div>
         </div>
     </div>
         <?= Html::a(
-                'Ver en mercado',
-                [
-                'ventas/ventas-item',
-                'id' => $model->id,
-                'esProducto' => false
-                ],
-                ['class' => 'btn btn-success mr-2 mt-4']
-            ) ?>
+                    'Ver en mercado',
+                    [
+                    'ventas/ventas-item',
+                    'id' => $model->id,
+                    'esProducto' => false
+                    ],
+                    ['class' => 'btn btn-success mr-2 mt-4']
+                ) ?>
         <?php
         if (!Yii::$app->user->isGuest) {
                 echo Html::a(

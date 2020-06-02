@@ -63,7 +63,7 @@ $css = <<<CSS
 
 .imagenJuego {
   text-align: center;
-  height: 40vh ;
+  height: 40% ;
   opacity: 0.6;
   transition: 0.3s;
 }
@@ -96,9 +96,7 @@ $this->registerCSS($css);
             echo Html::a(
                 Html::img($juego->urlImagen, [
                   'class' => 'd-block w-100 imagenJuego',
-                  'alt' => $juego->titulo,
-                  'width' => 800,
-                  'height' => 400,
+                  'alt' => $juego->titulo
                 ]),
                 [
                   'juegos/view', 'id' => $juego->id
