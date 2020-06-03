@@ -13,6 +13,9 @@ $this->params['breadcrumbs'][] = ['label' => 'Criticas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<!-- Dependencia de krajee starrating -->
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" crossorigin="anonymous"></script>
+
 <div class="criticas-criticaJuego">
 
     <h1><?= Html::encode($this->title) ?></h1>
