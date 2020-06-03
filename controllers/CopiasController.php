@@ -34,11 +34,11 @@ class CopiasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'mis-copias'],
+                'only' => ['create', 'update', 'delete', 'mis-copias', 'comprar-copia'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'mis-copias'],
+                        'actions' => ['create', 'mis-copias', 'comprar-copia'],
                         'roles' => ['@'],
                     ],
                     [
@@ -64,6 +64,18 @@ class CopiasController extends Controller
                             }
 
                             return true;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['comprar-copia'],
+                        'matchCallback' => function ($rule, $action) {
+                            $usuario = Usuarios::findOne(Yii::$app->user->id);
+
+                            if (!$usuario->esVerificado()) {
+                                Yii::$app->session->setFlash('error', '¡Debes verificar tu cuenta antes de comprar un juego!');
+                                return false;
+                            }
                         },
                     ],
                 ],
@@ -192,6 +204,11 @@ class CopiasController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionComprarCopia($jId)
+    {
+        
     }
 
     /**

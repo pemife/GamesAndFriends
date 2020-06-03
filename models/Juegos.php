@@ -143,6 +143,26 @@ class Juegos extends \yii\db\ActiveRecord
         return $this->hasMany(Ignorados::className(), ['id' => 'usuario_id'])->viaTable('juegos_ignorados', ['juego_id' => 'id']);
     }
 
+    /**
+     * Gets query for [[Plataformas]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPlataformas()
+    {
+        return $this->hasMany(Plataformas::className(), ['id' => 'plataforma_id'])->viaTable('precios', ['juego_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Precios]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPrecios()
+    {
+        return $this->hasMany(Precios::className(), ['juego_id' => 'id'])->inverseOf('juego');
+    }
+
     public function generosId()
     {
         $etiquetas = $this->etiquetas;
@@ -236,6 +256,8 @@ class Juegos extends \yii\db\ActiveRecord
         }
 
         $carpeta = str_replace(' ', '_', $this->titulo) . '/Trailers';
+
+        $urlTrailers = [];
 
         for ($i = 1; $i <= $numeroTrailers; $i++) {
             $cmd = $s3->getCommand('GetObject', [

@@ -116,4 +116,27 @@ class Copias extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Ventas::className(), ['copia_id' => 'id'])->inverseOf('copia');
     }
+
+    public function generaClave()
+    {
+        do {
+            $clave = '';
+            for ($i = 0; $i < 3; $i++) {
+                $clave .= strtoupper(substr(uniqid(), -5));
+                $clave .= $i != 2 ? '-' : '';
+            }
+        } while (!$this->claveValida($clave) && !$this->claveUnica($clave));
+        
+        return $clave;
+    }
+
+    private function claveValida($clave)
+    {
+        return preg_match('/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/', $clave);
+    }
+
+    private function claveUnica($clave)
+    {
+        return !self::find()->where(['clave' => $clave])->exists();
+    }
 }

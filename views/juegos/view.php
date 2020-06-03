@@ -82,6 +82,10 @@ CSS;
 $this->registerJs($js);
 $this->registerCSS($css);
 ?>
+
+<!-- Dependencia de krajee starrating -->
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" crossorigin="anonymous"></script>
+
 <div class="juegos-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -136,58 +140,103 @@ $this->registerCSS($css);
             </div>
         </div>
     </div>
+
     <div class="row mb-4">
         <div class="col">
-            <?= Html::a(
-                    'Ver en mercado',
-                    [
-                    'ventas/ventas-item',
-                    'id' => $model->id,
-                    'esProducto' => false
-                    ],
-                    ['class' => 'btn btn-success mr-2 mt-4']
-                ) ?>
-            <?php
-            if (!Yii::$app->user->isGuest) {
-                    echo Html::a(
-                        'Añadir a lista de deseados',
+            <div class="row">
+                <div class="col">
+                    <?= Html::a(
+                        'Ventas de 2ª Mano',
                         [
-                        'usuarios/anadir-deseos',
-                        'uId' => Yii::$app->user->id,
-                        'jId' => $model->id
+                            'ventas/ventas-item',
+                            'id' => $model->id,
+                            'esProducto' => false
                         ],
-                        ['class' => 'btn btn-info mr-2 mt-4',]
-                    );
-            }
-            ?>
-            <?php if (Yii::$app->user->id === 1) : ?>
-                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2 mt-4']) ?>
-                <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger mr-2 mt-4',
-                'data' => [
-                    'confirm' => '¿Estas seguro de querer borrar este elemento?',
-                    'method' => 'post',
-                ],
-                ]) ?>
-            <?php endif; ?>
+                        ['class' => 'btn btn-success mr-2 mt-4']
+                    ) ?>
+                    <?php
+                    if (!Yii::$app->user->isGuest) {
+                        echo Html::a(
+                            'Añadir a lista de deseados',
+                            [
+                                'usuarios/anadir-deseos',
+                                'uId' => Yii::$app->user->id,
+                                'jId' => $model->id
+                            ],
+                            ['class' => 'btn btn-info mr-2 mt-4',]
+                        );
+                    }
+                    ?>
+                    <?php if (Yii::$app->user->id === 1) : ?>
+                        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2 mt-4']) ?>
+                        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+                        'class' => 'btn btn-danger mr-2 mt-4',
+                        'data' => [
+                            'confirm' => '¿Estas seguro de querer borrar este elemento?',
+                            'method' => 'post',
+                        ],
+                        ]) ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 bg-dark text-light mt-4 ml-4">
+                    <h4 class="pt-4 pl-4">
+                        Comprar <?= Html::encode($model->titulo) ?>
+                    </h4>
+                    <p class="text-light pl-4">
+                        Opciones de compra
+                    </p>
+                    <span class="d-flex justify-content-end">
+                        <?php foreach ($model->precios as $precio) { ?>
+                            <?= Html::a(
+                                Html::img($precio->plataforma->urlLogo,
+                                    [
+                                        'class' => 'mr-2',
+                                        'height' => 30,
+                                        'width' => 30
+                                    ]
+                                )
+                                . $precio->cifra . '€',
+                                [
+                                'copias/comprar-copia',
+                                'jId' => $model->id,
+                                'pId' => $precio->plataforma->id
+                                ],
+                                [
+                                    'class' => 'btn mr-2 mt-4 mb-4 text-light',
+                                    'style' => [
+                                        'background-color' => $precio->plataforma->color
+                                    ]
+                                ]
+                            ) ?> 
+                            <?= Yii::debug($precio) ?>
+                        <?php } ?>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="row">
         <div class="col">
-            <h3>Críticas</h3>
-        
-            <p>
-                <?php
-                if ($tieneJuego) {
-                    echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
-                }
-                ?>
-            </p>
-
+            <div class="row mb-2 mt-2">
+                <div class="col-md-1">
+                    <h3>Críticas</h3>
+                </div>
+                <div class="col-md-1 ml-4">
+                    <?php
+                    if ($tieneJuego) {
+                        echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
+                    }
+                    ?>
+                </div>
+                
+            </div>
+                
             <?= GridView::widget([
-        'dataProvider' => $criticasProvider,
-        'columns' => [
+            'dataProvider' => $criticasProvider,
+            'columns' => [
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{like}',
@@ -284,33 +333,33 @@ $this->registerCSS($css);
     </div>
 
     <div class="row">
-        <div class="col">
-            <h3>Juegos similares a <?= Html::encode($model->titulo) ?></h3>
+        <h3 class="col-md-12 mt-4 mb-2">Juegos similares a <?= Html::encode($model->titulo) ?></h3>
 
-            <?= ListView::widget([
-                'dataProvider' => $similaresProvider,
-                'itemOptions' => ['class' => 'item'],
-                'summary' => '',
-                'itemView' => function ($model, $key, $index, $widget) {
-                    ?>
-                    <div class="col-md-4">
-                        <table class="border">
-                            <tr>
-                                <?= Html::img($model->urlImagen, ['class' => 'img-fluid pr-2']) ?>
-                            </tr>
-                            <tr>
-                                <th class="border-bottom"><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
-                            </tr>
-                            <tr>
-                                <td><?= Html::encode(implode(', ', $model->generosNombres())) ?></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <?php
-                }
-            ]) ?>
-            
-        </div>
+        <?= ListView::widget([
+            'dataProvider' => $similaresProvider,
+            'itemOptions' => ['class' => 'item'],
+            'summary' => '',
+            'itemView' => function ($model, $key, $index, $widget) {
+                ?>
+                <div class="col-md-3">
+                    <table class="border">
+                        <tr>
+                            <?= Html::a(
+                                    Html::img($model->urlImagen, ['class' => 'img-fluid']),
+                                    ['view', 'id' => $model->id]
+                                ) ?>
+                        </tr>
+                        <tr>
+                            <th class="border-bottom"><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
+                        </tr>
+                        <tr>
+                            <td><?= Html::encode(implode(', ', $model->generosNombres())) ?></td>
+                        </tr>
+                    </table>
+                </div>
+                <?php
+            }
+        ]) ?>
     </div>
     
 
