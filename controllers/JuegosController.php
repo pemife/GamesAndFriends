@@ -6,6 +6,8 @@ use app\models\Criticas;
 use app\models\Etiquetas;
 use app\models\Juegos;
 use app\models\JuegosSearch;
+use app\models\Plataformas;
+use app\models\Precios;
 use app\models\Usuarios;
 use app\models\Ventas;
 use Yii;
@@ -47,7 +49,7 @@ class JuegosController extends Controller
                         'allow' => true,
                         'actions' => ['view'],
                         'matchCallback' => function ($rule, $action) {
-                            $model = Juegos::findOne(Yii::$app->request->queryParams['id']);
+                            $model = $this->findModel(Yii::$app->request->queryParams['id']);
                             if ($model->cont_adul == true) {
                                 if (!Yii::$app->user->isGuest) {
                                     if (Usuarios::findOne(Yii::$app->user->id)->esMayorDeEdad()) {
@@ -115,6 +117,8 @@ class JuegosController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
         $ventaMasBarata = Ventas::find()
         ->select('precio')
         ->joinWith('copia')
@@ -151,7 +155,6 @@ class JuegosController extends Controller
         $tieneJuego = Yii::$app->user->isGuest ? false : Usuarios::findOne(Yii::$app->user->id)->tieneJuego($id);
 
         //Juegos Similares
-        $model = $this->findModel($id);
         $similaresProvider = new ActiveDataProvider([
             'query' => $model->similares(),
         ]);
@@ -179,8 +182,16 @@ class JuegosController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $juego = Yii::$app->request->post('Juegos');
 
-            foreach ($juego['etiquetas'] as $idEtiqueta) {
-                $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+            if ($juego['etiquetas']) {
+                foreach ($juego['etiquetas'] as $idEtiqueta) {
+                    $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+                }
+            }
+
+            if ($juego['plataformas']) {
+                foreach ($juego['plataformas'] as $idPlataforma) {
+                    $model->link('plataformas', Plataformas::findOne($idPlataforma));
+                }
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -190,9 +201,14 @@ class JuegosController extends Controller
             $generosArray[$etiqueta->id] = $etiqueta->nombre;
         }
 
+        foreach (Plataformas::find()->all() as $plataforma) {
+            $plataformasArray[$plataforma->id] = $plataforma->nombre;
+        }
+
         return $this->render('create', [
             'model' => $model,
             'generosArray' => $generosArray,
+            'plataformasArray' => $plataformasArray,
             'edadesValidas' => [3=>3,7=>7,12=>12,16=>16,18=>18],
         ]);
     }
@@ -211,8 +227,22 @@ class JuegosController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $juego = Yii::$app->request->post('Juegos');
 
-            foreach ($juego['etiquetas'] as $idEtiqueta) {
-                $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+            if ($juego['etiquetas']) {
+                foreach ($model->etiquetas as $etiqueta) {
+                    $model->unlink('etiquetas', $etiqueta, true);
+                }
+                foreach ($juego['etiquetas'] as $idEtiqueta) {
+                    $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+                }
+            }
+
+            if ($juego['plataformas']) {
+                foreach ($model->precios as $precio) {
+                    $model->unlink('precios', $precio, true);
+                }
+                foreach ($juego['plataformas'] as $idPlataforma) {
+                    $model->link('plataformas', Plataformas::findOne($idPlataforma));
+                }
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -222,9 +252,14 @@ class JuegosController extends Controller
             $generosArray[$etiqueta->id] = $etiqueta->nombre;
         }
 
+        foreach (Plataformas::find()->all() as $plataforma) {
+            $plataformasArray[$plataforma->id] = $plataforma->nombre;
+        }
+
         return $this->render('update', [
             'model' => $model,
             'generosArray' => $generosArray,
+            'plataformasArray' => $plataformasArray,
             'edadesValidas' => [3=>3,7=>7,12=>12,16=>16,18=>18],
         ]);
     }
@@ -303,10 +338,5 @@ class JuegosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    private function generaClave()
-    {
-        
     }
 }

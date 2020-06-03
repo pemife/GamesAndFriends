@@ -25,8 +25,9 @@ DROP TABLE IF EXISTS plataformas CASCADE;
 
 CREATE TABLE plataformas
 (
-  id          BIGSERIAL           PRIMARY KEY
+    id          BIGSERIAL           PRIMARY KEY
   , nombre      VARCHAR(50)         UNIQUE
+  , img_key     VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS juegos CASCADE;
@@ -242,8 +243,6 @@ CREATE TABLE relaciones
     , CONSTRAINT CHK_Old_Estado_Valido CHECK (old_estado=0 OR old_estado=1 OR old_estado=2 OR old_estado=3 OR old_estado=4)
 );
 
--- DROP SEQUENCE deseados_orden_seq CASCADE;
-
 DROP TABLE IF EXISTS deseados CASCADE;
 
 CREATE TABLE deseados
@@ -313,6 +312,21 @@ CREATE TABLE juegos_ignorados
   , PRIMARY KEY(usuario_id, juego_id)
 );
 
+DROP TABLE IF EXISTS precios CASCADE;
+
+CREATE TABLE precios
+(
+    id              BIGSERIAL     PRIMARY KEY
+  , juego_id        BIGINT        REFERENCES juegos(id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , plataforma_id   BIGINT        REFERENCES plataformas(id)
+                                  ON DELETE NO ACTION
+                                  ON UPDATE CASCADE
+  , cifra           NUMERIC(6,2)
+  , CONSTRAINT uq_juego_plataforma UNIQUE (juego_id, plataforma_id)
+);
+
 --INSERTS --
 
 INSERT INTO usuarios (nombre, password, email, fechanac, img_key)
@@ -348,8 +362,11 @@ VALUES (1,1), (1,3), (1,4),(1,6);
 INSERT INTO juegos_etiquetas (juego_id, etiqueta_id)
 VALUES (2,5),(2,6),(2,8),(2,9),(1,1),(1,2),(1,3),(1,7),(3,3),(3,7),(3,12),(3,13),(3,14);
 
-INSERT INTO plataformas (nombre)
-VALUES ('PC'),('PlayStation 4'),('Xbox One'),('Nintendo Switch');
+INSERT INTO plataformas (nombre, img_key)
+VALUES ('PC', 'pcicon.png'),('PlayStation 4', 'psicon.png'),('Xbox One', 'xboxicon.png'),('Nintendo Switch', 'switchicon.png');
+
+INSERT INTO precios (juego_id, plataforma_id, cifra)
+VALUES (1,1,19.99),(1,2,19.99),(1,3,19.99),(1,4,19.99),(2,1,14.99),(2,2, 14.99),(2,3,14.99),(2,4,39.99),(3,1,13.25);
 
 INSERT INTO copias (juego_id, propietario_id, clave, plataforma_id)
 VALUES (1, 2, 'K57F0-PV9M6-8MZ4Y', 1), (2, 2, 'IZM46-23GIN-5IPAN', 4),

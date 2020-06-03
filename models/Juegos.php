@@ -177,6 +177,20 @@ class Juegos extends \yii\db\ActiveRecord
         return $generosIds;
     }
 
+    public function plataformasId()
+    {
+        $plataformas = $this->plataformas;
+        if (!$plataformas) {
+            return [];
+        }
+
+        foreach ($plataformas as $plataforma) {
+            $plataformasIds[] = $plataforma->id;
+        }
+
+        return $plataformasIds;
+    }
+
     public function generosNombres()
     {
         $etiquetas = $this->etiquetas;
@@ -269,5 +283,26 @@ class Juegos extends \yii\db\ActiveRecord
         }
 
         return $urlTrailers;
+    }
+
+    public function sinTrailers()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        $cmd = $s3->getCommand('GetObject', [
+            'Bucket' => 'gamesandfriends',
+            'Key' => 'Juegos/sin-trailers.jpg',
+        ]);
+
+        return (string)$s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
     }
 }

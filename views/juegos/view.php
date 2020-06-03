@@ -115,6 +115,7 @@ $this->registerCSS($css);
                         <?php $count++ ?>
                     <?php endforeach; ?>
                 </span>
+                <?= $totalTrailers == 0 ? Html::img($model->sinTrailers(), ['class' => 'img-fluid']) : '' ?>
             </div>
             <div class="col-md-4 mt-2">
 

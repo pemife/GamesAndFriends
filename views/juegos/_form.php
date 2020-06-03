@@ -52,6 +52,17 @@ use kartik\select2\Select2;
         ],
     ]))->label('Edad mínima') ?>
 
+    <?= $form->field($model, 'plataformas')->widget(Select2::classname(), ([
+        'name' => 'Plataformas',
+        'data' => $plataformasArray,
+        'size' => Select2::SMALL,
+        'options' => ['placeholder' => 'Introduce las plataformas del juego', 'multiple' => true],
+        'pluginOptions' => [
+            'allowClear' => false,
+            'tags' => true,
+        ],
+    ]))->label('Plataformas') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
