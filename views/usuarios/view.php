@@ -392,7 +392,7 @@ $this->registerJs($js);
                 'estado',
                 [
                   'class' => 'yii\grid\ActionColumn',
-                  'template' => '{vender} {view} {delete}',
+                  'template' => '{vender} {view} {retirar}',
                   'buttons' => [
                     'view' => function ($url, $model, $key) {
                         return Html::a(
@@ -415,11 +415,11 @@ $this->registerJs($js);
                         }
                         return false;
                     },
-                    'delete' => function ($url, $model, $key) {
+                    'retirar' => function ($url, $model, $key) {
                         if (Yii::$app->user->id == $model->propietario_id) {
                             return Html::a(
                                 '<span class="glyphicon glyphicon-trash"></span>',
-                                ['copias/delete', 'id' => $model->id],
+                                ['copias/retirar-inventario', 'id' => $model->id],
                                 [
                                     'data' => [
                                       'method' => 'post',

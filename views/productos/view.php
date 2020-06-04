@@ -33,8 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             echo Html::a('Poner en venta',
                 [
-                    'ventas/crea-venta-producto',
-                    'productoId' => $model->id
+                    'ventas/crea-venta-item',
+                    'cId' => false,
+                    'pId' => $model->id
                 ],
                 [
                     'class' => 'btn btn-success',

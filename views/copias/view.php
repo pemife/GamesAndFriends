@@ -28,13 +28,28 @@ $this->params['breadcrumbs'][] = $this->title;
       </p>
     <?php endif ?>
 
+    <?php if (Yii::$app->user->id === $model->propietario_id) {
+        echo Html::a('Poner en venta',
+            [
+                'ventas/crea-venta-item',
+                'cId' => false,
+                'pId' => $model->id
+            ],
+            [
+                'class' => 'btn btn-success mb-4',
+                'hidden' => false,
+            ]
+        );
+        }
+    ?>
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'juego.titulo',
             'propietario.nombre:text:Propietario',
             'plataforma.nombre:text:Plataforma',
-            // 'enVenta',
+            'estado'
         ],
     ]) ?>
 
