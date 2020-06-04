@@ -30,7 +30,7 @@ class Precios extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['juego_id', 'plataforma_id', 'cifra'], 'required'],
+            [['juego_id', 'plataforma_id'], 'required'],
             [['juego_id', 'plataforma_id'], 'default', 'value' => null],
             [['juego_id', 'plataforma_id'], 'integer'],
             [['cifra'], 'number'],

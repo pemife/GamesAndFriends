@@ -38,7 +38,7 @@ class CopiasController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'mis-copias', 'comprar-copia'],
+                        'actions' => ['create', 'mis-copias'],
                         'roles' => ['@'],
                     ],
                     [
@@ -82,15 +82,17 @@ class CopiasController extends Controller
                                 return false;
                             }
 
-                            if (!Juegos::find(Yii::$app->request->queryParams(['jId']))->exists()) {
+                            if (!Juegos::findOne(Yii::$app->request->queryParams['jId'])) {
                                 Yii::$app->session->setFlash('error', '¡Ese juego no existe!');
                                 return false;
                             }
 
-                            if (!Plataformas::find(Yii::$app->request->queryParams(['pId']))->exists()) {
+                            if (!Plataformas::findOne(Yii::$app->request->queryParams['pId'])) {
                                 Yii::$app->session->setFlash('error', '¡Intentas comprar un juego para una plataforma que no existe!');
                                 return false;
                             }
+
+                            return true;
                         },
                     ],
                     [
@@ -225,7 +227,7 @@ class CopiasController extends Controller
 
     public function actionRetirarInventario($id)
     {
-        $this->findModel($id)->unlink('propietario', Usuarios::find(Yii::$app->user->id)->one());
+        $this->findModel($id)->unlink('propietario', Usuarios::findOne(Yii::$app->user->id));
 
         Yii::$app->session->setFlash('success', 'Copia retirada de inventario correctamente');
 

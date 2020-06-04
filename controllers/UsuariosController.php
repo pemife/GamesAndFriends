@@ -261,7 +261,7 @@ class UsuariosController extends Controller
                                 return false;
                             }
 
-                            if (!Juegos::find(Yii::$app->request->queryParams['jId'])) {
+                            if (!Juegos::findOne(Yii::$app->request->queryParams['jId'])) {
                                 Yii::$app->session->setFlash('error', 'No puedes añadir a la lista de deseos un juego que no existe');
                                 return false;
                             }
@@ -288,7 +288,7 @@ class UsuariosController extends Controller
 
                             $jId = Yii::$app->request->queryParams['jId'];
                             
-                            if (!Juegos::find($jId)->one()) {
+                            if (!Juegos::findOne($jId)) {
                                 Yii::$app->session->setFlash('error', '¡No puedes borrar de la lista un juego que no existe!');
                                 return false;
                             }
@@ -341,7 +341,7 @@ class UsuariosController extends Controller
                                 return false;
                             }
 
-                            if (!Juegos::find(Yii::$app->request->queryParams['jId'])) {
+                            if (!Juegos::findOne(Yii::$app->request->queryParams['jId'])) {
                                 Yii::$app->session->setFlash('error', 'No puedes ' . $palabraAccion . ' en la lista de ignorados un juego que no existe');
                                 return false;
                             }
