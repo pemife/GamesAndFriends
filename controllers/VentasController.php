@@ -35,7 +35,10 @@ class VentasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'mis-ventas', 'solicitar-compra', 'finalizar-venta'],
+                'only' => [
+                    'create', 'update', 'delete', 'mis-ventas', 'solicitar-compra',
+                    'finalizar-venta', 'crea-venta-productos', 'crea-venta-item'
+                ],
                 'rules' => [
                     [
                         'allow' => true,
@@ -145,6 +148,43 @@ class VentasController extends Controller
                             Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta que no es tuya!');
                             return false;
                         },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['crea-venta-productos', 'crea-venta-copias'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
+                                return false;
+                            }
+                            
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['crea-venta-item'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
+                                return false;
+                            }
+
+                            $cId = Yii::$app->request->queryParams['cId'];
+                            $pId = Yii::$app->request->queryParams['pId'];
+
+                            if (empty($cId) && empty($pId)) {
+                                Yii::$app->session->setFlash('error', 'No puedes vender un producto y una copia a la vez');
+                                return false;
+                            } elseif (!empty($cId) && !empty($pId)) {
+                                Yii::$app->session->setFlash('error', 'No puedes crear una venta vacía');
+                                return false;
+                            }
+                            
+                            return true;
+                        }
                     ],
                 ],
             ],
@@ -407,7 +447,7 @@ class VentasController extends Controller
      * @return string El resultado del renderizado de la página
      * @param mixed $productoId
      */
-    public function actionCreaVentaProducto($productoId)
+    public function actionCreaVentaProductos($productoId)
     {
         $model = new Ventas();
 
@@ -422,12 +462,13 @@ class VentasController extends Controller
             Yii::$app->session->setFlash('error', 'Ha ocurrido un fallo al procesar tu venta');
         }
 
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
-            return $this->redirect(['ventas/index']);
+        if (Ventas::findOne(Yii::$app->request->queryParams['productoId'])) {
+            Yii::$app->session->setFlash('error', 'Ese producto ya esta en venta');
+            return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
         }
 
         // Crea un array asociativo con el id del producto a vender + el nombre
+        $puedeVender = false;
         foreach (Productos::lista() as $producto) {
             $listaProductosVenta[$producto->id] = $producto->nombre;
             $puedeVender = true;
@@ -448,7 +489,7 @@ class VentasController extends Controller
      * Esta accion sirve para la creacion de la venta de una copia.
      * @return string El resultado del renderizado de la página
      */
-    public function actionCreaVentaCopia()
+    public function actionCreaVentaCopias()
     {
         $model = new Ventas();
 
@@ -457,11 +498,6 @@ class VentasController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             }
             Yii::$app->session->setFlash('error', 'Ha ocurrido un fallo al procesar tu venta');
-        }
-
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash('error', 'No puedes vender algo sin iniciar sesion!');
-            return $this->redirect(['ventas/index']);
         }
 
         // Crea un array asociativo con el id de la copia a vender + el nombre
@@ -478,9 +514,40 @@ class VentasController extends Controller
             return $this->redirect(['ventas/index']);
         }
 
-        return $this->render('creaVentaCopia', [
+        return $this->render('creaVentaCopias', [
             'listaCopiasVenta' => $listaCopiasVenta,
             'dataProvider' => $dataProvider,
+            'model' => $model,
+        ]);
+    }
+
+    public function actionCreaVentaItem($cId, $pId)
+    {
+        $model = new Ventas();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            Yii::$app->session->setFlash('error', 'Ha ocurrido un fallo al procesar tu venta');
+        }
+
+        $nombreItem = empty($cId) ? Productos::findOne($pId)->nombre : Copias::findOne($cId)->juego->titulo;
+
+        if (Ventas::find()->where(['producto_id' => $pId])->exists()) {
+            Yii::$app->session->setFlash('error', 'Ese producto ya esta en venta');
+            return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+        }
+
+        if (Ventas::find()->where(['copia_id' => $cId])->exists()) {
+            Yii::$app->session->setFlash('error', 'Esa copia ya esta en venta');
+            return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+        }
+
+        return $this->render('creaVentaItem', [
+            'cId' => $cId,
+            'pId' => $pId,
+            'nombreItem' => $nombreItem,
             'model' => $model,
         ]);
     }

@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Productos;
 use yii\bootstrap4\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
@@ -8,7 +9,7 @@ use kartik\select2\Select2;
 /* @var $model app\models\Ventas */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = 'Venta de juego';
+$this->title = 'Venta de ' . $nombreItem;
 $this->params['breadcrumbs'][] = ['label' => 'Ventas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -25,17 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ])->label(false);
     ?>
 
-    <?= $form->field($model, 'copia_id')->widget(Select2::className(),[
-        'data' => $listaCopiasVenta,
-        'options' => ['placeholder' => 'Introduzca una copia del juego que quiere vender'],
-        'pluginOptions' => [
-          'allowClear' => false,
-        ],
-      ])->label('Copia a vender'); ?>
+    <?= $form->field($model, 'copia_id')->hiddenInput([
+            'readonly' => true,
+            'value' => $cId ? $cId : null,
+      ])->label(false); ?>
 
     <?= $form->field($model, 'producto_id')->hiddenInput([
             'readonly' => true,
-            'value' => null,
+            'value' => $pId ? $pId : null,
       ])->label(false); ?>
 
     <?= $form->field($model, 'precio') ?>
