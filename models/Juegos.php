@@ -240,7 +240,10 @@ class Juegos extends \yii\db\ActiveRecord
 
         $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
-        return (string)$request->getUri();
+        if (getenv('MEDIA')) {
+            return (string)$request->getUri();
+        }
+        return '';
     }
 
     public function getTrailers()
