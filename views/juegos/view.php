@@ -189,7 +189,14 @@ $this->registerCSS($css);
                         Opciones de compra
                     </p>
                     <span class="d-flex justify-content-end">
-                        <?php foreach ($model->precios as $precio) { ?>
+                        <?php
+                        $permiteCompra = false;
+                        foreach ($model->precios as $precio) {
+                            if ($precio->cifra == null) {
+                                continue;
+                            }
+                            $permiteCompra = true;
+                        ?>
                             <?= Html::a(
                                 Html::img($precio->plataforma->urlLogo,
                                     [
@@ -213,6 +220,9 @@ $this->registerCSS($css);
                             ) ?> 
                             <?= Yii::debug($precio) ?>
                         <?php } ?>
+                        <span class="mr-2 mt-4 mb-4">
+                            <?= $permiteCompra ? '' : '¡No hay opciones de compra!' ?>
+                        </span>
                     </span>
                 </div>
             </div>

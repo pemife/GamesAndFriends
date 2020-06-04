@@ -316,15 +316,14 @@ DROP TABLE IF EXISTS precios CASCADE;
 
 CREATE TABLE precios
 (
-    id              BIGSERIAL     PRIMARY KEY
-  , juego_id        BIGINT        REFERENCES juegos(id)
+    juego_id        BIGINT        REFERENCES juegos(id)
                                   ON DELETE NO ACTION
                                   ON UPDATE CASCADE
   , plataforma_id   BIGINT        REFERENCES plataformas(id)
                                   ON DELETE NO ACTION
                                   ON UPDATE CASCADE
   , cifra           NUMERIC(6,2)
-  , CONSTRAINT uq_juego_plataforma UNIQUE (juego_id, plataforma_id)
+  , PRIMARY KEY(juego_id, plataforma_id)
 );
 
 --INSERTS --

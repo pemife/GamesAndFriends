@@ -107,7 +107,7 @@ class Plataformas extends \yii\db\ActiveRecord
     {
         switch ($this->id) {
             case 1:
-                return '#3c3d42';
+                return '#00a4ef';
             break;
             case 2:
                 return '#003087';
