@@ -40,7 +40,7 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-dark bg-dark navbar-expand-md fixed-top',
+            'class' => 'navbar-dark bg-dark navbar-expand-md fixed-top container-fluid',
         ],
         'collapseOptions' => [
             'class' => 'justify-content-end',
@@ -85,11 +85,14 @@ AppAsset::register($this);
                  ['label' => 'Añadir a inventario', 'url' => ['usuarios/anadir-inventario']],
                  Html::beginForm(['site/logout'], 'post')
                  . Html::submitButton(
-                     '&nbsp;&nbsp;Logout (' . $usuarioNombre . ')',
+                     '&nbsp;&nbsp;Logout (' . Html::encode($usuarioNombre) . ')',
                      ['class' => 'btn btn-link logout']
                  )
                  . Html::endForm()],
                  'visible' => !Yii::$app->user->isGuest
+            ],
+            [
+                'label' => 'Carrito', 'url' => ['juegos/carrito-compra'], 'visible' => !Yii::$app->user->isGuest
             ]
         ],
     ]);

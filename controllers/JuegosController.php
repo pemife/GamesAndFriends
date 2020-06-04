@@ -15,6 +15,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\Cookie;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -36,7 +37,7 @@ class JuegosController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'view'],
+                'only' => ['create', 'update', 'delete', 'view', 'anadir-carrito'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -69,6 +70,33 @@ class JuegosController extends Controller
                                     Yii::$app->session->setFlash('error', '¡Tu edad no cumple con los criterios para ver este juego!');
                                     return false;
                                 }
+                            }
+                            
+                            return true;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['anadir-carrito'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            $jId = Yii::$app->request->queryParams['jId'];
+
+                            if (!Juegos::findOne($jId)) {
+                                Yii::$app->session->setFlash('error', '¡Ese juego no existe!');
+                                return false;
+                            }
+
+                            $pId = Yii::$app->request->queryParams['pId'];
+
+                            if (!Plataformas::findOne($pId)) {
+                                Yii::$app->session->setFlash('error', '¡No puedes añadir!');
+                                return false;
+                            }
+
+                            if (!Precios::findOne(['juego_id' => $jId, 'plataforma_id' => $pId])) {
+                                Yii::$app->session->setFlash('error', '¡No hay opcion de compra disponible para ese juego!');
+                                return false;
                             }
                             
                             return true;
@@ -322,6 +350,30 @@ class JuegosController extends Controller
             'juegosProvider' => $juegosProvider,
             'recomendacionesProvider' => $recomendacionesProvider,
         ]);
+    }
+
+    public function actionAnadirCarrito($jId, $pId)
+    {
+        $precio = Precios::findOne(['juego_id' => $jId, 'plataforma_id' => $pId]);
+
+        Yii::$app->session->remove('carritoCompra');
+
+        if (!Yii::$app->session->has('carritoCompra')) {
+            $cookie = new Cookie([
+                'name' => 'carritoCompra',
+                'value' => 'hola',
+                'expire' => time() + 86400 * 365,
+            ]);
+
+            Yii::$app->response->cookies->add($cookie);
+
+            return $cookie;
+        } else {
+            Yii::$app->session->set('carritoCompra', 'no');
+
+            return Yii::$app->session['carritoCompra'];
+        }
+        return false;
     }
 
     /**
