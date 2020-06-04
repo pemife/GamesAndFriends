@@ -9,14 +9,29 @@ use yii\bootstrap4\Html;
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
-            'nombre',
-            // 'password',
+            [
+                'attribute' => 'nombre',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return
+                    Html::a(
+                        Html::img(
+                            $model->urlImagen,
+                            [
+                            'class' => 'rounded-circle mr-2',
+                            'width' => 50,
+                            'height' => 50,
+                            ]
+                        )
+                        . $model->nombre,
+                        [
+                            'usuarios/view',
+                            'id' => $model->id
+                        ]
+                    );
+                }
+            ],
             'created_at',
-            // 'token',
-            // 'email:email',
-            // 'biografia:ntext',
-            // 'fechanac',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{relaciones} {view} {bloquear} {update} {delete} {seguir}',
