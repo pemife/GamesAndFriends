@@ -13,6 +13,10 @@ $this->params['breadcrumbs'][] = ['label' => 'Productos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
+
+<!-- Dependencia de krajee starrating -->
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" crossorigin="anonymous"></script>
+
 <div class="productos-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -29,8 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
             echo Html::a('Poner en venta',
                 [
-                    'ventas/crea-venta-producto',
-                    'productoId' => $model->id
+                    'ventas/crea-venta-item',
+                    'cId' => false,
+                    'pId' => $model->id
                 ],
                 [
                     'class' => 'btn btn-success',

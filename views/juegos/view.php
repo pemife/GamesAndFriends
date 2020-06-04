@@ -31,6 +31,9 @@ if (!Yii::$app->user->isGuest) {
     }
 }
 
+// Numero total de trailers
+$totalTrailers = sizeof($model->trailers);
+
 $js = <<<SCRIPT
 $(function() {
     if ($tieneJuegoJs && !$usuarioHaCriticado) {
@@ -38,99 +41,213 @@ $(function() {
             $('#modalCritica').modal('show');
         }, 3000);
     }
+
+    $('.trailer').hide();
+    $('[name="video1"]').show();
+
+    $('.trailer').each(function () {
+        this.volume = 0.2;
+    });
 });
+
+$('.selector').click(function(e) {
+    seleccionarTrailer(this.dataset.numerotrailer);
+});
+
+function pausaVideos() {
+    $('.trailer').each(function() {
+        this.pause();
+    });
+}
+
+function seleccionarTrailer(numero) {
+    pausaVideos();
+    $('.trailer').hide();
+    $('[name="video' + numero + '"]').show();
+}
 SCRIPT;
 
+$css = <<<CSS
+.descripcion {
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trailer {
+    width: 100%;
+}
+CSS;
+
 $this->registerJs($js);
+$this->registerCSS($css);
 ?>
+
+<!-- Dependencia de krajee starrating -->
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" crossorigin="anonymous"></script>
+
 <div class="juegos-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <span>
-        <?= Html::img($model->urlImagen, ['height' => 200, 'width' => 300]) ?>
-        <?php
-        if ($precioMinimo != null) {
-            ?>
-                <h3>En venta desde <?= Html::encode($precioMinimo) ?>€</h3>
-            <?php
-        } else {
-            ?>
-                <h3>No hay ninguna copia en venta actualmente</h3>
-            <?php
-        }
-        ?>
-        <p>Valoraciones Positivas Globales: <?= Html::encode($valPosGlob) ?></p>
-        <p>Valoraciones Positivas Recientes: <?= Html::encode($valPosRec) ?></p>
-        <?= Html::a(
-            'Ver en mercado',
-            [
-              'ventas/ventas-item',
-              'id' => $model->id,
-              'esProducto' => false
-            ],
-            ['class' => 'btn btn-success mr-2']
-        ) ?>
-        <?php
-        if (!Yii::$app->user->isGuest) {
-              echo Html::a(
-                  'Añadir a lista de deseados',
-                  [
-                    'usuarios/anadir-deseos',
-                    'uId' => Yii::$app->user->id,
-                    'jId' => $model->id
-                  ],
-                  ['class' => 'btn btn-info',]
-              );
-        }
-        ?>
-    </span>
+    <div class="container">
+        <div class="row mt-4 bg-dark pt-4 pb-4 text-light">
+            <div class="col-md-8 mt-2">
+                <?php
+                $count = 1;
+                foreach ($model->trailers as $trailer) : ?>
+                    <video class="trailer" controls name="video<?= $count ?>">
+                        <source src="<?= $trailer ?>">
+                    </video>
+                    <?php $count++ ?>
+                <?php endforeach; ?>
+                <span class="d-flex justify-content-center">
+                    <?php
+                    $count = 1;
+                    foreach ($model->trailers as $trailer) : ?>
+                        <?= Html::radio('selector', $count > 1 ? false : true, [
+                                'class' => 'selector mr-2',
+                                'id' => 'selectorRadio' . $count,
+                                'data' => [
+                                    'numeroTrailer' => $count
+                                ]
+                            ]) ?>
+                        <?php $count++ ?>
+                    <?php endforeach; ?>
+                </span>
+                <?= $totalTrailers == 0 ? Html::img($model->sinTrailers(), ['class' => 'img-fluid']) : '' ?>
+            </div>
+            <div class="col-md-4 mt-2">
 
-    </br></br>
+                <?= Html::img($model->urlImagen, ['class' => 'img-fluid']) ?>
 
-    <?php if (Yii::$app->user->id === 1) : ?>
-      <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-          'class' => 'btn btn-danger',
-          'data' => [
-            'confirm' => '¿Estas seguro de querer borrar este elemento?',
-            'method' => 'post',
-          ],
-          ]) ?>
-        </p>
-    <?php endif ?>
+                <p class="descripcion mt-2">
+                    <?= Html::encode($model->descripcion) ?>
+                </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'descripcion:ntext',
-            'fechalan:date',
-            'dev',
-            'publ',
-            'cont_adul:boolean',
-            'edad_minima',
-            [
-                'attribute' => 'etiquetas',
-                'label' => 'Generos',
-                'value' => Html::encode(implode(', ', $model->generosNombres())),
-            ]
-        ],
-    ]) ?>
+                <p>
+                    Valoraciones Positivas Globales: <?= Html::encode($valPosGlob) ?><br>
+                    Valoraciones Positivas Recientes: <?= Html::encode($valPosRec) ?>
+                </p>
 
-    <h3>Críticas</h3>
+                <p>
+                    Desarrolladora: <?= Html::encode($model->dev) ?><br>
+                    Editora: <?= Html::encode($model->publ) ?>
+                </p>
 
-    <p>
-        <?php
-        if ($tieneJuego) {
-            echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
-        }
-        ?>
-    </p>
+                <p>
+                    Géneros: <?= Html::encode(implode(', ', $model->generosNombres())) ?>
+                </p>
+            </div>
+        </div>
+    </div>
 
-    <?= GridView::widget([
-        'dataProvider' => $criticasProvider,
-        'columns' => [
+    <div class="row mb-4">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <?= Html::a(
+                        'Ventas de 2ª Mano',
+                        [
+                            'ventas/ventas-item',
+                            'id' => $model->id,
+                            'esProducto' => false
+                        ],
+                        ['class' => 'btn btn-success mr-2 mt-4']
+                    ) ?>
+                    <?php
+                    if (!Yii::$app->user->isGuest) {
+                        echo Html::a(
+                            'Añadir a lista de deseados',
+                            [
+                                'usuarios/anadir-deseos',
+                                'uId' => Yii::$app->user->id,
+                                'jId' => $model->id
+                            ],
+                            ['class' => 'btn btn-info mr-2 mt-4',]
+                        );
+                    }
+                    ?>
+                    <?php if (Yii::$app->user->id === 1) : ?>
+                        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2 mt-4']) ?>
+                        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+                        'class' => 'btn btn-danger mr-2 mt-4',
+                        'data' => [
+                            'confirm' => '¿Estas seguro de querer borrar este elemento?',
+                            'method' => 'post',
+                        ],
+                        ]) ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 bg-dark text-light mt-4 ml-4">
+                    <h4 class="pt-4 pl-4">
+                        Comprar <?= Html::encode($model->titulo) ?>
+                    </h4>
+                    <p class="text-light pl-4">
+                        Opciones de compra
+                    </p>
+                    <span class="d-flex justify-content-end">
+                        <?php
+                        $permiteCompra = false;
+                        foreach ($model->precios as $precio) {
+                            if ($precio->cifra == null) {
+                                continue;
+                            }
+                            $permiteCompra = true;
+                        ?>
+                            <?= Html::a(
+                                Html::img($precio->plataforma->urlLogo,
+                                    [
+                                        'class' => 'mr-2',
+                                        'height' => 30,
+                                        'width' => 30
+                                    ]
+                                )
+                                . $precio->cifra . '€',
+                                [
+                                'copias/comprar-copia',
+                                'jId' => $model->id,
+                                'pId' => $precio->plataforma->id
+                                ],
+                                [
+                                    'class' => 'btn mr-2 mt-4 mb-4 text-light',
+                                    'style' => [
+                                        'background-color' => $precio->plataforma->color
+                                    ]
+                                ]
+                            ) ?> 
+                            <?= Yii::debug($precio) ?>
+                        <?php } ?>
+                        <span class="mr-2 mt-4 mb-4">
+                            <?= $permiteCompra ? '' : '¡No hay opciones de compra!' ?>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="row mb-2 mt-2">
+                <div class="col-md-1">
+                    <h3>Críticas</h3>
+                </div>
+                <div class="col-md-1 ml-4">
+                    <?php
+                    if ($tieneJuego) {
+                        echo Html::a('Opinar', ['criticas/critica-juego', 'juego_id' => $model->id], ['class' => 'btn btn-success']);
+                    }
+                    ?>
+                </div>
+                
+            </div>
+                
+            <?= GridView::widget([
+            'dataProvider' => $criticasProvider,
+            'columns' => [
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{like}',
@@ -223,18 +340,26 @@ $this->registerJs($js);
             ],
         ]
     ]); ?>
-
-    <h3>Juegos similares a <?= Html::encode($model->titulo) ?></h3>
+        </div>
+    </div>
 
     <div class="row">
+        <h3 class="col-md-12 mt-4 mb-2">Juegos similares a <?= Html::encode($model->titulo) ?></h3>
+
         <?= ListView::widget([
             'dataProvider' => $similaresProvider,
-            'itemOptions' => ['class' => 'item',],
+            'itemOptions' => ['class' => 'item'],
             'summary' => '',
             'itemView' => function ($model, $key, $index, $widget) {
                 ?>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <table class="border">
+                        <tr>
+                            <?= Html::a(
+                                    Html::img($model->urlImagen, ['class' => 'img-fluid']),
+                                    ['view', 'id' => $model->id]
+                                ) ?>
+                        </tr>
                         <tr>
                             <th class="border-bottom"><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
                         </tr>
@@ -247,6 +372,8 @@ $this->registerJs($js);
             }
         ]) ?>
     </div>
+    
+
 
     <?php
     Modal::begin([

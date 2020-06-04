@@ -143,6 +143,26 @@ class Juegos extends \yii\db\ActiveRecord
         return $this->hasMany(Ignorados::className(), ['id' => 'usuario_id'])->viaTable('juegos_ignorados', ['juego_id' => 'id']);
     }
 
+    /**
+     * Gets query for [[Plataformas]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPlataformas()
+    {
+        return $this->hasMany(Plataformas::className(), ['id' => 'plataforma_id'])->viaTable('precios', ['juego_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Precios]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPrecios()
+    {
+        return $this->hasMany(Precios::className(), ['juego_id' => 'id'])->inverseOf('juego');
+    }
+
     public function generosId()
     {
         $etiquetas = $this->etiquetas;
@@ -155,6 +175,20 @@ class Juegos extends \yii\db\ActiveRecord
         }
 
         return $generosIds;
+    }
+
+    public function plataformasId()
+    {
+        $plataformas = $this->plataformas;
+        if (!$plataformas) {
+            return [];
+        }
+
+        foreach ($plataformas as $plataforma) {
+            $plataformasIds[] = $plataforma->id;
+        }
+
+        return $plataformasIds;
     }
 
     public function generosNombres()
@@ -193,13 +227,82 @@ class Juegos extends \yii\db\ActiveRecord
             ],
         ]);
 
+        $carpeta = '';
+
+        if ($this->img_key != 'sin-imagen.jpg') {
+            $carpeta = str_replace(' ', '_', $this->titulo) . '/';
+        }
+
         $cmd = $s3->getCommand('GetObject', [
             'Bucket' => 'gamesandfriends',
-            'Key' => 'Juegos/' . $this->img_key,
+            'Key' => 'Juegos/' . $carpeta . $this->img_key,
         ]);
 
         $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
         return (string)$request->getUri();
+    }
+
+    public function getTrailers()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        // El numero de trailers que tiene cada juego en AmazonS3
+        switch ($this->id) {
+            case 1:
+            case 2:
+                $numeroTrailers = 2;
+            break;
+            case 3:
+                $numeroTrailers = 3;
+            break;
+            default:
+                $numeroTrailers = 0;
+        }
+
+        $carpeta = str_replace(' ', '_', $this->titulo) . '/Trailers';
+
+        $urlTrailers = [];
+
+        for ($i = 1; $i <= $numeroTrailers; $i++) {
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => 'gamesandfriends',
+                'Key' => 'Juegos/' . $carpeta . '/trailer' . $i . '.mp4',
+            ]);
+    
+            $urlTrailers[] = (string)$s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
+        }
+
+        return $urlTrailers;
+    }
+
+    public function sinTrailers()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        $cmd = $s3->getCommand('GetObject', [
+            'Bucket' => 'gamesandfriends',
+            'Key' => 'Juegos/sin-trailers.jpg',
+        ]);
+
+        return (string)$s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
     }
 }

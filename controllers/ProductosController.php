@@ -59,7 +59,7 @@ class ProductosController extends Controller
                                 return true;
                             }
 
-                            if (Ventas::find()->where(['producto_id' => $model->id])) {
+                            if ($model->estado == 'En venta') {
                                 Yii::$app->session->setFlash('error', 'No puedes modificar/borrar un producto que esta en venta');
                                 return false;
                             }

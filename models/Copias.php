@@ -39,6 +39,7 @@ class Copias extends \yii\db\ActiveRecord
             [['juego_id', 'plataforma_id'], 'required'],
             [['juego_id', 'propietario_id', 'plataforma_id'], 'default', 'value' => null],
             [['juego_id', 'propietario_id', 'plataforma_id'], 'integer'],
+            [['clave'], 'default', 'value' => $this->generaClave()],
             [['clave'], 'string', 'max' => 17],
             [['clave'], 'match', 'pattern' => '/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/'],
             [['juego_id'], 'exist', 'skipOnError' => true, 'targetClass' => Juegos::className(), 'targetAttribute' => ['juego_id' => 'id']],
@@ -115,5 +116,39 @@ class Copias extends \yii\db\ActiveRecord
     public function getVentas()
     {
         return $this->hasMany(Ventas::className(), ['copia_id' => 'id'])->inverseOf('copia');
+    }
+
+    public function generaClave()
+    {
+        do {
+            $clave = '';
+            for ($i = 0; $i < 3; $i++) {
+                $clave .= strtoupper(substr(uniqid(), -5));
+                $clave .= $i != 2 ? '-' : '';
+            }
+        } while (!$this->claveValida($clave) && !$this->claveUnica($clave));
+        
+        return $clave;
+    }
+
+    private function claveValida($clave)
+    {
+        return preg_match('/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/', $clave);
+    }
+
+    private function claveUnica($clave)
+    {
+        return !self::find()->where(['clave' => $clave])->exists();
+    }
+
+    public function getEstado()
+    {
+        if (Ventas::find()->where(['copia_id' => $this->id])->exists()) {
+            return 'En venta';
+        }
+
+        // Añadir estado "clave desvelada"
+
+        return '';
     }
 }

@@ -8,7 +8,7 @@ use kartik\select2\Select2;
 /* @var $model app\models\Ventas */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = 'Venta de producto';
+$this->title = 'Venta de juego';
 $this->params['breadcrumbs'][] = ['label' => 'Ventas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -25,15 +25,15 @@ $this->params['breadcrumbs'][] = $this->title;
     ])->label(false);
     ?>
 
-    <?= $form->field($model, 'producto_id')->widget(Select2::className(), [
-        'data' => $listaProductosVenta,
-        'options' => ['placeholder' => 'Introduzca un producto de su inventario'],
+    <?= $form->field($model, 'copia_id')->widget(Select2::className(), [
+        'data' => $listaCopiasVenta,
+        'options' => ['placeholder' => 'Introduzca una copia del juego que quiere vender'],
         'pluginOptions' => [
           'allowClear' => false,
         ],
-      ])->label('Producto a vender'); ?>
+      ])->label('Copia a vender'); ?>
 
-    <?= $form->field($model, 'copia_id')->hiddenInput([
+    <?= $form->field($model, 'producto_id')->hiddenInput([
             'readonly' => true,
             'value' => null,
       ])->label(false); ?>
