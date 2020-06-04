@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ])->label(false);
     ?>
 
-    <?= $form->field($model, 'producto_id')->widget(Select2::className(),[
+    <?= $form->field($model, 'producto_id')->widget(Select2::className(), [
         'data' => $listaProductosVenta,
         'options' => ['placeholder' => 'Introduzca un producto de su inventario'],
         'pluginOptions' => [

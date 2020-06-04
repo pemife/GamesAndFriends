@@ -39,6 +39,7 @@ class Copias extends \yii\db\ActiveRecord
             [['juego_id', 'plataforma_id'], 'required'],
             [['juego_id', 'propietario_id', 'plataforma_id'], 'default', 'value' => null],
             [['juego_id', 'propietario_id', 'plataforma_id'], 'integer'],
+            [['clave'], 'default', 'value' => $this->generaClave()],
             [['clave'], 'string', 'max' => 17],
             [['clave'], 'match', 'pattern' => '/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/'],
             [['juego_id'], 'exist', 'skipOnError' => true, 'targetClass' => Juegos::className(), 'targetAttribute' => ['juego_id' => 'id']],
@@ -138,5 +139,16 @@ class Copias extends \yii\db\ActiveRecord
     private function claveUnica($clave)
     {
         return !self::find()->where(['clave' => $clave])->exists();
+    }
+
+    public function getEstado()
+    {
+        if (Ventas::find()->where(['copia_id' => $this->id])->exists()) {
+            return 'En venta';
+        }
+
+        // Añadir estado "clave desvelada"
+
+        return '';
     }
 }

@@ -39,6 +39,7 @@ class Productos extends \yii\db\ActiveRecord
             [['descripcion'], 'string'],
             [['propietario_id'], 'default', 'value' => null],
             [['propietario_id'], 'integer'],
+            [['img_key'], 'default', 'value' => 'sin-imagen.jpg'],
             [['nombre', 'img_key'], 'string', 'max' => 255],
             [['nombre'], 'unique'],
             [['img_key'], 'unique'],
@@ -136,5 +137,16 @@ class Productos extends \yii\db\ActiveRecord
         $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
         return (string)$request->getUri();
+    }
+
+    public function getEstado()
+    {
+        if (Ventas::find()->where(['copia_id' => $this->id])->exists()) {
+            return 'En venta';
+        }
+
+        // Añadir estado "clave desvelada"
+
+        return '';
     }
 }

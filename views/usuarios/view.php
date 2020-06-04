@@ -325,26 +325,24 @@ $this->registerJs($js);
               'contentOptions' => ['itemprop' => 'name']
             ],
             'stock',
-            [
-                'header' => 'Estado',
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{estado}',
-                'buttons' => [
-                    'estado' => function ($url, $model, $key) {
-                        //TODO
-                    }
-                ],
-            ],
+            'estado',
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' => '{vermercado} {view} {delete}',
+              'template' => '{vender} {view} {delete}',
               'buttons' => [
-                  'vermercado' => function ($url, $model, $key) {
-                      return Html::a(
-                          '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                          ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => true],
-                          ['title' => 'ver en mercado']
-                      );
+                  'vender' => function ($url, $model, $key) {
+                    if (!$model->estado) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                            [
+                              'ventas/crea-venta-item',
+                              'cId' => false,
+                              'pId' => $model->id
+                            ],
+                            ['title' => 'vender']
+                        );
+                    }
+                    return false;
                   },
                   'view' => function ($url, $model, $key) {
                       return Html::a(
@@ -353,7 +351,7 @@ $this->registerJs($js);
                           ['title' => 'ver producto']
                       );
                   },
-                'delete' => function ($url, $model, $key) {
+                  'delete' => function ($url, $model, $key) {
                     if (Yii::$app->user->id == $model->propietario_id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>',
@@ -371,7 +369,7 @@ $this->registerJs($js);
                         );
                     }
                     return null;
-                }
+                  }
               ]
             ],
           ],
@@ -390,19 +388,11 @@ $this->registerJs($js);
                     'attribute' => 'juego.titulo',
                     'contentOptions' => ['itemprop' => 'name']
                 ],
-                [
-                    'header' => 'Estado',
-                    'class' => 'yii\grid\ActionColumn',
-                    'template' => '{estado}',
-                    'buttons' => [
-                        'estado' => function ($url, $model, $key) {
-                            //TODO
-                        }
-                    ],
-                ],
+                'plataforma.nombre:text:Plataforma',
+                'estado',
                 [
                   'class' => 'yii\grid\ActionColumn',
-                  'template' => '{vermercado} {view} {update} {delete}',
+                  'template' => '{vender} {view} {delete}',
                   'buttons' => [
                     'view' => function ($url, $model, $key) {
                         return Html::a(
@@ -411,26 +401,19 @@ $this->registerJs($js);
                             ['title' => 'ver copia']
                         );
                     },
-                    'vermercado' => function ($url, $model, $key) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-shopping-cart"></span>',
-                            [
-                              'ventas/ventas-item',
-                              'id' => $model->id,
-                              'esProducto' => false,
-                            ],
-                            ['title' => 'ver en mercado']
-                        );
-                    },
-                    'update' => function ($url, $model, $key) {
-                        if (Yii::$app->user->id == $model->propietario_id) {
+                    'vender' => function ($url, $model, $key) {
+                        if (!$model->estado) {
                             return Html::a(
-                                '<span class="glyphicon glyphicon-pencil"></span>',
-                                ['ventas/update', 'id' => $model->id],
-                                ['title' => 'ver en mercado']
+                                '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                                [
+                                  'ventas/crea-venta-item',
+                                  'cId' => $model->id,
+                                  'pId' => false
+                                ],
+                                ['title' => 'vender']
                             );
                         }
-                        return null;
+                        return false;
                     },
                     'delete' => function ($url, $model, $key) {
                         if (Yii::$app->user->id == $model->propietario_id) {
@@ -443,6 +426,9 @@ $this->registerJs($js);
                                       'confirm' => '¿Estas seguro de retirar copia?(Esta accion no se puede deshacer)',
                                     ],
                                     'title' => 'retirar copia de inventario',
+                                    'style' => [
+                                        'color' => 'red',
+                                    ],
                                 ]
                             );
                         }
