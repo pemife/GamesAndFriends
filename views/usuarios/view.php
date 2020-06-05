@@ -10,8 +10,6 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Usuarios */
 
-// Yii::debug($model->listaIdsBloqueados());
-
 $this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,8 +31,6 @@ $puedeVerAmigosJS = json_encode($puedeVerAmigos);
 
 // Recomendaciones de usuarios
 $tieneRecomendaciones = sizeof($usuariosRecomendadosProvider->getModels());
-
-Yii::debug(sizeof($usuariosRecomendadosProvider->getModels()));
 
 $js = <<<EOF
 $('document').ready(function(){

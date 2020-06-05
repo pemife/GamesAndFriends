@@ -7,6 +7,7 @@ use kartik\rating\StarRating as RatingStarRating;
 use yii\bootstrap4\Modal;
 use yii\widgets\ListView;
 use Aws\S3\S3Client;
+use yii\bootstrap4\Dropdown;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -222,6 +223,60 @@ $this->registerCSS($css);
                             'method' => 'post',
                         ],
                         ]) ?>
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-info mt-4">Ofertas <b class="caret"></b></a>
+                        <?= Dropdown::widget([
+                            'items' => [
+                                ['label' => '50%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.50
+                                    ])
+                                ],
+                                ['label' => '55%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.55
+                                    ])
+                                ],
+                                ['label' => '65%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.60
+                                    ])
+                                ],
+                                ['label' => '60%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.65
+                                    ])
+                                ],
+                                ['label' => '75%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.75
+                                    ])
+                                ],
+                                ['label' => '80%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.80
+                                    ])
+                                ],
+                                ['label' => '85%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.85
+                                    ])
+                                ],
+                                ['label' => '90%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.9
+                                    ])
+                                ],
+                            ]
+                        ])
+                        ?>
                     <?php endif; ?>
                 </div>
             </div>
@@ -231,7 +286,7 @@ $this->registerCSS($css);
                         Comprar <?= Html::encode($model->titulo) ?>
                     </h4>
                     <p class="text-light pl-4">
-                        Añadir al carro de compra
+                        Añadir al carro de compra<br>
                     </p>
                     <span class="d-flex justify-content-end">
                         <?php
@@ -239,6 +294,9 @@ $this->registerCSS($css);
                         foreach ($model->precios as $precio) {
                             if ($precio->cifra == null) {
                                 continue;
+                            }
+                            if (!$permiteCompra && $precio->oferta != 1.0) {
+                                echo '<b>Oferta del ' . $precio->oferta * 100 . '%</b>';
                             }
                             $permiteCompra = true;
                         ?>
@@ -251,7 +309,7 @@ $this->registerCSS($css);
                                         'width' => 30
                                     ]
                                 )
-                                . $precio->cifra . '€',
+                                . $precio->cifra * $precio->oferta . '€',
                                 'javascript:void(0)',
                                 [
                                     'class' => 'btn mr-2 mt-4 mb-4 text-light botonCompra',
@@ -438,3 +496,4 @@ $this->registerCSS($css);
     ?>
 
 </div>
+<?= Yii::debug($model->oferta) ?>

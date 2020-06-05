@@ -25,6 +25,7 @@ use Aws\S3\S3Client;
  */
 class Juegos extends \yii\db\ActiveRecord
 {
+    private $_oferta;
 
     /**
      * {@inheritdoc}
@@ -313,5 +314,20 @@ class Juegos extends \yii\db\ActiveRecord
         }
 
         return '';
+    }
+
+    public function getOferta()
+    {
+        return $this->_oferta;
+    }
+
+    public function setOferta($porcentaje)
+    {
+        if ($porcentaje >= 0.1 && $porcentaje <= 1) {
+            $this->_oferta = $porcentaje;
+            return true;
+        }
+
+        return false;
     }
 }

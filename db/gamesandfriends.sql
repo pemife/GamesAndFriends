@@ -323,6 +323,8 @@ CREATE TABLE precios
                                   ON DELETE NO ACTION
                                   ON UPDATE CASCADE
   , cifra           NUMERIC(6,2)
+  , oferta          NUMERIC(3,2)  DEFAULT 1.00
+                                  CHECK (oferta >= 0.10 AND oferta <= 1.00)
   -- , PRIMARY KEY(juego_id, plataforma_id)
 );
 

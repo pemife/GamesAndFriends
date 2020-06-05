@@ -11,6 +11,7 @@ use app\models\Precios;
 use app\models\Usuarios;
 use app\models\Ventas;
 use Yii;
+use yii\bootstrap4\Html;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -82,6 +83,19 @@ class JuegosController extends Controller
 
                             if (!Precios::findOne(Yii::$app->request->queryParams['pId'])) {
                                 Yii::$app->session->setFlash('error', '¡No hay opcion de compra disponible para ese juego!');
+                                return false;
+                            }
+                            
+                            return true;
+                        },
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['poner-oferta'],
+                        'matchCallback' => function ($rule, $action) {
+
+                            if (!Juegos::findOne(Yii::$app->request->queryParams['jId'])) {
+                                Yii::$app->session->setFlash('error', '¡Ese juego no existe!');
                                 return false;
                             }
                             
@@ -401,6 +415,27 @@ class JuegosController extends Controller
         ]);
     }
 
+    public function actionPonerOferta($jId, $porcentaje)
+    {
+        $precios = Precios::find()->where(['juego_id' => $jId])->all();
+
+        foreach ($precios as $precio) {
+            $precio->oferta = $porcentaje;
+            Yii::debug($precio);
+            if (!$precio->save()) {
+                Yii::$app->session->setFlash('error', 'Ha ocurrido un error al poner la oferta');
+                return $this->redirect(['juegos/view', 'id' => $jId]);
+            }
+        }
+
+        if ($this->enviaCorreoRecomendaciones($jId)) {
+            Yii::$app->session->setFlash('success', 'Se han enviado todos los correos');
+        }
+
+        Yii::$app->session->setFlash('success', 'Oferta asignada correctamente');
+        return $this->redirect(['juegos/view', 'id' => $jId]);
+    }
+
     /**
      * Finds the Juegos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -415,5 +450,46 @@ class JuegosController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    private function enviaCorreoRecomendaciones($jId)
+    {
+        $emailsusuariosRecomendaciones = Usuarios::find()
+        ->joinWith('deseados')
+        ->joinWith('deseados.juego')
+        ->where(['juegos.id' => $jId])
+        ->select('usuarios.email')
+        ->distinct()
+        ->column();
+
+        if (!$emailsusuariosRecomendaciones) {
+            Yii::$app->session->setFlash('success', 'No se ha enviado ningun correo');
+            return false;
+        }
+
+        $emailsFallados = [];
+        
+        foreach ($emailsusuariosRecomendaciones as $email) {
+            $correo = Yii::$app->mailer->compose()
+            ->setFrom('gamesandfriends2@gmail.com')
+            ->setTo($email)
+            ->setSubject('¡Un juego en tu lista de deseos esta en oferta!')
+            ->setHtmlBody(
+                '¡El juego '
+                . Html::a($this->findModel($jId)->titulo, ['juegos/view', 'id' => $jId])
+                . ' está de oferta!'
+            );
+
+            if (!$correo->send()) {
+                $emailsFallados[] = $email;
+            }
+        }
+        
+        if ($emailsFallados) {
+            Yii::$app->session->setFlash('error', 'Ha fallado el envio de correos de estas direcciones' . implode(', ', $emailsFallados));
+            return false;
+        }
+
+        return true;
     }
 }
