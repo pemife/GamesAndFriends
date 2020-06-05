@@ -10,6 +10,7 @@ use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use yii\bootstrap4\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\Precios;
 
 AppAsset::register($this);
 ?>
@@ -92,7 +93,7 @@ AppAsset::register($this);
                  'visible' => !Yii::$app->user->isGuest
             ],
             [
-                'label' => 'Carrito', 'url' => ['juegos/carrito-compra'], 'visible' => !Yii::$app->user->isGuest
+                'label' => 'Carrito (' . Precios::totalCarrito() . ')', 'url' => ['juegos/carrito-compra'], 'visible' => !Yii::$app->user->isGuest, 'class' => 'carrito'
             ]
         ],
     ]);

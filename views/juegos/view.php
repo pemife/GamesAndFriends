@@ -63,12 +63,12 @@ $('.botonCompra').click(function(e) {
     $.ajax({
         method: 'GET',
         url: '$urlCarrito',
-        data: {jId: this.dataset.jid, pId: this.dataset.pid},
+        data: {pId: this.dataset.pid},
           success: function(result){
             if (result) {
-              alert(result);
+                //alert(result);
             } else {
-              alert('Ha ocurrido un error');
+                //alert('Ha ocurrido un error');
             }
         }
     });
@@ -259,8 +259,7 @@ $this->registerCSS($css);
                                         'background-color' => $precio->plataforma->color
                                     ],
                                     'data' => [
-                                        'jId' => $model->id,
-                                        'pId' => $precio->plataforma->id
+                                        'pId' => $precio->id
                                     ]
                                 ]
                             ) ?> 

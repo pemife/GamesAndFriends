@@ -80,21 +80,7 @@ class JuegosController extends Controller
                         'actions' => ['anadir-carrito'],
                         'matchCallback' => function ($rule, $action) {
 
-                            $jId = Yii::$app->request->queryParams['jId'];
-
-                            if (!Juegos::findOne($jId)) {
-                                Yii::$app->session->setFlash('error', '¡Ese juego no existe!');
-                                return false;
-                            }
-
-                            $pId = Yii::$app->request->queryParams['pId'];
-
-                            if (!Plataformas::findOne($pId)) {
-                                Yii::$app->session->setFlash('error', '¡No puedes añadir!');
-                                return false;
-                            }
-
-                            if (!Precios::findOne(['juego_id' => $jId, 'plataforma_id' => $pId])) {
+                            if (!Precios::findOne(Yii::$app->request->queryParams['pId'])) {
                                 Yii::$app->session->setFlash('error', '¡No hay opcion de compra disponible para ese juego!');
                                 return false;
                             }
@@ -352,28 +338,67 @@ class JuegosController extends Controller
         ]);
     }
 
-    public function actionAnadirCarrito($jId, $pId)
+    public function actionAnadirCarrito($pId)
     {
-        $precio = Precios::findOne(['juego_id' => $jId, 'plataforma_id' => $pId]);
-
-        Yii::$app->session->remove('carritoCompra');
-
-        if (!Yii::$app->session->has('carritoCompra')) {
+        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
             $cookie = new Cookie([
-                'name' => 'carritoCompra',
-                'value' => 'hola',
+                'name' => 'Carro-' . Yii::$app->user->id,
+                'value' => $pId,
                 'expire' => time() + 86400 * 365,
+                'secure' => true,
             ]);
 
             Yii::$app->response->cookies->add($cookie);
 
-            return $cookie;
+            return Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
         } else {
-            Yii::$app->session->set('carritoCompra', 'no');
+            $cookieAntes = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
 
-            return Yii::$app->session['carritoCompra'];
+            $cookie = new Cookie([
+                'name' => 'Carro-' . Yii::$app->user->id,
+                'value' =>  $cookieAntes . ' ' . $pId,
+                'expire' => time() + 86400 * 365,
+                'secure' => true,
+            ]);
+
+            Yii::$app->response->cookies->add($cookie);
+
+            return Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
         }
+
         return false;
+    }
+
+    public function actionCarritoCompra()
+    {
+        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+            Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
+            return $this->redirect(['home']);
+        }
+
+        $cookieCarro = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+
+        $precios = explode(' ', $cookieCarro);
+
+        $query = Precios::find()->where(['IN', 'id', $precios]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $precioTotal = 0;
+
+        foreach ($dataProvider->getModels() as $precio) {
+            $precioTotal += $precio->cifra;
+        }
+
+        // var_dump($precios);
+        // exit;
+
+        return $this->render('carritoCompra', [
+            'dataProvider' => $dataProvider,
+            'precioTotal' => $precioTotal,
+        ]);
     }
 
     /**

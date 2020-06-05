@@ -71,4 +71,17 @@ class Precios extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Plataformas::className(), ['id' => 'plataforma_id'])->inverseOf('precios');
     }
+
+    public static function totalCarrito()
+    {
+        if (\Yii::$app->request->cookies->has('Carro-' . \Yii::$app->user->id)) {
+            $cookieCarro = \Yii::$app->request->cookies->getValue('Carro-' . \Yii::$app->user->id);
+
+            $arrayCarro = explode(' ', $cookieCarro);
+    
+            return sizeof($arrayCarro);
+        }
+
+        return 0;
+    }
 }
