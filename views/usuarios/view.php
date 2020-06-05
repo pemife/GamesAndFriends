@@ -20,6 +20,7 @@ $enlaceMod = $puedeModificar ? Url::to(['usuarios/update', 'id' => $model->id]) 
 $enlaceBor = $puedeModificar ? Url::to(['usuarios/delete', 'id' => $model->id]) : 'javascript:void(0)';
 $enlacePass = $puedeModificar ? Url::to(['usuarios/cambio-pass', 'id' => $model->id]) : 'javascript:void(0)';
 $enlaceFotos = $puedeModificar ? Url::to(['usuarios/cambio-imagen', 'id' => $model->id]) : 'javascript:void(0)';
+$enlaceFondos = $puedeModificar ? Url::to(['usuarios/cambio-fondo', 'id' => $model->id]) : 'javascript:void(0)';
 
 $urlAmigos = Url::to(['lista-amigos', 'usuarioId' => $model->id]);
 $urlBloqueados = Url::to(['lista-bloqueados', 'usuarioId' => $model->id]);
@@ -67,6 +68,12 @@ $('#botonEdit').click(function(){
   ventanaAux.focus();
 });
 
+$('#botonFondos').click(function(){
+  ventanaAux = window.open('$enlaceFondos', 'aux', 'width=800, height=450');
+  ventanaAux.moveBy(350,250);
+  ventanaAux.focus();
+});
+
 function actualizarListaAmigos(){
   if(esAmigo){
     $.ajax({
@@ -103,8 +110,11 @@ function actualizarListaBloqueados(){
 EOF;
 $this->registerJs($js);
 ?>
-
 <style>
+  body{
+    background-image: url(<?= $model->urlFondo ?>);
+  }
+
   .nombreOpciones{
     display: inline-flex;
     justify-content: space-between;
@@ -153,6 +163,7 @@ $this->registerJs($js);
   .contenedorImagen:hover > .imagenPerfil {opacity: 0.6 }
   .contenedorImagen:hover > .botonImagen {opacity: 1}
 </style>
+
 <div class="usuarios-view">
     <div class="nombreOpciones">
       <div class="titulo">
@@ -211,6 +222,12 @@ $this->registerJs($js);
                             'tokenUsuario' => $model->token,
                           ],
                           ]) ?>
+                    </li>
+                    <li>
+                        <?= Html::a('Cambiar fondo perfil', 'javascript:void(0)', [
+                            'class' => 'btn btn-link',
+                            'id' => 'botonFondos'
+                        ]) ?>
                     </li>
                     <?php if ($model->token != null) : ?>
                     <li>

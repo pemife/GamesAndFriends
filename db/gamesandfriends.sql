@@ -19,6 +19,7 @@ CREATE TABLE usuarios
   , fechanac            DATE            CHECK (fechanac < CURRENT_DATE)
   , es_critico          BOOLEAN         DEFAULT false
   , img_key             VARCHAR(255)
+  , fondo_key           VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS plataformas CASCADE;

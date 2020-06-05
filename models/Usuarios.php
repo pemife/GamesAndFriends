@@ -70,6 +70,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['token'], 'safe', 'on' => [self::SCENARIO_VERIFICACION]],
             [['venta_solicitada'], 'default', 'value' => null],
             [['venta_solicitada'], 'integer'],
+            [['fondo_key'], 'default', 'value' => ''],
+            [['fondo_key'], 'string', 'max'=> 255],
             [['img_key'], 'default', 'value' => 'sin-imagen.jpg'],
             [['img_key'], 'string', 'max'=> 255]
             // [['venta_solicitada'], 'validarVentaTerminada'],
@@ -554,6 +556,32 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             $cmd = $s3->getCommand('GetObject', [
                 'Bucket' => 'gamesandfriends',
                 'Key' => 'Usuarios/default/' . $this->img_key,
+            ]);
+
+            $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+            return (string)$request->getUri();
+        }
+        return '';
+    }
+
+    public function getUrlFondo()
+    {
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        if (getenv('MEDIA')) {
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => 'gamesandfriends',
+                'Key' => 'Usuarios/fondos/' . $this->fondo_key,
             ]);
 
             $request = $s3->createPresignedRequest($cmd, '+20 minutes');
