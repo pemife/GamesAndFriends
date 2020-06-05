@@ -505,6 +505,8 @@ class UsuariosController extends Controller
 
         $copiasUsuario = $copiasProvider->getModels();
 
+        $juegosUsuarioIds = 0;
+
         foreach ($copiasUsuario as $copia) {
             $juegosUsuarioIds[] = $copia->juego->id;
         }

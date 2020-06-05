@@ -33,7 +33,10 @@ class Precios extends \yii\db\ActiveRecord
             [['juego_id', 'plataforma_id'], 'required'],
             [['juego_id', 'plataforma_id'], 'default', 'value' => null],
             [['juego_id', 'plataforma_id'], 'integer'],
+            [['oferta'], 'default', 'value' => 1.00],
+            [['oferta'], 'required'],
             [['cifra'], 'number'],
+            [['oferta'], 'number', 'min' => 0.10, 'max' => 1.00],
             [['juego_id', 'plataforma_id'], 'unique', 'targetAttribute' => ['juego_id', 'plataforma_id']],
             [['juego_id'], 'exist', 'skipOnError' => true, 'targetClass' => Juegos::className(), 'targetAttribute' => ['juego_id' => 'id']],
             [['plataforma_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plataformas::className(), 'targetAttribute' => ['plataforma_id' => 'id']],
@@ -83,16 +86,5 @@ class Precios extends \yii\db\ActiveRecord
         }
 
         return 0;
-    }
-
-    public function getOferta()
-    {
-        // Si es navidad, oferta del 50%
-        $hoy = date('d-m');
-        if ($hoy == '25-12') {
-            return 'Bieeeeen';
-        }
-
-        return 'Ohhhhh...';
     }
 }
