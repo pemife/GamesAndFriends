@@ -52,17 +52,19 @@ $this->registerJs($js);
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if ($uId === $model->usuario->id) : ?>
-      <p>
-        <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']) ?>
-        <?= Html::a('Borrar', ['delete', 'id' => $model->id], [
-          'class' => 'btn btn-danger',
-          'data' => [
-            'confirm' => '¿Estas seguro de querer borrar este elemento?',
-            'method' => 'post',
-          ],
-          ]) ?>
-        </p>
+    <?php if (!empty($model->usuario)) : ?>
+        <?php if ($uId === $model->usuario->id) : ?>
+        <p>
+            <?= Html::a('Modificar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary mr-2']) ?>
+            <?= Html::a('Borrar', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => '¿Estas seguro de querer borrar este elemento?',
+                'method' => 'post',
+            ],
+            ]) ?>
+            </p>
+        <?php endif ?>
     <?php endif ?>
 
     <h3>
@@ -88,7 +90,17 @@ $this->registerJs($js);
                   'itemprop' => 'name'
               ]
             ],
-            'usuario.nombre:text:Usuario',
+            [
+                'attribute' => 'usuario.nombre:text:Usuario',
+                'label' => 'Usuario',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if (empty($model->usuario_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->usuario->nombre);
+                }
+            ],
             [
                 'attribute' => 'votos',
                 'contentOptions' => [
@@ -106,13 +118,25 @@ $this->registerJs($js);
 <?= GridView::widget([
         'dataProvider' => $comentariosProvider,
         'columns' => [
-            'usuario.nombre',
+            [
+                'attribute' => 'usuario.nombre',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if (empty($model->usuario_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->usuario->nombre);
+                }
+            ],
             'texto:text:Comentario',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete} {reportar}',
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
+                        if (empty($model->usuario)) {
+                            return '';
+                        }
                         if (Yii::$app->user->id != $model->usuario->id) {
                             return '';
                         }
@@ -127,7 +151,10 @@ $this->registerJs($js);
                             ]
                         );
                     },
-                    'delete' => function ($url, $model, $key){
+                    'delete' => function ($url, $model, $key) {
+                        if (empty($model->usuario)) {
+                            return '';
+                        }
                         if (Yii::$app->user->id != $model->usuario->id) {
                             return '';
                         }

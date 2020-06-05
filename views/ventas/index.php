@@ -36,7 +36,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'copia.juego.titulo',
                 'contentOptions' => ['itemprop' => 'name']
             ],
-            'vendedor.nombre:ntext:Vendedor',
+            [
+                'attribute' => 'vendedor.nombre',
+                'label' => 'Vendedor',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if (empty($model->vendedor_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->vendedor->nombre);
+                }
+            ],
             'created_at:RelativeTime:En venta desde',
             [
                 'label' => 'Generos',
@@ -61,6 +71,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     );
                 },
                 'update' => function ($url, $model, $key) {
+                    if (empty($model->vendedor_id)) {
+                        return '';
+                    }
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
@@ -68,8 +81,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['title' => 'Actualizar']
                         );
                     }
+                    return '';
                 },
                 'delete' => function ($url, $model, $key) {
+                    if (empty($model->vendedor_id)) {
+                        return '';
+                    }
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>',
@@ -81,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         );
                     }
-                    return null;
+                    return '';
                 },
               ]
             ],
@@ -105,7 +122,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'producto.nombre',
                 'contentOptions' => ['itemprop' => 'name']
             ],
-            'vendedor.nombre:ntext:Vendedor',
+            [
+                'attribute' => 'vendedor.nombre',
+                'label' => 'Vendedor',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if (empty($model->vendedor_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->vendedor->nombre);
+                }
+            ],
             'created_at:RelativeTime:En venta desde',
             [
                 'attribute' => 'precio',
@@ -123,6 +150,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     );
                 },
                 'update' => function ($url, $model, $key) {
+                    if (empty($model->vendedor_id)) {
+                        return '';
+                    }
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
@@ -132,6 +162,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
                 'delete' => function ($url, $model, $key) {
+                    if (empty($model->vendedor_id)) {
+                        return '';
+                    }
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-trash"></span>',
@@ -143,7 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         );
                     }
-                    return null;
+                    return '';
                 },
               ]
             ],

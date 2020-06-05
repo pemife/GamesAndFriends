@@ -356,6 +356,9 @@ $this->registerCSS($css);
                     'visible' => !Yii::$app->user->isGuest,
                     'buttons' => [
                         'like' => function ($url, $model, $key) {
+                            if (empty($model->usuario_id)) {
+                                return '';
+                            }
                             if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario->id) {
                                 return '';
                             }
@@ -367,7 +370,17 @@ $this->registerCSS($css);
                         }
                     ]
                 ],
-                'usuario.nombre',
+                [
+                    'attribute' => 'usuario.nombre',
+                    'format' => 'raw',
+                    'label' => 'Usuario',
+                    'value' => function ($model) {
+                        if (empty($model->usuario_id)) {
+                            return '<span class="text-danger">Eliminado</span>';
+                        }
+                        return Html::encode($model->usuario->nombre);
+                    }
+                ],
                 'opinion',
                 [
                     'attribute' => 'valoracion',
@@ -390,6 +403,9 @@ $this->registerCSS($css);
                     'template' => '{update} {delete} {reportar}',
                     'buttons' => [
                         'update' => function ($url, $model, $key) {
+                            if (empty($model->usuario_id)) {
+                                return '';
+                            }
                             if (Yii::$app->user->id != $model->usuario->id) {
                                 return '';
                             }
@@ -405,6 +421,9 @@ $this->registerCSS($css);
                             );
                         },
                         'delete' => function ($url, $model, $key) {
+                            if (empty($model->usuario_id)) {
+                                return '';
+                            }
                             if (Yii::$app->user->id != $model->usuario->id) {
                                 return '';
                             }
@@ -425,6 +444,9 @@ $this->registerCSS($css);
                         },
                         // https://www.w3schools.com/bootstrap/bootstrap_modal.asp
                         'reportar' => function ($url, $model, $action) {
+                            if (empty($model->usuario_id)) {
+                                return '';
+                            }
                             if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario_id) {
                                 return '';
                             };

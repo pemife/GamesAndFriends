@@ -35,7 +35,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     'itemprop' => 'name'
                 ]
             ],
-            'usuario.nombre:text:Usuario',
+            [
+                'attribute' => 'usuario.nombre',
+                'format' => 'raw',
+                'label' => 'Usuario',
+                'value' => function ($model) {
+                    if (empty($model->usuario_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->usuario->nombre);
+                }
+            ],
             'created_at:RelativeTime',
             // 'desarrollo:ntext',
             // 'media',

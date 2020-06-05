@@ -47,7 +47,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'juego.titulo',
-            'propietario.nombre:text:Propietario',
+            [
+                'attribute' => 'propietario.nombre:text:Propietario',
+                'label' => 'Propietario',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if (empty($model->propietario_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->propietario->nombre);
+                }
+            ],
             'plataforma.nombre:text:Plataforma',
             'estado'
         ],

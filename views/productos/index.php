@@ -38,7 +38,17 @@ $this->params['breadcrumbs'][] = $this->title;
               'contentOptions' => ['itemprop' => 'description']
             ],
             'stock',
-            'propietario.nombre:ntext:Propietario',
+            [
+                'attribute' => 'propietario.nombre',
+                'label' => 'Propietario',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if (empty($model->propietario_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->propietario->nombre);
+                }
+            ],
             [
               'class' => 'yii\grid\ActionColumn',
               'template' => '{view} {update} {delete} {vermercado}',
@@ -51,27 +61,33 @@ $this->params['breadcrumbs'][] = $this->title;
                     );
                 },
                 'update' => function ($url, $model, $key) {
-                    if (Yii::$app->user->id == $model->propietario->id) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
-                            ['ventas/update', 'id' => $model->id],
-                            ['title' => 'Actualizar']
-                        );
+                    if (!Yii::$app->user->isGuest) {
+                        if (Yii::$app->user->id == $model->propietario->id) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-pencil"></span>',
+                                ['ventas/update', 'id' => $model->id],
+                                ['title' => 'Actualizar']
+                            );
+                        }
                     }
+
+                    return '';
                 },
                 'delete' => function ($url, $model, $key) {
-                    if (Yii::$app->user->id == $model->propietario->id) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
-                            ['ventas/delete', 'id' => $model->id],
-                            [
-                              'title' => 'Eliminar',
-                              'data-method' => 'POST',
-                              'confirm' => 'Esta seguro de que quiere eliminar la venta?'
-                            ]
-                        );
+                    if (!Yii::$app->user->isGuest) {
+                        if (Yii::$app->user->id == $model->propietario->id) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-trash"></span>',
+                                ['ventas/delete', 'id' => $model->id],
+                                [
+                                  'title' => 'Eliminar',
+                                  'data-method' => 'POST',
+                                  'confirm' => 'Esta seguro de que quiere eliminar la venta?'
+                                ]
+                            );
+                        }
                     }
-                    return null;
+                    return '';
                 },
               ],
             ],
