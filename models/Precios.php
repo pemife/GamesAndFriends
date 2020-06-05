@@ -84,4 +84,15 @@ class Precios extends \yii\db\ActiveRecord
 
         return 0;
     }
+
+    public function getOferta()
+    {
+        // Si es navidad, oferta del 50%
+        $hoy = date('d-m');
+        if ($hoy == '25-12') {
+            return 'Bieeeeen';
+        }
+
+        return 'Ohhhhh...';
+    }
 }
