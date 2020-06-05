@@ -503,8 +503,27 @@ class UsuariosController extends Controller
           'pagination' => ['pageSize' => 5],
         ]);
 
+        $copiasUsuario = $copiasProvider->getModels();
+
+        foreach ($copiasUsuario as $copia) {
+            $juegosUsuarioIds[] = $copia->juego->id;
+        }
+
+        $usuariosRecomendadosQuery = Usuarios::find()
+        ->joinWith('copias')
+        ->joinWith('copias.juego')
+        ->where(['IN', 'juegos.id', $juegosUsuarioIds])
+        ->andWhere(['not', ['usuarios.id' => $id]])
+        ->select('usuarios.nombre')
+        ->distinct();
+
+        $usuariosRecomendadosProvider = new ActiveDataProvider([
+            'query' => $usuariosRecomendadosQuery
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'usuariosRecomendadosProvider' => $usuariosRecomendadosProvider,
             'productosProvider' => $productosProvider,
             'copiasProvider' => $copiasProvider,
         ]);

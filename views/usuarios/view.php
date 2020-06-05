@@ -3,6 +3,7 @@
 use yii\grid\GridView;
 
 use yii\bootstrap4\Html;
+use yii\bootstrap4\Modal;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
 
@@ -30,10 +31,21 @@ $esAmigo = Yii::$app->user->isGuest ? false : $model->esAmigo(Yii::$app->user->i
 $puedeVerAmigos = $esAmigo || (Yii::$app->user->id == $model->id);
 $puedeVerAmigosJS = json_encode($puedeVerAmigos);
 
+// Recomendaciones de usuarios
+$tieneRecomendaciones = sizeof($usuariosRecomendadosProvider->getModels());
+
+Yii::debug(sizeof($usuariosRecomendadosProvider->getModels()));
+
 $js = <<<EOF
 $('document').ready(function(){
   $('#bloqueadosAjax').hide();
   actualizarListaAmigos();
+
+  if ($tieneRecomendaciones) {
+      setTimeout(function() {
+          $('#modalRecomendados').modal('show');
+      }, 3000);
+  }
 });
 
 var esAmigo = $puedeVerAmigosJS;
@@ -440,4 +452,65 @@ $this->registerJs($js);
               ]) ?>
           </div>
     </div>
+    <?php
+    Modal::begin([
+        'id' => 'modalRecomendados',
+    ]);
+    ?>
+        <div id="contenidoModal">
+            <p>Usuarios recomendados segun tus juegos</p>
+            <br>
+            <?= GridView::widget([
+              'dataProvider' => $usuariosRecomendadosProvider,
+              'rowOptions' => [
+                  'itemscope' => true,
+                  'itemtype' => 'http://schema.org/Product',
+              ],
+              'columns' => [
+                [
+                  'attribute' => 'nombre',
+                  'format' => 'raw',
+                  'value' => function ($model) {
+                      return
+                      Html::a(
+                          Html::img(
+                              $model->urlImagen,
+                              [
+                              'class' => 'rounded-circle mr-2',
+                              'width' => 50,
+                              'height' => 50,
+                              ]
+                          )
+                          . $model->nombre,
+                          [
+                              'usuarios/view',
+                              'id' => $model->id
+                          ]
+                      );
+                  }
+                ],
+                [
+                  'class' => 'yii\grid\ActionColumn',
+                  'template' => '{amistad}',
+                  'buttons' => [
+                    'amistad' => function ($url, $model, $key) {
+                        return Html::a(
+                            '',
+                            ['mandar-peticion', 'amigoId' => $model->id],
+                            [
+                              'class' => 'glyphicon glyphicon-plus',
+                              'title' => 'Mandar peticion de amistad a ' . $model->nombre
+                            ]
+                        );
+                    }
+                  ]
+                ]
+              ]]);
+            ?>
+        </div>
+
+    <?php
+    Modal::end();
+    ?>
+
 </div>
