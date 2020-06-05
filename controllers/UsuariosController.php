@@ -1109,8 +1109,29 @@ class UsuariosController extends Controller
             Yii::$app->session->setFlash('error', 'Algo ha fallado al guardar la imagen');
         }
 
-
         return $this->render('cambio-imagen', [
+            'model' => $model,
+            's3' => $this->clienteS3(),
+        ]);
+    }
+
+    public function actionCambioFondo($id)
+    {
+        $model = $this->findModel($id);
+        
+        if (!empty(Yii::$app->request->post())) {
+            $model->fondo_key = Yii::$app->request->post()['fondo_key'];
+            $model->scenario = Usuarios::SCENARIO_UPDATE;
+            $model->password = '';
+            Yii::debug($model);
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Se ha guardado la imagen correctamente');
+                return false;
+            }
+            Yii::$app->session->setFlash('error', 'Algo ha fallado al guardar la imagen');
+        }
+
+        return $this->render('cambio-fondo', [
             'model' => $model,
             's3' => $this->clienteS3(),
         ]);
