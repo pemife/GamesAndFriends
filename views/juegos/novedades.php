@@ -70,14 +70,13 @@ $css = <<<CSS
 
 .imagenJuego:hover {opacity: 1}
 
+.imagenesJuegos {display:none;}
+
 CSS;
 
 $this->registerCSS($css);
 ?>
 <div class="juegos-novedades">
-    <style>
-        .imagenesJuegos {display:none;}
-    </style>
 
     <h2>Novedades</h2>
 

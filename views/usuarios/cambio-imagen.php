@@ -86,13 +86,14 @@ $this->registerJS($js);
             'Key' => 'Usuarios/default/' . $carpeta . '/' . $i . '.jpg',
         ]);
 
-        $request = $s3->createPresignedRequest($cmd, '+20 minutes');
-
+        if (getenv('MEDIA')) {
+            $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+        }
         ?>
 
         <span class="contenedorImagen mb-4 mt-2">
             <?= Html::img(
-                (string)$request->getUri(),
+                getenv('MEDIA') ? (string)$request->getUri() : '',
                 [
                     'class' => 'rounded-circle imagenPerfil',
                     'width' => 150,
