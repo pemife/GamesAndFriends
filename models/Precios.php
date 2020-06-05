@@ -30,7 +30,7 @@ class Precios extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['juego_id', 'plataforma_id', 'cifra'], 'required'],
+            [['juego_id', 'plataforma_id'], 'required'],
             [['juego_id', 'plataforma_id'], 'default', 'value' => null],
             [['juego_id', 'plataforma_id'], 'integer'],
             [['cifra'], 'number'],
@@ -70,5 +70,18 @@ class Precios extends \yii\db\ActiveRecord
     public function getPlataforma()
     {
         return $this->hasOne(Plataformas::className(), ['id' => 'plataforma_id'])->inverseOf('precios');
+    }
+
+    public static function totalCarrito()
+    {
+        if (\Yii::$app->request->cookies->has('Carro-' . \Yii::$app->user->id)) {
+            $cookieCarro = \Yii::$app->request->cookies->getValue('Carro-' . \Yii::$app->user->id);
+
+            $arrayCarro = explode(' ', $cookieCarro);
+    
+            return sizeof($arrayCarro);
+        }
+
+        return 0;
     }
 }

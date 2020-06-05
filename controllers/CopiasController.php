@@ -6,6 +6,7 @@ use app\models\Copias;
 use app\models\CopiasSearch;
 use app\models\Juegos;
 use app\models\Plataformas;
+use app\models\Precios;
 use app\models\Usuarios;
 use app\models\Ventas;
 use Yii;
@@ -13,6 +14,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\Cookie;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -38,7 +40,7 @@ class CopiasController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'mis-copias', 'comprar-copia'],
+                        'actions' => ['create', 'mis-copias'],
                         'roles' => ['@'],
                     ],
                     [
@@ -82,15 +84,17 @@ class CopiasController extends Controller
                                 return false;
                             }
 
-                            if (!Juegos::find(Yii::$app->request->queryParams(['jId']))->exists()) {
+                            if (!Juegos::findOne(Yii::$app->request->queryParams['jId'])) {
                                 Yii::$app->session->setFlash('error', '¡Ese juego no existe!');
                                 return false;
                             }
 
-                            if (!Plataformas::find(Yii::$app->request->queryParams(['pId']))->exists()) {
+                            if (!Plataformas::findOne(Yii::$app->request->queryParams['pId'])) {
                                 Yii::$app->session->setFlash('error', '¡Intentas comprar un juego para una plataforma que no existe!');
                                 return false;
                             }
+
+                            return true;
                         },
                     ],
                     [
@@ -225,7 +229,7 @@ class CopiasController extends Controller
 
     public function actionRetirarInventario($id)
     {
-        $this->findModel($id)->unlink('propietario', Usuarios::find(Yii::$app->user->id)->one());
+        $this->findModel($id)->unlink('propietario', Usuarios::findOne(Yii::$app->user->id));
 
         Yii::$app->session->setFlash('success', 'Copia retirada de inventario correctamente');
 
@@ -256,31 +260,55 @@ class CopiasController extends Controller
         ]);
     }
 
-    public function actionComprarCopia($jId, $pId)
+    public function actionCompletarCompra()
     {
-        $copia = new Copias([
-            'juego_id' => $jId,
-            'plataforma_id' => $pId,
-            'propietario_id' => Yii::$app->user->id
-        ]);
+        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+            Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
+            return $this->redirect(['home']);
+        }
 
-        // Valido la copia antes de la transacción
-        if (!$copia->validate()) {
-            Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al crear una copia del juego!');
-            return $this->redirect(['juegos/view', 'id' => $jId]);
+        $cookieCarro = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+
+        $precios = explode(' ', $cookieCarro);
+
+        foreach ($precios as $precioId) {
+            $precio = Precios::findOne($precioId);
+
+            $copia = new Copias([
+                'juego_id' => $precio->juego_id,
+                'plataforma_id' => $precio->plataforma_id,
+                'propietario_id' => Yii::$app->user->id
+            ]);
+
+            // Valido las copias antes de la transacción
+            if (!$copia->validate()) {
+                Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al procesar la compra [Copia inválida]!');
+                return $this->redirect(['home']);
+            }
+            $copias[] = $copia;
         }
 
         // Aqui se hara la transaccion monetaria de paypal
     
         // Si la transaccion se completa correctamente
-        if ($copia->save()) {
-            Yii::$app->session->setFlash('success', '¡Compra finalizada con éxito!');
-            return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+        foreach ($copias as $copia) {
+            if (!$copia->save()) {
+                Yii::$app->session->setFlash('error', 'Ha ocurrido un error al añadir copias a tu inventario');
+                return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+            }
         }
 
-        // No deberia llegar aqui nunca
-        Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al agregar el juego a tu cuenta!');
-        return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+        $cookie = new Cookie([
+            'name' => 'Carro-' . Yii::$app->user->id,
+            'value' =>  '',
+            'expire' => time() + 86400 * 365,
+            'secure' => true,
+        ]);
+
+        Yii::$app->response->cookies->add($cookie);
+        
+        Yii::$app->session->setFlash('success', 'Se ha realizado la compra correctamente!');
+        $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
     }
 
     /**

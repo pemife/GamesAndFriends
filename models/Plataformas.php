@@ -93,14 +93,17 @@ class Plataformas extends \yii\db\ActiveRecord
             ],
         ]);
 
-        $cmd = $s3->getCommand('GetObject', [
-            'Bucket' => 'gamesandfriends',
-            'Key' => 'Plataformas/' . $this->img_key,
-        ]);
+        if (getenv('MEDIA')) {
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => 'gamesandfriends',
+                'Key' => 'Plataformas/' . $this->img_key,
+            ]);
+    
+            $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
-        $request = $s3->createPresignedRequest($cmd, '+20 minutes');
-
-        return (string)$request->getUri();
+            return (string)$request->getUri();
+        }
+        return '';
     }
 
     public function getColor()

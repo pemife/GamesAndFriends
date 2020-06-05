@@ -7,6 +7,7 @@ use kartik\rating\StarRating as RatingStarRating;
 use yii\bootstrap4\Modal;
 use yii\widgets\ListView;
 use Aws\S3\S3Client;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Juegos */
@@ -34,6 +35,9 @@ if (!Yii::$app->user->isGuest) {
 // Numero total de trailers
 $totalTrailers = sizeof($model->trailers);
 
+// Url ajax carrito
+$urlCarrito = Url::to(['juegos/anadir-carrito']);
+
 $js = <<<SCRIPT
 $(function() {
     if ($tieneJuegoJs && !$usuarioHaCriticado) {
@@ -52,6 +56,22 @@ $(function() {
 
 $('.selector').click(function(e) {
     seleccionarTrailer(this.dataset.numerotrailer);
+});
+
+$('.botonCompra').click(function(e) {
+
+    $.ajax({
+        method: 'GET',
+        url: '$urlCarrito',
+        data: {pId: this.dataset.pid},
+          success: function(result){
+            if (result) {
+                //alert(result);
+            } else {
+                //alert('Ha ocurrido un error');
+            }
+        }
+    });
 });
 
 function pausaVideos() {
@@ -76,6 +96,31 @@ $css = <<<CSS
 
 .trailer {
     width: 100%;
+}
+
+.seAgita:hover {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 CSS;
 
@@ -181,12 +226,12 @@ $this->registerCSS($css);
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8 bg-dark text-light mt-4 ml-4">
+                <div class="col-md-8 bg-dark text-light mt-4 ml-3">
                     <h4 class="pt-4 pl-4">
                         Comprar <?= Html::encode($model->titulo) ?>
                     </h4>
                     <p class="text-light pl-4">
-                        Opciones de compra
+                        Añadir al carro de compra
                     </p>
                     <span class="d-flex justify-content-end">
                         <?php
@@ -198,7 +243,8 @@ $this->registerCSS($css);
                             $permiteCompra = true;
                         ?>
                             <?= Html::a(
-                                Html::img($precio->plataforma->urlLogo,
+                                Html::img(
+                                    $precio->plataforma->urlLogo,
                                     [
                                         'class' => 'mr-2',
                                         'height' => 30,
@@ -206,19 +252,17 @@ $this->registerCSS($css);
                                     ]
                                 )
                                 . $precio->cifra . '€',
+                                'javascript:void(0)',
                                 [
-                                'copias/comprar-copia',
-                                'jId' => $model->id,
-                                'pId' => $precio->plataforma->id
-                                ],
-                                [
-                                    'class' => 'btn mr-2 mt-4 mb-4 text-light',
+                                    'class' => 'btn mr-2 mt-4 mb-4 text-light botonCompra',
                                     'style' => [
                                         'background-color' => $precio->plataforma->color
+                                    ],
+                                    'data' => [
+                                        'pId' => $precio->id
                                     ]
                                 ]
                             ) ?> 
-                            <?= Yii::debug($precio) ?>
                         <?php } ?>
                         <span class="mr-2 mt-4 mb-4">
                             <?= $permiteCompra ? '' : '¡No hay opciones de compra!' ?>
@@ -248,97 +292,97 @@ $this->registerCSS($css);
             <?= GridView::widget([
             'dataProvider' => $criticasProvider,
             'columns' => [
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{like}',
-                'visible' => !Yii::$app->user->isGuest,
-                'buttons' => [
-                    'like' => function ($url, $model, $key) {
-                        if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario->id) {
-                            return '';
-                        }
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{like}',
+                    'visible' => !Yii::$app->user->isGuest,
+                    'buttons' => [
+                        'like' => function ($url, $model, $key) {
+                            if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario->id) {
+                                return '';
+                            }
 
-                        return Html::a(
-                            '<span class=" glyphicon glyphicon-thumbs-up"></span>',
-                            ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => true]
-                        );
-                    }
-                ]
-            ],
-            'usuario.nombre',
-            'opinion',
-            [
-              'attribute' => 'valoracion',
-              'format' => 'raw',
-              'value' => function ($model) {
-                return RatingStarRating::widget([
-                  'name' => 'rating_35',
-                  'value' => Html::encode($model->valoracion),
-                  'pluginOptions' => [
-                    'displayOnly' => true,
-                    'size' => 'm',
-                    'showCaption' => false,
-                  ]
-                ]);
-              }
-            ],
-            'last_update:Date',
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete} {reportar}',
-                'buttons' => [
-                    'update' => function ($url, $model, $key) {
-                        if (Yii::$app->user->id != $model->usuario->id) {
-                            return '';
+                            return Html::a(
+                                '<span class=" glyphicon glyphicon-thumbs-up"></span>',
+                                ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => true]
+                            );
                         }
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
-                            [
-                                '/criticas/update',
-                                'id' => $model->id,
-                            ],
-                            [
-                                'title' => 'editar crítica',
-                            ]
-                        );
-                    },
-                    'delete' => function ($url, $model, $key) {
-                        if (Yii::$app->user->id != $model->usuario->id) {
-                            return '';
-                        }
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
-                            [
-                                'criticas/delete',
-                                'id' => $model->id,
-                            ],
-                            [
-                                'data' => [
-                                  'method' => 'post',
-                                  'confirm' => '¿Estas seguro de borrar la crítica?(Esta accion no se puede deshacer)',
-                                ],
-                                'title' => 'borrar crítica',
-                            ]
-                        );
-                    },
-                    // https://www.w3schools.com/bootstrap/bootstrap_modal.asp
-                    'reportar' => function ($url, $model, $action) {
-                        if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario_id) {
-                            return '';
-                        };
-                        
-                        return Html::a('', ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => false], [
-                            'class' => 'glyphicon glyphicon-fire',
-                            'title' => 'Reportar critica',
-                            'style' => [
-                                'color' => 'red',
-                            ],
-                            'data-confirm' => '¿Confirmas querer reportar la crítica?',
+                    ]
+                ],
+                'usuario.nombre',
+                'opinion',
+                [
+                    'attribute' => 'valoracion',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        return RatingStarRating::widget([
+                        'name' => 'rating_35',
+                        'value' => Html::encode($model->valoracion),
+                        'pluginOptions' => [
+                            'displayOnly' => true,
+                            'size' => 'm',
+                            'showCaption' => false,
+                        ]
                         ]);
                     }
-                ]
-            ],
-        ]
+                ],
+                'last_update:Date',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{update} {delete} {reportar}',
+                    'buttons' => [
+                        'update' => function ($url, $model, $key) {
+                            if (Yii::$app->user->id != $model->usuario->id) {
+                                return '';
+                            }
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-pencil"></span>',
+                                [
+                                    '/criticas/update',
+                                    'id' => $model->id,
+                                ],
+                                [
+                                    'title' => 'editar crítica',
+                                ]
+                            );
+                        },
+                        'delete' => function ($url, $model, $key) {
+                            if (Yii::$app->user->id != $model->usuario->id) {
+                                return '';
+                            }
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-trash"></span>',
+                                [
+                                    'criticas/delete',
+                                    'id' => $model->id,
+                                ],
+                                [
+                                    'data' => [
+                                    'method' => 'post',
+                                    'confirm' => '¿Estas seguro de borrar la crítica?(Esta accion no se puede deshacer)',
+                                    ],
+                                    'title' => 'borrar crítica',
+                                ]
+                            );
+                        },
+                        // https://www.w3schools.com/bootstrap/bootstrap_modal.asp
+                        'reportar' => function ($url, $model, $action) {
+                            if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario_id) {
+                                return '';
+                            };
+                            
+                            return Html::a('', ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => false], [
+                                'class' => 'glyphicon glyphicon-fire',
+                                'title' => 'Reportar critica',
+                                'style' => [
+                                    'color' => 'red',
+                                ],
+                                'data-confirm' => '¿Confirmas querer reportar la crítica?',
+                            ]);
+                        }
+                    ]
+                ],
+            ]
     ]); ?>
         </div>
     </div>
@@ -356,9 +400,12 @@ $this->registerCSS($css);
                     <table class="border">
                         <tr>
                             <?= Html::a(
-                                    Html::img($model->urlImagen, ['class' => 'img-fluid']),
-                                    ['view', 'id' => $model->id]
-                                ) ?>
+                                Html::img(
+                                    $model->urlImagen,
+                                    ['class' => 'img-fluid']
+                                ),
+                                ['view', 'id' => $model->id]
+                            ) ?>
                         </tr>
                         <tr>
                             <th class="border-bottom"><?= Html::a($model->titulo, ['view', 'id' => $model->id]) ?></th>
@@ -380,7 +427,6 @@ $this->registerCSS($css);
         'id' => 'modalCritica',
     ]);
     ?>
-
         <div id="contenidoModal">
             <p>No has hecho una critica de este juego; ¿Te gustaria hacerla ahora?</p>
             <br>

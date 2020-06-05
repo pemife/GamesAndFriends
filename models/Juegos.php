@@ -233,14 +233,17 @@ class Juegos extends \yii\db\ActiveRecord
             $carpeta = str_replace(' ', '_', $this->titulo) . '/';
         }
 
-        $cmd = $s3->getCommand('GetObject', [
-            'Bucket' => 'gamesandfriends',
-            'Key' => 'Juegos/' . $carpeta . $this->img_key,
-        ]);
+        if (getenv('MEDIA')) {
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => 'gamesandfriends',
+                'Key' => 'Juegos/' . $carpeta . $this->img_key,
+            ]);
 
-        $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+            $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
-        return (string)$request->getUri();
+            return (string)$request->getUri();
+        }
+        return '';
     }
 
     public function getTrailers()
@@ -273,15 +276,17 @@ class Juegos extends \yii\db\ActiveRecord
 
         $urlTrailers = [];
 
-        for ($i = 1; $i <= $numeroTrailers; $i++) {
-            $cmd = $s3->getCommand('GetObject', [
-                'Bucket' => 'gamesandfriends',
-                'Key' => 'Juegos/' . $carpeta . '/trailer' . $i . '.mp4',
-            ]);
-    
-            $urlTrailers[] = (string)$s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
-        }
+        if (getenv('MEDIA')) {
+            for ($i = 1; $i <= $numeroTrailers; $i++) {
+                $cmd = $s3->getCommand('GetObject', [
+                    'Bucket' => 'gamesandfriends',
+                    'Key' => 'Juegos/' . $carpeta . '/trailer' . $i . '.mp4',
+                ]);
 
+                $urlTrailers[] = (string) $s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
+            }
+        }
+        
         return $urlTrailers;
     }
 
@@ -298,11 +303,15 @@ class Juegos extends \yii\db\ActiveRecord
             ],
         ]);
 
-        $cmd = $s3->getCommand('GetObject', [
-            'Bucket' => 'gamesandfriends',
-            'Key' => 'Juegos/sin-trailers.jpg',
-        ]);
+        if (getenv('MEDIA')) {
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => 'gamesandfriends',
+                'Key' => 'Juegos/sin-trailers.jpg',
+            ]);
 
-        return (string)$s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
+            return (string) $s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
+        }
+
+        return '';
     }
 }

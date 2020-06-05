@@ -259,4 +259,6 @@ if (!Yii::$app->user->isGuest) {
 
 ?>
 
+<?= Yii::debug(Yii::$app->session) ?>
+
 </div>
