@@ -5,7 +5,7 @@ namespace app\models;
 use Aws\S3\S3Client;
 
 /**
- * This is the model class for table "juegos".
+ * Esta es la clase modelo para la tabla "juegos".
  *
  * @property int $id
  * @property string $titulo
