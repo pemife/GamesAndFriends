@@ -16,7 +16,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * PostsController implements the CRUD actions for Posts model.
+ * PostsController implementa las acciones CRUD para el modelo Posts.
  */
 class PostsController extends Controller
 {
@@ -86,10 +86,10 @@ class PostsController extends Controller
     }
 
     /**
-     * Displays a single Posts model.
+     * Displays a single Posts.
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
@@ -109,7 +109,7 @@ class PostsController extends Controller
     }
 
     /**
-     * Creates a new Posts model.
+     * Creates a new Posts.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -128,11 +128,11 @@ class PostsController extends Controller
     }
 
     /**
-     * Updates an existing Posts model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo Posts.
+     * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionUpdate($id)
     {
@@ -149,11 +149,11 @@ class PostsController extends Controller
     }
 
     /**
-     * Deletes an existing Posts model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo Posts.
+     * Si el borrado es exitoso, redirecciona a la pagina indice
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionDelete($id)
     {
@@ -164,10 +164,10 @@ class PostsController extends Controller
 
     /**
      * Finds the Posts model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
-     * @return Posts the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Posts el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -175,9 +175,9 @@ class PostsController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
-
+    
     public function actionVotar()
     {
         $requestPost = Yii::$app->request->post();

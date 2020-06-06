@@ -21,7 +21,7 @@ use yii\web\Cookie;
 use yii\web\NotFoundHttpException;
 
 /**
- * JuegosController implements the CRUD actions for Juegos model.
+ * JuegosController implementa las acciones CRUD para el modelo Juegos.
  */
 class JuegosController extends Controller
 {
@@ -109,7 +109,8 @@ class JuegosController extends Controller
     }
 
     /**
-     * Lists all Juegos models.
+     * Lista todos los modelos
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -139,10 +140,11 @@ class JuegosController extends Controller
     }
 
     /**
-     * Displays a single Juegos model.
+     * Muestra un único modelo Juegos.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
@@ -200,8 +202,10 @@ class JuegosController extends Controller
     }
 
     /**
-     * Creates a new Juegos model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un nuevo modelo Juegos.
+     * Si la creación es exitosa, redirecciona a la pagina de vista del juego creado.
+     * Esta accion está limitada solo al usuario administrador.
+     *
      * @return mixed
      */
     public function actionCreate()
@@ -243,11 +247,13 @@ class JuegosController extends Controller
     }
 
     /**
-     * Updates an existing Juegos model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo Juegos.
+     * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     * Esta accion está limitada solo al usuario administrador.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionUpdate($id)
     {
@@ -294,11 +300,13 @@ class JuegosController extends Controller
     }
 
     /**
-     * Deletes an existing Juegos model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo Juegos.
+     * Si el borrado es exitoso, redirecciona a la pagina indice
+     * Esta accion está limitada solo al usuario administrador.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionDelete($id)
     {
@@ -309,6 +317,7 @@ class JuegosController extends Controller
 
     /**
      * Muestra una vista con los juegos recien añadidos o actualizados.
+     *
      * @return mixed Renderiza una pagina con novedades de juegos
      */
     public function actionNovedades()
@@ -353,6 +362,14 @@ class JuegosController extends Controller
         ]);
     }
 
+    /**
+     * Crea o actualiza la cookie de carrito de compra, que almacena
+     * los juegos que se quiere comprar las plataformas en las
+     * que se desea comprar, para el posterior procesamiento de compra.
+     *
+     * @param integer $pId el ID de la plataforma
+     * @return mixed si se ha añadido, devuelve la cookie, sino, false
+     */
     public function actionAnadirCarrito($pId)
     {
         if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
@@ -384,11 +401,18 @@ class JuegosController extends Controller
         return false;
     }
 
+    /**
+     * Muestra una vista con los juegos añadidos anteriormente al carrito
+     * para procesar su compra.
+     * Si no tiene nada en el carro, redirecciona a la pagina de inicio.
+     *
+     * @return string la vista 'carritoCompra'
+     */
     public function actionCarritoCompra()
     {
         if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
             Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
-            return $this->redirect(['home']);
+            return $this->redirect(['site/index']);
         }
 
         $cookieCarro = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
@@ -406,9 +430,6 @@ class JuegosController extends Controller
         foreach ($dataProvider->getModels() as $precio) {
             $precioTotal += $precio->cifra;
         }
-
-        // var_dump($precios);
-        // exit;
 
         return $this->render('carritoCompra', [
             'dataProvider' => $dataProvider,
@@ -439,10 +460,10 @@ class JuegosController extends Controller
 
     /**
      * Finds the Juegos model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
-     * @return Juegos the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Juegos el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -450,7 +471,7 @@ class JuegosController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 
     private function enviaCorreoRecomendaciones($jId)

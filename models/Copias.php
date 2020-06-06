@@ -20,6 +20,7 @@ use Yii;
  */
 class Copias extends \yii\db\ActiveRecord
 {
+    const SCENARIO_ANADIR_INVENTARIO = 'create';
 
     /**
      * {@inheritdoc}
@@ -36,6 +37,7 @@ class Copias extends \yii\db\ActiveRecord
     {
         return [
             [['juego_id', 'plataforma_id'], 'required'],
+            [['clave'], 'required', 'on' => [self::SCENARIO_ANADIR_INVENTARIO]],
             [['juego_id', 'propietario_id', 'plataforma_id'], 'default', 'value' => null],
             [['juego_id', 'propietario_id', 'plataforma_id'], 'integer'],
             [['clave'], 'default', 'value' => $this->generaClave()],

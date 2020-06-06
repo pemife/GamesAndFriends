@@ -17,7 +17,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * VentasController implements the CRUD actions for Ventas model.
+ * VentasController implementa las acciones CRUD para el modelo Ventas.
  */
 class VentasController extends Controller
 {
@@ -258,10 +258,10 @@ class VentasController extends Controller
     }
 
     /**
-     * Displays a single Ventas model.
+     * Displays a single Ventas.
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
@@ -271,7 +271,7 @@ class VentasController extends Controller
     }
 
     /**
-     * Creates a new Ventas model.
+     * Creates a new Ventas.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -325,11 +325,11 @@ class VentasController extends Controller
     }
 
     /**
-     * Updates an existing Ventas model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo Ventas.
+     * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionUpdate($id)
     {
@@ -364,11 +364,11 @@ class VentasController extends Controller
     }
 
     /**
-     * Deletes an existing Ventas model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo Ventas.
+     * Si el borrado es exitoso, redirecciona a la pagina indice
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionDelete($id)
     {
@@ -655,10 +655,10 @@ class VentasController extends Controller
 
     /**
      * Finds the Ventas model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
-     * @return Ventas the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Ventas el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -666,6 +666,6 @@ class VentasController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 }

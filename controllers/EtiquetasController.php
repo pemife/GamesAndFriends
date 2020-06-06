@@ -11,7 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * EtiquetasController implements the CRUD actions for Etiquetas model.
+ * EtiquetasController implementa las acciones CRUD para el modelo Etiquetas.
  */
 class EtiquetasController extends Controller
 {
@@ -44,7 +44,8 @@ class EtiquetasController extends Controller
     }
 
     /**
-     * Lists all Etiquetas models.
+     * Lista todos los modelos de Etiquetas.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -59,10 +60,11 @@ class EtiquetasController extends Controller
     }
 
     /**
-     * Displays a single Etiquetas model.
+     * Muestra un único modelo Etiquetas.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
@@ -72,8 +74,10 @@ class EtiquetasController extends Controller
     }
 
     /**
-     * Creates a new Etiquetas model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un nuevo modelo Etiquetas.
+     * Si la creacion es exitosa, el navegador redirecciona a la pagina de vista de la etiqueta.
+     * Esta accion está limitada solo al usuario administrador.
+     *
      * @return mixed
      */
     public function actionCreate()
@@ -90,11 +94,13 @@ class EtiquetasController extends Controller
     }
 
     /**
-     * Updates an existing Etiquetas model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo existente de Etiquetas.
+     * Si la actualizacion es exitosa, redirecciona a la pagina de vista de la etiqueta.
+     * Esta accion está limitada solo al usuario administrador.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionUpdate($id)
     {
@@ -110,11 +116,13 @@ class EtiquetasController extends Controller
     }
 
     /**
-     * Deletes an existing Etiquetas model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo existente de Etiquetas.
+     * Si el borrado es exitoso, redirecciona a la pagina de 'indice' de etiquetas.
+     * Esta accion está limitada solo al usuario administrador.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionDelete($id)
     {
@@ -124,11 +132,11 @@ class EtiquetasController extends Controller
     }
 
     /**
-     * Finds the Etiquetas model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Encuentra el modelo Etiquetas basado en el valor de su clave primaria.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
-     * @return Etiquetas the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Etiquetas el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -136,6 +144,6 @@ class EtiquetasController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 }
