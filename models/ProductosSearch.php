@@ -32,7 +32,7 @@ class ProductosSearch extends Productos
     }
 
     /**
-     * Creates data provider instance with search query applied.
+     * Crea una instancia de proveedor de datos con la query de la busqueda aplicada.
      *
      * @param array $params
      *

@@ -3,7 +3,7 @@
 namespace app\models;
 
 /**
- * This is the model class for table "ventas".
+ * Esta es la clase modelo para la tabla "ventas".
  *
  * @property int $id
  * @property string $created_at

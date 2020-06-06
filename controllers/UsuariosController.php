@@ -516,7 +516,7 @@ class UsuariosController extends Controller
         ->joinWith('copias.juego')
         ->where(['IN', 'juegos.id', $juegosUsuarioIds])
         ->andWhere(['not', ['usuarios.id' => $id]])
-        ->select('usuarios.nombre')
+        ->select('usuarios.nombre, usuarios.id')
         ->distinct();
 
         $usuariosRecomendadosProvider = new ActiveDataProvider([

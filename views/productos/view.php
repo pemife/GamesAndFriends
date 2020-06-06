@@ -106,10 +106,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Propietario',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    if (empty($model->propietario_id)) {
+                    if (empty($model->usuario_id)) {
                         return '<span class="text-danger">Eliminado</span>';
                     }
-                    return Html::encode($model->propietario->nombre);
+                    return Html::encode($model->usuario->nombre);
                 }
             ],
             'opinion',

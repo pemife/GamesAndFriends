@@ -7,7 +7,7 @@ use yii\web\IdentityInterface;
 use Aws\S3\S3Client;
 
 /**
- * This is the model class for table "usuarios".
+ * Esta es la clase modelo para la tabla "usuarios".
  *
  * @property int $id
  * @property string $nombre
@@ -99,14 +99,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ];
     }
 
-    // public function validarVentaTerminada($atributo, $params)
-    // {
-    //     if (isset($this->solicitud->finished_at)) {
-    //         $this->addError('venta_solicitada', 'Esa venta ya esta terminada');
-    //     }
-    // }
-
     /**
+     * Devuelve query para [[Comentarios]]
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getComentarios()
@@ -115,6 +110,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Devuelve query para [[Criticas]]
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getCriticas()
@@ -123,6 +120,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Devuelve query para [[Posts]]
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getPosts()
@@ -131,6 +130,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Devuelve query para [[Etiquetas]]
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getEtiquetas()
@@ -139,10 +140,10 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds an identity by the given ID.
+     * Encuentra identidad por el ID dado.
      *
-     * @param string|int $id the ID to be looked for
-     * @return IdentityInterface|null the identity object that matches the given ID.
+     * @param string|int $id el ID buscado
+     * @return IdentityInterface|null el objeto identidad que coincide con el ID dado
      */
     public static function findIdentity($id)
     {
@@ -150,29 +151,35 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds an identity by the given token.
+     * Encuentra una identidad por el token dado.
      *
-     * @param string $token the token to be looked for
+     * @param string $token la token a buscar
      * @param null|mixed $type
-     * @return IdentityInterface|null the identity object that matches the given token.
+     * @return IdentityInterface|null el objeto identidad que coincide con la token dada
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
     }
 
     /**
+     * El ID el usuario
+     *
      * @return int|string current user ID
      */
     public function getId()
     {
         return $this->id;
     }
+    
     /**
+     * La clave de autenticacion del usuario
+     *
      * @return string current user auth key
      */
     public function getAuthKey()
     {
     }
+
     /**
      * @param string $authKey
      * @return bool if auth key is valid for current user
@@ -180,17 +187,24 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
     }
+
     /**
-     * Validates password.
+     * Valida la contraseña
      *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
+     * @param string $password la contraseña a validar
+     * @return bool si la contraseña provista es valida para el usuario actual
      */
     public function validatePassword($password)
     {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 
+    /**
+     * Funcion que se ejecuta antes de que se guarde el modelo del usuario
+     *
+     * @param [type] $insert
+     * @return void
+     */
     public function beforeSave($insert)
     {
         if (!parent::beforeSave($insert)) {
@@ -223,7 +237,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Gets query for [[Copias]].
+     * Devuelve query para [[Copias]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -248,7 +262,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Gets query for [[Juegos]].
+     * Devuelve query para [[Juegos]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -258,7 +272,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Gets query for [[Deseados]].
+     * Devuelve query para [[Deseados]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -268,7 +282,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Gets query for [[JuegosIgnorados]].
+     * Devuelve query para [[JuegosIgnorados]].
      *
      * @return \yii\db\ActiveQuery
      */

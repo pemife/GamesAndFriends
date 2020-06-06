@@ -32,7 +32,7 @@ class PostsSearch extends Posts
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Crea una instancia de proveedor de datos con la query de busqueda aplicada
      *
      * @param array $params
      *
