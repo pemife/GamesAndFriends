@@ -7,7 +7,7 @@ use yii\db\pgsql\QueryBuilder;
 use yii\db\Query;
 
 /**
- * This is the model class for table "posts".
+ * Esta es una clase modelo para la tabla "posts".
  *
  * @property int $id
  * @property string $titulo
@@ -65,6 +65,8 @@ class Posts extends \yii\db\ActiveRecord
     }
 
     /**
+     * Devuelve query para [[Comentarios]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getComentarios()
@@ -73,7 +75,9 @@ class Posts extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el juego asociado al post
+     *
+     * @return \yii\db\ActiveRecord
      */
     public function getJuego()
     {
@@ -81,18 +85,31 @@ class Posts extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el usuario asociado al post
+     *
+     * @return \yii\db\ActiveRecord
      */
     public function getUsuario()
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'usuario_id'])->inverseOf('posts');
     }
 
+    /**
+     * Devuelve el numero del total de votos del post
+     *
+     * @return integer
+     */
     public function getVotos()
     {
         return VotosPosts::find()->where(['post_id' => $this->id])->count();
     }
 
+    /**
+     * Devuelve si el usuario ha votado el post o no
+     *
+     * @param [integer] $uId el id del usuario que estamos comprobando
+     * @return boolean si ha votado el post o no
+     */
     public function usuarioVotado($uId)
     {
         return VotosPosts::find()->where(['post_id' => $this->id, 'usuario_id' => $uId])->exists();

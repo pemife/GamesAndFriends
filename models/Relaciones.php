@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "relaciones".
+ * Esta es la clase modelo para la tabla "relaciones".
  *
  * @property int $usuario1_id
  * @property int $usuario2_id
@@ -55,7 +55,7 @@ class Relaciones extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario1]].
+     * Devuelve query para [[Usuario1]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -65,7 +65,7 @@ class Relaciones extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario2]].
+     * Devuelve query para [[Usuario2]].
      *
      * @return \yii\db\ActiveQuery
      */

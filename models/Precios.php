@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "precios".
+ * Esta es la clase modelo para la tabla "precios".
  *
  * @property int $juego_id
  * @property int $plataforma_id
@@ -56,7 +56,7 @@ class Precios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Juego]].
+     * Devuelve query para [[Juego]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -66,7 +66,7 @@ class Precios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Plataforma]].
+     * Devuelve query para [[Plataforma]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -75,6 +75,12 @@ class Precios extends \yii\db\ActiveRecord
         return $this->hasOne(Plataformas::className(), ['id' => 'plataforma_id'])->inverseOf('precios');
     }
 
+    /**
+     * Devuelve el total de items que hay en el carrito, si no existe
+     * la cookie que lo contabiliza, devuelve un 0.
+     *
+     * @return integer
+     */
     public static function totalCarrito()
     {
         if (\Yii::$app->request->cookies->has('Carro-' . \Yii::$app->user->id)) {

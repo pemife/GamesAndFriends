@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "votos_posts".
+ * Esta es la clase modelo para la tabla "votos_posts".
  *
  * @property int $usuario_id
  * @property int $post_id
@@ -50,7 +50,7 @@ class VotosPosts extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Post]].
+     * Devuelve query para [[Post]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -60,7 +60,7 @@ class VotosPosts extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario]].
+     * Devuelve query para [[Usuario]].
      *
      * @return \yii\db\ActiveQuery
      */
