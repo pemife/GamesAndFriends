@@ -15,6 +15,7 @@ use yii\bootstrap4\Html;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Cookie;
 use yii\web\NotFoundHttpException;
@@ -476,7 +477,10 @@ class JuegosController extends Controller
             ->setSubject('¡Un juego en tu lista de deseos esta en oferta!')
             ->setHtmlBody(
                 '¡El juego '
-                . Html::a($this->findModel($jId)->titulo, ['juegos/view', 'id' => $jId])
+                . Html::a(
+                    $this->findModel($jId)->titulo,
+                    Url::to(['juegos/view', 'id' => $jId], true)
+                )
                 . ' está de oferta!'
             );
 

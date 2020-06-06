@@ -526,6 +526,7 @@ class VentasController extends Controller
         $model = new Ventas();
 
         if ($model->load(Yii::$app->request->post())) {
+            Yii::debug($model);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -539,8 +540,13 @@ class VentasController extends Controller
             return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
         }
 
-        if (Ventas::find()->where(['copia_id' => $cId])->exists()) {
+        if (Ventas::find()->where(['copia_id' => $cId])->andWhere(['finished_at' => null])->exists()) {
             Yii::$app->session->setFlash('error', 'Esa copia ya esta en venta');
+            return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+        }
+
+        if (Ventas::find()->where(['copia_id' => $cId])->andWhere(['<', 'finished_at', date('Y-m-d h:i:s')])->exists()) {
+            Yii::$app->session->setFlash('error', 'La reventa de copias está bloqueada en esta página');
             return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
         }
 

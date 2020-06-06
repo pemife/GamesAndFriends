@@ -42,7 +42,6 @@ class Productos extends \yii\db\ActiveRecord
             [['img_key'], 'default', 'value' => 'sin-imagen.jpg'],
             [['nombre', 'img_key'], 'string', 'max' => 255],
             [['nombre'], 'unique'],
-            [['img_key'], 'unique'],
             [['propietario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['propietario_id' => 'id']],
         ];
     }

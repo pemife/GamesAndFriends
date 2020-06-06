@@ -59,7 +59,7 @@ CREATE TABLE productos
   , propietario_id   BIGINT         REFERENCES usuarios(id)
                                     ON DELETE SET NULL
                                     ON UPDATE CASCADE
-  , img_key       VARCHAR(255)      UNIQUE
+  , img_key       VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS criticas CASCADE;

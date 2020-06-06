@@ -235,43 +235,43 @@ $this->registerCSS($css);
                                 ['label' => '55%', 'url' => Url::to([
                                     'juegos/poner-oferta',
                                     'jId' => $model->id,
-                                    'porcentaje' => 0.55
-                                    ])
-                                ],
-                                ['label' => '65%', 'url' => Url::to([
-                                    'juegos/poner-oferta',
-                                    'jId' => $model->id,
-                                    'porcentaje' => 0.60
+                                    'porcentaje' => 0.45
                                     ])
                                 ],
                                 ['label' => '60%', 'url' => Url::to([
                                     'juegos/poner-oferta',
                                     'jId' => $model->id,
-                                    'porcentaje' => 0.65
+                                    'porcentaje' => 0.30
+                                    ])
+                                ],
+                                ['label' => '65%', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 0.35
                                     ])
                                 ],
                                 ['label' => '75%', 'url' => Url::to([
                                     'juegos/poner-oferta',
                                     'jId' => $model->id,
-                                    'porcentaje' => 0.75
+                                    'porcentaje' => 0.25
                                     ])
                                 ],
                                 ['label' => '80%', 'url' => Url::to([
                                     'juegos/poner-oferta',
                                     'jId' => $model->id,
-                                    'porcentaje' => 0.80
+                                    'porcentaje' => 0.20
                                     ])
                                 ],
                                 ['label' => '85%', 'url' => Url::to([
                                     'juegos/poner-oferta',
                                     'jId' => $model->id,
-                                    'porcentaje' => 0.85
+                                    'porcentaje' => 0.15
                                     ])
                                 ],
                                 ['label' => '90%', 'url' => Url::to([
                                     'juegos/poner-oferta',
                                     'jId' => $model->id,
-                                    'porcentaje' => 0.9
+                                    'porcentaje' => 0.1
                                     ])
                                 ],
                             ]
@@ -296,7 +296,7 @@ $this->registerCSS($css);
                                 continue;
                             }
                             if (!$permiteCompra && $precio->oferta != 1.0) {
-                                echo '<b>Oferta del ' . $precio->oferta * 100 . '%</b>';
+                                echo '<b>Oferta del ' . (1 - $precio->oferta) * 100 . '%</b>';
                             }
                             $permiteCompra = true;
                         ?>
