@@ -54,13 +54,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'descripcion:text',
             [
-              'attribute' => 'propietario.nombre',
-              'label' => 'Propietario',
-              'format' => 'raw',
-              'value' => Html::a(
-                  $model->propietario->nombre,
-                  ['usuarios/view', 'id' => $model->propietario->id]
-              ),
+                'attribute' => 'propietario.nombre',
+                'label' => 'Propietario',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if (!empty($model->propietario_id)) {
+                        return Html::a(
+                            $model->propietario->nombre,
+                            ['usuarios/view', 'id' => $model->propietario->id]
+                        );
+                    }
+                    return '';
+                }
             ]
         ],
     ]) ?>
@@ -82,6 +87,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'visible' => !Yii::$app->user->isGuest,
                 'buttons' => [
                     'like' => function ($url, $model, $key) {
+                        if (empty($model->usuario_id)) {
+                            return '';
+                        }
                         if (Yii::$app->user->isGuest || Yii::$app->user->id == $model->usuario->id) {
                             return '';
                         }
@@ -93,7 +101,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ]
             ],
-            'usuario.nombre',
+            [
+                'attribute' => 'usuario.nombre',
+                'label' => 'Propietario',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if (empty($model->propietario_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->propietario->nombre);
+                }
+            ],
             'opinion',
             [
                 'attribute' => 'valoracion',
@@ -115,8 +133,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{update} {delete} {reportar}',
                 'buttons' => [
                     'update' => function ($url, $model, $key) {
+                        if (empty($model->usuario_id)) {
+                            return '';
+                        }
                         if (Yii::$app->user->id != $model->usuario->id) {
-                            return "";
+                            return '';
                         }
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil"></span>',
@@ -130,6 +151,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'delete' => function ($url, $model, $key) {
+                        if (empty($model->usuario_id)) {
+                            return '';
+                        }
                         if (Yii::$app->user->id != $model->usuario->id) {
                             return '';
                         }
@@ -149,6 +173,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
                     'reportar' => function ($url, $model, $action) {
+                        if (empty($model->usuario_id)) {
+                            return '';
+                        }
                         if (Yii::$app->user->isGuest) {
                             return '';
                         };

@@ -24,8 +24,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'juego.titulo',
             'plataforma.nombre:text:Plataforma',
-            'propietario.nombre',
-
+            [
+                'attribute' => 'propietario.nombre',
+                'format' => 'raw',
+                'label' => 'Propietario',
+                'value' => function ($model) {
+                    if (empty($model->propietario_id)) {
+                        return '<span class="text-danger">Eliminado</span>';
+                    }
+                    return Html::encode($model->propietario->nombre);
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

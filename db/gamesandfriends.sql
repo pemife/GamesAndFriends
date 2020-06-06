@@ -57,9 +57,9 @@ CREATE TABLE productos
   , descripcion   TEXT              NOT NULL
   , stock         NUMERIC(5)        NOT NULL
   , propietario_id   BIGINT         REFERENCES usuarios(id)
-                                    ON DELETE CASCADE
+                                    ON DELETE SET NULL
                                     ON UPDATE CASCADE
-  , img_key       VARCHAR(255)      UNIQUE
+  , img_key       VARCHAR(255)
 );
 
 DROP TABLE IF EXISTS criticas CASCADE;
@@ -74,9 +74,8 @@ CREATE TABLE criticas
                                     DEFAULT CURRENT_TIMESTAMP
   , valoracion    NUMERIC(1)        NOT NULL
                                     CHECK (valoracion > 0 AND valoracion <6)
-  , usuario_id    BIGINT            NOT NULL
-                                    REFERENCES usuarios(id)
-                                    ON DELETE CASCADE
+  , usuario_id    BIGINT            REFERENCES usuarios(id)
+                                    ON DELETE SET NULL
                                     ON UPDATE CASCADE
   , producto_id   BIGINT            REFERENCES productos(id)
                                     ON DELETE CASCADE
@@ -107,9 +106,8 @@ CREATE TABLE posts
                                     REFERENCES juegos(id)
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
-  , usuario_id    BIGINT            NOT NULL
-                                    REFERENCES usuarios(id)
-                                    ON DELETE CASCADE
+  , usuario_id    BIGINT            REFERENCES usuarios(id)
+                                    ON DELETE SET NULL
                                     ON UPDATE CASCADE
 );
 
@@ -121,9 +119,8 @@ CREATE TABLE comentarios
   , created_at      TIMESTAMPTZ(0)      NOT NULL
                                       DEFAULT CURRENT_TIMESTAMP
   , texto           TEXT              NOT NULL
-  , usuario_id      BIGINT            NOT NULL
-                                      REFERENCES usuarios(id)
-                                      ON DELETE CASCADE
+  , usuario_id      BIGINT            REFERENCES usuarios(id)
+                                      ON DELETE SET NULL
                                       ON UPDATE CASCADE
   , post_id         BIGINT            NOT NULL
                                       REFERENCES posts(id)
@@ -144,9 +141,8 @@ DROP TABLE IF EXISTS usuarios_etiquetas CASCADE;
 CREATE TABLE usuarios_etiquetas
 (
     id              BIGSERIAL         PRIMARY KEY
-  , usuario_id      BIGINT            NOT NULL
-                                      REFERENCES usuarios(id)
-                                      ON DELETE CASCADE
+  , usuario_id      BIGINT            REFERENCES usuarios(id)
+                                      ON DELETE SET NULL
                                       ON UPDATE CASCADE
   , etiqueta_id     BIGINT            NOT NULL
                                       REFERENCES etiquetas(id)
@@ -179,7 +175,7 @@ CREATE TABLE copias
                                     ON DELETE NO ACTION
                                     ON UPDATE CASCADE
   , propietario_id   BIGINT         REFERENCES usuarios(id)
-                                    ON DELETE CASCADE
+                                    ON DELETE SET NULL
                                     ON UPDATE CASCADE
   , clave         VARCHAR(17)       CONSTRAINT ck_patron_clave
                                     CHECK (clave LIKE '_____-_____-_____')
@@ -198,12 +194,11 @@ CREATE TABLE ventas
   , created_at    TIMESTAMPTZ(0)      NOT NULL
                                     DEFAULT CURRENT_TIMESTAMP
   , finished_at   TIMESTAMPTZ(0)
-  , vendedor_id   BIGINT            NOT NULL
-                                    REFERENCES usuarios(id)
-                                    ON DELETE CASCADE
+  , vendedor_id   BIGINT            REFERENCES usuarios(id)
+                                    ON DELETE SET null
                                     ON UPDATE CASCADE
   , comprador_id  BIGINT            REFERENCES usuarios(id)
-                                    ON DELETE CASCADE
+                                    ON DELETE SET NULL
                                     ON UPDATE CASCADE
   , producto_id   BIGINT            UNIQUE REFERENCES productos(id)
                                     ON DELETE NO ACTION
@@ -230,10 +225,10 @@ DROP TABLE IF EXISTS relaciones CASCADE;
 CREATE TABLE relaciones
 (
       usuario1_id    BIGINT         REFERENCES usuarios(id)
-                                    ON DELETE NO ACTION
+                                    ON DELETE CASCADE
                                     ON UPDATE CASCADE
     , usuario2_id    BIGINT         REFERENCES usuarios(id)
-                                    ON DELETE NO ACTION
+                                    ON DELETE CASCADE
                                     ON UPDATE CASCADE
     , estado         NUMERIC(1)     NOT NULL
                                     DEFAULT 0
@@ -276,7 +271,7 @@ DROP TABLE IF EXISTS reportes_comentarios CASCADE;
 CREATE TABLE reportes_comentarios
 (
     usuario_id      BIGINT      REFERENCES usuarios(id)
-                                ON DELETE NO ACTION
+                                ON DELETE SET NULL
                                 ON UPDATE CASCADE
   , comentario_id   BIGINT      REFERENCES comentarios(id)
                                 ON DELETE CASCADE
@@ -290,7 +285,7 @@ DROP TABLE IF EXISTS reportes_criticas CASCADE;
 CREATE TABLE reportes_criticas
 (
     usuario_id        BIGINT         REFERENCES usuarios(id)
-                                     ON DELETE NO ACTION
+                                     ON DELETE SET NULL
                                      ON UPDATE CASCADE
   , critica_id        BIGINT         REFERENCES criticas(id)
                                      ON DELETE CASCADE

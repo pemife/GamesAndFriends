@@ -32,7 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::img(empty($model->producto_id) ? $model->copia->juego->urlImagen : $model->producto->urlImagen, ['height' => 200, 'width' => 300]) ?>
     </br></br>
     <p>
-      <span style="font-weight: bold;">Vendedor: </span> <?= Html::a($model->vendedor->nombre, ['usuarios/view', 'id' => $model->vendedor_id]) ?>
+      <span style="font-weight: bold;">Vendedor: </span> <?= Html::a(
+          $model->vendedor ? $model->vendedor->nombre : 'Eliminado',
+          $model->vendedor ? [
+            'usuarios/view',
+            'id' => $model->vendedor_id
+          ] : 'javascript:void(0)'
+      ) ?>
     </p>
     <p>
       <span style="font-weight: bold;">Precio: </span> <?= Html::encode($model->precio) ?>
