@@ -3,7 +3,7 @@
 namespace app\models;
 
 /**
- * This is the model class for table "criticas".
+ * Esta es la clase modelo para la tabla "criticas".
  *
  * @property int $id
  * @property string $opinion
@@ -95,11 +95,21 @@ class Criticas extends \yii\db\ActiveRecord
         return $this->hasOne(Juegos::className(), ['id' => 'juego_id'])->inverseOf('criticas');
     }
 
+    /**
+     * Devuelve una query con los reportes de la crítica
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getReportesCriticas()
     {
         return $this->hasMany(ReportesCriticas::className(), ['critica_id' => 'id'])->inverseOf('critica');
     }
 
+    /**
+     * Devuelve si la critica es una critica de producto o no
+     *
+     * @return boolean si es producto o no
+     */
     public function esCriticaProducto()
     {
         return $this->producto_id != null;

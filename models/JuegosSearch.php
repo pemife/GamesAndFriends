@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Juegos;
 
 /**
- * JuegosSearch represents the model behind the search form of `app\models\Juegos`.
+ * JuegosSearch representa el modelo tras el formulario de busqueda de `app\models\Juegos`.
  */
 class JuegosSearch extends Juegos
 {

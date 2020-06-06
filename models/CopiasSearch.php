@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Copias;
 
 /**
- * CopiasSearch represents the model behind the search form of `app\models\Copias`.
+ * CopiasSearch representa el modelo tras el formulario de busqueda de `app\models\Copias`.
  */
 class CopiasSearch extends Copias
 {
@@ -32,7 +32,8 @@ class CopiasSearch extends Copias
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Crea una instancia de proveedor de datos con la query de busqueda aplicada
+     *
      *
      * @param array $params
      *

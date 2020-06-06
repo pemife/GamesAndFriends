@@ -6,7 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * VentasSearch represents the model behind the search form of `app\models\Ventas`.
+ * VentasSearch representa el modelo tras el formulario de busqueda de `app\models\Ventas`.
  */
 class VentasSearch extends Ventas
 {

@@ -6,7 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * ProductosSearch represents the model behind the search form of `app\models\Productos`.
+ * ProductosSearch representa el modelo tras el formulario de busqueda de `app\models\Productos`.
  */
 class ProductosSearch extends Productos
 {

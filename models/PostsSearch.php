@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Posts;
 
 /**
- * PostsSearch represents the model behind the search form of `app\models\Posts`.
+ * PostsSearch representa el modelo tras el formulario de busqueda de `app\models\Posts`.
  */
 class PostsSearch extends Posts
 {

@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "deseados".
+ * Esta es la clase modelo para la tabla "deseados".
  *
  * @property int $usuario_id
  * @property int $juego_id
@@ -53,7 +53,7 @@ class Deseados extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Juego]].
+     * Devuelve la query para [[Juego]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -63,7 +63,7 @@ class Deseados extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario]].
+     * Devuelve la query para [[Usuario]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -72,6 +72,12 @@ class Deseados extends \yii\db\ActiveRecord
         return $this->hasOne(Usuarios::className(), ['id' => 'usuario_id'])->inverseOf('deseados');
     }
 
+    /**
+     * Esta funcion asigna el orden del ultimo en la tabla
+     * cuando se agregan a la lista de deseos
+     *
+     * @return int el numero de orden
+     */
     public function asignarOrden()
     {
         $arrayDeseados = Deseados::find()
