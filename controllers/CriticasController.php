@@ -33,7 +33,7 @@ class CriticasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'index'],
+                'only' => ['create', 'update', 'delete', 'index', 'critica-producto'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -83,7 +83,7 @@ class CriticasController extends Controller
      * Lista de todos los modelos Criticas.
      * No se permite acceder si no esta logueado.
      *
-     * @return mixed la pagina renderizada
+     * @return string la pagina renderizada
      */
     public function actionIndex()
     {
@@ -155,6 +155,7 @@ class CriticasController extends Controller
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se puede encontrar
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionUpdate($id)
     {
@@ -184,6 +185,7 @@ class CriticasController extends Controller
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionDelete($id)
     {
@@ -207,7 +209,7 @@ class CriticasController extends Controller
      *
      * @param integer $cId
      * @param boolean $esVotoPositivo
-     * @return void
+     * @return yii\web\Response
      */
     public function actionReportar($cId, $esVotoPositivo)
     {
@@ -281,7 +283,7 @@ class CriticasController extends Controller
      * del juego que desean criticar.
      *
      * @param integer $juego_id
-     * @return void
+     * @return yii\web\Response|string
      */
     public function actionCriticaJuego($juego_id)
     {

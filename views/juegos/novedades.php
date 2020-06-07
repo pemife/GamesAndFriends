@@ -1,5 +1,6 @@
 <?php
 
+use app\controllers\UsuariosController;
 use yii\bootstrap4\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -257,7 +258,4 @@ if (!Yii::$app->user->isGuest) {
 }
 
 ?>
-
-<?= Yii::debug(Yii::$app->session) ?>
-
 </div>

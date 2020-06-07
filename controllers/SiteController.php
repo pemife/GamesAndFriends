@@ -55,7 +55,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Muestra la pagina de inicio.
      *
      * @return string
      */
@@ -65,7 +65,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Login action.
+     * Accion de login.
      *
      * @return Response|string
      */
@@ -87,7 +87,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Logout action.
+     * Accion de logout
      *
      * @return Response
      */
@@ -99,7 +99,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays contact page.
+     * Muestra la pagina de contacto
      *
      * @return Response|string
      */
@@ -117,7 +117,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays about page.
+     * Muestra la pagina de "sobre la pagina"
      *
      * @return string
      */

@@ -137,7 +137,8 @@ class CopiasController extends Controller
     /**
      * Lista de todos los modelos Copias.
      * Si el usuario esta logueado, muestra solo sus copias.
-     * @return mixed la pagina renderizada
+     *
+     * @return Response|string la pagina renderizada
      */
     public function actionIndex()
     {
@@ -165,8 +166,9 @@ class CopiasController extends Controller
 
     /**
      * Muestra un único modelo de Copias.
+     *
      * @param int $id
-     * @return mixed
+     * @return Response|string
      * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
@@ -185,7 +187,8 @@ class CopiasController extends Controller
      * Si la creacion es exitosa, el navegador redireccionara a la pagina de vista del modelo.
      * Esta acción esta limitada a los usuarios logueados, servirá para que los usuarios
      * puedan añadir a su inventario una clave de juego que quieran vender.
-     * @return mixed
+     *
+     * @return Response|string
      */
     public function actionCreate()
     {
@@ -208,9 +211,11 @@ class CopiasController extends Controller
      * Si se actualiza correctamente, el navegador será redireccionado a la pagina de vista.
      * Esta accion está limitada solo al usuario propietario de la copia, y solo podrá modificar
      * dicha copia si no se encuentra en venta en el momento.
+     *
      * @param int $id
-     * @return mixed
+     * @return Response|string
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionUpdate($id)
     {
@@ -230,9 +235,11 @@ class CopiasController extends Controller
      * Si se borra exitosamente, sera redireccionado a copias/index.
      * Esta accion está limitada solo al usuario propietario de la copia, y solo podrá borrar
      * dicha copia si no se encuentra en venta en el momento.
+     *
      * @param int $id
-     * @return mixed
+     * @return Response
      * @throws NotFoundHttpException si el modelo no se encuentra.
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionDelete($id)
     {
@@ -247,7 +254,8 @@ class CopiasController extends Controller
      * dicha copia si no se encuentra en venta en el momento.
      *
      * @param integer $id el ID de la copia de la que se retirara la propiedad
-     * @return mixed
+     * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionRetirarInventario($id)
     {
@@ -262,7 +270,7 @@ class CopiasController extends Controller
      * Devuelve un índice de las copias del usuario logueado
      *
      * @param integer $id el id del usuario
-     * @return mixed la pagina renderizada
+     * @return string la pagina renderizada
      */
     public function actionMisCopias($id)
     {
@@ -296,7 +304,7 @@ class CopiasController extends Controller
      * Si da un error, muestra que copia ha dado el error y redirecciona
      * a la pagina de inicio.
      *
-     * @return mixed
+     * @return Response
      */
     public function actionCompletarCompra()
     {
@@ -351,7 +359,8 @@ class CopiasController extends Controller
 
     /**
      * Encuentra el modelo Copias basado el la clave primaria.
-     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
+     *
      * @param int $id
      * @return Copias el modelo buscado
      * @throws NotFoundHttpException si el modelo no se encuentra

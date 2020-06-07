@@ -454,7 +454,7 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Lists all Usuarios models.
+     * Lista todos los modelos de usuario
      * @return mixed
      */
     public function actionIndex()
@@ -480,7 +480,10 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Displays a single Usuarios.
+     * Muestra un único modelo Usuarios.
+     * Esta accion esta limitada a usuarios logueados que sean amigos del usuario
+     * del que se quiere ver el perfil o el propio usuario del perfil.
+     * El acceso a usuarios no amigos/bloqueados, esta bloqueado tambien.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -532,8 +535,10 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Creates a new Usuarios.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un nuevo modelo Usuarios.
+     * Es la accion que permite registrarse a los usuarios nuevos a la pagina.
+     * Esta accion esta limitada a los usuarios no logueados.
+     * Si la creacion es exitosa, redirecciona a la pagina de vista.
      * @return mixed
      */
     public function actionCreate()
@@ -569,6 +574,8 @@ class UsuariosController extends Controller
     /**
      * Actualiza un modelo Usuarios.
      * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     * Esta acción esta limitada a el usuario cuyo perfil se quiere editar,
+     * o al usuario administrador.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -593,7 +600,9 @@ class UsuariosController extends Controller
 
     /**
      * Borra un modelo Usuarios.
-     * Si el borrado es exitoso, redirecciona a la pagina indice
+     * Si el borrado es exitoso, redirecciona a la pagina indice.
+     * Esta acción esta limitada a el usuario cuyo perfil se
+     * quiere borrar, o al usuario administrador.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -607,6 +616,13 @@ class UsuariosController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * Funcion que permite el cambio de contraseña de usuario.
+     * Esta acción está limitada al usuario cuya contraseña se quiere cambiar.
+     *
+     * @param integer $id el ID del usuario a cambiar
+     * @return yii\web\Response|string
+     */
     public function actionCambioPass($id)
     {
         $model = $this->findModel($id);
@@ -629,11 +645,23 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Muestra una vista donde puede elegir si quiere añadir un juego o un producto
+     * a su inventario, para su posterior venta.
+     *
+     * @return void
+     */
     public function actionAnadirInventario()
     {
         return $this->render('anadirInventario');
     }
 
+    /**
+     * Permite solicitar la verificación del correo electronico, enviando
+     * un enlace de verificación
+     *
+     * @return void
+     */
     public function actionSolicitarVerificacion()
     {
         if (!Yii::$app->user->isGuest) {
@@ -655,8 +683,15 @@ class UsuariosController extends Controller
         return $this->redirect(['site/login']);
     }
 
+    /**
+     * Acción que verifica la dirección de correo del usuario
+     *
+     * @return void
+     */
     public function actionVerificar($token)
     {
+        // $token = Yii::$app->request->post('token');
+
         if (!Yii::$app->user->isGuest) {
             $usuario = $this->findModel(Yii::$app->user->id);
 
@@ -684,6 +719,14 @@ class UsuariosController extends Controller
         return $this->redirect(['site/login']);
     }
 
+    /**
+     * Devuelve la renderización en AJAX de una tabla con los
+     * usuarios que sean amigos del usuario cuyo ID se ha pasado
+     * como parametro de la funcion.
+     *
+     * @param integer $usuarioId el id del usuario del que queremos ver los amigos
+     * @return string la vista renderizada
+     */
     public function actionListaAmigos($usuarioId)
     {
         $usuario = $this->findModel($usuarioId);
@@ -693,6 +736,14 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Añade a otro usuario a una relacion con el usuario con
+     * la sesion iniciada, y los relaciona como amigos.
+     *
+     * @param integer $usuarioId el id del usuario 1
+     * @param integer $amigoId el id del usuario 2
+     * @return void
+     */
     public function actionAnadirAmigo($usuarioId, $amigoId)
     {
         $usuario = $this->findModel($usuarioId);
@@ -719,6 +770,13 @@ class UsuariosController extends Controller
         return $this->redirect(['view', 'id' => $usuarioId]);
     }
 
+    /**
+     * Manda una peticion de amistad por correo al usuario obetivo
+     * que podrá aceptar.
+     *
+     * @param integer $amigoId el id del usuario al que manda la peticion
+     * @return void
+     */
     public function actionMandarPeticion($amigoId)
     {
         if ($this->enviaPeticionAmistad($amigoId)) {
@@ -732,10 +790,16 @@ class UsuariosController extends Controller
                 return $this->redirect(['index']);
             }
         }
-        // Yii::$app->session->setFlash('error', 'Ha ocurrido un error al guardar la petición de amistad');
+        
         return $this->redirect(['index']);
     }
 
+    /**
+     * Borra la relacion entre dos usuarios que eran amigos
+     *
+     * @param integer $amigoId el id del usuario amigo
+     * @return void
+     */
     public function actionBorrarAmigo($amigoId)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
@@ -761,6 +825,13 @@ class UsuariosController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Crea un bloqueo entre usuarios, lo que negara varios tipos de
+     * contenido entre los usuarios que esten bloqueados.
+     *
+     * @param integer $usuarioId el usuario a bloquear
+     * @return void
+     */
     public function actionBloquearUsuario($usuarioId)
     {
         $usuario = $this->findModel($usuarioId);
@@ -807,6 +878,12 @@ class UsuariosController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Permite desbloquear a usuarios entre sí
+     *
+     * @param integer $usuarioId el usuario bloqueado anteriormente
+     * @return void
+     */
     public function actionDesbloquearUsuario($usuarioId)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
@@ -1138,7 +1215,7 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Finds the Usuarios model based on its primary key value.
+     * Encuentra el modelo Usuarios basado en la clave primaria.
      * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
      * @return Usuarios el modelo cargado
@@ -1159,17 +1236,34 @@ class UsuariosController extends Controller
         ->setFrom('gamesandfriends2@gmail.com')
         ->setTo($this->findModel($usuarioId)->email)
         ->setSubject('Confirmacion de registro')
-        ->setHtmlBody('Confirma tu correo electronico con el siguiente enlace: '
-        . Html::a(
-            'Confirmar',
-            Url::to(
-                [
-                    'usuarios/verificar',
-                    'token' => $this->findModel($usuarioId)->token,
-                ],
-                true
+        ->setHtmlBody(
+            'Confirma tu correo electronico con el siguiente enlace: '
+            . Html::a(
+                'Confirmar',
+                Url::to(
+                    [
+                        'usuarios/verificar',
+                        'token' => $this->findModel($usuarioId)->token,
+                    ],
+                    true
+                )
             )
-        ))->send();
+            // . Html::beginForm(
+            //     Url::to(
+            //         [
+            //             'usuarios/verificar',
+            //             'token' => $this->findModel($usuarioId)->token,
+            //         ],
+            //         true
+            //     ),
+            //     'post'
+            // )
+            // . Html::submitButton(
+            //     '&nbsp;&nbsp;Confirmar',
+            //     ['class' => 'btn btn-link']
+            // )
+            // . Html::endForm()
+        )->send();
 
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
     }

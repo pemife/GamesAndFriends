@@ -226,6 +226,12 @@ $this->registerCSS($css);
                         <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-info mt-4">Ofertas <b class="caret"></b></a>
                         <?= Dropdown::widget([
                             'items' => [
+                                ['label' => 'Sin oferta', 'url' => Url::to([
+                                    'juegos/poner-oferta',
+                                    'jId' => $model->id,
+                                    'porcentaje' => 1.00
+                                    ])
+                                ],
                                 ['label' => '50%', 'url' => Url::to([
                                     'juegos/poner-oferta',
                                     'jId' => $model->id,
@@ -296,7 +302,7 @@ $this->registerCSS($css);
                                 continue;
                             }
                             if (!$permiteCompra && $precio->oferta != 1.0) {
-                                echo '<b>Oferta del ' . (1 - $precio->oferta) * 100 . '%</b>';
+                                echo '<b class="mt-4 mb-4 mr-4 pt-2">Oferta ' . (1 - $precio->oferta) * 100 . '%</b>';
                             }
                             $permiteCompra = true;
                         ?>
@@ -312,7 +318,7 @@ $this->registerCSS($css);
                                 . $precio->cifra * $precio->oferta . '€',
                                 'javascript:void(0)',
                                 [
-                                    'class' => 'btn mr-2 mt-4 mb-4 text-light botonCompra',
+                                    'class' => 'btn btn-sm mr-2 mt-4 mb-4 text-light botonCompra',
                                     'style' => [
                                         'background-color' => $precio->plataforma->color
                                     ],

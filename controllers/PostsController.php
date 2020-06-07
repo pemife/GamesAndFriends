@@ -71,7 +71,7 @@ class PostsController extends Controller
     }
 
     /**
-     * Lists all Posts models.
+     * Lista todos los modelos Posts
      * @return mixed
      */
     public function actionIndex()
@@ -86,7 +86,7 @@ class PostsController extends Controller
     }
 
     /**
-     * Displays a single Posts.
+     * Muestra un único modelo Posts.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -109,8 +109,8 @@ class PostsController extends Controller
     }
 
     /**
-     * Creates a new Posts.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un nuevo modelo Posts.
+     * Si la creacion es exitosa, redirecciona a la pagina de vista.
      * @return mixed
      */
     public function actionCreate()
@@ -163,7 +163,7 @@ class PostsController extends Controller
     }
 
     /**
-     * Finds the Posts model based on its primary key value.
+     * Encuentra el modelo Posts basado en su clave primaria.
      * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
      * @return Posts el modelo cargado
@@ -178,6 +178,11 @@ class PostsController extends Controller
         throw new NotFoundHttpException('La pagina solicitada no existe');
     }
     
+    /**
+     * Funcion para votar posts
+     *
+     * @return integer el numero de votos total despues de votar el post
+     */
     public function actionVotar()
     {
         $requestPost = Yii::$app->request->post();

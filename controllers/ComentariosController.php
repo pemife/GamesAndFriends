@@ -58,7 +58,7 @@ class ComentariosController extends Controller
      * Crea un modelo nuevo de Comentarios
      * Si se crea correctamente, el navegador sera redireccionado al post comentado.
      * Solo pueden acceder a esta accion, los usuarios logueados.
-     * @return mixed
+     * @return Response|string
      */
     public function actionCreate($pId)
     {
@@ -80,8 +80,9 @@ class ComentariosController extends Controller
      * Solo puede acceder a esta acción el usuario creador del post.
      *
      * @param int $id
-     * @return mixed
+     * @return Response|string
      * @throws NotFoundHttpException si el modelo no existe
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionUpdate($id)
     {
@@ -101,9 +102,11 @@ class ComentariosController extends Controller
      * Si se crea correctamente, el navegador sera redireccionado al
      * post donde estaba el comentario.
      * Solo puede acceder a esta acción el usuario creador del post.
+     *
      * @param int $id
-     * @return mixed
+     * @return Response
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionDelete($id)
     {
@@ -118,7 +121,7 @@ class ComentariosController extends Controller
      * Redirecciona a la pagina del post donde se encuentra el comentario reportado
      *
      * @param integer $cId el ID del comentario a reportar
-     * @return mixed la pagina renderizada
+     * @return Response la pagina renderizada
      */
     public function actionReportar($cId)
     {

@@ -75,6 +75,7 @@ class ProductosController extends Controller
 
     /**
      * Lists all Productos models.
+     * Lista todos los modelos Productos
      * @return mixed
      */
     public function actionIndex()
@@ -100,7 +101,7 @@ class ProductosController extends Controller
     }
 
     /**
-     * Displays a single Productos.
+     * Muestra un único modelo Productos.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -131,8 +132,8 @@ class ProductosController extends Controller
     }
 
     /**
-     * Creates a new Productos.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un nuevo modelo Productos.
+     * Si la creacion es exitosa, redirecciona a la pagina de vista.
      * @return mixed
      */
     public function actionCreate()
@@ -183,7 +184,7 @@ class ProductosController extends Controller
     }
 
     /**
-     * Finds the Productos model based on its primary key value.
+     * Encuentra el modelo Productos basado en la clave primaria.
      * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
      * @return Productos el modelo cargado

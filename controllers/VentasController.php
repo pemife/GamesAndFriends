@@ -258,7 +258,7 @@ class VentasController extends Controller
     }
 
     /**
-     * Displays a single Ventas.
+     * Muestra un único modelo Ventas.
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -271,8 +271,8 @@ class VentasController extends Controller
     }
 
     /**
-     * Creates a new Ventas.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un nuevo modelo Ventas.
+     * Si la creacion es exitosa, redirecciona a la pagina de vista.
      * @return mixed
      */
     public function actionCreate()
@@ -654,7 +654,7 @@ class VentasController extends Controller
     }
 
     /**
-     * Finds the Ventas model based on its primary key value.
+     * Encuentra el modelo Ventas basado en la clave primaria.
      * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
      * @return Ventas el modelo cargado

@@ -3,7 +3,7 @@ use yii\bootstrap4\Html;
 use yii\helpers\Url;
 
 ?>
-<h1 align="center">Bienvenid@ <?= $nombre ?></h1>
+<h1>Bienvenid@ <?= $nombre ?></h1>
 
 <p>Si quieres verificar tu cuenta, pincha en
     <?= Html::a(

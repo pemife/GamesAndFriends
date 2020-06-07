@@ -322,7 +322,6 @@ class JuegosController extends Controller
      */
     public function actionNovedades()
     {
-        $searchModel = new JuegosSearch();
         $queryJuegosNuevos = Juegos::find()->where(['cont_adul' => false])->orderBy('fechalan DESC')->limit(10)->offset(0);
         $queryRecomendaciones = Juegos::find()->where(['cont_adul' => false])->orderBy('fechalan DESC')->limit(10)->offset(0);
 
@@ -437,6 +436,13 @@ class JuegosController extends Controller
         ]);
     }
 
+    /**
+     * Pone un juego en oferta. Esta accion esta limitada al administrador.
+     *
+     * @param integer $jId el juego a poner en oferta
+     * @param float $porcentaje el porcentaje de oferta a aplicar
+     * @return mixed
+     */
     public function actionPonerOferta($jId, $porcentaje)
     {
         $precios = Precios::find()->where(['juego_id' => $jId])->all();
@@ -459,7 +465,7 @@ class JuegosController extends Controller
     }
 
     /**
-     * Finds the Juegos model based on its primary key value.
+     * Encuentra el modelo Juegos basado en la clave primaria.
      * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
      * @return Juegos el modelo cargado
@@ -474,6 +480,13 @@ class JuegosController extends Controller
         throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 
+    /**
+     * Esta función envía un correo a todos los usuarios que tengan un juego en la lista
+     * de deseados, y este se ponga de oferta, avisandolo de la oferta aplicada.
+     *
+     * @param integer $jId el id del juego que se pone de oferta
+     * @return boolean false si ocurre algun error o no se envía algun correo, true si se envian todos correctamente
+     */
     private function enviaCorreoRecomendaciones($jId)
     {
         $emailsusuariosRecomendaciones = Usuarios::find()
