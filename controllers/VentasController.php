@@ -606,6 +606,7 @@ class VentasController extends Controller
      *
      * @param integer $idVenta el id de la venta solicitada
      * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionSolicitarCompra($idVenta)
     {
@@ -637,11 +638,14 @@ class VentasController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Finaliza la venta de un producto o copia, cambia la propiedad del item,
+     * asigna una fecha y hora de finalización, asigna un usuario comprador,
+     * y retira la solicitud de venta del usuario comprador.
      *
-     * @param [type] $idVenta
-     * @param [type] $idComprador
-     * @return void
+     * @param integer $idVenta el id de la venta a terminar
+     * @param integer $idComprador el id del usuario que compra el item
+     * @return Response|boolean
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionFinalizarVenta($idVenta, $idComprador)
     {
@@ -675,6 +679,7 @@ class VentasController extends Controller
     /**
      * Encuentra el modelo Ventas basado en la clave primaria.
      * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
+     *
      * @param int $id
      * @return Ventas el modelo cargado
      * @throws NotFoundHttpException si el modelo no se encuentra
