@@ -55,9 +55,9 @@ class Relaciones extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Usuario1]].
+     * Devuelve el primer usuario de la relación.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario1()
     {
@@ -65,9 +65,9 @@ class Relaciones extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Usuario2]].
+     * Devuelve el segundo usuario de la relación.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario2()
     {

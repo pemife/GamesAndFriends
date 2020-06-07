@@ -59,9 +59,9 @@ class Comentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Posts]]
+     * Devuelve el post en el que esta el comentario.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Posts
      */
     public function getPost()
     {
@@ -69,9 +69,9 @@ class Comentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Usuario]].
+     * Devuelve el usuario creador del comentario.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {

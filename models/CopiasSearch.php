@@ -34,9 +34,7 @@ class CopiasSearch extends Copias
     /**
      * Crea una instancia de proveedor de datos con la query de busqueda aplicada
      *
-     *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)

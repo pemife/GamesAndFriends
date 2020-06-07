@@ -95,6 +95,16 @@ class JuegosController extends Controller
                         'actions' => ['poner-oferta'],
                         'matchCallback' => function ($rule, $action) {
 
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', '¡Debes ser admin para poner una oferta!');
+                                return false;
+                            }
+
+                            if (Yii::$app->user->id !== 1) {
+                                Yii::$app->session->setFlash('error', '¡No tienes permiso para poner la oferta!');
+                                return false;
+                            }
+
                             if (!Juegos::findOne(Yii::$app->request->queryParams['jId'])) {
                                 Yii::$app->session->setFlash('error', '¡Ese juego no existe!');
                                 return false;
@@ -143,8 +153,9 @@ class JuegosController extends Controller
      * Muestra un único modelo Juegos.
      *
      * @param int $id
-     * @return mixed
+     * @return string la pagina renderizada
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso (edad minima)
      */
     public function actionView($id)
     {
@@ -206,7 +217,8 @@ class JuegosController extends Controller
      * Si la creación es exitosa, redirecciona a la pagina de vista del juego creado.
      * Esta accion está limitada solo al usuario administrador.
      *
-     * @return mixed
+     * @return Response|string
+     * @throws ForbiddenHttpException si el usuario logueado no es admin
      */
     public function actionCreate()
     {
@@ -252,8 +264,9 @@ class JuegosController extends Controller
      * Esta accion está limitada solo al usuario administrador.
      *
      * @param int $id
-     * @return mixed
+     * @return Response|string
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es admin
      */
     public function actionUpdate($id)
     {
@@ -305,8 +318,9 @@ class JuegosController extends Controller
      * Esta accion está limitada solo al usuario administrador.
      *
      * @param int $id
-     * @return mixed
+     * @return Response
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es admin
      */
     public function actionDelete($id)
     {
@@ -318,7 +332,7 @@ class JuegosController extends Controller
     /**
      * Muestra una vista con los juegos recien añadidos o actualizados.
      *
-     * @return mixed Renderiza una pagina con novedades de juegos
+     * @return string Renderiza una pagina con novedades de juegos
      */
     public function actionNovedades()
     {
@@ -367,7 +381,8 @@ class JuegosController extends Controller
      * que se desea comprar, para el posterior procesamiento de compra.
      *
      * @param integer $pId el ID de la plataforma
-     * @return mixed si se ha añadido, devuelve la cookie, sino, false
+     * @return string|boolean si se ha añadido, devuelve la cookie, sino, false
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionAnadirCarrito($pId)
     {
@@ -442,6 +457,7 @@ class JuegosController extends Controller
      * @param integer $jId el juego a poner en oferta
      * @param float $porcentaje el porcentaje de oferta a aplicar
      * @return mixed
+     * @throws ForbiddenHttpException si el usuario logueado no es admin o el juego no existe
      */
     public function actionPonerOferta($jId, $porcentaje)
     {

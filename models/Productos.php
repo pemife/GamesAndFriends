@@ -62,7 +62,7 @@ class Productos extends \yii\db\ActiveRecord
 
     /**
      * Devuelve una lista con los nombres e ids.
-     * 
+     *
      * @return array los modelos de productos
      */
     public static function lista()
@@ -79,7 +79,7 @@ class Productos extends \yii\db\ActiveRecord
 
     /**
      *  Lista de Productos que devuelve un activeQuery.
-     * 
+     *
      *  @return \yii\db\ActiveQuery
      */
     public static function listaQuery()
@@ -106,7 +106,7 @@ class Productos extends \yii\db\ActiveRecord
     /**
      * Devuelve el propietario del producto, o null en su defecto
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios|null
      */
     public function getPropietario()
     {

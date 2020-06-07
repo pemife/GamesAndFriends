@@ -71,7 +71,8 @@ class PostsController extends Controller
     }
 
     /**
-     * Lista todos los modelos Posts
+     * Lista todos los modelos Posts.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -87,6 +88,7 @@ class PostsController extends Controller
 
     /**
      * Muestra un único modelo Posts.
+     *
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -111,7 +113,9 @@ class PostsController extends Controller
     /**
      * Crea un nuevo modelo Posts.
      * Si la creacion es exitosa, redirecciona a la pagina de vista.
-     * @return mixed
+     * Esta accion esta limitada solo a los usuarios logueados.
+     *
+     * @return Response|string
      */
     public function actionCreate()
     {
@@ -130,9 +134,12 @@ class PostsController extends Controller
     /**
      * Actualiza un modelo Posts.
      * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     * Esta accion esta limitada solo al usuario creador del post.
+     *
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es el propietario
      */
     public function actionUpdate($id)
     {
@@ -151,9 +158,12 @@ class PostsController extends Controller
     /**
      * Borra un modelo Posts.
      * Si el borrado es exitoso, redirecciona a la pagina indice
+     * Esta accion esta limitada solo al usuario creador del post.
+     *
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es el propietario
      */
     public function actionDelete($id)
     {
@@ -165,6 +175,7 @@ class PostsController extends Controller
     /**
      * Encuentra el modelo Posts basado en su clave primaria.
      * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
+     *
      * @param int $id
      * @return Posts el modelo cargado
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -180,8 +191,10 @@ class PostsController extends Controller
     
     /**
      * Funcion para votar posts
+     * Esta accion esta limitada solo a los usuarios logueados
      *
      * @return integer el numero de votos total despues de votar el post
+     * @throws ForbiddenHttpException si el usuario no esta logueado
      */
     public function actionVotar()
     {

@@ -84,7 +84,9 @@ class Copias extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el juego del que es la copia
+     *
+     * @return Juegos
      */
     public function getJuego()
     {
@@ -92,7 +94,9 @@ class Copias extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve la plataforma para la que es la copia
+     *
+     * @return Plataformas
      */
     public function getPlataforma()
     {
@@ -100,7 +104,9 @@ class Copias extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el usuario propietario de la copia o null en su defecto
+     *
+     * @return Usuarios|null
      */
     public function getPropietario()
     {
@@ -108,6 +114,8 @@ class Copias extends \yii\db\ActiveRecord
     }
 
     /**
+     * Devuelve query para [[Ventas]]
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getVentas()
@@ -116,7 +124,7 @@ class Copias extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve claves validas de copias generadas automaticamente
+     * Devuelve claves validas de copias generadas automaticamente.
      *
      * @return string la clave de copia generada
      */

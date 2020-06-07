@@ -53,9 +53,9 @@ class Deseados extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve la query para [[Juego]].
+     * Devuelve el juego deseado.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Juegos
      */
     public function getJuego()
     {
@@ -63,9 +63,9 @@ class Deseados extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve la query para [[Usuario]].
+     * Devuelve el usuario asociado al juego deseado.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {

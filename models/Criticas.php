@@ -72,7 +72,9 @@ class Criticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el producto del que habla la crítica o null si la critica es de un juego.
+     *
+     * @return Productos|null
      */
     public function getProducto()
     {
@@ -80,7 +82,9 @@ class Criticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el usuario creador de la crítica, o null si se ha borrado.
+     *
+     * @return Usuarios|null
      */
     public function getUsuario()
     {
@@ -88,7 +92,9 @@ class Criticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el juego del que habla la crítica o null si la critica es de un producto.
+     *
+     * @return Juegos|null
      */
     public function getJuego()
     {

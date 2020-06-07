@@ -53,9 +53,9 @@ class ReportesComentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Comentario]].
+     * Devuelve el comentario del reporte.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Comentarios
      */
     public function getComentario()
     {
@@ -63,9 +63,9 @@ class ReportesComentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Usuario]].
+     * Devuelve el usuario del reporte.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {

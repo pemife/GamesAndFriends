@@ -7,8 +7,7 @@ namespace app\models;
  *
  * @property int $id
  * @property string $nombre
- *
- * @property JuegosEtiquetas[] $juegosEtiquetas
+ * @property Juegos[] $juegos
  * @property UsuariosEtiquetas[] $usuariosEtiquetas
  */
 class Etiquetas extends \yii\db\ActiveRecord

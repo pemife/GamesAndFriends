@@ -101,6 +101,7 @@ class EtiquetasController extends Controller
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es admin
      */
     public function actionUpdate($id)
     {
@@ -123,6 +124,7 @@ class EtiquetasController extends Controller
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es admin
      */
     public function actionDelete($id)
     {

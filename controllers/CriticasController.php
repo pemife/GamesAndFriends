@@ -72,6 +72,8 @@ class CriticasController extends Controller
                                 Yii::$app->session->setFlash('error', 'No puedes hacer una reseña de un producto que no tienes');
                                 return false;
                             }
+
+                            return true;
                         }
                     ],
                 ],
@@ -261,7 +263,8 @@ class CriticasController extends Controller
      * que desean criticar.
      *
      * @param integer $producto_id
-     * @return mixed
+     * @return Response|string
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionCriticaProducto($producto_id)
     {
@@ -283,7 +286,7 @@ class CriticasController extends Controller
      * del juego que desean criticar.
      *
      * @param integer $juego_id
-     * @return yii\web\Response|string
+     * @return Response|string
      */
     public function actionCriticaJuego($juego_id)
     {

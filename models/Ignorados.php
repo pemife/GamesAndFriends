@@ -50,9 +50,9 @@ class Ignorados extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve la query para [[Juego]].
+     * Devuelve el juego ignorado.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Juegos
      */
     public function getJuego()
     {
@@ -60,9 +60,9 @@ class Ignorados extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve la query para [[Usuario]].
+     * Devuelve el usuario asociado al juego ignorado.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {

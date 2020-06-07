@@ -9,7 +9,6 @@ use Aws\S3\S3Client;
  *
  * @property int $id
  * @property string $nombre
- *
  * @property Copias[] $copias
  */
 class Plataformas extends \yii\db\ActiveRecord
@@ -35,6 +34,11 @@ class Plataformas extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Devuelve la lista de modelos de Plataformas
+     *
+     * @return ActiveRecord[]
+     */
     public static function lista()
     {
         return self::find()
@@ -42,6 +46,11 @@ class Plataformas extends \yii\db\ActiveRecord
         ->all();
     }
 
+    /**
+     * Devuelve una lista asociativa de clave => valor, para plataformas
+     *
+     * @return array
+     */
     public static function listaAsociativa()
     {
         foreach (self::lista() as $plataforma) {

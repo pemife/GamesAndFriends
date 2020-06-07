@@ -56,9 +56,9 @@ class ReportesCriticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Critica]].
+     * Devuelve la critica del reporte.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Criticas
      */
     public function getCritica()
     {
@@ -66,9 +66,9 @@ class ReportesCriticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Usuario]].
+     * Devuelve el usuario del reporte.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {

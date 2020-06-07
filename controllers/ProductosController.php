@@ -55,17 +55,17 @@ class ProductosController extends Controller
                                 return false;
                             }
 
-                            if ($model->propietario_id == Yii::$app->user->id) {
-                                return true;
-                            }
-
                             if ($model->estado == 'En venta') {
                                 Yii::$app->session->setFlash('error', 'No puedes modificar/borrar un producto que esta en venta');
                                 return false;
                             }
 
-                            Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
-                            return false;
+                            if ($model->propietario_id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
+                                return false;
+                            }
+                            
+                            return true;
                         },
                     ],
                 ],
@@ -74,8 +74,8 @@ class ProductosController extends Controller
     }
 
     /**
-     * Lists all Productos models.
-     * Lista todos los modelos Productos
+     * Lista todos los modelos de Productos.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -102,6 +102,7 @@ class ProductosController extends Controller
 
     /**
      * Muestra un único modelo Productos.
+     *
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
@@ -132,9 +133,11 @@ class ProductosController extends Controller
     }
 
     /**
-     * Crea un nuevo modelo Productos.
-     * Si la creacion es exitosa, redirecciona a la pagina de vista.
-     * @return mixed
+     * Crea un nuevo modelo Productos para su posterior venta.
+     * Si la creación es exitosa, redirecciona a la pagina de vista.
+     * Esta accion esta limitada a los usuarios logueados.
+     *
+     * @return Response|string
      */
     public function actionCreate()
     {
@@ -152,9 +155,13 @@ class ProductosController extends Controller
     /**
      * Actualiza un modelo Productos.
      * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     * Esta accion esta limitada al creador del Producto.
+     * No permite borrar/modificar un producto si esta en venta.
+     *
      * @param int $id
-     * @return mixed
+     * @return Response|string
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario no es el propietario o el producto esta en venta
      */
     public function actionUpdate($id)
     {
@@ -172,9 +179,13 @@ class ProductosController extends Controller
     /**
      * Borra un modelo Productos.
      * Si el borrado es exitoso, redirecciona a la pagina indice
+     * Esta accion esta limitada al creador del Producto.
+     * No permite borrar/modificar un producto si esta en venta.
+     *
      * @param int $id
      * @return mixed
      * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario no es el propietario o el producto esta en venta
      */
     public function actionDelete($id)
     {
@@ -186,6 +197,7 @@ class ProductosController extends Controller
     /**
      * Encuentra el modelo Productos basado en la clave primaria.
      * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
+     *
      * @param int $id
      * @return Productos el modelo cargado
      * @throws NotFoundHttpException si el modelo no se encuentra

@@ -50,7 +50,7 @@ class VotosPosts extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Post]].
+     * Devuelve el [[Post]] votado.
      *
      * @return \yii\db\ActiveQuery
      */
@@ -60,7 +60,7 @@ class VotosPosts extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Usuario]].
+     * Devuelve el [[Usuario]] que ha votado.
      *
      * @return \yii\db\ActiveQuery
      */

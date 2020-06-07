@@ -77,7 +77,7 @@ class Posts extends \yii\db\ActiveRecord
     /**
      * Devuelve el juego asociado al post
      *
-     * @return \yii\db\ActiveRecord
+     * @return Juegos
      */
     public function getJuego()
     {
@@ -87,7 +87,7 @@ class Posts extends \yii\db\ActiveRecord
     /**
      * Devuelve el usuario asociado al post
      *
-     * @return \yii\db\ActiveRecord
+     * @return Usuarios
      */
     public function getUsuario()
     {

@@ -226,18 +226,28 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return true;
     }
 
+    /**
+     * Devuelve query para las ventas en las que participó como vendedor.
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getVentas()
     {
         return $this->hasMany(Ventas::className(), ['vendedor_id' => 'id'])->inverseOf('vendedor');
     }
 
+    /**
+     * Devuelve query para las ventas en las que participó como comprador.
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getCompras()
     {
         return $this->hasMany(Ventas::className(), ['comprador_id' => 'id'])->inverseOf('comprador');
     }
 
     /**
-     * Devuelve query para [[Copias]].
+     * Devuelve las copias de las que el usuario es propietario.
      *
      * @return \yii\db\ActiveQuery
      */
@@ -246,23 +256,38 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Copias::className(), ['propietario_id' => 'id'])->inverseOf('propietario');
     }
 
+    /**
+     * Devuelve los productos de los que el usuario es propietario.
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getProductos()
     {
         return $this->hasMany(Productos::className(), ['propietario_id' => 'id'])->inverseOf('propietario');
     }
 
+    /**
+     * Devuelve la venta del mercado de segunda mano que ha solicitado el usuario.
+     *
+     * @return Ventas
+     */
     public function getSolicitud()
     {
         return $this->hasOne(Ventas::className(), ['id' => 'venta_solicitada']);
     }
 
+    /**
+     * Devuelve query de [[Relaciones]] en las que participa el usuario.
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getRelaciones()
     {
         return $this->hasMany(Relaciones::className(), ['usuario1_id' => 'id']);
     }
 
     /**
-     * Devuelve query para [[Juegos]].
+     * Devuelve query para los [[Juegos]] que desea el usuario.
      *
      * @return \yii\db\ActiveQuery
      */
@@ -272,7 +297,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Devuelve query para [[Deseados]].
+     * Devuelve query para [[Deseados]] los deseos del usuario.
      *
      * @return \yii\db\ActiveQuery
      */
@@ -282,7 +307,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Devuelve query para [[JuegosIgnorados]].
+     * Devuelve query para [[Ignorados]] los juegos ignorados.
      *
      * @return \yii\db\ActiveQuery
      */
@@ -291,11 +316,22 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Ignorados::className(), ['usuario_id' => 'id'])->inverseOf('usuario');
     }
 
+    /**
+     * Crea la token del usuario
+     *
+     * @return string
+     */
     public function creaToken()
     {
         return Yii::$app->security->generateRandomString(32);
     }
 
+    /**
+     * Validador de fecha de nacimiento.
+     *
+     * @param string $fecha
+     * @return void
+     */
     public function validaFecha($fecha)
     {
         if (strtotime($this->fechanac) > strtotime(date('Y-m-d'))) {
@@ -303,6 +339,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         }
     }
 
+    /**
+     * Devuelve si el usuario tiene el producto pasado por parametros como ID
+     *
+     * @param integer $pId el producto en cuestión
+     * @return boolean
+     */
     public function tieneProducto($pId)
     {
         $arrayProductos = $this->productos;
@@ -316,6 +358,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return false;
     }
 
+    /**
+     * Devuelve si el usuario tiene el juego pasado por parametros como ID
+     *
+     * @param integer $jId el juego en cuestión
+     * @return boolean
+     */
     public function tieneJuego($jId)
     {
         $arrayJuegos = $this->copias;
@@ -329,32 +377,36 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return false;
     }
     
+    /**
+     * Devuelve si el usuario es mayor de edad o no
+     *
+     * @return boolean
+     */
     public function esMayorDeEdad()
     {
         return ($this->fechanac < (date('Y-m-d', strtotime('- 18 years'))));
     }
     
+    /**
+     * Devuelve si el usuario ha verificado su correo electronico
+     *
+     * @return boolean
+     */
     public function esVerificado()
     {
         return !isset($this->token);
     }
 
-    // Devuelve un array con los usuarios relacionados, con un estado concreto
-    // si estado==1, devuelve los amigos, y si estado==3 devuelve los usuarios bloqueados
+    /**
+     * Devuelve un array con los usuarios relacionados, con un estado concreto
+     * si estado==1, devuelve los amigos, y si estado==3 devuelve los usuarios bloqueados
+     * si estado==2, devuelve las amistades rechazadas, y estado==4 el seguimiento de usuarios (críticos)
+     *
+     * @param integer $estado
+     * @return Usuarios[]
+     */
     public function arrayRelacionados($estado)
     {
-        // Se pueden modificar las querys para que devuelvan datos formateados:
-        /*
-        $out = ['results' => ['id' => '', 'text' => '']];
-        $query = new Query;
-        $query->select('id, name AS text')
-            ->from('city')
-            ->where(['like', 'name', $q])
-            ->limit(20);
-        $command = $query->createCommand();
-        $data = $command->queryAll();
-        $out['results'] = array_values($data);
-        */
         $relaciones = Relaciones::find()
         ->where(['estado' => $estado, 'usuario1_id' => $this->id])
         ->orWhere(['estado' => $estado, 'usuario2_id' => $this->id])
@@ -377,6 +429,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $arrayRelacionados;
     }
     
+    /**
+     * Devuelve si el usuario es amigo del usuario pasado por parametros como ID
+     *
+     * @param integer $usuario2Id el usuario comprobado
+     * @return boolean
+     */
     public function esAmigo($usuario2Id)
     {
         $usuario2 = self::findOne($usuario2Id);
@@ -384,6 +442,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return in_array($this, $usuario2->arrayRelacionados(1));
     }
 
+    /**
+     * Devuelve el estado de una relacion entre dos usuarios
+     *
+     * @param integer $usuario2Id
+     * @return integer el estado de su relacion (1,2,3,4,5) (amistad, rechazado, bloqueado, seguido, sin relacion)
+     */
     public function estadoRelacion($usuario2Id)
     {
         $usuario2 = $this->findOne($usuario2Id);
@@ -409,6 +473,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $relacion->estado;
     }
 
+    /**
+     * Devuelve las relaciones que tiene un usuario con otro
+     *
+     * @param integer $usuarioId el otro usuario
+     * @return integer[]
+     */
     public function relacionesCon($usuarioId)
     {
         $relaciones = Relaciones::find()
@@ -419,6 +489,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $relaciones;
     }
 
+    /**
+     * Devuelve la relacion que tiene un usuario con otro
+     *
+     * @param integer $usuarioId
+     * @return Relaciones
+     */
     public function relacionCon($usuarioId)
     {
         return Relaciones::find()
@@ -426,6 +502,13 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->one();
     }
 
+    /**
+     * Devuelve si el usuario del modelo esta bloqueado o a bloqueado al
+     * usuario pasado por parametros como ID
+     *
+     * @param integer $usuarioId
+     * @return boolean
+     */
     public function estaBloqueadoPor($usuarioId)
     {
         return Relaciones::find()
@@ -433,6 +516,13 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->exists();
     }
 
+    /**
+     * Devuelve si el usuario del modelo esta seguido por el usuario
+     * pasado por parametros como ID
+     *
+     * @param integer $usuarioId
+     * @return boolean
+     */
     public function estaSeguidoPor($usuarioId)
     {
         return Relaciones::find()
@@ -440,6 +530,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->exists();
     }
 
+    /**
+     * Devuelve un array de usuarios que estan bloqueados por el usuario del modelo
+     *
+     * @param boolean $devolverIds si devuelve los IDs de los usuarios o los modelos
+     * @return integer[]|Usuarios[]
+     */
     public function arrayUsuariosBloqueados($devolverIds)
     {
         $relacionesBloqueo = Relaciones::find()
@@ -468,6 +564,11 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return [];
     }
 
+    /**
+     * Devuelve un array de IDs de juegos ignorados por el usuario del modelo
+     *
+     * @return integer[]
+     */
     public function arrayIdJuegosIgnorados()
     {
         foreach ($this->ignorados as $ignorado) {
@@ -481,6 +582,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return [];
     }
 
+    /**
+     * Devuelve los generos de preferencia del usuario
+     *
+     * @param boolean $devuelveIds si devuelve los IDs o los nombres de los modelos
+     * @return integer[]|string[]
+     */
     public function generosPreferencia($devuelveIds)
     {
         foreach ($this->etiquetas as $genero) {
@@ -494,12 +601,14 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return [];
     }
 
-    // Un usuario se considerará Crítico de juegos/productos cuando la suma
-    // de votos positivos de su conjunto de criticas supere 500.
-    // (para probar que funciona, lo limitaré a 5 votos positivos)
-
-    // Query para la suma de votos
-    // select count(*) from criticas c join reportes_criticas rc on c.id=rc.critica_id join usuarios u on u.id=c.usuario_id where rc.voto_positivo=true and u.id='$usuarioId';
+    /**
+     * Devuelve si el usuario cumple los requisitos para ser crítico de juegos.
+     * Un usuario se considerará Crítico de juegos/productos cuando la suma
+     * de votos positivos de su conjunto de criticas supere una cifra concreta.
+     * (para probar que funciona, lo limitaré a 5 votos positivos)
+     *
+     * @return boolean
+     */
     public function cumpleRequisitoDeCritico()
     {
         $votosCriticas = Criticas::find()
@@ -511,6 +620,11 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $votosCriticas > 5;
     }
 
+    /**
+     * Devuelve los votos positivos que tiene el usuario en sus criticas de juegos.
+     *
+     * @return integer
+     */
     public function puntuacionCritico()
     {
         $votosCriticas = Criticas::find()
@@ -522,6 +636,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return $votosCriticas;
     }
 
+    /**
+     * Devuelve una lista de relaciones del usuario donde muestra
+     * los criticos que son seguidos por el usuario del modelo.
+     *
+     * @return string[]
+     */
     public function listaCriticosSeguidosId()
     {
         return Relaciones::find()
@@ -530,6 +650,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->column();
     }
 
+    /**
+     * Devuelve una lista de usuarios seguidores del usuario del modelo
+     * para que le sigan, el usuario necesita ser critico.
+     *
+     * @return string[]
+     */
     public function listaSeguidoresId()
     {
         return Relaciones::find()
@@ -538,6 +664,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->column();
     }
 
+    /**
+     * Devuelve un array con los IDs de los usuarios que el usuario del
+     * modelo tiene bloqueados.
+     *
+     * @return string[]
+     */
     public function listaIdsBloqueados()
     {
         return Relaciones::find()
@@ -546,6 +678,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->column();
     }
 
+    /**
+     * Devuelve un array con los modelos de los usuarios que el usuario
+     * del modelo tiene bloqueados.
+     *
+     * @return Usuarios[]
+     */
     public function listaBloqueados()
     {
         return self::find()
@@ -553,6 +691,11 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ->all();
     }
 
+    /**
+     * Devuelve una URL de la imagen del Amazon S3 que tiene el usuario asignada
+     *
+     * @return string
+     */
     public function getUrlImagen()
     {
         $s3 = new S3Client([
@@ -579,6 +722,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return '';
     }
 
+    /**
+     * Devuelve una URL de imagen de Amazon S3 que tiene el
+     * usuario asignado al fondo de su perfil
+     *
+     * @return string
+     */
     public function getUrlFondo()
     {
         $s3 = new S3Client([
@@ -605,6 +754,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return '';
     }
 
+    /**
+     * Devuelve un array de como estan dispuestas las fotos
+     * por defecto que pueden elegir los usuarios para ponerse de fotos de perfil.
+     *
+     * @return array
+     */
     public function getArrayCarpetasImagenes()
     {
         return [

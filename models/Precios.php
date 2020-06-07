@@ -56,9 +56,9 @@ class Precios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Juego]].
+     * Devuelve el juego asociado al precio.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Juegos
      */
     public function getJuego()
     {
@@ -66,9 +66,9 @@ class Precios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Devuelve query para [[Plataforma]].
+     * Devuelve la plataforma asociada al precio.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Plataformas
      */
     public function getPlataforma()
     {
