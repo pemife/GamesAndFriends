@@ -523,6 +523,7 @@ class VentasController extends Controller
      * @param integer $cId la copia a vender, o 0 si se quiere vender un producto
      * @param integer $pId el producto a vender, o 0 si se quiere vender una copia
      * @return void
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionCreaVentaItem($cId, $pId)
     {
