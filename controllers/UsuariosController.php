@@ -1205,7 +1205,8 @@ class UsuariosController extends Controller
      * usuario pasado por parametros como ID.
      *
      * @param integer $uId el id del usuario a seguir
-     * @return void
+     * @return Response|string
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionSeguirCritico($uId)
     {
@@ -1237,6 +1238,13 @@ class UsuariosController extends Controller
         return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
     }
 
+    /**
+     * Permite prescindir de la relación de seguimiento del usuario
+     * crítico de juegos.
+     *
+     * @param integer $uId
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionAbandonarCritico($uId)
     {
         $relacion = Relaciones::find()
@@ -1263,6 +1271,13 @@ class UsuariosController extends Controller
         return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
     }
 
+    /**
+     * Renderiza una vista con la que el usuario puede seleccionar entre
+     * varias imagenes de usuario, para asignarse como imagen de usuario.
+     *
+     * @param integer $id id de usuario
+     * @return boolean|string
+     */
     public function actionCambioImagen($id)
     {
         $model = $this->findModel($id);
@@ -1285,6 +1300,13 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Permite al usuario seleccionar un fondo de perfil, renderiza una
+     * vista con las opciones de imagenes por defecto.
+     *
+     * @param integer $id id del usuario
+     * @return boolean|string
+     */
     public function actionCambioFondo($id)
     {
         $model = $this->findModel($id);
@@ -1323,6 +1345,13 @@ class UsuariosController extends Controller
         throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 
+    /**
+     * Envia el correo de verificación que es producto de la accion
+     * de solicitud de verificación de usuario.
+     *
+     * @param integer $usuarioId el id del usuario al que se le envía el correo
+     * @return void
+     */
     public function enviaCorreoConfirmacion($usuarioId)
     {
         Yii::$app->mailer->compose()
@@ -1346,6 +1375,13 @@ class UsuariosController extends Controller
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
     }
 
+    /**
+     * Envia un correo de bienvenida al usuario recien registrado.
+     * Funciona tambien como un correo de verificación.
+     *
+     * @param integer $usuarioId el usuario al que envia el correo
+     * @return void
+     */
     public function enviaCorreoBienvenida($usuarioId)
     {
         Yii::$app->mailer->compose(
@@ -1362,6 +1398,13 @@ class UsuariosController extends Controller
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
     }
 
+    /**
+     * Envia un correo con la petición de amistad al usuario objetivo
+     * que podrá aceptar.
+     *
+     * @param integer $amigoId el id del usuario objetivo
+     * @return boolean si se envía correctamente el email
+     */
     private function enviaPeticionAmistad($amigoId)
     {
         $correo = Yii::$app->mailer->compose()
@@ -1380,6 +1423,13 @@ class UsuariosController extends Controller
         return false;
     }
 
+    /**
+     * Función que actualiza el orden de la lista de juegos deseados
+     * que se llama cuando un juego es retirado de la lista de deseos.
+     *
+     * @param integer $uId el id del usuario cuya lista se va a ordenar
+     * @return boolean|Response si se actualiza correctamente
+     */
     private function actualizarOrdenDeseados($uId)
     {
         $deseados = Deseados::find()
@@ -1390,9 +1440,6 @@ class UsuariosController extends Controller
         if (!$deseados) {
             return false;
         }
-
-        // var_dump($deseados);
-        // exit;
 
         for ($i = 0; $i < count($deseados); $i++) {
             $deseo = $deseados[$i];
@@ -1406,6 +1453,11 @@ class UsuariosController extends Controller
         return true;
     }
 
+    /**
+     * Función que devuelve el cliente de Amazon S3 que sirve las imagenes de usuario/fondo de usuario
+     *
+     * @return S3Client
+     */
     private function clienteS3()
     {
         $s3 = new S3Client([
