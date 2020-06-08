@@ -38,5 +38,5 @@ class DataColumn extends \yii\grid\DataColumn
         }
         
         return parent::renderFilterCellContent();
-    }    
+    }
 }
