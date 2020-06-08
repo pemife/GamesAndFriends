@@ -179,7 +179,7 @@ $this->registerJs($js);
                         };
                         
                         return Html::a('', ['comentarios/reportar', 'cId' => $model->id], [
-                            'class' => 'glyphicon glyphicon-fire',
+                            'class' => 'glyphicon glyphicon-exclamation-sign',
                             'title' => 'Reportar comentario',
                             'style' => [
                                 'color' => 'red',

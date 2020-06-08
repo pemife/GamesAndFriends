@@ -30,7 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
               'attribute' => 'nombre',
-              'contentOptions' => ['itemprop' => 'name']
+              'contentOptions' => ['itemprop' => 'name'],
+              'format' => 'raw',
+              'value' => function ($model) {
+                return Html::encode($model->nombre) . '<br>' . Html::a(
+                    Html::img($model->urlImagen, ['class' => 'mt-2', 'height' => 100, 'width' => 170, 'alt' => $model->nombre]),
+                    ['productos/view', 'id' => $model->id]
+                );
+              }
             ],
             [
               'attribute' => 'descripcion',

@@ -82,7 +82,7 @@ class CriticasController extends Controller
     }
 
     /**
-     * Lista de todos los modelos Criticas.
+     * Lista de todos los modelos Criticas de los usuarios críticos a los que sigas.
      * No se permite acceder si no esta logueado.
      *
      * @return string la pagina renderizada
@@ -90,10 +90,14 @@ class CriticasController extends Controller
     public function actionIndex()
     {
         $usuario = Usuarios::findOne(Yii::$app->user->id);
-        Yii::debug($usuario->listaCriticosSeguidosId());
+        
         $query = Criticas::find()
         ->where(['in', 'usuario_id', $usuario->listaCriticosSeguidosId()])
         ->orderBy('last_update');
+
+        if (!$query->exists()) {
+            Yii::$app->session->setFlash('error', '¡No sigues a ningún crítico!');
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query

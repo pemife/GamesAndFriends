@@ -59,4 +59,8 @@ Estas son las capturas de ejemplo para ver el diseño compatible con cada navega
 
 ### *Prueba del seis*
 
-#
+*1. ¿Qué sitio es éste?*
+-GamesAndFriends tiene una barra de navegacion, la cual se encuentra siempre fijada en la parte
+mas alta de la página, de la manera mas comoda, para saber siempre de que pagina se trata. Junto
+con el logo, 
+

@@ -79,20 +79,20 @@ $this->registerJs($js);
         'columns' => [
             [
               'attribute' => 'titulo',
-              'contentOptions' => ['itemprop' => 'name']
+              'contentOptions' => ['itemprop' => 'name'],
+              'format' => 'raw',
+              'value' => function ($model) {
+                  return Html::encode($model->titulo) . '<br>' . Html::a(
+                      Html::img($model->urlImagen, ['class' => 'mt-2', 'height' => 85, 'width' => 170, 'alt' => $model->titulo]),
+                      ['juegos/view', 'id' => $model->id]
+                  );
+              }
             ],
             [
               'attribute' => 'fechalan',
               'format' => 'date',
+              'label' => 'Lanzado',
               'contentOptions' => ['itemprop' => 'datePublished']
-            ],
-            [
-              'attribute' => 'dev',
-              'contentOptions' => ['itemprop' => 'creator']
-            ],
-            [
-              'attribute' => 'publ',
-              'contentOptions' => ['itemprop' => 'publisher']
             ],
             'edad_minima',
             [
