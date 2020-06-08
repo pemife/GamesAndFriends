@@ -3,7 +3,7 @@
 namespace app\models;
 
 /**
- * This is the model class for table "ventas".
+ * Esta es la clase modelo para la tabla "ventas".
  *
  * @property int $id
  * @property string $created_at
@@ -66,6 +66,13 @@ class Ventas extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Valida que al crear una venta, el usuario sea el propietario del producto/copia.
+     *
+     * @param [type] $atributo
+     * @param [type] $params
+     * @return void
+     */
     public function validarVendedorPropietario($atributo, $params)
     {
         if (!empty($this->producto) && ($this->vendedor_id != $this->producto->propietario_id)) {
@@ -76,6 +83,14 @@ class Ventas extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * Valida que la venta sea o de un producto, o de una copia, pero no de los dos
+     * y valida que no sea una venta vacía.
+     *
+     * @param [type] $atributo
+     * @param [type] $params
+     * @return void
+     */
     public function validarCopiaProducto($atributo, $params)
     {
         if (empty($this->copia_id) && empty($this->producto_id)) {
@@ -86,7 +101,9 @@ class Ventas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve la copia en venta, o null si la venta es de un producto.
+     *
+     * @return \yii\db\ActiveQuery|null
      */
     public function getCopia()
     {
@@ -94,7 +111,9 @@ class Ventas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el producto en venta, o null si la venta es de una copia.
+     *
+     * @return \yii\db\ActiveQuery|null
      */
     public function getProducto()
     {
@@ -102,7 +121,9 @@ class Ventas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el usuario que ha creado la venta, o null si el usuario se ha borrado
+     *
+     * @return \yii\db\ActiveQuery|null
      */
     public function getVendedor()
     {
@@ -110,18 +131,21 @@ class Ventas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el usuario que ha comprado el producto/copia,
+     * o null si la venta no ha finalizado aún.
+     *
+     * @return \yii\db\ActiveQuery|null
      */
     public function getComprador()
     {
         return $this->hasOne(Usuarios::className(), ['id' => 'comprador_id'])->inverseOf('ventas0');
     }
 
-    // public function getSolicitante()
-    // {
-    //     return $this->hasOne(Usuarios::className(), ['venta_solicitada' => 'id'])->inverseOf('venta_solicitada');
-    // }
-
+    /**
+     * Devuelve si es la venta de un producto
+     *
+     * @return boolean
+     */
     public function esProducto()
     {
         return isset($this->producto_id);

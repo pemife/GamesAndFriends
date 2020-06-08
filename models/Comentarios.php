@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "comentarios".
+ * Esta es la clase modelo para la tabla "comentarios".
  *
  * @property int $id
  * @property string $created_at
@@ -59,9 +59,9 @@ class Comentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Post]].
+     * Devuelve el post en el que esta el comentario.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Posts
      */
     public function getPost()
     {
@@ -69,9 +69,9 @@ class Comentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario]].
+     * Devuelve el usuario creador del comentario.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {
@@ -79,7 +79,7 @@ class Comentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[ReportesComentarios]].
+     * Devuelve query para [[ReportesComentarios]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -89,7 +89,7 @@ class Comentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuarios]].
+     * Devuelve query para [[Usuarios]].
      *
      * @return \yii\db\ActiveQuery
      */

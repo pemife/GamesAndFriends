@@ -17,7 +17,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * VentasController implements the CRUD actions for Ventas model.
+ * VentasController implementa las acciones CRUD para el modelo Ventas.
  */
 class VentasController extends Controller
 {
@@ -49,12 +49,12 @@ class VentasController extends Controller
                                 return false;
                             }
 
-                            if (Usuarios::findOne(Yii::$app->user->id)->esVerificado()) {
-                                return true;
+                            if (!Usuarios::findOne(Yii::$app->user->id)->esVerificado()) {
+                                Yii::$app->session->setFlash('error', '¡No puedes poner nada en venta sin verificar tu cuenta!');
+                                return false;
                             }
 
-                            Yii::$app->session->setFlash('error', '¡No puedes poner nada en venta sin verificar tu cuenta!');
-                            return false;
+                            return true;
                         },
                     ],
                     [
@@ -71,7 +71,6 @@ class VentasController extends Controller
                         'allow' => true,
                         'actions' => ['delete'],
                         'matchCallback' => function ($rule, $action) {
-                            // Yii::debug(Yii::$app->request->queryParams['id']);
                             $model = Ventas::findOne(Yii::$app->request->queryParams['id']);
                             if (!Yii::$app->user->isGuest && ($model->vendedor_id == Yii::$app->user->id)) {
                                 return true;
@@ -192,7 +191,9 @@ class VentasController extends Controller
     }
 
     /**
-     * Muestra todas las ventas.
+     * Muestra todas las ventas de segunda mano que no sean del usuario logueado.
+     * Si el usuario es menor de edad, no muestra los juegos de contenido adulto.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -258,10 +259,11 @@ class VentasController extends Controller
     }
 
     /**
-     * Displays a single Ventas model.
+     * Muestra un único modelo Ventas.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
@@ -271,9 +273,11 @@ class VentasController extends Controller
     }
 
     /**
-     * Creates a new Ventas model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un nuevo modelo Ventas.
+     * Si la creacion es exitosa, redirecciona a la pagina de vista.
+     *
      * @return mixed
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionCreate()
     {
@@ -325,11 +329,13 @@ class VentasController extends Controller
     }
 
     /**
-     * Updates an existing Ventas model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo Ventas.
+     * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionUpdate($id)
     {
@@ -364,11 +370,13 @@ class VentasController extends Controller
     }
 
     /**
-     * Deletes an existing Ventas model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo Ventas.
+     * Si el borrado es exitoso, redirecciona a la pagina indice
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionDelete($id)
     {
@@ -379,6 +387,7 @@ class VentasController extends Controller
 
     /**
      * Muestra todas las ventas donde el vendedor es el usuario logueado.
+     *
      * @param  int  $u Id del usuario del que queremos ver sus ventas
      * @return string    Resultado de renderizado de la página
      */
@@ -428,24 +437,10 @@ class VentasController extends Controller
     }
 
     /**
-     * Esta accion filtra las copias por nombre y por genero [TODO].
-     * @param  string $nombre El nombre del juego de Copia
-     * @param  string $genero El genero del juego de Copia
-     * @return [type]         [description]
-     */
-    public function actionFiltraCopias($nombre, $genero)
-    {
-        $dataProvider = new ActiveDataProvider([
-          'query' => Ventas::find()
-          ->where(['finished_at' => null])
-          ->filterWhere([]),
-        ]);
-    }
-
-    /**
      * Esta accion sirve para la creacion de la venta de un producto.
+     *
+     * @param mixed $productoId el id del producto a vender
      * @return string El resultado del renderizado de la página
-     * @param mixed $productoId
      */
     public function actionCreaVentaProductos($productoId)
     {
@@ -487,6 +482,7 @@ class VentasController extends Controller
 
     /**
      * Esta accion sirve para la creacion de la venta de una copia.
+     *
      * @return string El resultado del renderizado de la página
      */
     public function actionCreaVentaCopias()
@@ -521,6 +517,14 @@ class VentasController extends Controller
         ]);
     }
 
+    /**
+     * Esta acción sirve para crear la venta de un item, ya sea una copia, o un producto
+     *
+     * @param integer $cId la copia a vender, o 0 si se quiere vender un producto
+     * @param integer $pId el producto a vender, o 0 si se quiere vender una copia
+     * @return void
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionCreaVentaItem($cId, $pId)
     {
         $model = new Ventas();
@@ -561,8 +565,9 @@ class VentasController extends Controller
     /**
      * Accion que renderiza una lista de todas las ventas
      * de un item concreto.
+     *
      * @param mixed $id El id del item que queremos usar
-     * @param bool $esProducto Boolean para saber si es un producto o una copia
+     * @param boolean $esProducto Boolean para saber si es un producto o una copia
      * @return string     El resultado del renderizado
      */
     public function actionVentasItem($id, $esProducto)
@@ -595,6 +600,14 @@ class VentasController extends Controller
         ]);
     }
 
+    /**
+     * Crea la solicitud de compra de un objeto en venta, y asigna la venta
+     * solicitada al usuario solicitante.
+     *
+     * @param integer $idVenta el id de la venta solicitada
+     * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionSolicitarCompra($idVenta)
     {
         $venta = Ventas::findOne($idVenta);
@@ -624,6 +637,16 @@ class VentasController extends Controller
         return $this->redirect(['ventas/view', 'id' => $venta->id]);
     }
 
+    /**
+     * Finaliza la venta de un producto o copia, cambia la propiedad del item,
+     * asigna una fecha y hora de finalización, asigna un usuario comprador,
+     * y retira la solicitud de venta del usuario comprador.
+     *
+     * @param integer $idVenta el id de la venta a terminar
+     * @param integer $idComprador el id del usuario que compra el item
+     * @return Response|boolean
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionFinalizarVenta($idVenta, $idComprador)
     {
         $venta = Ventas::findOne($idVenta);
@@ -645,7 +668,7 @@ class VentasController extends Controller
 
             Yii::$app->session->setFlash('success', 'Venta finalizada con exito');
 
-            $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+            return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
         } else {
             Yii::$app->session->setFlash('error', 'Ha ocurrido un error procesando la venta');
         }
@@ -654,11 +677,12 @@ class VentasController extends Controller
     }
 
     /**
-     * Finds the Ventas model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Encuentra el modelo Ventas basado en la clave primaria.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
+     *
      * @param int $id
-     * @return Ventas the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Ventas el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -666,6 +690,6 @@ class VentasController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 }

@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "juegos_ignorados".
+ * Esta es la clase modelo para la tabla "juegos_ignorados".
  *
  * @property int $usuario_id
  * @property int $juego_id
@@ -50,9 +50,9 @@ class Ignorados extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Juego]].
+     * Devuelve el juego ignorado.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Juegos
      */
     public function getJuego()
     {
@@ -60,9 +60,9 @@ class Ignorados extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario]].
+     * Devuelve el usuario asociado al juego ignorado.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {

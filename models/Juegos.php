@@ -5,7 +5,7 @@ namespace app\models;
 use Aws\S3\S3Client;
 
 /**
- * This is the model class for table "juegos".
+ * Esta es la clase modelo para la tabla "juegos".
  *
  * @property int $id
  * @property string $titulo
@@ -73,6 +73,11 @@ class Juegos extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Devuelve la lista de todos los juegos.
+     *
+     * @return array Lista de juegos
+     */
     public static function lista()
     {
         return self::find()
@@ -80,6 +85,11 @@ class Juegos extends \yii\db\ActiveRecord
         ->all();
     }
 
+    /**
+     * Devuelve la lista de todos los juegos con formato id => titulo.
+     *
+     * @return array Lista asociativa (id => titulo) de juegos
+     */
     public static function listaAsociativa()
     {
         foreach (self::lista() as $juego) {
@@ -90,7 +100,7 @@ class Juegos extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Etiquetas]].
+     * Devuelve query para [[Etiquetas]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -100,7 +110,7 @@ class Juegos extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Posts]].
+     * Devuelve query para [[Posts]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -110,7 +120,7 @@ class Juegos extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Copias]].
+     * Devuelve query para [[Copias]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -120,7 +130,7 @@ class Juegos extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Criticas]].
+     * Devuelve query para [[Criticas]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -128,9 +138,9 @@ class Juegos extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Criticas::className(), ['juego_id' => 'id'])->inverseOf('juego');
     }
-    
+
     /**
-     * Gets query for [[Deseados]].
+     * Devuelve query para [[Deseados]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -139,13 +149,18 @@ class Juegos extends \yii\db\ActiveRecord
         return $this->hasMany(Deseados::className(), ['juego_id' => 'id'])->inverseOf('juego');
     }
 
+    /**
+     * Devuelve query para [[Ignorados]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getIgnorados()
     {
         return $this->hasMany(Ignorados::className(), ['id' => 'usuario_id'])->viaTable('juegos_ignorados', ['juego_id' => 'id']);
     }
 
     /**
-     * Gets query for [[Plataformas]].
+     * Devuelve query para [[Plataformas]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -155,7 +170,7 @@ class Juegos extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Precios]].
+     * Devuelve query para [[Precios]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -164,6 +179,11 @@ class Juegos extends \yii\db\ActiveRecord
         return $this->hasMany(Precios::className(), ['juego_id' => 'id'])->inverseOf('juego');
     }
 
+    /**
+     * Devuelve un array de Ids de generos.
+     *
+     * @return array
+     */
     public function generosId()
     {
         $etiquetas = $this->etiquetas;
@@ -178,6 +198,11 @@ class Juegos extends \yii\db\ActiveRecord
         return $generosIds;
     }
 
+    /**
+     * Devuelve un array de Ids de Plataformas
+     *
+     * @return array
+     */
     public function plataformasId()
     {
         $plataformas = $this->plataformas;
@@ -192,6 +217,11 @@ class Juegos extends \yii\db\ActiveRecord
         return $plataformasIds;
     }
 
+    /**
+     * Devuelve un array de nombres de géneros
+     *
+     * @return array
+     */
     public function generosNombres()
     {
         $etiquetas = $this->etiquetas;
@@ -206,6 +236,11 @@ class Juegos extends \yii\db\ActiveRecord
         return $generosNombres;
     }
 
+    /**
+     * Devuelve un array de 4 juegos que coincidan en generos.
+     *
+     * @return array
+     */
     public function similares()
     {
         return $this->find()
@@ -215,6 +250,11 @@ class Juegos extends \yii\db\ActiveRecord
         ->limit(4);
     }
 
+    /**
+     * Devuelve la url de la imagen en amazon S3 asignada al juego.
+     *
+     * @return string
+     */
     public function getUrlImagen()
     {
         $s3 = new S3Client([
@@ -242,11 +282,16 @@ class Juegos extends \yii\db\ActiveRecord
 
             $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
-            return (string)$request->getUri();
+            return (string) $request->getUri();
         }
         return '';
     }
 
+    /**
+     * Devuelve un array con las url de Amazon S3 asignadas a los trailers del juego
+     *
+     * @return array
+     */
     public function getTrailers()
     {
         $s3 = new S3Client([
@@ -287,10 +332,15 @@ class Juegos extends \yii\db\ActiveRecord
                 $urlTrailers[] = (string) $s3->createPresignedRequest($cmd, '+20 minutes')->getUri();
             }
         }
-        
+
         return $urlTrailers;
     }
 
+    /**
+     * Devuelve una url de una imagen que indica que no hay trailers del juego.
+     *
+     * @return string
+     */
     public function sinTrailers()
     {
         $s3 = new S3Client([
@@ -316,11 +366,22 @@ class Juegos extends \yii\db\ActiveRecord
         return '';
     }
 
+    /**
+     * Getter de _oferta
+     *
+     * @return float
+     */
     public function getOferta()
     {
         return $this->_oferta;
     }
 
+    /**
+     * Setter de _oferta
+     *
+     * @param [float] $porcentaje
+     * @return boolean si se ha modificado o no la variable
+     */
     public function setOferta($porcentaje)
     {
         if ($porcentaje >= 0.1 && $porcentaje <= 1) {

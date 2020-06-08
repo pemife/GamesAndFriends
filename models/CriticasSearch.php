@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Criticas;
 
 /**
- * CriticasSearch represents the model behind the search form of `app\models\Criticas`.
+ * CriticasSearch representa el modelo tras el formulario de busqueda de `app\models\Criticas`.
  */
 class CriticasSearch extends Criticas
 {
@@ -33,10 +33,9 @@ class CriticasSearch extends Criticas
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Crea una instancia de proveedor de datos con la query de busqueda aplicada
      *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)

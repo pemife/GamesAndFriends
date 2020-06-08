@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "copias".
+ * Esta es la clase modelo para la tabla copias
  *
  * @property int $id
  * @property int $juego_id
@@ -20,7 +20,7 @@ use Yii;
  */
 class Copias extends \yii\db\ActiveRecord
 {
-    // public $en_venta;
+    const SCENARIO_ANADIR_INVENTARIO = 'create';
 
     /**
      * {@inheritdoc}
@@ -37,6 +37,7 @@ class Copias extends \yii\db\ActiveRecord
     {
         return [
             [['juego_id', 'plataforma_id'], 'required'],
+            [['clave'], 'required', 'on' => [self::SCENARIO_ANADIR_INVENTARIO]],
             [['juego_id', 'propietario_id', 'plataforma_id'], 'default', 'value' => null],
             [['juego_id', 'propietario_id', 'plataforma_id'], 'integer'],
             [['clave'], 'default', 'value' => $this->generaClave()],
@@ -65,6 +66,12 @@ class Copias extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Devuelve una query con las copias del usuario logeado
+     * o devuelve una query con todas las copias
+     *
+     * @return Query una query con copias
+     */
     public static function listaQuery()
     {
         $query = self::find();
@@ -76,18 +83,10 @@ class Copias extends \yii\db\ActiveRecord
         return $query;
     }
 
-    public function getEnVenta()
-    {
-        return $this->en_venta;
-    }
-
-    public function setEnVenta($value)
-    {
-        $this->en_venta = $value;
-    }
-
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el juego del que es la copia
+     *
+     * @return Juegos
      */
     public function getJuego()
     {
@@ -95,7 +94,9 @@ class Copias extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve la plataforma para la que es la copia
+     *
+     * @return Plataformas
      */
     public function getPlataforma()
     {
@@ -103,7 +104,9 @@ class Copias extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el usuario propietario de la copia o null en su defecto
+     *
+     * @return Usuarios|null
      */
     public function getPropietario()
     {
@@ -111,6 +114,8 @@ class Copias extends \yii\db\ActiveRecord
     }
 
     /**
+     * Devuelve query para [[Ventas]]
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getVentas()
@@ -118,6 +123,11 @@ class Copias extends \yii\db\ActiveRecord
         return $this->hasMany(Ventas::className(), ['copia_id' => 'id'])->inverseOf('copia');
     }
 
+    /**
+     * Devuelve claves validas de copias generadas automaticamente.
+     *
+     * @return string la clave de copia generada
+     */
     public function generaClave()
     {
         do {
@@ -131,16 +141,33 @@ class Copias extends \yii\db\ActiveRecord
         return $clave;
     }
 
+    /**
+     * Valida que la clave generada tiene el formato adecuado
+     *
+     * @param [string] $clave
+     * @return boolean si es valida o no
+     */
     private function claveValida($clave)
     {
         return preg_match('/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/', $clave);
     }
 
+    /**
+     * Valida que la clave generada es única
+     *
+     * @param [string] $clave
+     * @return boolean si es única o no
+     */
     private function claveUnica($clave)
     {
         return !self::find()->where(['clave' => $clave])->exists();
     }
 
+    /**
+     * Devuelve el estado de la copia, si esta en venta o bloqueada
+     *
+     * @return string
+     */
     public function getEstado()
     {
         if (Ventas::find()->where(['copia_id' => $this->id])->exists()) {
@@ -149,8 +176,6 @@ class Copias extends \yii\db\ActiveRecord
             }
             return 'En venta';
         }
-
-        // Añadir estado "clave desvelada"
 
         return '';
     }

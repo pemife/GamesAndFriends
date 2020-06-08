@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Juegos;
 
 /**
- * JuegosSearch represents the model behind the search form of `app\models\Juegos`.
+ * JuegosSearch representa el modelo tras el formulario de busqueda de `app\models\Juegos`.
  */
 class JuegosSearch extends Juegos
 {
@@ -32,7 +32,7 @@ class JuegosSearch extends Juegos
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Crea una instancia de proveedor de datos con la query de busqueda aplicada.
      *
      * @param array $params
      *

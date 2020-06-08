@@ -12,7 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * ComentariosController implements the CRUD actions for Comentarios model.
+ * ComentariosController implementa las acciones CRUD para el modelo de Comentarios.
  */
 class ComentariosController extends Controller
 {
@@ -55,37 +55,10 @@ class ComentariosController extends Controller
     }
 
     /**
-     * Lists all Comentarios models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ComentariosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Comentarios model.
-     * @param int $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Comentarios model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Crea un modelo nuevo de Comentarios
+     * Si se crea correctamente, el navegador sera redireccionado al post comentado.
+     * Solo pueden acceder a esta accion, los usuarios logueados.
+     * @return Response|string
      */
     public function actionCreate($pId)
     {
@@ -102,11 +75,14 @@ class ComentariosController extends Controller
     }
 
     /**
-     * Updates an existing Comentarios model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo existente de Comentarios.
+     * Si se crea correctamente, el navegador sera redireccionado al post comentado.
+     * Solo puede acceder a esta acción el usuario creador del post.
+     *
      * @param int $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Response|string
+     * @throws NotFoundHttpException si el modelo no existe
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionUpdate($id)
     {
@@ -122,11 +98,15 @@ class ComentariosController extends Controller
     }
 
     /**
-     * Deletes an existing Comentarios model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo de Comentarios existente
+     * Si se crea correctamente, el navegador sera redireccionado al
+     * post donde estaba el comentario.
+     * Solo puede acceder a esta acción el usuario creador del post.
+     *
      * @param int $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Response
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionDelete($id)
     {
@@ -136,6 +116,13 @@ class ComentariosController extends Controller
         return $this->redirect(['posts/view', 'id' => $post]);
     }
 
+    /**
+     * Accion que crea un reporte para un comentario
+     * Redirecciona a la pagina del post donde se encuentra el comentario reportado
+     *
+     * @param integer $cId el ID del comentario a reportar
+     * @return Response la pagina renderizada
+     */
     public function actionReportar($cId)
     {
         $reporte = ReportesComentarios::find()->where(['comentario_id' => $cId, 'usuario_id' => Yii::$app->user->id])->exists();
@@ -161,11 +148,11 @@ class ComentariosController extends Controller
     }
 
     /**
-     * Finds the Comentarios model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Encuentra el modelo Comentarios basado en la clave primaria.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 será lanzada
      * @param int $id
-     * @return Comentarios the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Comentarios el modelo encontrado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -173,6 +160,6 @@ class ComentariosController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 }

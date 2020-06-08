@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "reportes_criticas".
+ * Esta es la clase modelo para la tabla "reportes_criticas".
  *
  * @property int $usuario_id
  * @property int $critica_id
@@ -56,9 +56,9 @@ class ReportesCriticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Critica]].
+     * Devuelve la critica del reporte.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Criticas
      */
     public function getCritica()
     {
@@ -66,9 +66,9 @@ class ReportesCriticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario]].
+     * Devuelve el usuario del reporte.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {

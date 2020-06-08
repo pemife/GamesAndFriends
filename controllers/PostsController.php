@@ -16,7 +16,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * PostsController implements the CRUD actions for Posts model.
+ * PostsController implementa las acciones CRUD para el modelo Posts.
  */
 class PostsController extends Controller
 {
@@ -71,7 +71,8 @@ class PostsController extends Controller
     }
 
     /**
-     * Lists all Posts models.
+     * Lista todos los modelos Posts.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -86,10 +87,11 @@ class PostsController extends Controller
     }
 
     /**
-     * Displays a single Posts model.
+     * Muestra un único modelo Posts.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
@@ -109,9 +111,11 @@ class PostsController extends Controller
     }
 
     /**
-     * Creates a new Posts model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Crea un nuevo modelo Posts.
+     * Si la creacion es exitosa, redirecciona a la pagina de vista.
+     * Esta accion esta limitada solo a los usuarios logueados.
+     *
+     * @return Response|string
      */
     public function actionCreate()
     {
@@ -128,11 +132,14 @@ class PostsController extends Controller
     }
 
     /**
-     * Updates an existing Posts model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo Posts.
+     * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     * Esta accion esta limitada solo al usuario creador del post.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es el propietario
      */
     public function actionUpdate($id)
     {
@@ -149,11 +156,14 @@ class PostsController extends Controller
     }
 
     /**
-     * Deletes an existing Posts model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo Posts.
+     * Si el borrado es exitoso, redirecciona a la pagina indice
+     * Esta accion esta limitada solo al usuario creador del post.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es el propietario
      */
     public function actionDelete($id)
     {
@@ -163,11 +173,12 @@ class PostsController extends Controller
     }
 
     /**
-     * Finds the Posts model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Encuentra el modelo Posts basado en su clave primaria.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
+     *
      * @param int $id
-     * @return Posts the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Posts el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -175,9 +186,16 @@ class PostsController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
-
+    
+    /**
+     * Funcion para votar posts
+     * Esta accion esta limitada solo a los usuarios logueados
+     *
+     * @return integer el numero de votos total despues de votar el post
+     * @throws ForbiddenHttpException si el usuario no esta logueado
+     */
     public function actionVotar()
     {
         $requestPost = Yii::$app->request->post();

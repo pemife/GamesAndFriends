@@ -2,16 +2,18 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+use yii\bootstrap4\Html;
+
+$this->title = 'GamesAndFriends';
 ?>
 <div class="site-index">
 
     <div class="jumbotron">
         <h1>Congratulations!</h1>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        <p class="lead">Esta es Games And Friends, tu página de compra/venta de claves favorita.</p>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <p><?= Html::a('¡Click aquí para ver las novedades!', ['juegos/novedades'], ['class' => 'btn btn-lg btn-success']) ?></p>
     </div>
 
     <div class="body-content">

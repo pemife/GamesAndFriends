@@ -3,12 +3,11 @@
 namespace app\models;
 
 /**
- * This is the model class for table "etiquetas".
+ * Esta es la clase modelo para la tabla "etiquetas"
  *
  * @property int $id
  * @property string $nombre
- *
- * @property JuegosEtiquetas[] $juegosEtiquetas
+ * @property Juegos[] $juegos
  * @property UsuariosEtiquetas[] $usuariosEtiquetas
  */
 class Etiquetas extends \yii\db\ActiveRecord
@@ -45,7 +44,7 @@ class Etiquetas extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Juegos]].
+     * Devuelve la query para [[Juegos]].
      *
      * @return \yii\db\ActiveQuery
      */

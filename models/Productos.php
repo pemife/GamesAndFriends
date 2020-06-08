@@ -6,7 +6,7 @@ use Aws\S3\S3Client;
 use Yii;
 
 /**
- * This is the model class for table "productos".
+ * Esta es la clase modelo para la tabla "productos".
  *
  * @property int $id
  * @property string $nombre
@@ -62,7 +62,8 @@ class Productos extends \yii\db\ActiveRecord
 
     /**
      * Devuelve una lista con los nombres e ids.
-     * @return [type] [description]
+     *
+     * @return array los modelos de productos
      */
     public static function lista()
     {
@@ -77,8 +78,9 @@ class Productos extends \yii\db\ActiveRecord
     }
 
     /**
+     *  Lista de Productos que devuelve un activeQuery.
+     *
      *  @return \yii\db\ActiveQuery
-     *  Lista de Productos que devuelve un activeQuery
      */
     public static function listaQuery()
     {
@@ -92,6 +94,8 @@ class Productos extends \yii\db\ActiveRecord
     }
 
     /**
+     * Devuelve query de [[Criticas]]
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getCriticas()
@@ -100,7 +104,9 @@ class Productos extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el propietario del producto, o null en su defecto
+     *
+     * @return Usuarios|null
      */
     public function getPropietario()
     {
@@ -108,6 +114,8 @@ class Productos extends \yii\db\ActiveRecord
     }
 
     /**
+     * Devuelve query para [[Ventas]]
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getVentas()
@@ -115,6 +123,11 @@ class Productos extends \yii\db\ActiveRecord
         return $this->hasMany(Ventas::className(), ['producto_id' => 'id'])->inverseOf('producto');
     }
 
+    /**
+     * Devuelve la url de la imagen de Amazon S3 asociada al producto
+     *
+     * @return string la url de la imagen
+     */
     public function getUrlImagen()
     {
         $s3 = new S3Client([
@@ -141,13 +154,16 @@ class Productos extends \yii\db\ActiveRecord
         return '';
     }
 
+    /**
+     * Devuelve el estado del producto, si esta en venta o no
+     *
+     * @return string
+     */
     public function getEstado()
     {
         if (Ventas::find()->where(['copia_id' => $this->id])->exists()) {
             return 'En venta';
         }
-
-        // Añadir estado "clave desvelada"
 
         return '';
     }

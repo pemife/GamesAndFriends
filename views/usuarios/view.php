@@ -475,10 +475,6 @@ $this->registerJs($js);
             <br>
             <?= GridView::widget([
               'dataProvider' => $usuariosRecomendadosProvider,
-              'rowOptions' => [
-                  'itemscope' => true,
-                  'itemtype' => 'http://schema.org/Product',
-              ],
               'columns' => [
                 [
                   'attribute' => 'nombre',

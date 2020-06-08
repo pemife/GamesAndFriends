@@ -15,7 +15,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * CriticasController implements the CRUD actions for Criticas model.
+ * CriticasController implementa las acciones CRUD para el modelo Criticas.
  */
 class CriticasController extends Controller
 {
@@ -33,7 +33,7 @@ class CriticasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'index'],
+                'only' => ['create', 'update', 'delete', 'index', 'critica-producto'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -72,6 +72,8 @@ class CriticasController extends Controller
                                 Yii::$app->session->setFlash('error', 'No puedes hacer una reseña de un producto que no tienes');
                                 return false;
                             }
+
+                            return true;
                         }
                     ],
                 ],
@@ -79,6 +81,12 @@ class CriticasController extends Controller
         ];
     }
 
+    /**
+     * Lista de todos los modelos Criticas.
+     * No se permite acceder si no esta logueado.
+     *
+     * @return string la pagina renderizada
+     */
     public function actionIndex()
     {
         $usuario = Usuarios::findOne(Yii::$app->user->id);
@@ -97,19 +105,28 @@ class CriticasController extends Controller
     }
 
     /**
-     * Displays a single Criticas model.
+     * Muestra el producto/juego del que habla la crítica
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
-        return $this->redirect(['productos/view', 'id' => Criticas::findOne($id)->producto_id]);
+        $critica = Criticas::findOne($id);
+
+        if (empty($critica->producto_id)) {
+            return $this->redirect(['juegos/view', 'id' => $critica->juego_id]);
+        }
+        return $this->redirect(['productos/view', 'id' => $critica->producto_id]);
     }
 
     /**
-     * Creates a new Criticas model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un modelo nuevo de Críticas.
+     * Si la creación es exitosa, redirecciona a criticas/view, que muestra
+     * el producto/juego del que habla la crítica.
+     * Esta accion está limitada a los usuarios logueados
+     *
      * @return mixed
      */
     public function actionCreate()
@@ -131,21 +148,23 @@ class CriticasController extends Controller
     }
 
     /**
-     * Updates an existing Criticas model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo existente de Críticas.
+     * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     * Si la actualización es exitosa, redirecciona a criticas/view, que muestra
+     * el producto/juego del que habla la crítica.
+     * Esta accion está limitada solo al usuario creador de la critica.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se puede encontrar
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($model->esCriticaProducto()) {
-                return $this->redirect(['productos/view', 'id' => $model->producto_id]);
-            }
-            return $this->redirect(['juegos/view', 'id' => $model->juego_id]);
+            return $this->redirect(['view', 'id' => $id]);
         }
 
         if ($model->esCriticaProducto()) {
@@ -161,11 +180,14 @@ class CriticasController extends Controller
     }
 
     /**
-     * Deletes an existing Criticas model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo existente de Críticas.
+     * Si el borrado es exitoso, redireccionará al producto/juego del que hablaba.
+     * Esta accion está limitada solo al usuario creador de la critica.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionDelete($id)
     {
@@ -182,23 +204,26 @@ class CriticasController extends Controller
         return $this->redirect($url);
     }
 
+    /**
+     * Crea un reporte sobre la crítica, puede ser un voto positivo,
+     * o un reporte negativo.
+     * Redirecciona a la pagina del producto/juego del que habla
+     *
+     * @param integer $cId
+     * @param boolean $esVotoPositivo
+     * @return yii\web\Response
+     */
     public function actionReportar($cId, $esVotoPositivo)
     {
         $reporte = ReportesCriticas::find()->where(['critica_id' => $cId, 'usuario_id' => Yii::$app->user->id])->one();
-        $url = Url::to(
-            [
-                $this->findModel($cId)->juego ? 'juegos/view' : 'productos/view',
-                'id' => $this->findModel($cId)->juego ? $this->findModel($cId)->juego->id : $this->findModel($cId)->producto->id
-            ]
-        );
 
         if ($reporte) {
             if ($reporte->voto_positivo && $esVotoPositivo) {
                 Yii::$app->session->setFlash('error', 'Ya le has dado megusta a esa crítica');
-                return $this->redirect($url);
+                return $this->redirect(['view', 'id' => $cId]);
             } elseif (!$reporte->voto_positivo && !$esVotoPositivo) {
                 Yii::$app->session->setFlash('error', 'Ya has reportado esa critica');
-                return $this->redirect($url);
+                return $this->redirect(['view', 'id' => $cId]);
             } else {
                 $reporte->voto_positivo = $esVotoPositivo;
             }
@@ -225,13 +250,22 @@ class CriticasController extends Controller
             } else {
                 Yii::$app->session->setFlash('success', 'Has mandado un reporte correctamente');
             }
-            return $this->redirect($url);
+            return $this->redirect(['view', 'id' => $cId]);
         }
 
         Yii::$app->session->setFlash('error', 'Ha ocurrido un error al procesar el reporte / megusta');
-        return $this->redirect($url);
+        return $this->redirect(['view', 'id' => $cId]);
     }
 
+    /**
+     * Crea una crítica de un producto
+     * Esta accion está limitada solo a los usuarios poseedores del producto
+     * que desean criticar.
+     *
+     * @param integer $producto_id
+     * @return Response|string
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionCriticaProducto($producto_id)
     {
         $model = new Criticas();
@@ -240,14 +274,20 @@ class CriticasController extends Controller
             return $this->redirect(['productos/view', 'id' => $producto_id]);
         }
 
-        // $model->producto_id = $producto->id;
-
         return $this->render('criticaProducto', [
             'model' => $model,
             'producto' => Productos::findOne($producto_id),
         ]);
     }
 
+    /**
+     * Crea una crítica de un juego.
+     * Esta accion está limitada solo a los usuarios poseedores
+     * del juego que desean criticar.
+     *
+     * @param integer $juego_id
+     * @return Response|string
+     */
     public function actionCriticaJuego($juego_id)
     {
         if (Yii::$app->user->isGuest) {
@@ -279,11 +319,11 @@ class CriticasController extends Controller
     }
 
     /**
-     * Finds the Criticas model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Encuentra el modelo Criticas basando el valor de su clave primaria.
+     * Si el modelo no se encuentra, lanza una excepcion HTTP 404.
      * @param int $id
-     * @return Criticas the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Criticas el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -291,6 +331,6 @@ class CriticasController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 }

@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use app\models\Comentarios;
 
 /**
- * ComentariosSearch represents the model behind the search form of `app\models\Comentarios`.
+ * ComentariosSearch representa el modelo tras el formulario de busqueda de  `app\models\Comentarios`.
  */
 class ComentariosSearch extends Comentarios
 {
@@ -32,10 +32,9 @@ class ComentariosSearch extends Comentarios
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Crea una instancia de proveedor de datos con la query de busqueda aplicada
      *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)

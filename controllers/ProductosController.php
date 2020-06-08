@@ -15,7 +15,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * ProductosController implements the CRUD actions for Productos model.
+ * ProductosController implementa las acciones CRUD para el modelo Productos.
  */
 class ProductosController extends Controller
 {
@@ -55,17 +55,17 @@ class ProductosController extends Controller
                                 return false;
                             }
 
-                            if ($model->propietario_id == Yii::$app->user->id) {
-                                return true;
-                            }
-
                             if ($model->estado == 'En venta') {
                                 Yii::$app->session->setFlash('error', 'No puedes modificar/borrar un producto que esta en venta');
                                 return false;
                             }
 
-                            Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
-                            return false;
+                            if ($model->propietario_id != Yii::$app->user->id) {
+                                Yii::$app->session->setFlash('error', '¡No puedes modificar el producto de otra persona!');
+                                return false;
+                            }
+                            
+                            return true;
                         },
                     ],
                 ],
@@ -74,7 +74,8 @@ class ProductosController extends Controller
     }
 
     /**
-     * Lists all Productos models.
+     * Lista todos los modelos de Productos.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -100,10 +101,11 @@ class ProductosController extends Controller
     }
 
     /**
-     * Displays a single Productos model.
+     * Muestra un único modelo Productos.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
@@ -131,9 +133,11 @@ class ProductosController extends Controller
     }
 
     /**
-     * Creates a new Productos model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Crea un nuevo modelo Productos para su posterior venta.
+     * Si la creación es exitosa, redirecciona a la pagina de vista.
+     * Esta accion esta limitada a los usuarios logueados.
+     *
+     * @return Response|string
      */
     public function actionCreate()
     {
@@ -149,11 +153,15 @@ class ProductosController extends Controller
     }
 
     /**
-     * Updates an existing Productos model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo Productos.
+     * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     * Esta accion esta limitada al creador del Producto.
+     * No permite borrar/modificar un producto si esta en venta.
+     *
      * @param int $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Response|string
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario no es el propietario o el producto esta en venta
      */
     public function actionUpdate($id)
     {
@@ -169,11 +177,15 @@ class ProductosController extends Controller
     }
 
     /**
-     * Deletes an existing Productos model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo Productos.
+     * Si el borrado es exitoso, redirecciona a la pagina indice
+     * Esta accion esta limitada al creador del Producto.
+     * No permite borrar/modificar un producto si esta en venta.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario no es el propietario o el producto esta en venta
      */
     public function actionDelete($id)
     {
@@ -183,11 +195,12 @@ class ProductosController extends Controller
     }
 
     /**
-     * Finds the Productos model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Encuentra el modelo Productos basado en la clave primaria.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
+     *
      * @param int $id
-     * @return Productos the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Productos el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -195,6 +208,6 @@ class ProductosController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 }

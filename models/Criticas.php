@@ -3,7 +3,7 @@
 namespace app\models;
 
 /**
- * This is the model class for table "criticas".
+ * Esta es la clase modelo para la tabla "criticas".
  *
  * @property int $id
  * @property string $opinion
@@ -72,7 +72,9 @@ class Criticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el producto del que habla la crítica o null si la critica es de un juego.
+     *
+     * @return Productos|null
      */
     public function getProducto()
     {
@@ -80,7 +82,9 @@ class Criticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el usuario creador de la crítica, o null si se ha borrado.
+     *
+     * @return Usuarios|null
      */
     public function getUsuario()
     {
@@ -88,18 +92,30 @@ class Criticas extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Devuelve el juego del que habla la crítica o null si la critica es de un producto.
+     *
+     * @return Juegos|null
      */
     public function getJuego()
     {
         return $this->hasOne(Juegos::className(), ['id' => 'juego_id'])->inverseOf('criticas');
     }
 
+    /**
+     * Devuelve una query con los reportes de la crítica
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getReportesCriticas()
     {
         return $this->hasMany(ReportesCriticas::className(), ['critica_id' => 'id'])->inverseOf('critica');
     }
 
+    /**
+     * Devuelve si la critica es una critica de producto o no
+     *
+     * @return boolean si es producto o no
+     */
     public function esCriticaProducto()
     {
         return $this->producto_id != null;

@@ -5,11 +5,10 @@ namespace app\models;
 use Aws\S3\S3Client;
 
 /**
- * This is the model class for table "plataformas".
+ * Esta es la clase modelo para la tabla "plataformas".
  *
  * @property int $id
  * @property string $nombre
- *
  * @property Copias[] $copias
  */
 class Plataformas extends \yii\db\ActiveRecord
@@ -31,10 +30,15 @@ class Plataformas extends \yii\db\ActiveRecord
             [['nombre'], 'string', 'max' => 50],
             [['nombre'], 'unique'],
             [['img_key'], 'string', 'max' => 255],
-            [['img_key'], 'unique']
+            [['img_key'], 'unique'],
         ];
     }
 
+    /**
+     * Devuelve la lista de modelos de Plataformas
+     *
+     * @return ActiveRecord[]
+     */
     public static function lista()
     {
         return self::find()
@@ -42,6 +46,11 @@ class Plataformas extends \yii\db\ActiveRecord
         ->all();
     }
 
+    /**
+     * Devuelve una lista asociativa de clave => valor, para plataformas
+     *
+     * @return array
+     */
     public static function listaAsociativa()
     {
         foreach (self::lista() as $plataforma) {
@@ -63,6 +72,8 @@ class Plataformas extends \yii\db\ActiveRecord
     }
 
     /**
+     * Devuelve query para [[Copias]].
+     *
      * @return \yii\db\ActiveQuery
      */
     public function getCopias()
@@ -71,7 +82,7 @@ class Plataformas extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Precios]].
+     * Devuelve query para [[Precios]].
      *
      * @return \yii\db\ActiveQuery
      */
@@ -80,6 +91,11 @@ class Plataformas extends \yii\db\ActiveRecord
         return $this->hasMany(Precios::className(), ['plataforma_id' => 'id'])->inverseOf('plataforma');
     }
 
+    /**
+     * Devuelve una url de la imagen del logo de la plataforma
+     *
+     * @return string
+     */
     public function getUrlLogo()
     {
         $s3 = new S3Client([
@@ -98,14 +114,19 @@ class Plataformas extends \yii\db\ActiveRecord
                 'Bucket' => 'gamesandfriends',
                 'Key' => 'Plataformas/' . $this->img_key,
             ]);
-    
+
             $request = $s3->createPresignedRequest($cmd, '+20 minutes');
 
-            return (string)$request->getUri();
+            return (string) $request->getUri();
         }
         return '';
     }
 
+    /**
+     * Devuelve un string representativo con el color caracteristico de la plataforma
+     *
+     * @return string
+     */
     public function getColor()
     {
         switch ($this->id) {

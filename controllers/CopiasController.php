@@ -18,7 +18,7 @@ use yii\web\Cookie;
 use yii\web\NotFoundHttpException;
 
 /**
- * CopiasController implements the CRUD actions for Copias model.
+ * CopiasController implementa las acciones CRUD para el modelo Copias.
  */
 class CopiasController extends Controller
 {
@@ -120,6 +120,12 @@ class CopiasController extends Controller
                                 return false;
                             }
 
+                            $model = Copias::findOne(Yii::$app->request->queryParams['id']);
+                            if ($model->estado == 'En venta') {
+                                Yii::$app->session->setFlash('error', 'No puedes retirar una copia que esta en venta');
+                                return false;
+                            }
+
                             return true;
                         },
                     ],
@@ -129,8 +135,10 @@ class CopiasController extends Controller
     }
 
     /**
-     * Lists all Copias models.
-     * @return mixed
+     * Lista de todos los modelos Copias.
+     * Si el usuario esta logueado, muestra solo sus copias.
+     *
+     * @return Response|string la pagina renderizada
      */
     public function actionIndex()
     {
@@ -157,10 +165,11 @@ class CopiasController extends Controller
     }
 
     /**
-     * Displays a single Copias model.
+     * Muestra un único modelo de Copias.
+     *
      * @param int $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Response|string
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     public function actionView($id)
     {
@@ -174,14 +183,18 @@ class CopiasController extends Controller
     }
 
     /**
-     * Creates a new Copias model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Crea un modelo nuevo de Copias.
+     * Si la creacion es exitosa, el navegador redireccionara a la pagina de vista del modelo.
+     * Esta acción esta limitada a los usuarios logueados, servirá para que los usuarios
+     * puedan añadir a su inventario una clave de juego que quieran vender.
+     *
+     * @return Response|string
      */
     public function actionCreate()
     {
         $model = new Copias();
 
+        $model->scenario = Copias::SCENARIO_ANADIR_INVENTARIO;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -194,11 +207,15 @@ class CopiasController extends Controller
     }
 
     /**
-     * Updates an existing Copias model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo existente de Copias.
+     * Si se actualiza correctamente, el navegador será redireccionado a la pagina de vista.
+     * Esta accion está limitada solo al usuario propietario de la copia, y solo podrá modificar
+     * dicha copia si no se encuentra en venta en el momento.
+     *
      * @param int $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Response|string
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionUpdate($id)
     {
@@ -214,11 +231,15 @@ class CopiasController extends Controller
     }
 
     /**
-     * Deletes an existing Copias model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo existente de Copias.
+     * Si se borra exitosamente, sera redireccionado a copias/index.
+     * Esta accion está limitada solo al usuario propietario de la copia, y solo podrá borrar
+     * dicha copia si no se encuentra en venta en el momento.
+     *
      * @param int $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Response
+     * @throws NotFoundHttpException si el modelo no se encuentra.
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
     public function actionDelete($id)
     {
@@ -227,6 +248,15 @@ class CopiasController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Función que retira la copia de la propiedad del usuario
+     * Esta accion está limitada solo al usuario propietario de la copia, y solo podrá retirar
+     * dicha copia si no se encuentra en venta en el momento.
+     *
+     * @param integer $id el ID de la copia de la que se retirara la propiedad
+     * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionRetirarInventario($id)
     {
         $this->findModel($id)->unlink('propietario', Usuarios::findOne(Yii::$app->user->id));
@@ -236,6 +266,12 @@ class CopiasController extends Controller
         return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
     }
 
+    /**
+     * Devuelve un índice de las copias del usuario logueado
+     *
+     * @param integer $id el id del usuario
+     * @return string la pagina renderizada
+     */
     public function actionMisCopias($id)
     {
         $usuario = Usuarios::findOne($id);
@@ -260,6 +296,16 @@ class CopiasController extends Controller
         ]);
     }
 
+    /**
+     * Procesa la compra de todos los items del carrito
+     * si se completa con éxito, redirecciona al perfil del usuario
+     * donde esta el inventario con las copias recién compradas
+     *
+     * Si da un error, muestra que copia ha dado el error y redirecciona
+     * a la pagina de inicio.
+     *
+     * @return Response
+     */
     public function actionCompletarCompra()
     {
         if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
@@ -308,15 +354,16 @@ class CopiasController extends Controller
         Yii::$app->response->cookies->add($cookie);
         
         Yii::$app->session->setFlash('success', 'Se ha realizado la compra correctamente!');
-        $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
+        return $this->redirect(['usuarios/view', 'id' => Yii::$app->user->id]);
     }
 
     /**
-     * Finds the Copias model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Encuentra el modelo Copias basado el la clave primaria.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
+     *
      * @param int $id
-     * @return Copias the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Copias el modelo buscado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -324,6 +371,6 @@ class CopiasController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 }

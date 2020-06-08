@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "reportes_comentarios".
+ * Esta es la clase modelo para la tabla "reportes_comentarios".
  *
  * @property int $usuario_id
  * @property int $comentario_id
@@ -53,9 +53,9 @@ class ReportesComentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Comentario]].
+     * Devuelve el comentario del reporte.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Comentarios
      */
     public function getComentario()
     {
@@ -63,9 +63,9 @@ class ReportesComentarios extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Usuario]].
+     * Devuelve el usuario del reporte.
      *
-     * @return \yii\db\ActiveQuery
+     * @return Usuarios
      */
     public function getUsuario()
     {

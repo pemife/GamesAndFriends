@@ -25,7 +25,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * UsuariosController implements the CRUD actions for Usuarios model.
+ * UsuariosController implementa las acciones CRUD para el modelo Usuarios.
  */
 class UsuariosController extends Controller
 {
@@ -149,19 +149,19 @@ class UsuariosController extends Controller
                         'allow' => true,
                         'actions' => ['anadir-amigo'],
                         'matchCallback' => function ($rule, $action) {
-                            $usuarioId = Yii::$app->request->queryParams['usuarioId'];
-                            $amigoId = Yii::$app->request->queryParams['amigoId'];
-
                             if (Yii::$app->user->isGuest) {
                                 Yii::$app->session->setFlash('error', 'Debes iniciar sesión para aceptar peticiones de amistad');
                                 return false;
                             }
 
+                            $amigoId = Yii::$app->request->queryParams['amigoId'];
+                            
                             if (Yii::$app->user->id != $amigoId) {
                                 Yii::$app->session->setFlash('error', 'No puedes aceptar esta peticion de amistad');
                                 return false;
                             }
-
+                            
+                            $usuarioId = Yii::$app->request->queryParams['usuarioId'];
                             $usuario = $this->findModel($usuarioId);
 
                             switch ($usuario->estadoRelacion($amigoId)) {
@@ -438,9 +438,11 @@ class UsuariosController extends Controller
                                 return false;
                             }
                             
+                            // No muestra la lista de seguidores si el usuario no es crítico de juegos
                             $tipoLista = Yii::$app->request->queryParams['tipoLista'];
                             if ($tipoLista == 'seguidores') {
                                 if (!$this->findModel(Yii::$app->user->id)->es_critico) {
+                                    Yii::$app->session->setFlash('error', 'Debes ser crítico para tener seguidores');
                                     return false;
                                 }
                             }
@@ -454,7 +456,8 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Lists all Usuarios models.
+     * Lista todos los modelos de usuario
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -480,10 +483,15 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Displays a single Usuarios model.
+     * Muestra un único modelo Usuarios.
+     * Esta accion esta limitada a usuarios logueados que sean amigos del usuario
+     * del que se quiere ver el perfil o el propio usuario del perfil.
+     * El acceso a usuarios no amigos/bloqueados, esta bloqueado tambien.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException el usuario que solicite la accion debe ser amigo.
      */
     public function actionView($id)
     {
@@ -516,7 +524,7 @@ class UsuariosController extends Controller
         ->joinWith('copias.juego')
         ->where(['IN', 'juegos.id', $juegosUsuarioIds])
         ->andWhere(['not', ['usuarios.id' => $id]])
-        ->select('usuarios.nombre')
+        ->select('usuarios.nombre, usuarios.id')
         ->distinct();
 
         $usuariosRecomendadosProvider = new ActiveDataProvider([
@@ -532,8 +540,11 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Creates a new Usuarios model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Crea un nuevo modelo Usuarios.
+     * Es la accion que permite registrarse a los usuarios nuevos a la pagina.
+     * Esta accion esta limitada a los usuarios no logueados.
+     * Si la creacion es exitosa, redirecciona a la pagina de vista.
+     *
      * @return mixed
      */
     public function actionCreate()
@@ -567,11 +578,15 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Updates an existing Usuarios model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Actualiza un modelo Usuarios.
+     * Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+     * Esta acción esta limitada a el usuario cuyo perfil se quiere editar,
+     * o al usuario administrador.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra
+     * @throws ForbiddenHttpException si el usuario logueado no es el del perfil que se quiere modificar.
      */
     public function actionUpdate($id)
     {
@@ -592,11 +607,15 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Deletes an existing Usuarios model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Borra un modelo Usuarios.
+     * Si el borrado es exitoso, redirecciona a la pagina indice.
+     * Esta acción esta limitada a el usuario cuyo perfil se
+     * quiere borrar, o al usuario administrador.
+     *
      * @param int $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException si el modelo no se encuentra.
+     * @throws ForbiddenHttpException si el usuario logueado no es el del perfil que se quiere borrar.
      */
     public function actionDelete($id)
     {
@@ -607,6 +626,13 @@ class UsuariosController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * Funcion que permite el cambio de contraseña de usuario.
+     * Esta acción está limitada al usuario cuya contraseña se quiere cambiar.
+     *
+     * @param integer $id el ID del usuario a cambiar
+     * @return yii\web\Response|string
+     */
     public function actionCambioPass($id)
     {
         $model = $this->findModel($id);
@@ -629,11 +655,23 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Muestra una vista donde puede elegir si quiere añadir un juego o un producto
+     * a su inventario, para su posterior venta.
+     *
+     * @return string
+     */
     public function actionAnadirInventario()
     {
         return $this->render('anadirInventario');
     }
 
+    /**
+     * Permite solicitar la verificación del correo electronico, enviando
+     * un enlace de verificación
+     *
+     * @return Response
+     */
     public function actionSolicitarVerificacion()
     {
         if (!Yii::$app->user->isGuest) {
@@ -655,8 +693,14 @@ class UsuariosController extends Controller
         return $this->redirect(['site/login']);
     }
 
+    /**
+     * Acción que verifica la dirección de correo del usuario
+     *
+     * @return Response
+     */
     public function actionVerificar($token)
     {
+
         if (!Yii::$app->user->isGuest) {
             $usuario = $this->findModel(Yii::$app->user->id);
 
@@ -684,6 +728,14 @@ class UsuariosController extends Controller
         return $this->redirect(['site/login']);
     }
 
+    /**
+     * Devuelve la renderización en AJAX de una tabla con los
+     * usuarios que sean amigos del usuario cuyo ID se ha pasado
+     * como parametro de la funcion.
+     *
+     * @param integer $usuarioId el id del usuario del que queremos ver los amigos
+     * @return string la vista renderizada
+     */
     public function actionListaAmigos($usuarioId)
     {
         $usuario = $this->findModel($usuarioId);
@@ -693,6 +745,18 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Añade a otro usuario a una relacion con el usuario con
+     * la sesion iniciada, y los relaciona como amigos.
+     * Esta acción está limitada al usuario al que fué mandada
+     * la peticion de amistad.
+     * (siempre que este usuario no esté bloqueado por el primer usuario).
+     *
+     * @param integer $usuarioId el id del usuario 1
+     * @param integer $amigoId el id del usuario 2
+     * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionAnadirAmigo($usuarioId, $amigoId)
     {
         $usuario = $this->findModel($usuarioId);
@@ -719,6 +783,16 @@ class UsuariosController extends Controller
         return $this->redirect(['view', 'id' => $usuarioId]);
     }
 
+    /**
+     * Manda una peticion de amistad por correo al usuario obetivo
+     * que podrá aceptar.
+     * Al mandar la peticion, se crea una relacion entre los usuarios,
+     * una relacion de amistad pendiente de aceptar.
+     *
+     * @param integer $amigoId el id del usuario al que manda la peticion
+     * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionMandarPeticion($amigoId)
     {
         if ($this->enviaPeticionAmistad($amigoId)) {
@@ -732,10 +806,16 @@ class UsuariosController extends Controller
                 return $this->redirect(['index']);
             }
         }
-        // Yii::$app->session->setFlash('error', 'Ha ocurrido un error al guardar la petición de amistad');
+        
         return $this->redirect(['index']);
     }
 
+    /**
+     * Borra la relacion entre dos usuarios que eran amigos
+     *
+     * @param integer $amigoId el id del usuario amigo
+     * @return void
+     */
     public function actionBorrarAmigo($amigoId)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
@@ -761,6 +841,14 @@ class UsuariosController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Crea un bloqueo entre usuarios, lo que negara varios tipos de
+     * contenido entre los usuarios que esten bloqueados.
+     *
+     * @param integer $usuarioId el usuario a bloquear
+     * @return void
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionBloquearUsuario($usuarioId)
     {
         $usuario = $this->findModel($usuarioId);
@@ -807,6 +895,13 @@ class UsuariosController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Permite desbloquear a usuarios entre sí
+     *
+     * @param integer $usuarioId el usuario bloqueado anteriormente
+     * @return void
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionDesbloquearUsuario($usuarioId)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
@@ -818,6 +913,12 @@ class UsuariosController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Renderiza por una peticion AJAX, una vista con los usuarios bloqueados.
+     *
+     * @param integer $usuarioId
+     * @return string
+     */
     public function actionListaBloqueados($usuarioId)
     {
         $usuario = $this->findModel($usuarioId);
@@ -827,15 +928,19 @@ class UsuariosController extends Controller
         ]);
     }
 
-    // https://jqueryui.com/sortable/
-    // https://www.yiiframework.com/extension/yiisoft/yii2-jui/doc/api/2.0/yii-jui-draggable
+    /**
+     * Muestra una vista con todos los juegos que desea un usuario
+     * Esta acción está limitada a los usuarios relacionados
+     * a la lista de deseos y a sus amigos.
+     *
+     * @param integer $uId
+     * @return string
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionVerListaDeseos($uId)
     {
-        $deseadosProvider = new ArrayDataProvider([
-            'allModels' => Deseados::find()
-            ->where(['usuario_id' => $uId])
-            ->orderBy('orden')
-            ->all(),
+        $deseadosProvider = new ActiveDataProvider([
+            'query' => $this->findModel($uId)->getDeseados()->orderBy('orden'),
         ]);
 
         return $this->render('listaDeseos', [
@@ -844,6 +949,14 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Añade un juego a la lista de deseos de un usuario
+     *
+     * @param integer $uId  el id del usuario
+     * @param integer $jId  el id del juego
+     * @return string|Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionAnadirDeseos($uId, $jId)
     {
         $repetido = Deseados::find()
@@ -881,6 +994,14 @@ class UsuariosController extends Controller
         return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
     }
 
+    /**
+     * Borra un juego de la lista de deseos
+     *
+     * @param integer $uId el id del usuario
+     * @param integer $jIdel id del juego
+     * @return void
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionBorrarDeseos($uId, $jId)
     {
         $deseo = Deseados::find()
@@ -894,6 +1015,12 @@ class UsuariosController extends Controller
         return $this->redirect(['ver-lista-deseos', 'uId' => $uId]);
     }
 
+    /**
+     * Ordena la lista de deseos con un nuevo orden
+     *
+     * @return boolean si se ha ordenado correctamente, (true) o ha ocurrido un error (false)
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionOrdenarListaDeseos()
     {
         $post = Yii::$app->request->post();
@@ -929,6 +1056,13 @@ class UsuariosController extends Controller
         return true;
     }
     
+    /**
+     * Accion que renderiza la lista de juegos que el usuario ha ignorado
+     *
+     * @param integer $uId
+     * @return string
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionVerListaIgnorados($uId)
     {
         $ignoradosProvider = new ArrayDataProvider([
@@ -943,6 +1077,14 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Añade un juego a la lista de juegos ignorados del usuario.
+     *
+     * @param integer $uId el id del usuario de la lista
+     * @param integer $jId el id del juego que se quiere añadir
+     * @return string
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionAnadirIgnorados($uId, $jId)
     {
         $repetido = Ignorados::find()
@@ -978,6 +1120,14 @@ class UsuariosController extends Controller
         return $this->redirect(['juegos/index']);
     }
 
+    /**
+     * Borra un juego de la lista de bloqueados del usuario
+     *
+     * @param integer $uId el id del usuario
+     * @param integer $jId el id del juego
+     * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionBorrarIgnorados($uId, $jId)
     {
         $ignorado = Ignorados::find()
@@ -989,6 +1139,19 @@ class UsuariosController extends Controller
         return $this->redirect(['juegos/index']);
     }
 
+    /**
+     * Devuelde una vista con la lista de un tipo de usuarios.
+     * Puede ser de usuarios bloqueados por el usuario,
+     * de usuarios normales, críticos, de seguidores, o de usuarios
+     * a los que sigue el usuario.
+     * Tambien muestra la lista filtrada por un texto insertado
+     * como parámetro.
+     *
+     * @param string $texto string que filtrará la lista
+     * @param integer $tipoLista
+     * @return string
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionIndexFiltrado($texto, $tipoLista)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
@@ -1037,6 +1200,14 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Crea una relación de seguimiento entre el usuario del modelo y el
+     * usuario pasado por parametros como ID.
+     *
+     * @param integer $uId el id del usuario a seguir
+     * @return Response|string
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionSeguirCritico($uId)
     {
         $usuario = $this->findModel(Yii::$app->user->id);
@@ -1067,6 +1238,13 @@ class UsuariosController extends Controller
         return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
     }
 
+    /**
+     * Permite prescindir de la relación de seguimiento del usuario
+     * crítico de juegos.
+     *
+     * @param integer $uId
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
+     */
     public function actionAbandonarCritico($uId)
     {
         $relacion = Relaciones::find()
@@ -1093,6 +1271,13 @@ class UsuariosController extends Controller
         return $this->redirect(['index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']);
     }
 
+    /**
+     * Renderiza una vista con la que el usuario puede seleccionar entre
+     * varias imagenes de usuario, para asignarse como imagen de usuario.
+     *
+     * @param integer $id id de usuario
+     * @return boolean|string
+     */
     public function actionCambioImagen($id)
     {
         $model = $this->findModel($id);
@@ -1115,6 +1300,13 @@ class UsuariosController extends Controller
         ]);
     }
 
+    /**
+     * Permite al usuario seleccionar un fondo de perfil, renderiza una
+     * vista con las opciones de imagenes por defecto.
+     *
+     * @param integer $id id del usuario
+     * @return boolean|string
+     */
     public function actionCambioFondo($id)
     {
         $model = $this->findModel($id);
@@ -1138,11 +1330,11 @@ class UsuariosController extends Controller
     }
 
     /**
-     * Finds the Usuarios model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Encuentra el modelo Usuarios basado en la clave primaria.
+     * Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.
      * @param int $id
-     * @return Usuarios the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return Usuarios el modelo cargado
+     * @throws NotFoundHttpException si el modelo no se encuentra
      */
     protected function findModel($id)
     {
@@ -1150,30 +1342,46 @@ class UsuariosController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        throw new NotFoundHttpException('La pagina solicitada no existe');
     }
 
+    /**
+     * Envia el correo de verificación que es producto de la accion
+     * de solicitud de verificación de usuario.
+     *
+     * @param integer $usuarioId el id del usuario al que se le envía el correo
+     * @return void
+     */
     public function enviaCorreoConfirmacion($usuarioId)
     {
         Yii::$app->mailer->compose()
         ->setFrom('gamesandfriends2@gmail.com')
         ->setTo($this->findModel($usuarioId)->email)
         ->setSubject('Confirmacion de registro')
-        ->setHtmlBody('Confirma tu correo electronico con el siguiente enlace: '
-        . Html::a(
-            'Confirmar',
-            Url::to(
-                [
-                    'usuarios/verificar',
-                    'token' => $this->findModel($usuarioId)->token,
-                ],
-                true
+        ->setHtmlBody(
+            'Confirma tu correo electronico con el siguiente enlace: '
+            . Html::a(
+                'Confirmar',
+                Url::to(
+                    [
+                        'usuarios/verificar',
+                        'token' => $this->findModel($usuarioId)->token,
+                    ],
+                    true
+                )
             )
-        ))->send();
+        )->send();
 
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
     }
 
+    /**
+     * Envia un correo de bienvenida al usuario recien registrado.
+     * Funciona tambien como un correo de verificación.
+     *
+     * @param integer $usuarioId el usuario al que envia el correo
+     * @return void
+     */
     public function enviaCorreoBienvenida($usuarioId)
     {
         Yii::$app->mailer->compose(
@@ -1190,6 +1398,13 @@ class UsuariosController extends Controller
         Yii::$app->session->setFlash('success', 'Se ha enviado el correo de confirmacion');
     }
 
+    /**
+     * Envia un correo con la petición de amistad al usuario objetivo
+     * que podrá aceptar.
+     *
+     * @param integer $amigoId el id del usuario objetivo
+     * @return boolean si se envía correctamente el email
+     */
     private function enviaPeticionAmistad($amigoId)
     {
         $correo = Yii::$app->mailer->compose()
@@ -1208,6 +1423,13 @@ class UsuariosController extends Controller
         return false;
     }
 
+    /**
+     * Función que actualiza el orden de la lista de juegos deseados
+     * que se llama cuando un juego es retirado de la lista de deseos.
+     *
+     * @param integer $uId el id del usuario cuya lista se va a ordenar
+     * @return boolean|Response si se actualiza correctamente
+     */
     private function actualizarOrdenDeseados($uId)
     {
         $deseados = Deseados::find()
@@ -1218,9 +1440,6 @@ class UsuariosController extends Controller
         if (!$deseados) {
             return false;
         }
-
-        // var_dump($deseados);
-        // exit;
 
         for ($i = 0; $i < count($deseados); $i++) {
             $deseo = $deseados[$i];
@@ -1234,6 +1453,11 @@ class UsuariosController extends Controller
         return true;
     }
 
+    /**
+     * Función que devuelve el cliente de Amazon S3 que sirve las imagenes de usuario/fondo de usuario
+     *
+     * @return S3Client
+     */
     private function clienteS3()
     {
         $s3 = new S3Client([
