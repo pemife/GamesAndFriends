@@ -113,6 +113,10 @@ AppAsset::register($this);
     <div class="container">
         <p class="float-left">&copy; My Company <?= date('Y') ?></p>
 
+        <p class="float-left ml-2">| <?= Html::a('Contacto', ['site/contact']) ?></p>
+
+        <p class="float-left ml-2">|  <?= Html::a('Acerca de', ['site/about']) ?></p>
+
         <p class="float-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
