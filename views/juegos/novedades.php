@@ -125,10 +125,17 @@ $this->registerCSS($css);
             'itemtype' => 'https://schema.org/VideoGame',
         ],
         'columns' => [
-            [
-              'attribute' => 'titulo',
-              'contentOptions' => ['itemprop' => 'name']
-            ],
+          [
+            'attribute' => 'titulo',
+            'contentOptions' => ['itemprop' => 'name'],
+            'format' => 'raw',
+            'value' => function ($model) {
+                return Html::encode($model->titulo) . '<br>' . Html::a(
+                    Html::img($model->urlImagen, ['class' => 'mt-2', 'height' => 85, 'width' => 170, 'alt' => $model->titulo]),
+                    ['juegos/view', 'id' => $model->id]
+                );
+            }
+          ],
             [
               'attribute' => 'fechalan',
               'format' => 'date',

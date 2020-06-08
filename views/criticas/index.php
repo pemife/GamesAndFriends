@@ -1,5 +1,6 @@
 <?php
 
+use kartik\rating\StarRating;
 use yii\bootstrap4\Html;
 use yii\grid\GridView;
 
@@ -29,10 +30,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'opinion:ntext',
-            'created_at',
             'last_update',
-            'valoracion',
-
+            [
+                'attribute' => 'valoracion',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return StarRating::widget([
+                        'name' => 'rating_35',
+                        'value' => $model->valoracion,
+                        'pluginOptions' => [
+                        'displayOnly' => true,
+                        'size' => 'm',
+                        'showCaption' => false,
+                        ]
+                    ]);
+                }
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {vermercado}',

@@ -50,7 +50,7 @@ $this->title = 'GamesAndFriends';
                     de productos que estan vendiendo los usuarios. ¡Seguro que algo te convence!
                 </p>
 
-                <p><?= Html::a('Posts', ['productos/index'], ['class' => 'btn btn-primary']) ?></p>
+                <p><?= Html::a('Productos', ['productos/index'], ['class' => 'btn btn-primary']) ?></p>
             </div>
         </div>
 

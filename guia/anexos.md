@@ -59,8 +59,26 @@ Estas son las capturas de ejemplo para ver el diseño compatible con cada navega
 
 ### *Prueba del seis*
 
-*1. ¿Qué sitio es éste?*
--GamesAndFriends tiene una barra de navegacion, la cual se encuentra siempre fijada en la parte
-mas alta de la página, de la manera mas comoda, para saber siempre de que pagina se trata. Junto
-con el logo, 
+ 1. ¿Qué sitio es éste?
+- _GamesAndFriends_ tiene una **barra de navegación**, la cual se encuentra siempre fijada en la parte
+mas alta de la página, de la manera mas cómoda, para saber siempre de que página se trata. El **logo**,
+que siempre esta fijado en la parte superior izquierda, permite verlo en todo momento.
 
+ 2. ¿En que página estoy?
+- En todas las páginas a las que se puede acceder en _GamesAndFriends_, hay un widget que muestra
+las **migas de pan** que muestran el camino que hemos seguido para llegar a donde estamos.
+
+ 3. ¿Cuales son las principales secciones del sitio?
+- La página consiste principalmente en **Mercado**, **Comunidad** y **Usuarios**.
+
+ 4. ¿Qué opciones tengo en este nivel?
+- Como usuario, puedes poner en venta un producto, o copia de juego, a su vez, puedes crear posts
+para hablar de juegos, o puedes opinar sobre un juego o producto que tengas en tu inventario. Puedes
+hacerte crítico, dejando opiniones de calidad, y puedes seguir críticos, y hacerte amigo de los
+usuarios participantes.
+
+ 5. ¿Dónde estoy en el esquema de las cosas?
+- Siempre hay un widget que muestra el camino que has recorrido para llegar hasta donde estés.
+
+ 6. ¿Cómo busco algo?
+- En cada índice hay un buscador.
