@@ -53,6 +53,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['fechanac'], 'validaFecha', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_CREATE]],
             [['created_at'], 'safe'],
             [['biografia'], 'string'],
+            [['nombre'], 'validaNombre', 'on' => [self::SCENARIO_UPDATE, self::SCENARIO_CREATE]],
             [['nombre'], 'string', 'max' => 32],
             [['token'], 'string', 'max' => 32, 'on' => [self::SCENARIO_CREATE]],
             [['token'], 'required', 'on' => [self::SCENARIO_CREATE]],
@@ -336,6 +337,19 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         if (strtotime($this->fechanac) > strtotime(date('Y-m-d'))) {
             $this->addError($fecha, 'No puede ser mayor que hoy');
+        }
+    }
+
+    /**
+     * Validador de nombre sin espacios
+     *
+     * @param string $nombre
+     * @return void
+     */
+    public function validaNombre($nombre)
+    {
+        if (sizeof(explode(' ', $this->$nombre)) > 1) {
+            $this->addError($nombre, '¡El nombre de usuario no puede tener espacios!');
         }
     }
 
