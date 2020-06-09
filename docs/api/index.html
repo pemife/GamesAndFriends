@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="language" content="en" />
+        
+<link href="./assets/6993b7a3/css/bootstrap.css" rel="stylesheet">
+<link href="./assets/d9ac8fa7/solarized_light.css" rel="stylesheet">
+<link href="./assets/837a9ec7/style.css" rel="stylesheet">
+<script src="./assets/7bb59eec/jquery.js"></script>
+<script src="./assets/6993b7a3/js/bootstrap.js"></script>
+<script src="./assets/ee881948/jssearch.js"></script>    <title>API del proyecto</title>
+</head>
+<body>
+
+<div class="wrap">
+    <nav id="w17374" class="navbar-inverse navbar-fixed-top navbar"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w17374-collapse"><span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span></button><a class="navbar-brand" href="./index.html">API del proyecto</a></div><div id="w17374-collapse" class="collapse navbar-collapse"><ul id="w17375" class="navbar-nav nav"><li><a href="./index.html">Class reference</a></li>
+<li><a href="../README.html">Guide</a></li></ul><div class="navbar-form navbar-left" role="search">
+  <div class="form-group">
+    <input id="searchbox" type="text" class="form-control" placeholder="Search">
+  </div>
+</div>
+</div></nav>
+    <div id="search-resultbox" style="display: none;" class="modal-content">
+        <ul id="search-results">
+        </ul>
+    </div>
+
+    
+<div class="row">
+    <div class="col-md-3">
+                <div id="navigation" class="list-group"><a class="list-group-item" href="#navigation-17367" data-toggle="collapse" data-parent="#navigation">Not namespaced classes <b class="caret"></b></a><div id="navigation-17367" class="submenu panel-collapse collapse"><a class="list-group-item" href="./yii.html">Yii</a>
+<a class="list-group-item" href="./yiirequirementchecker.html">YiiRequirementChecker</a></div>
+<a class="list-group-item" href="#navigation-17368" data-toggle="collapse" data-parent="#navigation">app\assets <b class="caret"></b></a><div id="navigation-17368" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-assets-appasset.html">AppAsset</a></div>
+<a class="list-group-item" href="#navigation-17369" data-toggle="collapse" data-parent="#navigation">app\commands <b class="caret"></b></a><div id="navigation-17369" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-commands-hellocontroller.html">HelloController</a></div>
+<a class="list-group-item" href="#navigation-17370" data-toggle="collapse" data-parent="#navigation">app\components <b class="caret"></b></a><div id="navigation-17370" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-components-herokutarget.html">HerokuTarget</a></div>
+<a class="list-group-item" href="#navigation-17371" data-toggle="collapse" data-parent="#navigation">app\controllers <b class="caret"></b></a><div id="navigation-17371" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-controllers-comentarioscontroller.html">ComentariosController</a>
+<a class="list-group-item" href="./app-controllers-copiascontroller.html">CopiasController</a>
+<a class="list-group-item" href="./app-controllers-criticascontroller.html">CriticasController</a>
+<a class="list-group-item" href="./app-controllers-etiquetascontroller.html">EtiquetasController</a>
+<a class="list-group-item" href="./app-controllers-juegoscontroller.html">JuegosController</a>
+<a class="list-group-item" href="./app-controllers-postscontroller.html">PostsController</a>
+<a class="list-group-item" href="./app-controllers-productoscontroller.html">ProductosController</a>
+<a class="list-group-item" href="./app-controllers-sitecontroller.html">SiteController</a>
+<a class="list-group-item" href="./app-controllers-usuarioscontroller.html">UsuariosController</a>
+<a class="list-group-item" href="./app-controllers-ventascontroller.html">VentasController</a></div>
+<a class="list-group-item" href="#navigation-17372" data-toggle="collapse" data-parent="#navigation">app\models <b class="caret"></b></a><div id="navigation-17372" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-models-comentarios.html">Comentarios</a>
+<a class="list-group-item" href="./app-models-comentariossearch.html">ComentariosSearch</a>
+<a class="list-group-item" href="./app-models-contactform.html">ContactForm</a>
+<a class="list-group-item" href="./app-models-copias.html">Copias</a>
+<a class="list-group-item" href="./app-models-copiassearch.html">CopiasSearch</a>
+<a class="list-group-item" href="./app-models-criticas.html">Criticas</a>
+<a class="list-group-item" href="./app-models-criticassearch.html">CriticasSearch</a>
+<a class="list-group-item" href="./app-models-deseados.html">Deseados</a>
+<a class="list-group-item" href="./app-models-etiquetas.html">Etiquetas</a>
+<a class="list-group-item" href="./app-models-etiquetassearch.html">EtiquetasSearch</a>
+<a class="list-group-item" href="./app-models-ignorados.html">Ignorados</a>
+<a class="list-group-item" href="./app-models-juegos.html">Juegos</a>
+<a class="list-group-item" href="./app-models-juegossearch.html">JuegosSearch</a>
+<a class="list-group-item" href="./app-models-loginform.html">LoginForm</a>
+<a class="list-group-item" href="./app-models-plataformas.html">Plataformas</a>
+<a class="list-group-item" href="./app-models-posts.html">Posts</a>
+<a class="list-group-item" href="./app-models-postssearch.html">PostsSearch</a>
+<a class="list-group-item" href="./app-models-precios.html">Precios</a>
+<a class="list-group-item" href="./app-models-productos.html">Productos</a>
+<a class="list-group-item" href="./app-models-productossearch.html">ProductosSearch</a>
+<a class="list-group-item" href="./app-models-relaciones.html">Relaciones</a>
+<a class="list-group-item" href="./app-models-reportescomentarios.html">ReportesComentarios</a>
+<a class="list-group-item" href="./app-models-reportescriticas.html">ReportesCriticas</a>
+<a class="list-group-item" href="./app-models-user.html">User</a>
+<a class="list-group-item" href="./app-models-usuarios.html">Usuarios</a>
+<a class="list-group-item" href="./app-models-usuariossearch.html">UsuariosSearch</a>
+<a class="list-group-item" href="./app-models-ventas.html">Ventas</a>
+<a class="list-group-item" href="./app-models-ventassearch.html">VentasSearch</a>
+<a class="list-group-item" href="./app-models-votosposts.html">VotosPosts</a></div>
+<a class="list-group-item" href="#navigation-17373" data-toggle="collapse" data-parent="#navigation">app\widgets <b class="caret"></b></a><div id="navigation-17373" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-widgets-alert.html">Alert</a>
+<a class="list-group-item" href="./app-widgets-datacolumn.html">DataColumn</a></div></div>    </div>
+    <div class="col-md-9 api-content" role="main">
+        <h1>Class Reference</h1>
+
+<table class="summaryTable docIndex table table-bordered table-striped table-hover">
+    <colgroup>
+        <col class="col-package" />
+        <col class="col-class" />
+        <col class="col-description" />
+    </colgroup>
+    <tr>
+        <th>Class</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td><a href="yii.html">Yii</a></td>
+        <td>Yii is a helper class serving common framework functionalities.</td>
+    </tr>
+    <tr>
+        <td><a href="yiirequirementchecker.html">YiiRequirementChecker</a></td>
+        <td>YiiRequirementChecker allows checking, if current system meets the requirements for running the Yii application.</td>
+    </tr>
+    <tr>
+        <td><a href="app-assets-appasset.html">app\assets\AppAsset</a></td>
+        <td>Main application asset bundle.</td>
+    </tr>
+    <tr>
+        <td><a href="app-commands-hellocontroller.html">app\commands\HelloController</a></td>
+        <td>This command echoes the first argument that you have entered.</td>
+    </tr>
+    <tr>
+        <td><a href="app-components-herokutarget.html">app\components\HerokuTarget</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-comentarioscontroller.html">app\controllers\ComentariosController</a></td>
+        <td>ComentariosController implementa las acciones CRUD para el modelo de Comentarios.</td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-copiascontroller.html">app\controllers\CopiasController</a></td>
+        <td>CopiasController implementa las acciones CRUD para el modelo Copias.</td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-criticascontroller.html">app\controllers\CriticasController</a></td>
+        <td>CriticasController implementa las acciones CRUD para el modelo Criticas.</td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-etiquetascontroller.html">app\controllers\EtiquetasController</a></td>
+        <td>EtiquetasController implementa las acciones CRUD para el modelo Etiquetas.</td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-juegoscontroller.html">app\controllers\JuegosController</a></td>
+        <td>JuegosController implementa las acciones CRUD para el modelo Juegos.</td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-postscontroller.html">app\controllers\PostsController</a></td>
+        <td>PostsController implementa las acciones CRUD para el modelo Posts.</td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-productoscontroller.html">app\controllers\ProductosController</a></td>
+        <td>ProductosController implementa las acciones CRUD para el modelo Productos.</td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-sitecontroller.html">app\controllers\SiteController</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+        <td>UsuariosController implementa las acciones CRUD para el modelo Usuarios.</td>
+    </tr>
+    <tr>
+        <td><a href="app-controllers-ventascontroller.html">app\controllers\VentasController</a></td>
+        <td>VentasController implementa las acciones CRUD para el modelo Ventas.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-comentarios.html">app\models\Comentarios</a></td>
+        <td>Esta es la clase modelo para la tabla "comentarios".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-comentariossearch.html">app\models\ComentariosSearch</a></td>
+        <td>ComentariosSearch representa el modelo tras el formulario de busqueda de  <code>app\models\Comentarios</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-contactform.html">app\models\ContactForm</a></td>
+        <td>ContactForm es el modelo tras el formulario de contacto</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-copias.html">app\models\Copias</a></td>
+        <td>Esta es la clase modelo para la tabla copias</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-copiassearch.html">app\models\CopiasSearch</a></td>
+        <td>CopiasSearch representa el modelo tras el formulario de busqueda de <code>app\models\Copias</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-criticas.html">app\models\Criticas</a></td>
+        <td>Esta es la clase modelo para la tabla "criticas".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-criticassearch.html">app\models\CriticasSearch</a></td>
+        <td>CriticasSearch representa el modelo tras el formulario de busqueda de <code>app\models\Criticas</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-deseados.html">app\models\Deseados</a></td>
+        <td>Esta es la clase modelo para la tabla "deseados".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-etiquetas.html">app\models\Etiquetas</a></td>
+        <td>Esta es la clase modelo para la tabla "etiquetas"</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-etiquetassearch.html">app\models\EtiquetasSearch</a></td>
+        <td>EtiquetasSearch representa el modelo tras el formulario de busqueda de <code>app\models\Etiquetas</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-ignorados.html">app\models\Ignorados</a></td>
+        <td>Esta es la clase modelo para la tabla "juegos_ignorados".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-juegos.html">app\models\Juegos</a></td>
+        <td>Esta es la clase modelo para la tabla "juegos".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-juegossearch.html">app\models\JuegosSearch</a></td>
+        <td>JuegosSearch representa el modelo tras el formulario de busqueda de <code>app\models\Juegos</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-loginform.html">app\models\LoginForm</a></td>
+        <td>Loginform es el modelo tras el formulario de login</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-plataformas.html">app\models\Plataformas</a></td>
+        <td>Esta es la clase modelo para la tabla "plataformas".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-posts.html">app\models\Posts</a></td>
+        <td>Esta es una clase modelo para la tabla "posts".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-postssearch.html">app\models\PostsSearch</a></td>
+        <td>PostsSearch representa el modelo tras el formulario de busqueda de <code>app\models\Posts</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-precios.html">app\models\Precios</a></td>
+        <td>Esta es la clase modelo para la tabla "precios".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-productos.html">app\models\Productos</a></td>
+        <td>Esta es la clase modelo para la tabla "productos".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-productossearch.html">app\models\ProductosSearch</a></td>
+        <td>ProductosSearch representa el modelo tras el formulario de busqueda de <code>app\models\Productos</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-relaciones.html">app\models\Relaciones</a></td>
+        <td>Esta es la clase modelo para la tabla "relaciones".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-reportescomentarios.html">app\models\ReportesComentarios</a></td>
+        <td>Esta es la clase modelo para la tabla "reportes_comentarios".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-reportescriticas.html">app\models\ReportesCriticas</a></td>
+        <td>Esta es la clase modelo para la tabla "reportes_criticas".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-user.html">app\models\User</a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="app-models-usuarios.html">app\models\Usuarios</a></td>
+        <td>Esta es la clase modelo para la tabla "usuarios".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-usuariossearch.html">app\models\UsuariosSearch</a></td>
+        <td>UsuariosSearch representa el modelo tras el formulario de busqueda de <code>app\models\Usuarios</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-ventas.html">app\models\Ventas</a></td>
+        <td>Esta es la clase modelo para la tabla "ventas".</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-ventassearch.html">app\models\VentasSearch</a></td>
+        <td>VentasSearch representa el modelo tras el formulario de busqueda de <code>app\models\Ventas</code>.</td>
+    </tr>
+    <tr>
+        <td><a href="app-models-votosposts.html">app\models\VotosPosts</a></td>
+        <td>Esta es la clase modelo para la tabla "votos_posts".</td>
+    </tr>
+    <tr>
+        <td><a href="app-widgets-alert.html">app\widgets\Alert</a></td>
+        <td>Alert widget renders a message from session flash. All flash messages are displayed
+in the sequence they were assigned using setFlash. You can set message as following:</td>
+    </tr>
+    <tr>
+        <td><a href="app-widgets-datacolumn.html">app\widgets\DataColumn</a></td>
+        <td></td>
+    </tr>
+</table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    $("a.toggle").on('click', function () {
+        var $this = $(this);
+        if ($this.hasClass('properties-hidden')) {
+            $this.text($this.text().replace(/Show/,'Hide'));
+            $this.parents(".summary").find(".inherited").show();
+            $this.removeClass('properties-hidden');
+        } else {
+            $this.text($this.text().replace(/Hide/,'Show'));
+            $this.parents(".summary").find(".inherited").hide();
+            $this.addClass('properties-hidden');
+        }
+
+        return false;
+    });
+    /*
+     $(".sourceCode a.show").toggle(function () {
+     $(this).text($(this).text().replace(/show/,'hide'));
+     $(this).parents(".sourceCode").find("div.code").show();
+     },function () {
+     $(this).text($(this).text().replace(/hide/,'show'));
+     $(this).parents(".sourceCode").find("div.code").hide();
+     });
+     $("a.sourceLink").click(function () {
+     $(this).attr('target','_blank');
+     });
+     */
+    /*]]>*/
+</script>
+
+
+</div>
+
+<footer class="footer">
+        <p class="pull-right"><small>Page generated on Tue, 09 Jun 2020 08:33:47 +0000</small></p>
+    Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
+
+<script>jQuery(function ($) {
+    var shiftWindow = function () { scrollBy(0, -50) };
+    if (location.hash) setTimeout(shiftWindow, 1);
+    window.addEventListener("hashchange", shiftWindow);
+var element = document.createElement("script");
+element.src = "./jssearch.index.js";
+document.body.appendChild(element);
+
+var searchBox = $('#searchbox');
+
+// search when typing in search field
+searchBox.on("keyup", function(event) {
+    var query = $(this).val();
+
+    if (query == '' || event.which == 27) {
+        $('#search-resultbox').hide();
+        return;
+    } else if (event.which == 13) {
+        var selectedLink = $('#search-resultbox a.selected');
+        if (selectedLink.length != 0) {
+            document.location = selectedLink.attr('href');
+            return;
+        }
+    } else if (event.which == 38 || event.which == 40) {
+        $('#search-resultbox').show();
+
+        var selected = $('#search-resultbox a.selected');
+        if (selected.length == 0) {
+            $('#search-results').find('a').first().addClass('selected');
+        } else {
+            var next;
+            if (event.which == 40) {
+                next = selected.parent().next().find('a').first();
+            } else {
+                next = selected.parent().prev().find('a').first();
+            }
+            if (next.length != 0) {
+                var resultbox = $('#search-results');
+                var position = next.position();
+
+//              TODO scrolling is buggy and jumps around
+//                resultbox.scrollTop(Math.floor(position.top));
+//                console.log(position.top);
+
+                selected.removeClass('selected');
+                next.addClass('selected');
+            }
+        }
+
+        return;
+    }
+    $('#search-resultbox').show();
+    $('#search-results').html('<li><span class="no-results">No results</span></li>');
+
+    var result = jssearch.search(query);
+
+    if (result.length > 0) {
+        var i = 0;
+        var resHtml = '';
+
+        for (var key in result) {
+            if (i++ > 20) {
+                break;
+            }
+            resHtml = resHtml +
+            '<li><a href="' + result[key].file.u.substr(3) +'"><span class="title">' + result[key].file.t + '</span>' +
+            '<span class="description">' + result[key].file.d + '</span></a></li>';
+        }
+        $('#search-results').html(resHtml);
+    }
+});
+
+// hide the search results on ESC
+$(document).on("keyup", function(event) { if (event.which == 27) { $('#search-resultbox').hide(); } });
+// hide search results on click to document
+$(document).bind('click', function (e) { $('#search-resultbox').hide(); });
+// except the following:
+searchBox.bind('click', function(e) { e.stopPropagation(); });
+$('#search-resultbox').bind('click', function(e) { e.stopPropagation(); });
+
+});</script></body>
+</html>

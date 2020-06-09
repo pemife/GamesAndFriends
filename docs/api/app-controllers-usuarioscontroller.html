@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="language" content="en" />
+        
+<link href="./assets/6993b7a3/css/bootstrap.css" rel="stylesheet">
+<link href="./assets/d9ac8fa7/solarized_light.css" rel="stylesheet">
+<link href="./assets/837a9ec7/style.css" rel="stylesheet">
+<script src="./assets/7bb59eec/jquery.js"></script>
+<script src="./assets/6993b7a3/js/bootstrap.js"></script>
+<script src="./assets/ee881948/jssearch.js"></script>    <title>UsuariosController, app\controllers\UsuariosController - API del proyecto</title>
+</head>
+<body>
+
+<div class="wrap">
+    <nav id="w7" class="navbar-inverse navbar-fixed-top navbar"><div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w7-collapse"><span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span></button><a class="navbar-brand" href="./index.html">API del proyecto</a></div><div id="w7-collapse" class="collapse navbar-collapse"><ul id="w8" class="navbar-nav nav"><li><a href="./index.html">Class reference</a></li>
+<li><a href="../README.html">Guide</a></li></ul><div class="navbar-form navbar-left" role="search">
+  <div class="form-group">
+    <input id="searchbox" type="text" class="form-control" placeholder="Search">
+  </div>
+</div>
+</div></nav>
+    <div id="search-resultbox" style="display: none;" class="modal-content">
+        <ul id="search-results">
+        </ul>
+    </div>
+
+    
+<div class="row">
+    <div class="col-md-3">
+                <div id="navigation" class="list-group"><a class="list-group-item" href="#navigation-0" data-toggle="collapse" data-parent="#navigation">Not namespaced classes <b class="caret"></b></a><div id="navigation-0" class="submenu panel-collapse collapse"><a class="list-group-item" href="./yii.html">Yii</a>
+<a class="list-group-item" href="./yiirequirementchecker.html">YiiRequirementChecker</a></div>
+<a class="list-group-item" href="#navigation-1" data-toggle="collapse" data-parent="#navigation">app\assets <b class="caret"></b></a><div id="navigation-1" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-assets-appasset.html">AppAsset</a></div>
+<a class="list-group-item" href="#navigation-2" data-toggle="collapse" data-parent="#navigation">app\commands <b class="caret"></b></a><div id="navigation-2" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-commands-hellocontroller.html">HelloController</a></div>
+<a class="list-group-item" href="#navigation-3" data-toggle="collapse" data-parent="#navigation">app\components <b class="caret"></b></a><div id="navigation-3" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-components-herokutarget.html">HerokuTarget</a></div>
+<a class="list-group-item active" href="#navigation-4" data-toggle="collapse" data-parent="#navigation">app\controllers <b class="caret"></b></a><div id="navigation-4" class="submenu panel-collapse collapse in"><a class="list-group-item" href="./app-controllers-comentarioscontroller.html">ComentariosController</a>
+<a class="list-group-item" href="./app-controllers-copiascontroller.html">CopiasController</a>
+<a class="list-group-item" href="./app-controllers-criticascontroller.html">CriticasController</a>
+<a class="list-group-item" href="./app-controllers-etiquetascontroller.html">EtiquetasController</a>
+<a class="list-group-item" href="./app-controllers-juegoscontroller.html">JuegosController</a>
+<a class="list-group-item" href="./app-controllers-postscontroller.html">PostsController</a>
+<a class="list-group-item" href="./app-controllers-productoscontroller.html">ProductosController</a>
+<a class="list-group-item" href="./app-controllers-sitecontroller.html">SiteController</a>
+<a class="list-group-item active" href="./app-controllers-usuarioscontroller.html">UsuariosController</a>
+<a class="list-group-item" href="./app-controllers-ventascontroller.html">VentasController</a></div>
+<a class="list-group-item" href="#navigation-5" data-toggle="collapse" data-parent="#navigation">app\models <b class="caret"></b></a><div id="navigation-5" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-models-comentarios.html">Comentarios</a>
+<a class="list-group-item" href="./app-models-comentariossearch.html">ComentariosSearch</a>
+<a class="list-group-item" href="./app-models-contactform.html">ContactForm</a>
+<a class="list-group-item" href="./app-models-copias.html">Copias</a>
+<a class="list-group-item" href="./app-models-copiassearch.html">CopiasSearch</a>
+<a class="list-group-item" href="./app-models-criticas.html">Criticas</a>
+<a class="list-group-item" href="./app-models-criticassearch.html">CriticasSearch</a>
+<a class="list-group-item" href="./app-models-deseados.html">Deseados</a>
+<a class="list-group-item" href="./app-models-etiquetas.html">Etiquetas</a>
+<a class="list-group-item" href="./app-models-etiquetassearch.html">EtiquetasSearch</a>
+<a class="list-group-item" href="./app-models-ignorados.html">Ignorados</a>
+<a class="list-group-item" href="./app-models-juegos.html">Juegos</a>
+<a class="list-group-item" href="./app-models-juegossearch.html">JuegosSearch</a>
+<a class="list-group-item" href="./app-models-loginform.html">LoginForm</a>
+<a class="list-group-item" href="./app-models-plataformas.html">Plataformas</a>
+<a class="list-group-item" href="./app-models-posts.html">Posts</a>
+<a class="list-group-item" href="./app-models-postssearch.html">PostsSearch</a>
+<a class="list-group-item" href="./app-models-precios.html">Precios</a>
+<a class="list-group-item" href="./app-models-productos.html">Productos</a>
+<a class="list-group-item" href="./app-models-productossearch.html">ProductosSearch</a>
+<a class="list-group-item" href="./app-models-relaciones.html">Relaciones</a>
+<a class="list-group-item" href="./app-models-reportescomentarios.html">ReportesComentarios</a>
+<a class="list-group-item" href="./app-models-reportescriticas.html">ReportesCriticas</a>
+<a class="list-group-item" href="./app-models-user.html">User</a>
+<a class="list-group-item" href="./app-models-usuarios.html">Usuarios</a>
+<a class="list-group-item" href="./app-models-usuariossearch.html">UsuariosSearch</a>
+<a class="list-group-item" href="./app-models-ventas.html">Ventas</a>
+<a class="list-group-item" href="./app-models-ventassearch.html">VentasSearch</a>
+<a class="list-group-item" href="./app-models-votosposts.html">VotosPosts</a></div>
+<a class="list-group-item" href="#navigation-6" data-toggle="collapse" data-parent="#navigation">app\widgets <b class="caret"></b></a><div id="navigation-6" class="submenu panel-collapse collapse"><a class="list-group-item" href="./app-widgets-alert.html">Alert</a>
+<a class="list-group-item" href="./app-widgets-datacolumn.html">DataColumn</a></div></div>    </div>
+    <div class="col-md-9 api-content" role="main">
+        <h1>Class app\controllers\UsuariosController</h1>
+<div class="top-nav">
+    <a href="index.html">All Classes</a>
+            | <a href="#properties">Properties</a>
+                | <a href="#methods">Methods</a>
+                | <a href="#events">Events</a>
+        </div>
+
+<table class="summaryTable docClass table table-bordered">
+    <colgroup>
+        <col class="col-name" />
+        <col class="col-value" />
+    </colgroup>
+            <tr><th>Inheritance</th><td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a> &raquo;
+<a href="yii-web-controller.html">yii\web\Controller</a> &raquo;
+<a href="yii-base-controller.html">yii\base\Controller</a> &raquo;
+<a href="yii-base-component.html">yii\base\Component</a> &raquo;
+<a href="yii-base-baseobject.html">yii\base\BaseObject</a></td></tr>
+                <tr><th>Implements</th><td><a href="yii-base-configurable.html">yii\base\Configurable</a>, <a href="yii-base-viewcontextinterface.html">yii\base\ViewContextInterface</a></td></tr>
+                                    </table>
+
+<div class="class-description">
+    <p><strong>UsuariosController implementa las acciones CRUD para el modelo Usuarios.</strong></p>
+    
+    </div>
+
+<a id="properties"></a>
+
+<div class="summary doc-property">
+<h2>Public Properties</h2>
+
+<p><a href="#" class="toggle">Hide inherited properties</a></p>
+
+<table class="summary-table table table-striped table-bordered table-hover">
+<colgroup>
+    <col class="col-property" />
+    <col class="col-type" />
+    <col class="col-description" />
+    <col class="col-defined" />
+</colgroup>
+<tr>
+  <th>Property</th><th>Type</th><th>Description</th><th>Defined By</th>
+</tr>
+        <tr class="inherited" id="$action">
+        <td><a href="yii-base-controller.html#$action-detail">$action</a></td>
+        <td><a href="yii-base-action.html">yii\base\Action</a></td>
+        <td>The action that is currently being executed.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$actionParams">
+        <td><a href="yii-web-controller.html#$actionParams-detail">$actionParams</a></td>
+        <td><a href="http://www.php.net/language.types.array">array</a></td>
+        <td>The parameters bound to the current action.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$behaviors">
+        <td><a href="yii-base-component.html#$behaviors-detail">$behaviors</a></td>
+        <td><a href="yii-base-behavior.html">yii\base\Behavior</a>[]</td>
+        <td>List of behaviors attached to this component</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="$defaultAction">
+        <td><a href="yii-base-controller.html#$defaultAction-detail">$defaultAction</a></td>
+        <td><a href="http://www.php.net/language.types.string">string</a></td>
+        <td>The ID of the action that is used when the action ID is not specified
+in the request.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$enableCsrfValidation">
+        <td><a href="yii-web-controller.html#$enableCsrfValidation-detail">$enableCsrfValidation</a></td>
+        <td><a href="http://www.php.net/language.types.boolean">boolean</a></td>
+        <td>Whether to enable CSRF validation for the actions in this controller.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$id">
+        <td><a href="yii-base-controller.html#$id-detail">$id</a></td>
+        <td><a href="http://www.php.net/language.types.string">string</a></td>
+        <td>The ID of this controller.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$layout">
+        <td><a href="yii-base-controller.html#$layout-detail">$layout</a></td>
+        <td><a href="http://www.php.net/language.types.null">null</a>|<a href="http://www.php.net/language.types.string">string</a>|<a href="http://www.php.net/language.types.boolean">false</a></td>
+        <td>The name of the layout to be applied to this controller's views.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$module">
+        <td><a href="yii-base-controller.html#$module-detail">$module</a></td>
+        <td><a href="yii-base-module.html">yii\base\Module</a></td>
+        <td>The module that this controller belongs to.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$modules">
+        <td><a href="yii-base-controller.html#$modules-detail">$modules</a></td>
+        <td><a href="yii-base-module.html">yii\base\Module</a>[]</td>
+        <td>All ancestor modules that this controller is located within.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$route">
+        <td><a href="yii-base-controller.html#$route-detail">$route</a></td>
+        <td><a href="http://www.php.net/language.types.string">string</a></td>
+        <td>The route (module ID, controller ID and action ID) of the current request.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$uniqueId">
+        <td><a href="yii-base-controller.html#$uniqueId-detail">$uniqueId</a></td>
+        <td><a href="http://www.php.net/language.types.string">string</a></td>
+        <td>The controller ID that is prefixed with the module ID (if any).</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$view">
+        <td><a href="yii-base-controller.html#$view-detail">$view</a></td>
+        <td><a href="yii-base-view.html">yii\base\View</a>|<a href="yii-web-view.html">yii\web\View</a></td>
+        <td>The view object that can be used to render views or view files.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="$viewPath">
+        <td><a href="yii-base-controller.html#$viewPath-detail">$viewPath</a></td>
+        <td><a href="http://www.php.net/language.types.string">string</a></td>
+        <td>The directory containing the view files for this controller.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+    </table>
+</div>
+
+<a id="methods"></a>
+
+<div class="summary doc-method">
+<h2>Public Methods</h2>
+
+<p><a href="#" class="toggle">Hide inherited methods</a></p>
+
+<table class="summary-table table table-striped table-bordered table-hover">
+<colgroup>
+    <col class="col-method" />
+    <col class="col-description" />
+    <col class="col-defined" />
+</colgroup>
+<tr>
+  <th>Method</th><th>Description</th><th>Defined By</th>
+</tr>
+        <tr class="inherited" id="__call()">
+        <td><a href="yii-base-baseobject.html#__call()-detail">__call()</a></td>
+        <td>Calls the named method which is not a class method.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="__clone()">
+        <td><a href="yii-base-component.html#__clone()-detail">__clone()</a></td>
+        <td>This method is called after the object is created by cloning an existing one.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="__construct()">
+        <td><a href="yii-base-controller.html#__construct()-detail">__construct()</a></td>
+        <td></td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="__get()">
+        <td><a href="yii-base-baseobject.html#__get()-detail">__get()</a></td>
+        <td>Returns the value of an object property.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="__isset()">
+        <td><a href="yii-base-baseobject.html#__isset()-detail">__isset()</a></td>
+        <td>Checks if a property is set, i.e. defined and not null.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="__set()">
+        <td><a href="yii-base-baseobject.html#__set()-detail">__set()</a></td>
+        <td>Sets value of an object property.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="__unset()">
+        <td><a href="yii-base-baseobject.html#__unset()-detail">__unset()</a></td>
+        <td>Sets an object property to null.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr id="actionAbandonarCritico()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionAbandonarCritico()-detail">actionAbandonarCritico()</a></td>
+        <td>Permite prescindir de la relación de seguimiento del usuario
+crítico de juegos.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionAnadirAmigo()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionAnadirAmigo()-detail">actionAnadirAmigo()</a></td>
+        <td>Añade a otro usuario a una relacion con el usuario con
+la sesion iniciada, y los relaciona como amigos.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionAnadirDeseos()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionAnadirDeseos()-detail">actionAnadirDeseos()</a></td>
+        <td>Añade un juego a la lista de deseos de un usuario</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionAnadirIgnorados()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionAnadirIgnorados()-detail">actionAnadirIgnorados()</a></td>
+        <td>Añade un juego a la lista de juegos ignorados del usuario.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionAnadirInventario()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionAnadirInventario()-detail">actionAnadirInventario()</a></td>
+        <td>Muestra una vista donde puede elegir si quiere añadir un juego o un producto
+a su inventario, para su posterior venta.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionBloquearUsuario()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionBloquearUsuario()-detail">actionBloquearUsuario()</a></td>
+        <td>Crea un bloqueo entre usuarios, lo que negara varios tipos de
+contenido entre los usuarios que esten bloqueados.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionBorrarAmigo()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionBorrarAmigo()-detail">actionBorrarAmigo()</a></td>
+        <td>Borra la relacion entre dos usuarios que eran amigos</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionBorrarDeseos()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionBorrarDeseos()-detail">actionBorrarDeseos()</a></td>
+        <td>Borra un juego de la lista de deseos</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionBorrarIgnorados()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionBorrarIgnorados()-detail">actionBorrarIgnorados()</a></td>
+        <td>Borra un juego de la lista de bloqueados del usuario</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionCambioFondo()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionCambioFondo()-detail">actionCambioFondo()</a></td>
+        <td>Permite al usuario seleccionar un fondo de perfil, renderiza una
+vista con las opciones de imagenes por defecto.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionCambioImagen()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionCambioImagen()-detail">actionCambioImagen()</a></td>
+        <td>Renderiza una vista con la que el usuario puede seleccionar entre
+varias imagenes de usuario, para asignarse como imagen de usuario.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionCambioPass()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionCambioPass()-detail">actionCambioPass()</a></td>
+        <td>Funcion que permite el cambio de contraseña de usuario.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionCreate()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionCreate()-detail">actionCreate()</a></td>
+        <td>Crea un nuevo modelo Usuarios.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionDelete()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionDelete()-detail">actionDelete()</a></td>
+        <td>Borra un modelo Usuarios.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionDesbloquearUsuario()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionDesbloquearUsuario()-detail">actionDesbloquearUsuario()</a></td>
+        <td>Permite desbloquear a usuarios entre sí</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionIndex()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionIndex()-detail">actionIndex()</a></td>
+        <td>Lista todos los modelos de usuario</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionIndexFiltrado()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionIndexFiltrado()-detail">actionIndexFiltrado()</a></td>
+        <td>Devuelde una vista con la lista de un tipo de usuarios.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionListaAmigos()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionListaAmigos()-detail">actionListaAmigos()</a></td>
+        <td>Devuelve la renderización en AJAX de una tabla con los
+usuarios que sean amigos del usuario cuyo ID se ha pasado
+como parametro de la funcion.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionListaBloqueados()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionListaBloqueados()-detail">actionListaBloqueados()</a></td>
+        <td>Renderiza por una peticion AJAX, una vista con los usuarios bloqueados.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionMandarPeticion()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionMandarPeticion()-detail">actionMandarPeticion()</a></td>
+        <td>Manda una peticion de amistad por correo al usuario obetivo
+que podrá aceptar.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionOrdenarListaDeseos()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionOrdenarListaDeseos()-detail">actionOrdenarListaDeseos()</a></td>
+        <td>Ordena la lista de deseos con un nuevo orden</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionSeguirCritico()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionSeguirCritico()-detail">actionSeguirCritico()</a></td>
+        <td>Crea una relación de seguimiento entre el usuario del modelo y el
+usuario pasado por parametros como ID.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionSolicitarVerificacion()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionSolicitarVerificacion()-detail">actionSolicitarVerificacion()</a></td>
+        <td>Permite solicitar la verificación del correo electronico, enviando
+un enlace de verificación</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionUpdate()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionUpdate()-detail">actionUpdate()</a></td>
+        <td>Actualiza un modelo Usuarios.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionVerListaDeseos()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionVerListaDeseos()-detail">actionVerListaDeseos()</a></td>
+        <td>Muestra una vista con todos los juegos que desea un usuario
+Esta acción está limitada a los usuarios relacionados
+a la lista de deseos y a sus amigos.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionVerListaIgnorados()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionVerListaIgnorados()-detail">actionVerListaIgnorados()</a></td>
+        <td>Accion que renderiza la lista de juegos que el usuario ha ignorado</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionVerificar()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionVerificar()-detail">actionVerificar()</a></td>
+        <td>Acción que verifica la dirección de correo del usuario</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="actionView()">
+        <td><a href="app-controllers-usuarioscontroller.html#actionView()-detail">actionView()</a></td>
+        <td>Muestra un único modelo Usuarios.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr class="inherited" id="actions()">
+        <td><a href="yii-base-controller.html#actions()-detail">actions()</a></td>
+        <td>Declares external actions for the controller.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="afterAction()">
+        <td><a href="yii-base-controller.html#afterAction()-detail">afterAction()</a></td>
+        <td>This method is invoked right after an action is executed.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="asJson()">
+        <td><a href="yii-web-controller.html#asJson()-detail">asJson()</a></td>
+        <td>Send data formatted as JSON.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="asXml()">
+        <td><a href="yii-web-controller.html#asXml()-detail">asXml()</a></td>
+        <td>Send data formatted as XML.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="attachBehavior()">
+        <td><a href="yii-base-component.html#attachBehavior()-detail">attachBehavior()</a></td>
+        <td>Attaches a behavior to this component.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="attachBehaviors()">
+        <td><a href="yii-base-component.html#attachBehaviors()-detail">attachBehaviors()</a></td>
+        <td>Attaches a list of behaviors to the component.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="beforeAction()">
+        <td><a href="yii-base-controller.html#beforeAction()-detail">beforeAction()</a></td>
+        <td>This method is invoked right before an action is executed.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr id="behaviors()">
+        <td><a href="app-controllers-usuarioscontroller.html#behaviors()-detail">behaviors()</a></td>
+        <td>Returns a list of behaviors that this component should behave as.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr class="inherited" id="bindActionParams()">
+        <td><a href="yii-base-controller.html#bindActionParams()-detail">bindActionParams()</a></td>
+        <td>Binds the parameters to the action.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="canGetProperty()">
+        <td><a href="yii-base-baseobject.html#canGetProperty()-detail">canGetProperty()</a></td>
+        <td>Returns a value indicating whether a property can be read.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="canSetProperty()">
+        <td><a href="yii-base-baseobject.html#canSetProperty()-detail">canSetProperty()</a></td>
+        <td>Returns a value indicating whether a property can be set.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="className()">
+        <td><a href="yii-base-baseobject.html#className()-detail">className()</a></td>
+        <td>Returns the fully qualified name of this class.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="createAction()">
+        <td><a href="yii-base-controller.html#createAction()-detail">createAction()</a></td>
+        <td>Creates an action based on the given action ID.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="detachBehavior()">
+        <td><a href="yii-base-component.html#detachBehavior()-detail">detachBehavior()</a></td>
+        <td>Detaches a behavior from the component.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="detachBehaviors()">
+        <td><a href="yii-base-component.html#detachBehaviors()-detail">detachBehaviors()</a></td>
+        <td>Detaches all behaviors from the component.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="ensureBehaviors()">
+        <td><a href="yii-base-component.html#ensureBehaviors()-detail">ensureBehaviors()</a></td>
+        <td>Makes sure that the behaviors declared in <a href="yii-base-component.html#behaviors()-detail">behaviors()</a> are attached to this component.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr id="enviaCorreoBienvenida()">
+        <td><a href="app-controllers-usuarioscontroller.html#enviaCorreoBienvenida()-detail">enviaCorreoBienvenida()</a></td>
+        <td>Envia un correo de bienvenida al usuario recien registrado.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr id="enviaCorreoConfirmacion()">
+        <td><a href="app-controllers-usuarioscontroller.html#enviaCorreoConfirmacion()-detail">enviaCorreoConfirmacion()</a></td>
+        <td>Envia el correo de verificación que es producto de la accion
+de solicitud de verificación de usuario.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+            <tr class="inherited" id="findLayoutFile()">
+        <td><a href="yii-base-controller.html#findLayoutFile()-detail">findLayoutFile()</a></td>
+        <td>Finds the applicable layout file.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+                <tr class="inherited" id="getBehavior()">
+        <td><a href="yii-base-component.html#getBehavior()-detail">getBehavior()</a></td>
+        <td>Returns the named behavior object.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="getBehaviors()">
+        <td><a href="yii-base-component.html#getBehaviors()-detail">getBehaviors()</a></td>
+        <td>Returns all behaviors attached to this component.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="getModules()">
+        <td><a href="yii-base-controller.html#getModules()-detail">getModules()</a></td>
+        <td>Returns all ancestor modules of this controller.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="getRoute()">
+        <td><a href="yii-base-controller.html#getRoute()-detail">getRoute()</a></td>
+        <td>Returns the route of the current request.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="getUniqueId()">
+        <td><a href="yii-base-controller.html#getUniqueId()-detail">getUniqueId()</a></td>
+        <td>Returns the unique ID of the controller.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="getView()">
+        <td><a href="yii-base-controller.html#getView()-detail">getView()</a></td>
+        <td>Returns the view object that can be used to render views or view files.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="getViewPath()">
+        <td><a href="yii-base-controller.html#getViewPath()-detail">getViewPath()</a></td>
+        <td>Returns the directory containing view files for this controller.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="goBack()">
+        <td><a href="yii-web-controller.html#goBack()-detail">goBack()</a></td>
+        <td>Redirects the browser to the last visited page.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="goHome()">
+        <td><a href="yii-web-controller.html#goHome()-detail">goHome()</a></td>
+        <td>Redirects the browser to the home page.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="hasEventHandlers()">
+        <td><a href="yii-base-component.html#hasEventHandlers()-detail">hasEventHandlers()</a></td>
+        <td>Returns a value indicating whether there is any handler attached to the named event.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="hasMethod()">
+        <td><a href="yii-base-baseobject.html#hasMethod()-detail">hasMethod()</a></td>
+        <td>Returns a value indicating whether a method is defined.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="hasProperty()">
+        <td><a href="yii-base-baseobject.html#hasProperty()-detail">hasProperty()</a></td>
+        <td>Returns a value indicating whether a property is defined.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="init()">
+        <td><a href="yii-base-baseobject.html#init()-detail">init()</a></td>
+        <td>Initializes the object.</td>
+        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+    </tr>
+            <tr class="inherited" id="off()">
+        <td><a href="yii-base-component.html#off()-detail">off()</a></td>
+        <td>Detaches an existing event handler from this component.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="on()">
+        <td><a href="yii-base-component.html#on()-detail">on()</a></td>
+        <td>Attaches an event handler to an event.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+            <tr class="inherited" id="redirect()">
+        <td><a href="yii-web-controller.html#redirect()-detail">redirect()</a></td>
+        <td>Redirects the browser to the specified URL.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="refresh()">
+        <td><a href="yii-web-controller.html#refresh()-detail">refresh()</a></td>
+        <td>Refreshes the current page.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="render()">
+        <td><a href="yii-base-controller.html#render()-detail">render()</a></td>
+        <td>Renders a view and applies layout if available.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="renderAjax()">
+        <td><a href="yii-web-controller.html#renderAjax()-detail">renderAjax()</a></td>
+        <td>Renders a view in response to an AJAX request.</td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="renderContent()">
+        <td><a href="yii-base-controller.html#renderContent()-detail">renderContent()</a></td>
+        <td>Renders a static string by applying a layout.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="renderFile()">
+        <td><a href="yii-base-controller.html#renderFile()-detail">renderFile()</a></td>
+        <td>Renders a view file.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="renderPartial()">
+        <td><a href="yii-base-controller.html#renderPartial()-detail">renderPartial()</a></td>
+        <td>Renders a view without applying layout.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="run()">
+        <td><a href="yii-base-controller.html#run()-detail">run()</a></td>
+        <td>Runs a request specified in terms of a route.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="runAction()">
+        <td><a href="yii-base-controller.html#runAction()-detail">runAction()</a></td>
+        <td>Runs an action within this controller with the specified action ID and parameters.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="setView()">
+        <td><a href="yii-base-controller.html#setView()-detail">setView()</a></td>
+        <td>Sets the view object to be used by this controller.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="setViewPath()">
+        <td><a href="yii-base-controller.html#setViewPath()-detail">setViewPath()</a></td>
+        <td>Sets the directory that contains the view files.</td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+            <tr class="inherited" id="trigger()">
+        <td><a href="yii-base-component.html#trigger()-detail">trigger()</a></td>
+        <td>Triggers an event.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
+    </tr>
+    </table>
+</div>
+
+<div class="summary doc-method">
+<h2>Protected Methods</h2>
+
+<p><a href="#" class="toggle">Hide inherited methods</a></p>
+
+<table class="summary-table table table-striped table-bordered table-hover">
+<colgroup>
+    <col class="col-method" />
+    <col class="col-description" />
+    <col class="col-defined" />
+</colgroup>
+<tr>
+  <th>Method</th><th>Description</th><th>Defined By</th>
+</tr>
+                                                                                                                                                                                                                                <tr id="findModel()">
+        <td><a href="app-controllers-usuarioscontroller.html#findModel()-detail">findModel()</a></td>
+        <td>Encuentra el modelo Usuarios basado en la clave primaria.</td>
+        <td><a href="app-controllers-usuarioscontroller.html">app\controllers\UsuariosController</a></td>
+    </tr>
+                                                                                                                </table>
+</div>
+
+<a id="events"></a>
+<div class="summary doc-event">
+    <h2>Events</h2>
+
+    <p><a href="#" class="toggle">Hide inherited events</a></p>
+
+    <table class="summary-table table table-striped table-bordered table-hover">
+    <colgroup>
+        <col class="col-event" />
+        <col class="col-type" />
+        <col class="col-description" />
+        <col class="col-defined" />
+    </colgroup>
+    <tr>
+        <th>Event</th><th>Type</th><th>Description</th><th>Defined By</th>
+    </tr>
+        <tr class="inherited" id="EVENT_AFTER_ACTION">
+        <td><a href="yii-base-controller.html#EVENT_AFTER_ACTION-detail">EVENT_AFTER_ACTION</a></td>
+        <td><a href="yii-base-actionevent.html">yii\base\ActionEvent</a></td>
+        <td>
+            An event raised right after executing a controller action.                    </td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+        <tr class="inherited" id="EVENT_BEFORE_ACTION">
+        <td><a href="yii-base-controller.html#EVENT_BEFORE_ACTION-detail">EVENT_BEFORE_ACTION</a></td>
+        <td><a href="yii-base-actionevent.html">yii\base\ActionEvent</a></td>
+        <td>
+            An event raised right before executing a controller action.                    </td>
+        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+    </tr>
+        </table>
+</div>
+
+<a id="constants"></a>
+
+<h2>Method Details</h2>
+
+<div class="method-doc">
+
+    <div class="detail-header h3" id="actionAbandonarCritico()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionAbandonarCritico()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionAbandonarCritico()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Permite prescindir de la relación de seguimiento del usuario
+crítico de juegos.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">void</span> <strong><a href="app-controllers-usuarioscontroller.html#actionAbandonarCritico()-detail">actionAbandonarCritico</a></strong> ( <span style="color: #0000BB">$uId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$uId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionAnadirAmigo()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionAnadirAmigo()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionAnadirAmigo()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Añade a otro usuario a una relacion con el usuario con
+la sesion iniciada, y los relaciona como amigos.</strong></p>
+
+        <p>Esta acción está limitada al usuario al que fué mandada
+la peticion de amistad.
+(siempre que este usuario no esté bloqueado por el primer usuario).</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response</span> <strong><a href="app-controllers-usuarioscontroller.html#actionAnadirAmigo()-detail">actionAnadirAmigo</a></strong> ( <span style="color: #0000BB">$usuarioId</span>, <span style="color: #0000BB">$amigoId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$usuarioId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario 1</p>
+</td>
+                </tr>
+                            <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$amigoId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario 2</p>
+</td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionAnadirDeseos()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionAnadirDeseos()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionAnadirDeseos()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Añade un juego a la lista de deseos de un usuario</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a>|\app\controllers\Response</span> <strong><a href="app-controllers-usuarioscontroller.html#actionAnadirDeseos()-detail">actionAnadirDeseos</a></strong> ( <span style="color: #0000BB">$uId</span>, <span style="color: #0000BB">$jId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$uId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario</p>
+</td>
+                </tr>
+                            <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$jId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del juego</p>
+</td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionAnadirIgnorados()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionAnadirIgnorados()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionAnadirIgnorados()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Añade un juego a la lista de juegos ignorados del usuario.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionAnadirIgnorados()-detail">actionAnadirIgnorados</a></strong> ( <span style="color: #0000BB">$uId</span>, <span style="color: #0000BB">$jId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$uId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario de la lista</p>
+</td>
+                </tr>
+                            <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$jId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del juego que se quiere añadir</p>
+</td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionAnadirInventario()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionAnadirInventario()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionAnadirInventario()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Muestra una vista donde puede elegir si quiere añadir un juego o un producto
+a su inventario, para su posterior venta.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionAnadirInventario()-detail">actionAnadirInventario</a></strong> ( )</td></tr>
+            </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionBloquearUsuario()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionBloquearUsuario()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionBloquearUsuario()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Crea un bloqueo entre usuarios, lo que negara varios tipos de
+contenido entre los usuarios que esten bloqueados.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">void</span> <strong><a href="app-controllers-usuarioscontroller.html#actionBloquearUsuario()-detail">actionBloquearUsuario</a></strong> ( <span style="color: #0000BB">$usuarioId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$usuarioId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El usuario a bloquear</p>
+</td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionBorrarAmigo()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionBorrarAmigo()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionBorrarAmigo()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Borra la relacion entre dos usuarios que eran amigos</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">void</span> <strong><a href="app-controllers-usuarioscontroller.html#actionBorrarAmigo()-detail">actionBorrarAmigo</a></strong> ( <span style="color: #0000BB">$amigoId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$amigoId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario amigo</p>
+</td>
+                </tr>
+                                                </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionBorrarDeseos()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionBorrarDeseos()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionBorrarDeseos()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Borra un juego de la lista de deseos</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">void</span> <strong><a href="app-controllers-usuarioscontroller.html#actionBorrarDeseos()-detail">actionBorrarDeseos</a></strong> ( <span style="color: #0000BB">$uId</span>, <span style="color: #0000BB">$jId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$uId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario</p>
+</td>
+                </tr>
+                            <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$jId</span></td>
+                  <td class="param-type-col"></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionBorrarIgnorados()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionBorrarIgnorados()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionBorrarIgnorados()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Borra un juego de la lista de bloqueados del usuario</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response</span> <strong><a href="app-controllers-usuarioscontroller.html#actionBorrarIgnorados()-detail">actionBorrarIgnorados</a></strong> ( <span style="color: #0000BB">$uId</span>, <span style="color: #0000BB">$jId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$uId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario</p>
+</td>
+                </tr>
+                            <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$jId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del juego</p>
+</td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionCambioFondo()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionCambioFondo()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionCambioFondo()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Permite al usuario seleccionar un fondo de perfil, renderiza una
+vista con las opciones de imagenes por defecto.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.boolean">boolean</a>|<a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionCambioFondo()-detail">actionCambioFondo</a></strong> ( <span style="color: #0000BB">$id</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$id</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>Id del usuario</p>
+</td>
+                </tr>
+                                                </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionCambioImagen()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionCambioImagen()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionCambioImagen()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Renderiza una vista con la que el usuario puede seleccionar entre
+varias imagenes de usuario, para asignarse como imagen de usuario.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.boolean">boolean</a>|<a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionCambioImagen()-detail">actionCambioImagen</a></strong> ( <span style="color: #0000BB">$id</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$id</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>Id de usuario</p>
+</td>
+                </tr>
+                                                </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionCambioPass()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionCambioPass()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionCambioPass()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Funcion que permite el cambio de contraseña de usuario.</strong></p>
+
+        <p>Esta acción está limitada al usuario cuya contraseña se quiere cambiar.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\yii\web\Response|<a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionCambioPass()-detail">actionCambioPass</a></strong> ( <span style="color: #0000BB">$id</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$id</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El ID del usuario a cambiar</p>
+</td>
+                </tr>
+                                                </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionCreate()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionCreate()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionCreate()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Crea un nuevo modelo Usuarios.</strong></p>
+
+        <p>Es la accion que permite registrarse a los usuarios nuevos a la pagina.
+Esta accion esta limitada a los usuarios no logueados.
+Si la creacion es exitosa, redirecciona a la pagina de vista.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">mixed</span> <strong><a href="app-controllers-usuarioscontroller.html#actionCreate()-detail">actionCreate</a></strong> ( )</td></tr>
+            </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionDelete()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionDelete()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionDelete()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Borra un modelo Usuarios.</strong></p>
+
+        <p>Si el borrado es exitoso, redirecciona a la pagina indice.
+Esta acción esta limitada a el usuario cuyo perfil se
+quiere borrar, o al usuario administrador.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">mixed</span> <strong><a href="app-controllers-usuarioscontroller.html#actionDelete()-detail">actionDelete</a></strong> ( <span style="color: #0000BB">$id</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$id</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col"><a href="yii-web-notfoundhttpexception.html">yii\web\NotFoundHttpException</a></td>
+                  <td class="param-desc-col"><p>si el modelo no se encuentra.</p>
+</td>
+                </tr>
+                            <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si el usuario logueado no es el del perfil que se quiere borrar.</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionDesbloquearUsuario()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionDesbloquearUsuario()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionDesbloquearUsuario()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Permite desbloquear a usuarios entre sí</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">void</span> <strong><a href="app-controllers-usuarioscontroller.html#actionDesbloquearUsuario()-detail">actionDesbloquearUsuario</a></strong> ( <span style="color: #0000BB">$usuarioId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$usuarioId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El usuario bloqueado anteriormente</p>
+</td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionIndex()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionIndex()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionIndex()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Lista todos los modelos de usuario</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">mixed</span> <strong><a href="app-controllers-usuarioscontroller.html#actionIndex()-detail">actionIndex</a></strong> ( )</td></tr>
+            </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionIndexFiltrado()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionIndexFiltrado()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionIndexFiltrado()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Devuelde una vista con la lista de un tipo de usuarios.</strong></p>
+
+        <p>Puede ser de usuarios bloqueados por el usuario,
+de usuarios normales, críticos, de seguidores, o de usuarios
+a los que sigue el usuario.
+Tambien muestra la lista filtrada por un texto insertado
+como parámetro.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionIndexFiltrado()-detail">actionIndexFiltrado</a></strong> ( <span style="color: #0000BB">$texto</span>, <span style="color: #0000BB">$tipoLista</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$texto</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.string">string</a></td>
+                  <td class="param-desc-col"><p>String que filtrará la lista</p>
+</td>
+                </tr>
+                            <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$tipoLista</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionListaAmigos()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionListaAmigos()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionListaAmigos()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Devuelve la renderización en AJAX de una tabla con los
+usuarios que sean amigos del usuario cuyo ID se ha pasado
+como parametro de la funcion.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionListaAmigos()-detail">actionListaAmigos</a></strong> ( <span style="color: #0000BB">$usuarioId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$usuarioId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario del que queremos ver los amigos</p>
+</td>
+                </tr>
+                                        <tr>
+                  <th class="param-name-col">return</th>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.string">string</a></td>
+                  <td class="param-desc-col"><p>La vista renderizada</p>
+</td>
+                </tr>
+                                    </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionListaBloqueados()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionListaBloqueados()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionListaBloqueados()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Renderiza por una peticion AJAX, una vista con los usuarios bloqueados.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionListaBloqueados()-detail">actionListaBloqueados</a></strong> ( <span style="color: #0000BB">$usuarioId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$usuarioId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionMandarPeticion()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionMandarPeticion()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionMandarPeticion()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Manda una peticion de amistad por correo al usuario obetivo
+que podrá aceptar.</strong></p>
+
+        <p>Al mandar la peticion, se crea una relacion entre los usuarios,
+una relacion de amistad pendiente de aceptar.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response</span> <strong><a href="app-controllers-usuarioscontroller.html#actionMandarPeticion()-detail">actionMandarPeticion</a></strong> ( <span style="color: #0000BB">$amigoId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$amigoId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario al que manda la peticion</p>
+</td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionOrdenarListaDeseos()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionOrdenarListaDeseos()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionOrdenarListaDeseos()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Ordena la lista de deseos con un nuevo orden</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.boolean">boolean</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionOrdenarListaDeseos()-detail">actionOrdenarListaDeseos</a></strong> ( )</td></tr>
+                                                <tr>
+                  <th class="param-name-col">return</th>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.boolean">boolean</a></td>
+                  <td class="param-desc-col"><p>Si se ha ordenado correctamente, (true) o ha ocurrido un error (false)</p>
+</td>
+                </tr>
+                                        <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionSeguirCritico()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionSeguirCritico()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionSeguirCritico()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Crea una relación de seguimiento entre el usuario del modelo y el
+usuario pasado por parametros como ID.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response|<a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionSeguirCritico()-detail">actionSeguirCritico</a></strong> ( <span style="color: #0000BB">$uId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$uId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario a seguir</p>
+</td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionSolicitarVerificacion()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionSolicitarVerificacion()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionSolicitarVerificacion()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Permite solicitar la verificación del correo electronico, enviando
+un enlace de verificación</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response</span> <strong><a href="app-controllers-usuarioscontroller.html#actionSolicitarVerificacion()-detail">actionSolicitarVerificacion</a></strong> ( )</td></tr>
+            </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionUpdate()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionUpdate()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionUpdate()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Actualiza un modelo Usuarios.</strong></p>
+
+        <p>Si se actualiza con éxito, redireciona a la pagina de vista del modelo.
+Esta acción esta limitada a el usuario cuyo perfil se quiere editar,
+o al usuario administrador.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">mixed</span> <strong><a href="app-controllers-usuarioscontroller.html#actionUpdate()-detail">actionUpdate</a></strong> ( <span style="color: #0000BB">$id</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$id</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col"><a href="yii-web-notfoundhttpexception.html">yii\web\NotFoundHttpException</a></td>
+                  <td class="param-desc-col"><p>si el modelo no se encuentra</p>
+</td>
+                </tr>
+                            <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si el usuario logueado no es el del perfil que se quiere modificar.</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionVerListaDeseos()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionVerListaDeseos()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionVerListaDeseos()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Muestra una vista con todos los juegos que desea un usuario
+Esta acción está limitada a los usuarios relacionados
+a la lista de deseos y a sus amigos.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionVerListaDeseos()-detail">actionVerListaDeseos</a></strong> ( <span style="color: #0000BB">$uId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$uId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionVerListaIgnorados()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionVerListaIgnorados()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionVerListaIgnorados()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Accion que renderiza la lista de juegos que el usuario ha ignorado</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-usuarioscontroller.html#actionVerListaIgnorados()-detail">actionVerListaIgnorados</a></strong> ( <span style="color: #0000BB">$uId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$uId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionVerificar()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionVerificar()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionVerificar()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Acción que verifica la dirección de correo del usuario</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response</span> <strong><a href="app-controllers-usuarioscontroller.html#actionVerificar()-detail">actionVerificar</a></strong> ( <span style="color: #0000BB">$token</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$token</span></td>
+                  <td class="param-type-col"></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="actionView()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#actionView()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        actionView()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Muestra un único modelo Usuarios.</strong></p>
+
+        <p>Esta accion esta limitada a usuarios logueados que sean amigos del usuario
+del que se quiere ver el perfil o el propio usuario del perfil.
+El acceso a usuarios no amigos/bloqueados, esta bloqueado tambien.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">mixed</span> <strong><a href="app-controllers-usuarioscontroller.html#actionView()-detail">actionView</a></strong> ( <span style="color: #0000BB">$id</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$id</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                                    <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col"><a href="yii-web-notfoundhttpexception.html">yii\web\NotFoundHttpException</a></td>
+                  <td class="param-desc-col"><p>si el modelo no se encuentra</p>
+</td>
+                </tr>
+                            <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
+                  <td class="param-desc-col"><p>el usuario que solicite la accion debe ser amigo.</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="behaviors()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#behaviors()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        behaviors()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Returns a list of behaviors that this component should behave as.</strong></p>
+
+        <p>Child classes may override this method to specify the behaviors they want to behave as.</p>
+<p>The return value of this method should be an array of behavior objects or configurations
+indexed by behavior names. A behavior configuration can be either a string specifying
+the behavior class or an array of the following structure:</p>
+<pre><code class="hljs php language-php"><span class="hljs-string">'behaviorName'</span> =&gt; [
+    <span class="hljs-string">'class'</span> =&gt; <span class="hljs-string">'BehaviorClass'</span>,
+    <span class="hljs-string">'property1'</span> =&gt; <span class="hljs-string">'value1'</span>,
+    <span class="hljs-string">'property2'</span> =&gt; <span class="hljs-string">'value2'</span>,
+]
+</code></pre>
+<p>Note that a behavior class must extend from <span class="broken-link">\app\controllers\Behavior</span>. Behaviors can be attached using a name or anonymously.
+When a name is used as the array key, using this name, the behavior can later be retrieved using <a href="yii-base-component.html#getBehavior()-detail">getBehavior()</a>
+or be detached using <a href="yii-base-component.html#detachBehavior()-detail">detachBehavior()</a>. Anonymous behaviors can not be retrieved or detached.</p>
+<p>Behaviors declared in this method will be attached to the component automatically (on demand).</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.array">array</a></span> <strong><a href="app-controllers-usuarioscontroller.html#behaviors()-detail">behaviors</a></strong> ( )</td></tr>
+                                                <tr>
+                  <th class="param-name-col">return</th>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.array">array</a></td>
+                  <td class="param-desc-col"><p>The behavior configurations.</p>
+</td>
+                </tr>
+                                    </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="enviaCorreoBienvenida()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#enviaCorreoBienvenida()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        enviaCorreoBienvenida()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Envia un correo de bienvenida al usuario recien registrado.</strong></p>
+
+        <p>Funciona tambien como un correo de verificación.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">void</span> <strong><a href="app-controllers-usuarioscontroller.html#enviaCorreoBienvenida()-detail">enviaCorreoBienvenida</a></strong> ( <span style="color: #0000BB">$usuarioId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$usuarioId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El usuario al que envia el correo</p>
+</td>
+                </tr>
+                                                </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="enviaCorreoConfirmacion()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#enviaCorreoConfirmacion()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        enviaCorreoConfirmacion()
+        <span class="detail-header-tag small">
+            public                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Envia el correo de verificación que es producto de la accion
+de solicitud de verificación de usuario.</strong></p>
+
+        
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">void</span> <strong><a href="app-controllers-usuarioscontroller.html#enviaCorreoConfirmacion()-detail">enviaCorreoConfirmacion</a></strong> ( <span style="color: #0000BB">$usuarioId</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$usuarioId</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"><p>El id del usuario al que se le envía el correo</p>
+</td>
+                </tr>
+                                                </table>
+
+<!--	-->
+
+    <div class="detail-header h3" id="findModel()-detail">
+        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
+        <a class="tool-link hash" href="app-controllers-usuarioscontroller.html#findModel()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        
+        findModel()
+        <span class="detail-header-tag small">
+            protected                                    method
+                    </span>
+    </div>
+
+    
+    <div class="doc-description">
+        <p><strong>Encuentra el modelo Usuarios basado en la clave primaria.</strong></p>
+
+        <p>Si el modelo no se encuentra, una excepcion HTTP 404 se lanzará.</p>
+
+            </div>
+
+    <table class="detail-table table table-striped table-bordered table-hover">
+        <tr><td colspan="3" class="signature"><span class="signature-defs">protected</span> <span class="signature-type"><a href="app-models-usuarios.html">app\models\Usuarios</a></span> <strong><a href="app-controllers-usuarioscontroller.html#findModel()-detail">findModel</a></strong> ( <span style="color: #0000BB">$id</span> )</td></tr>
+                                    <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$id</span></td>
+                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
+                  <td class="param-desc-col"></td>
+                </tr>
+                                        <tr>
+                  <th class="param-name-col">return</th>
+                  <td class="param-type-col"><a href="app-models-usuarios.html">app\models\Usuarios</a></td>
+                  <td class="param-desc-col"><p>El modelo cargado</p>
+</td>
+                </tr>
+                                        <tr>
+                  <th class="param-name-col">throws</th>
+                  <td class="param-type-col"><a href="yii-web-notfoundhttpexception.html">yii\web\NotFoundHttpException</a></td>
+                  <td class="param-desc-col"><p>si el modelo no se encuentra</p>
+</td>
+                </tr>
+                        </table>
+
+<!--	-->
+</div>
+        </div>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    $("a.toggle").on('click', function () {
+        var $this = $(this);
+        if ($this.hasClass('properties-hidden')) {
+            $this.text($this.text().replace(/Show/,'Hide'));
+            $this.parents(".summary").find(".inherited").show();
+            $this.removeClass('properties-hidden');
+        } else {
+            $this.text($this.text().replace(/Hide/,'Show'));
+            $this.parents(".summary").find(".inherited").hide();
+            $this.addClass('properties-hidden');
+        }
+
+        return false;
+    });
+    /*
+     $(".sourceCode a.show").toggle(function () {
+     $(this).text($(this).text().replace(/show/,'hide'));
+     $(this).parents(".sourceCode").find("div.code").show();
+     },function () {
+     $(this).text($(this).text().replace(/hide/,'show'));
+     $(this).parents(".sourceCode").find("div.code").hide();
+     });
+     $("a.sourceLink").click(function () {
+     $(this).attr('target','_blank');
+     });
+     */
+    /*]]>*/
+</script>
+
+
+</div>
+
+<footer class="footer">
+        <p class="pull-right"><small>Page generated on Tue, 09 Jun 2020 08:33:38 +0000</small></p>
+    Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
+
+<script>jQuery(function ($) {
+    var shiftWindow = function () { scrollBy(0, -50) };
+    if (location.hash) setTimeout(shiftWindow, 1);
+    window.addEventListener("hashchange", shiftWindow);
+var element = document.createElement("script");
+element.src = "./jssearch.index.js";
+document.body.appendChild(element);
+
+var searchBox = $('#searchbox');
+
+// search when typing in search field
+searchBox.on("keyup", function(event) {
+    var query = $(this).val();
+
+    if (query == '' || event.which == 27) {
+        $('#search-resultbox').hide();
+        return;
+    } else if (event.which == 13) {
+        var selectedLink = $('#search-resultbox a.selected');
+        if (selectedLink.length != 0) {
+            document.location = selectedLink.attr('href');
+            return;
+        }
+    } else if (event.which == 38 || event.which == 40) {
+        $('#search-resultbox').show();
+
+        var selected = $('#search-resultbox a.selected');
+        if (selected.length == 0) {
+            $('#search-results').find('a').first().addClass('selected');
+        } else {
+            var next;
+            if (event.which == 40) {
+                next = selected.parent().next().find('a').first();
+            } else {
+                next = selected.parent().prev().find('a').first();
+            }
+            if (next.length != 0) {
+                var resultbox = $('#search-results');
+                var position = next.position();
+
+//              TODO scrolling is buggy and jumps around
+//                resultbox.scrollTop(Math.floor(position.top));
+//                console.log(position.top);
+
+                selected.removeClass('selected');
+                next.addClass('selected');
+            }
+        }
+
+        return;
+    }
+    $('#search-resultbox').show();
+    $('#search-results').html('<li><span class="no-results">No results</span></li>');
+
+    var result = jssearch.search(query);
+
+    if (result.length > 0) {
+        var i = 0;
+        var resHtml = '';
+
+        for (var key in result) {
+            if (i++ > 20) {
+                break;
+            }
+            resHtml = resHtml +
+            '<li><a href="' + result[key].file.u.substr(3) +'"><span class="title">' + result[key].file.t + '</span>' +
+            '<span class="description">' + result[key].file.d + '</span></a></li>';
+        }
+        $('#search-results').html(resHtml);
+    }
+});
+
+// hide the search results on ESC
+$(document).on("keyup", function(event) { if (event.which == 27) { $('#search-resultbox').hide(); } });
+// hide search results on click to document
+$(document).bind('click', function (e) { $('#search-resultbox').hide(); });
+// except the following:
+searchBox.bind('click', function(e) { e.stopPropagation(); });
+$('#search-resultbox').bind('click', function(e) { e.stopPropagation(); });
+
+});</script></body>
+</html>
