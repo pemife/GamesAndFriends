@@ -483,7 +483,7 @@ $this->registerCSS($css);
             'itemView' => function ($model, $key, $index, $widget) {
                 ?>
                 <div class="col-md-3">
-                    <table class="border">
+                    <table class="table table-stripped">
                         <tr>
                             <?= Html::a(
                                 Html::img(

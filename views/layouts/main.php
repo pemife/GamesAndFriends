@@ -11,6 +11,7 @@ use yii\bootstrap4\NavBar;
 use yii\bootstrap4\Breadcrumbs;
 use app\assets\AppAsset;
 use app\models\Precios;
+use Aws\S3\S3Client;
 
 AppAsset::register($this);
 ?>
@@ -26,6 +27,51 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body>
+<?php
+
+$s3 = new S3Client([
+    'version' => 'latest',
+    'region' => 'eu-west-2',
+    'credentials' => [
+        'key' => getenv('KEY'),
+        'secret' => getenv('SECRET'),
+        'token' => null,
+        'expires' => null,
+    ],
+]);
+
+$urlFondo = '';
+$urlLogo = '';
+
+if (getenv('MEDIA')) {
+    $cmd = $s3->getCommand('GetObject', [
+        'Bucket' => 'gamesandfriends',
+        'Key' => 'logov2.png',
+    ]);
+
+    $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+    $urlLogo = (string)$request->getUri();
+
+    $cmd = $s3->getCommand('GetObject', [
+        'Bucket' => 'gamesandfriends',
+        'Key' => 'fondo.png',
+    ]);
+
+    $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+    $urlFondo = (string)$request->getUri();
+}
+?>
+<style>
+body {
+    background-image: url(<?= $urlFondo ?>);
+}
+
+.table {
+    background-color: white;
+}
+</style>
 <?php $this->beginBody() ?>
 
 <div class="wrap">
@@ -38,7 +84,7 @@ AppAsset::register($this);
     }
 
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => Html::img($urlLogo, ['height' => 30, 'width' => 100]),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-dark bg-dark navbar-expand-md fixed-top container-fluid',
@@ -55,8 +101,8 @@ AppAsset::register($this);
                 'label' => 'Mercado',
                 'items' => [
                     ['label' => '2ª Mano', 'url' => ['/ventas/index']],
-                    ['label' => 'Productos', 'url' => ['/productos/index']],
                     ['label' => 'Juegos', 'url' => ['/juegos/index']],
+                    ['label' => 'Productos', 'url' => ['/productos/index']],
                 ],
             ],
             [
@@ -70,7 +116,7 @@ AppAsset::register($this);
                 'label' => 'Usuarios',
                 'visible' => !Yii::$app->user->isGuest,
                 'items' => [
-                    ['label' => 'Usuarios', 'url' => ['usuarios/index']],
+                    ['label' => 'Indice', 'url' => ['usuarios/index']],
                     ['label' => 'Bloqueados', 'url' => ['usuarios/index-filtrado', 'texto' => false, 'tipoLista' => 'bloqueados']],
                     ['label' => 'Críticos', 'url' => ['usuarios/index-filtrado', 'texto' => false, 'tipoLista' => 'criticos']]
                 ]

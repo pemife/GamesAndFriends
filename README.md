@@ -1,6 +1,6 @@
 <p align="center">
     <a href="http://gamesandfriends.herokuapp.com/index.php" target="_blank">
-        <img src="https://cdn.iconscout.com/icon/free/png-512/heroku-5-569467.png" height="100px">
+        <img src="guia/images/anexos/logo1.png" height="100px">
     </a>
     <h1 align="center">Games and Friends</h1>
     <br>

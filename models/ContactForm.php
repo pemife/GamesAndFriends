@@ -45,7 +45,7 @@ class ContactForm extends Model
 
     /**
      * Envia un email a la direccion de email especificada usando la informacion recogida por este modelo
-     * 
+     *
      * @param string $email el email objetivo
      * @return bool si el modelo pasa la validacion
      */

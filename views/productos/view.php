@@ -95,8 +95,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
 
                         return Html::a(
-                            '<span class=" glyphicon glyphicon-thumbs-up"></span>',
-                            ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => true]
+                            '<span class="glyphicon glyphicon-thumbs-up"></span>',
+                            ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => true],
+                            ['title' => 'me gusta']
                         );
                     }
                 ]
@@ -181,7 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         };
                         
                         return Html::a('', ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => false], [
-                            'class' => 'glyphicon glyphicon-fire',
+                            'class' => 'glyphicon glyphicon-exclamation-sign',
                             'title' => 'Reportar critica',
                             'style' => [
                                 'color' => 'red',

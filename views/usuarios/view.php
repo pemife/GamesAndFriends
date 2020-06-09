@@ -111,9 +111,11 @@ EOF;
 $this->registerJs($js);
 ?>
 <style>
-  body{
-    background-image: url(<?= $model->urlFondo ?>);
-  }
+    <?php if (!empty($model->fondo_key)) : ?>
+      body{
+        background-image: url(<?= $model->urlFondo ?>);
+      }
+    <?php endif; ?>
 
   .nombreOpciones{
     display: inline-flex;

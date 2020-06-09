@@ -34,7 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'attribute' => 'copia.juego.titulo',
-                'contentOptions' => ['itemprop' => 'name']
+                'contentOptions' => ['itemprop' => 'name'],
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::encode($model->copia->juego->titulo) . '<br>' . Html::a(
+                        Html::img($model->copia->juego->urlImagen, ['class' => 'mt-2', 'height' => 85, 'width' => 170, 'alt' => $model->copia->juego->titulo]),
+                        ['juegos/view', 'id' => $model->copia->juego->id]
+                    );
+                }
             ],
             [
                 'attribute' => 'vendedor.nombre',
@@ -44,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (empty($model->vendedor_id)) {
                         return '<span class="text-danger">Eliminado</span>';
                     }
-                    return Html::encode($model->vendedor->nombre);
+                    return Html::a($model->vendedor->nombre, ['usuarios/view', 'id' => $model->vendedor_id]);
                 }
             ],
             'created_at:RelativeTime:En venta desde',
@@ -130,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (empty($model->vendedor_id)) {
                         return '<span class="text-danger">Eliminado</span>';
                     }
-                    return Html::encode($model->vendedor->nombre);
+                    return Html::a($model->vendedor->nombre, ['usuarios/view', 'id' => $model->vendedor_id]);
                 }
             ],
             'created_at:RelativeTime:En venta desde',

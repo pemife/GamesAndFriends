@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\ContactForm;
 use app\models\LoginForm;
+use Aws\S3\S3Client;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -61,7 +62,44 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('/site/index');
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-west-2',
+            'credentials' => [
+                'key' => getenv('KEY'),
+                'secret' => getenv('SECRET'),
+                'token' => null,
+                'expires' => null,
+            ],
+        ]);
+
+        $urlFondo = '';
+        $urlLogo = '';
+
+        if (getenv('MEDIA')) {
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => 'gamesandfriends',
+                'Key' => 'fondo.png',
+            ]);
+
+            $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+            $urlFondo = (string)$request->getUri();
+
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => 'gamesandfriends',
+                'Key' => 'logov1.png',
+            ]);
+
+            $request = $s3->createPresignedRequest($cmd, '+20 minutes');
+
+            $urlLogo = (string)$request->getUri();
+        }
+
+        return $this->render('/site/index', [
+            'urlLogo' => $urlLogo,
+            'urlFondo' => $urlFondo
+        ]);
     }
 
     /**

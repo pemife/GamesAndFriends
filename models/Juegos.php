@@ -69,7 +69,7 @@ class Juegos extends \yii\db\ActiveRecord
             'dev' => 'Desarrolladora',
             'publ' => 'Editora',
             'cont_adul' => 'Contenido adulto',
-            'edad_minima' => 'Edad Minima',
+            'edad_minima' => 'Edad Mínima',
         ];
     }
 
