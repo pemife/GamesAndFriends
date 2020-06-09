@@ -472,8 +472,10 @@ class JuegosController extends Controller
             }
         }
 
-        if ($this->enviaCorreoRecomendaciones($jId)) {
-            Yii::$app->session->setFlash('success', 'Se han enviado todos los correos');
+        if ($porcentaje != 1) {
+            if ($this->enviaCorreoRecomendaciones($jId)) {
+                Yii::$app->session->setFlash('success', 'Se han enviado todos los correos');
+            }
         }
 
         Yii::$app->session->setFlash('success', 'Oferta asignada correctamente');
