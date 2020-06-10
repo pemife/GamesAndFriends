@@ -335,6 +335,16 @@ class CopiasController extends Controller
         }
 
         // Aqui se hara la transaccion monetaria de paypal
+
+        $apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                '',     // ClientID
+                ''      // ClientSecret
+            )
+        );
+
+        $payer = new \PayPal\Api\Payer();
+        $payer->setPaymentMethod('paypal');
     
         // Si la transaccion se completa correctamente
         foreach ($copias as $copia) {
