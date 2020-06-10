@@ -336,15 +336,41 @@ class CopiasController extends Controller
 
         // Aqui se hara la transaccion monetaria de paypal
 
-        $apiContext = new \PayPal\Rest\ApiContext(
-            new \PayPal\Auth\OAuthTokenCredential(
-                '',     // ClientID
-                ''      // ClientSecret
-            )
-        );
+        $params = [
+            'method'=>'paypal',
+            'intent'=>'sale',
+            'order'=>[
+                'description'=>'Payment description',
+                'subtotal'=>44,
+                'shippingCost'=>0,
+                'total'=>44,
+                'currency'=>'USD',
+                'items'=>[
+                    [
+                        'name'=>'Item one',
+                        'price'=>10,
+                        'quantity'=>1,
+                        'currency'=>'USD'
+                    ],
+                    [
+                        'name'=>'Item two',
+                        'price'=>12,
+                        'quantity'=>2,
+                        'currency'=>'USD'
+                    ],
+                    [
+                        'name'=>'Item three',
+                        'price'=>1,
+                        'quantity'=>10,
+                        'currency'=>'USD'
+                    ],
 
-        $payer = new \PayPal\Api\Payer();
-        $payer->setPaymentMethod('paypal');
+                ]
+
+            ]
+        ];
+        
+        Yii::$app->PayPalRestApi->checkOut($params);
     
         // Si la transaccion se completa correctamente
         foreach ($copias as $copia) {

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "64b85d9bb187a486b0ac2b96f449bd6b",
+    "content-hash": "43f75b0718ce9435e8abe80e1d8155db",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.140.3",
+            "version": "3.141.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "aebd17510b6220b6e5b239730b02eaf7b9b2b816"
+                "reference": "d57dbde176a7db7a6131bb5d325aff63515eabc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/aebd17510b6220b6e5b239730b02eaf7b9b2b816",
-                "reference": "aebd17510b6220b6e5b239730b02eaf7b9b2b816",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d57dbde176a7db7a6131bb5d325aff63515eabc3",
+                "reference": "d57dbde176a7db7a6131bb5d325aff63515eabc3",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,56 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-06-08T18:19:35+00:00"
+            "time": "2020-06-10T18:11:38+00:00"
+        },
+        {
+            "name": "bitcko/yii2-bitcko-paypal-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bitcko/yii2-bitcko-paypal-api.git",
+                "reference": "a6cb413ce9aace9843d72120cd2c92a9042b1ffe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bitcko/yii2-bitcko-paypal-api/zipball/a6cb413ce9aace9843d72120cd2c92a9042b1ffe",
+                "reference": "a6cb413ce9aace9843d72120cd2c92a9042b1ffe",
+                "shasum": ""
+            },
+            "require": {
+                "paypal/rest-api-sdk-php": "*",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "bitcko\\paypalrestapi\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Mhmd Backer Shehadi",
+                    "email": "m.backer.shehadi@gmail.com"
+                }
+            ],
+            "description": "Bitcko Yii2 Paypal Api Extension use to integrate Paypal payments in your project using Paylpal php SDK",
+            "keywords": [
+                "PayPal API",
+                "PayPal Php api",
+                "PayPal Rest Api",
+                "PayPal developer",
+                "api",
+                "extension",
+                "payment",
+                "paypal",
+                "simple online payment",
+                "yii2"
+            ],
+            "time": "2018-12-27T09:53:21+00:00"
         },
         {
             "name": "bower-asset/inputmask",
@@ -7533,6 +7582,7 @@
         "kartik-v/yii2-widget-datepicker": 20,
         "kartik-v/yii2-widget-select2": 20,
         "kartik-v/yii2-widget-rating": 20,
+        "bitcko/yii2-bitcko-paypal-api": 20,
         "yiisoft/yii2-apidoc": 20,
         "codeception/verify": 20
     },
