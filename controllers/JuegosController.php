@@ -415,6 +415,12 @@ class JuegosController extends Controller
         return false;
     }
 
+    /**
+     * Esta acción borra el elemento que el usuario desee borrar de su carrito de compra
+     *
+     * @param integer $pId
+     * @return Response
+     */
     public function actionBorrarDeCarrito($pId)
     {
         if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {

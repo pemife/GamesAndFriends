@@ -27,19 +27,15 @@ paypal.Buttons({
       });
     }
 }).render('#paypal-button-container'); // Display payment options on your web page
-
-
 SCRIPT;
 
 $precioTotal = 0;
 
 foreach ($dataProvider->getModels() as $precio) {
-    if ($precio->oferta != 1) {
-        $precioTotal += $precio->cifra * $precio->oferta;
-    } else {
-        $precioTotal += $precio->cifra;
-    }
+    $precioTotal += $precio->cifra * $precio->oferta;
 }
+
+$precioTotal = (integer)($precioTotal * 100) / 100;
 
 ?>
 
@@ -148,7 +144,7 @@ foreach ($dataProvider->getModels() as $precio) {
         ],
     ]); ?>
 
-    <h3>Precio total: <?= Html::encode(Yii::$app->formatter->asCurrency($precioTotal)) ?></h3>
+    <h3>Precio total: <?= Html::encode(Yii::$app->formatter->asCurrency($precioTotal, 'EUR', [NumberFormatter::ROUNDING_MODE => 2])) ?></h3>
 
     <div id="paypal-button-container"></div>
     <script src="https://www.paypal.com/sdk/js?client-id=<?= getenv('PCLIENTID') ?>&currency=EUR" data-sdk-integration-source="button-factory"></script>
@@ -165,7 +161,7 @@ foreach ($dataProvider->getModels() as $precio) {
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
-                            value: '1'
+                            value: <?= round($precioTotal, 2, PHP_ROUND_HALF_DOWN) ?>
                         }
                     }]
                 });
