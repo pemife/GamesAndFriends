@@ -297,16 +297,15 @@ class CopiasController extends Controller
     }
 
     /**
-     * Procesa la compra de todos los items del carrito
-     * si se completa con éxito, redirecciona al perfil del usuario
-     * donde esta el inventario con las copias recién compradas
+     * Procesa todas las copias almacenadas en el carrito y
+     * muestra una vista para proceder al pago
      *
      * Si da un error, muestra que copia ha dado el error y redirecciona
      * a la pagina de inicio.
      *
      * @return Response
      */
-    public function actionCompletarCompra()
+    public function actionProcesarCarrito()
     {
         if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
             Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
@@ -317,6 +316,8 @@ class CopiasController extends Controller
 
         $precios = explode(' ', $cookieCarro);
 
+        $copias = [];
+
         foreach ($precios as $precioId) {
             $precio = Precios::findOne($precioId);
 
@@ -326,19 +327,15 @@ class CopiasController extends Controller
                 'propietario_id' => Yii::$app->user->id
             ]);
 
+            $copias[] = $copia;
+
             // Valido las copias antes de la transacción
             if (!$copia->validate()) {
                 Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al procesar la compra [Copia inválida]!');
                 return $this->redirect(['home']);
             }
-            $copias[] = $copia;
         }
 
-        // Aqui se hara la transaccion monetaria de paypal
-
-        
-    
-        // Si la transaccion se completa correctamente
         foreach ($copias as $copia) {
             if (!$copia->save()) {
                 Yii::$app->session->setFlash('error', 'Ha ocurrido un error al añadir copias a tu inventario');
@@ -374,10 +371,5 @@ class CopiasController extends Controller
         }
 
         throw new NotFoundHttpException('La pagina solicitada no existe');
-    }
-
-    private function hacerPago($pedido)
-    {
-        return Yii::$app->PayPalRestApi->processPayment($pedido);
     }
 }
