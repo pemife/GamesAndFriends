@@ -59,7 +59,7 @@ $precioTotal = (integer)($precioTotal * 100) / 100;
                     Html::img(
                         $model->plataforma->urlLogo,
                         [
-                            'class' => 'rounded-circle mr-2',
+                            'class' => 'mr-2',
                             'width' => 50,
                             'height' => 50,
                         ]
