@@ -79,7 +79,7 @@ class JuegosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['anadir-carrito'],
+                        'actions' => ['anadir-carrito', 'borrar-carrito'],
                         'matchCallback' => function ($rule, $action) {
 
                             if (!Precios::findOne(Yii::$app->request->queryParams['pId'])) {
@@ -415,6 +415,37 @@ class JuegosController extends Controller
         return false;
     }
 
+    public function actionBorrarDeCarrito($pId)
+    {
+        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+            Yii::$app->session->setFlash('error', 'Tu carro está vacío');
+        } else {
+            $cookieAntes = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+
+            $preciosIds = explode(' ', $cookieAntes);
+
+            foreach ($preciosIds as $precio => $id) {
+                if ($id === $pId) {
+                    unset($preciosIds[$precio]);
+                    break;
+                }
+            }
+
+            $cookieAhora = implode(' ', $preciosIds);
+
+            $cookie = new Cookie([
+                'name' => 'Carro-' . Yii::$app->user->id,
+                'value' =>  $cookieAhora,
+                'expire' => time() + 86400 * 365,
+                'secure' => true,
+            ]);
+
+            Yii::$app->response->cookies->add($cookie);
+        }
+
+        return $this->redirect(['carrito-compra']);
+    }
+
     /**
      * Muestra una vista con los juegos añadidos anteriormente al carrito
      * para procesar su compra.
@@ -439,15 +470,8 @@ class JuegosController extends Controller
             'query' => $query,
         ]);
 
-        $precioTotal = 0;
-
-        foreach ($dataProvider->getModels() as $precio) {
-            $precioTotal += $precio->cifra;
-        }
-
         return $this->render('carritoCompra', [
             'dataProvider' => $dataProvider,
-            'precioTotal' => $precioTotal,
         ]);
     }
 

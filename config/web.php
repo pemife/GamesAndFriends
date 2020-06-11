@@ -59,10 +59,6 @@ $config = [
             ],
         ],
         */
-        'PayPalRestApi'=> [
-            'class' => 'bitcko\paypalrestapi\PayPalRestApi',
-            'redirectUrl' => '/site/index',
-        ],
     ],
     'container' => [
         'definitions' => [

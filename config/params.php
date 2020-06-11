@@ -1,11 +1,9 @@
 <?php
 
 return [
-    'adminEmail' => 'sb-vih1t2189522@personal.example.com',
+    'adminEmail' => 'gamesandfriends2@gmail.com',
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     'bsDependencyEnabled' => false,
     'bsVersion' => '4.x',
-    'payPalClientId' => getenv('PCLIENTID'),
-    'payPalClientSecret' => getenv('PSECRET')
 ];
