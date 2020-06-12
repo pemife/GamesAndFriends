@@ -171,7 +171,7 @@ class Copias extends \yii\db\ActiveRecord
     public function getEstado()
     {
         if (Ventas::find()->where(['copia_id' => $this->id])->exists()) {
-            if (Ventas::find()->where(['copia_id' => $this->id])->andWhere(['>', 'finished_at', date('Y-m-d')])->exists()) {
+            if (Ventas::find()->where(['copia_id' => $this->id])->andWhere(['not', ['finished_at' => null]])->exists()) {
                 return 'Bloqueada';
             }
             return 'En venta';

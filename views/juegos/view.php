@@ -37,7 +37,7 @@ if (!Yii::$app->user->isGuest) {
 $totalTrailers = sizeof($model->trailers);
 
 // Url ajax carrito
-$urlCarrito = Url::to(['juegos/anadir-carrito']);
+$urlCarrito = Yii::$app->user->isGuest ? '' : Url::to(['juegos/anadir-carrito']);
 
 $js = <<<SCRIPT
 $(function() {
@@ -315,7 +315,13 @@ $this->registerCSS($css);
                                         'width' => 30
                                     ]
                                 )
-                                . $precio->cifra * $precio->oferta . '€',
+                                . Yii::$app->formatter->asCurrency(
+                                    round($precio->cifra * $precio->oferta, 3),
+                                    'EUR',
+                                    [
+                                        NumberFormatter::ROUNDING_MODE => 2
+                                    ]
+                                ),
                                 'javascript:void(0)',
                                 [
                                     'class' => 'btn btn-sm mr-2 mt-4 mb-4 text-light botonCompra',
@@ -524,4 +530,3 @@ $this->registerCSS($css);
     ?>
 
 </div>
-<?= Yii::debug($model->oferta) ?>

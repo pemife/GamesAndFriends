@@ -516,7 +516,7 @@ class UsuariosController extends Controller
         $juegosUsuarioIds = [0];
 
         foreach ($copiasUsuario as $copia) {
-            $juegosUsuarioIds[] = $copia->juego->id;
+            $juegosUsuarioIds[] = $copia->juego_id;
         }
 
         $usuariosRecomendadosQuery = Usuarios::find()

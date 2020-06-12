@@ -63,7 +63,7 @@ $(function(){
 SCRIPT;
 $this->registerJS($js);
 ?>
-<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js  " defer></script>
+<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" defer></script>
 
 <h1>Lista de Deseos de <?= $usuario->nombre ?></h1>
 

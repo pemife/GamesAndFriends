@@ -13,6 +13,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Cookie;
 use yii\web\NotFoundHttpException;
@@ -36,7 +37,9 @@ class CopiasController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete', 'mis-copias', 'comprar-copia', 'retirar-inventario'],
+                'only' => [
+                    'create', 'update', 'delete', 'mis-copias', 'comprar-copia',
+                    'retirar-inventario', 'procesar-carrito', 'finalizar-compra'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -129,6 +132,54 @@ class CopiasController extends Controller
                             return true;
                         },
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['procesar-carrito'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Error al procesar la compra [sesion erronea]');
+                                return false;
+                            }
+
+                            if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['finalizar-compra'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->isGuest) {
+                                Yii::$app->session->setFlash('error', 'Error al procesar la compra [sesion erronea]');
+                                return false;
+                            }
+
+                            if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
+                                Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
+                                return false;
+                            }
+
+                            // Compruebo que contiene la variable de autenticación
+                            if (!Yii::$app->request->post('authtoken')) {
+                                Yii::$app->session->setFlash('error', 'Compra no autorizada');
+                                return false;
+                            }
+
+                            // Aseguro que al finalizar la compra existe la token de autorizacion
+                            // que se creó al procesar el carrito antes de la transacción
+                            $tokenCookie = Yii::$app->request->cookies->getValue('authtoken');
+                            $tokenPost = Yii::$app->request->post('authtoken');
+                            if ($tokenCookie == $tokenPost) {
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    ]
                 ],
             ],
         ];
@@ -297,25 +348,27 @@ class CopiasController extends Controller
     }
 
     /**
-     * Procesa la compra de todos los items del carrito
-     * si se completa con éxito, redirecciona al perfil del usuario
-     * donde esta el inventario con las copias recién compradas
+     * Procesa todas las copias almacenadas en el carrito y
+     * muestra una vista para proceder al pago
      *
      * Si da un error, muestra que copia ha dado el error y redirecciona
      * a la pagina de inicio.
      *
      * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
-    public function actionCompletarCompra()
+    public function actionProcesarCarrito()
     {
-        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+        if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
             Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
-            return $this->redirect(['home']);
+            return false;
         }
 
-        $cookieCarro = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+        $cookieCarro = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
 
         $precios = explode(' ', $cookieCarro);
+
+        $copias = [];
 
         foreach ($precios as $precioId) {
             $precio = Precios::findOne($precioId);
@@ -326,17 +379,59 @@ class CopiasController extends Controller
                 'propietario_id' => Yii::$app->user->id
             ]);
 
+            $copias[] = $copia;
+
             // Valido las copias antes de la transacción
             if (!$copia->validate()) {
                 Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al procesar la compra [Copia inválida]!');
-                return $this->redirect(['home']);
+                return false;
             }
+        }
+
+        // Si no hay errores de validacion de copias del carrito, crea una token
+        // de autorizacion, lo asigna a una cookie y lo devuelve.
+
+        $tokenAuth = Yii::$app->security->generateRandomString(32);
+
+        $cookieAuth = new Cookie([
+            'name' => 'authtoken',
+            'value' =>  $tokenAuth,
+            'expire' => time() + 86400 * 365,
+        ]);
+
+        Yii::$app->response->cookies->add($cookieAuth);
+
+        return $tokenAuth;
+    }
+
+    /**
+     * Función llamada justo despues de procesar el carrito y que se complete la transaccion
+     * monetaria que hace que todo el contenido del carrito, pase a posesión del usuario
+     *
+     *
+     * @return Response
+     * @throws ForbiddenHttpException si no supera las reglas de acceso, o realiza una compra no autorizada
+     */
+    public function actionFinalizarCompra()
+    {
+        $cookieCarro = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
+
+        $precios = explode(' ', $cookieCarro);
+
+        $copias = [];
+
+        foreach ($precios as $precioId) {
+            $precio = Precios::findOne($precioId);
+
+            $copia = new Copias([
+                'juego_id' => $precio->juego_id,
+                'plataforma_id' => $precio->plataforma_id,
+                'propietario_id' => Yii::$app->user->id
+            ]);
+
             $copias[] = $copia;
         }
 
-        // Aqui se hara la transaccion monetaria de paypal
-    
-        // Si la transaccion se completa correctamente
         foreach ($copias as $copia) {
             if (!$copia->save()) {
                 Yii::$app->session->setFlash('error', 'Ha ocurrido un error al añadir copias a tu inventario');
@@ -345,10 +440,9 @@ class CopiasController extends Controller
         }
 
         $cookie = new Cookie([
-            'name' => 'Carro-' . Yii::$app->user->id,
+            'name' => 'carro-' . Yii::$app->user->id,
             'value' =>  '',
             'expire' => time() + 86400 * 365,
-            'secure' => true,
         ]);
 
         Yii::$app->response->cookies->add($cookie);

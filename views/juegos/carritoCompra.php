@@ -10,23 +10,22 @@ use yii\helpers\Url;
 $this->title = 'Carro de compra';
 $this->params['breadcrumbs'][] = $this->title;
 
+$precioTotal = 0;
+
+foreach ($dataProvider->getModels() as $precio) {
+    $precioTotal += $precio->cifra * $precio->oferta;
+}
+
+$precioTotal = (integer)($precioTotal * 100) / 100;
+
+$urlProcesarCarrito = Url::to(['copias/procesar-carrito'], true);
+$urlFinalCompra = Url::to(['copias/finalizar-compra'], true);
 ?>
 
 <div class="carrito-compra">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <h3>Precio total: <?= Html::encode($precioTotal) ?></h3>
-
-    <?= Html::a(
-        'Procesar compra',
-        ['copias/completar-compra'],
-        [
-            'class' => 'btn btn-success'
-        ]
-    ) ?>
-
-    <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'rowOptions' => [
@@ -44,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         Html::img(
                             $model->juego->urlImagen,
                             [
-                                'class' => 'rounded-circle mr-2',
+                                'class' => 'mr-2',
                                 'width' => 120,
                                 'height' => 80,
                             ]
@@ -62,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     Html::img(
                         $model->plataforma->urlLogo,
                         [
-                            'class' => 'rounded-circle mr-2',
+                            'class' => 'mr-2',
                             'width' => 50,
                             'height' => 50,
                         ]
@@ -70,11 +69,111 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'attribute' => 'cifra'
+                'attribute' => 'cifra',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if ($model->oferta != 1.00) {
+                        return
+                        '<del>'
+                        . Html::encode(
+                            Yii::$app->formatter->asCurrency($model->cifra)
+                        ) . '</del><br>'
+                        . Html::encode(
+                            Yii::$app->formatter->asCurrency(
+                                round($model->cifra * $model->oferta, 3),
+                                'EUR',
+                                [
+                                    NumberFormatter::ROUNDING_MODE => 2
+                                ]
+                            )
+                        );
+                    } else {
+                        return Html::encode(
+                            Yii::$app->formatter->asCurrency($model->cifra)
+                        );
+                    }
+                }
             ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{borrar}',
+                'buttons' => [
+                    'borrar' => function ($url, $model, $key) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash"></span>',
+                            ['juegos/borrar-de-carrito', 'pId' => $model->id],
+                            [
+                                'title' => 'borrar del carrito',
+                                'name' => 'botonDeseos',
+                                'style' => [
+                                    'color' => 'red',
+                                ],
+                                'data' => [
+                                    'modelId' => $model->id,
+                                ]
+                            ]
+                        );
+                    }
+                ]
+            ]
         ],
     ]); ?>
 
-    <?= Yii::debug($dataProvider->getModels()) ?>
+    <h3>Precio total: <?= Html::encode(Yii::$app->formatter->asCurrency($precioTotal, 'EUR', [NumberFormatter::ROUNDING_MODE => 2])) ?></h3>
 
+    <div id="paypal-button-container"></div>
+    <script src="https://www.paypal.com/sdk/js?client-id=<?= getenv('PCLIENTID') ?>&currency=EUR" data-sdk-integration-source="button-factory"></script>
+    <script>
+        token = '';
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                color: 'gold',
+                layout: 'vertical',
+                label: 'paypal',
+                
+            },
+
+            // Procesa el carro antes de la transaccion, para confimar que no hay errores
+            createOrder: function(data, actions) {
+                $.ajax({
+                    method: 'GET',
+                    url: '<?= $urlProcesarCarrito ?>',
+                    success: function(result){
+                        if (result) {
+                            token = result;
+                        } else {
+                            window.location.href = '<?= Url::to(['site/home']) ?>';
+                        }
+                    }
+                });
+
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: <?= round($precioTotal, 2, PHP_ROUND_HALF_DOWN) ?>
+                        }
+                    }]
+                });
+            },
+
+            // Si la transaccion se hace correctamente, entonces finaliza la compra
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '<?= $urlFinalCompra ?>',
+                        data: {authtoken: token},
+                        success: function(result){
+                            if (result) {
+                                window.location.href = result;
+                            }
+                        }
+                    });
+                });
+            }
+        }).render('#paypal-button-container');
+    </script>
+
+    <?= Yii::debug(Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id)) ?>
 </div>

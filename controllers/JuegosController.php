@@ -79,7 +79,7 @@ class JuegosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['anadir-carrito'],
+                        'actions' => ['anadir-carrito', 'borrar-carrito'],
                         'matchCallback' => function ($rule, $action) {
 
                             if (!Precios::findOne(Yii::$app->request->queryParams['pId'])) {
@@ -386,33 +386,63 @@ class JuegosController extends Controller
      */
     public function actionAnadirCarrito($pId)
     {
-        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+        if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
             $cookie = new Cookie([
-                'name' => 'Carro-' . Yii::$app->user->id,
+                'name' => 'carro-' . Yii::$app->user->id,
                 'value' => $pId,
                 'expire' => time() + 86400 * 365,
-                'secure' => true,
             ]);
 
             Yii::$app->response->cookies->add($cookie);
-
-            return Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
         } else {
-            $cookieAntes = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+            $cookieAntes = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
 
             $cookie = new Cookie([
-                'name' => 'Carro-' . Yii::$app->user->id,
+                'name' => 'carro-' . Yii::$app->user->id,
                 'value' =>  $cookieAntes . ' ' . $pId,
                 'expire' => time() + 86400 * 365,
-                'secure' => true,
             ]);
 
             Yii::$app->response->cookies->add($cookie);
-
-            return Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
         }
 
-        return false;
+        return Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
+    }
+
+    /**
+     * Esta acción borra el elemento que el usuario desee borrar de su carrito de compra
+     *
+     * @param integer $pId
+     * @return Response
+     */
+    public function actionBorrarDeCarrito($pId)
+    {
+        if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
+            Yii::$app->session->setFlash('error', 'Tu carro está vacío');
+        } else {
+            $cookieAntes = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
+
+            $preciosIds = explode(' ', $cookieAntes);
+
+            foreach ($preciosIds as $precio => $id) {
+                if ($id === $pId) {
+                    unset($preciosIds[$precio]);
+                    break;
+                }
+            }
+
+            $cookieAhora = implode(' ', $preciosIds);
+
+            $cookie = new Cookie([
+                'name' => 'carro-' . Yii::$app->user->id,
+                'value' =>  $cookieAhora,
+                'expire' => time() + 86400 * 365,
+            ]);
+
+            Yii::$app->response->cookies->add($cookie);
+        }
+
+        return $this->redirect(['carrito-compra']);
     }
 
     /**
@@ -424,12 +454,12 @@ class JuegosController extends Controller
      */
     public function actionCarritoCompra()
     {
-        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+        if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
             Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
             return $this->redirect(['site/index']);
         }
 
-        $cookieCarro = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+        $cookieCarro = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
 
         $precios = explode(' ', $cookieCarro);
 
@@ -439,15 +469,8 @@ class JuegosController extends Controller
             'query' => $query,
         ]);
 
-        $precioTotal = 0;
-
-        foreach ($dataProvider->getModels() as $precio) {
-            $precioTotal += $precio->cifra;
-        }
-
         return $this->render('carritoCompra', [
             'dataProvider' => $dataProvider,
-            'precioTotal' => $precioTotal,
         ]);
     }
 
@@ -472,8 +495,10 @@ class JuegosController extends Controller
             }
         }
 
-        if ($this->enviaCorreoRecomendaciones($jId)) {
-            Yii::$app->session->setFlash('success', 'Se han enviado todos los correos');
+        if ($porcentaje != 1.00) {
+            if ($this->enviaCorreoRecomendaciones($jId)) {
+                Yii::$app->session->setFlash('success', 'Se han enviado todos los correos');
+            }
         }
 
         Yii::$app->session->setFlash('success', 'Oferta asignada correctamente');
