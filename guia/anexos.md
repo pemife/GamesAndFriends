@@ -81,4 +81,4 @@ usuarios participantes.
 - Siempre hay un widget que muestra el camino que has recorrido para llegar hasta donde estés.
 
  6. ¿Cómo busco algo?
-- En cada índice hay un buscador.
+- 

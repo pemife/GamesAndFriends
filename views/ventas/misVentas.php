@@ -18,30 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Poner en venta Producto/Juego', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-    <h1>Productos</h1>
-
-    <?= GridView::widget([
-        'dataProvider' => $misProductosProvider,
-        'rowOptions' => [
-            'itemscope' => true,
-            'itemtype' => 'https://schema.org/Product'
-        ],
-        'columns' => [
-            [
-                'attribute' => 'producto.nombre',
-                'contentOptions' => ['itemprop' => 'name']
-            ],
-            'created_at:RelativeTime:En venta desde',
-            [
-                'attribute' => 'precio',
-                'contentOptions' => ['itemprop' => 'price']
-            ],
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
-    <br><br>
+    
     <h1>Juegos</h1>
 
     <?= GridView::widget([
@@ -76,10 +53,58 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'precio',
-                'contentOptions' => ['itemprop' => 'price']
+                'contentOptions' => ['itemprop' => 'price'],
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::encode(
+                        Yii::$app->formatter->asCurrency(
+                            round($model->precio, 3),
+                            'EUR',
+                            [
+                                NumberFormatter::ROUNDING_MODE => 2
+                            ]
+                        )
+                    );
+                }
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ]
+    ]); ?>
+
+    <br><br>
+
+    <h1>Productos</h1>
+
+    <?= GridView::widget([
+        'dataProvider' => $misProductosProvider,
+        'rowOptions' => [
+            'itemscope' => true,
+            'itemtype' => 'https://schema.org/Product'
+        ],
+        'columns' => [
+            [
+                'attribute' => 'producto.nombre',
+                'contentOptions' => ['itemprop' => 'name']
+            ],
+            'created_at:RelativeTime:En venta desde',
+            [
+                'attribute' => 'precio',
+                'contentOptions' => ['itemprop' => 'price'],
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::encode(
+                        Yii::$app->formatter->asCurrency(
+                            round($model->precio, 3),
+                            'EUR',
+                            [
+                                NumberFormatter::ROUNDING_MODE => 2
+                            ]
+                        )
+                    );
+                }
+            ],
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
     ]); ?>
 
 
