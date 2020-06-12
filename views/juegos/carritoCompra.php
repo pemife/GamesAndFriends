@@ -147,6 +147,6 @@ $precioTotal = (integer)($precioTotal * 100) / 100;
         }).render('#paypal-button-container');
     </script>
 
-    <?= Yii::debug(Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id)) ?>
+    <?= Yii::debug(Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id)) ?>
 
 </div>

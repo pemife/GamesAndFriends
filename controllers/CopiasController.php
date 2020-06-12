@@ -307,12 +307,12 @@ class CopiasController extends Controller
      */
     public function actionProcesarCarrito()
     {
-        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+        if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
             Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
             return $this->redirect(['home']);
         }
 
-        $cookieCarro = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+        $cookieCarro = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
 
         $precios = explode(' ', $cookieCarro);
 
@@ -344,7 +344,7 @@ class CopiasController extends Controller
         }
 
         $cookie = new Cookie([
-            'name' => 'Carro-' . Yii::$app->user->id,
+            'name' => 'carro-' . Yii::$app->user->id,
             'value' =>  '',
             'expire' => time() + 86400 * 365,
             'secure' => true,

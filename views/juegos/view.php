@@ -37,7 +37,7 @@ if (!Yii::$app->user->isGuest) {
 $totalTrailers = sizeof($model->trailers);
 
 // Url ajax carrito
-$urlCarrito = Url::to(['juegos/anadir-carrito']);
+$urlCarrito = Yii::$app->user->isGuest ? '' : Url::to(['juegos/anadir-carrito']);
 
 $js = <<<SCRIPT
 $(function() {
@@ -524,4 +524,3 @@ $this->registerCSS($css);
     ?>
 
 </div>
-<?= Yii::debug($model->oferta) ?>

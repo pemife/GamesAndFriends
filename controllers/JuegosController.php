@@ -386,30 +386,28 @@ class JuegosController extends Controller
      */
     public function actionAnadirCarrito($pId)
     {
-        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+        if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
             $cookie = new Cookie([
-                'name' => 'Carro-' . Yii::$app->user->id,
+                'name' => 'carro-' . Yii::$app->user->id,
                 'value' => $pId,
                 'expire' => time() + 86400 * 365,
-                'secure' => true,
             ]);
 
             Yii::$app->response->cookies->add($cookie);
 
-            return Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+            return Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
         } else {
-            $cookieAntes = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+            $cookieAntes = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
 
             $cookie = new Cookie([
-                'name' => 'Carro-' . Yii::$app->user->id,
+                'name' => 'carro-' . Yii::$app->user->id,
                 'value' =>  $cookieAntes . ' ' . $pId,
                 'expire' => time() + 86400 * 365,
-                'secure' => true,
             ]);
 
             Yii::$app->response->cookies->add($cookie);
 
-            return Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+            return Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
         }
 
         return false;
@@ -423,10 +421,10 @@ class JuegosController extends Controller
      */
     public function actionBorrarDeCarrito($pId)
     {
-        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+        if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
             Yii::$app->session->setFlash('error', 'Tu carro está vacío');
         } else {
-            $cookieAntes = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+            $cookieAntes = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
 
             $preciosIds = explode(' ', $cookieAntes);
 
@@ -440,10 +438,9 @@ class JuegosController extends Controller
             $cookieAhora = implode(' ', $preciosIds);
 
             $cookie = new Cookie([
-                'name' => 'Carro-' . Yii::$app->user->id,
+                'name' => 'carro-' . Yii::$app->user->id,
                 'value' =>  $cookieAhora,
                 'expire' => time() + 86400 * 365,
-                'secure' => true,
             ]);
 
             Yii::$app->response->cookies->add($cookie);
@@ -461,12 +458,12 @@ class JuegosController extends Controller
      */
     public function actionCarritoCompra()
     {
-        if (!Yii::$app->request->cookies->has('Carro-' . Yii::$app->user->id)) {
+        if (!Yii::$app->request->cookies->has('carro-' . Yii::$app->user->id)) {
             Yii::$app->session->setFlash('error', 'No tienes nada en el carrito');
             return $this->redirect(['site/index']);
         }
 
-        $cookieCarro = Yii::$app->request->cookies->getValue('Carro-' . Yii::$app->user->id);
+        $cookieCarro = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
 
         $precios = explode(' ', $cookieCarro);
 
