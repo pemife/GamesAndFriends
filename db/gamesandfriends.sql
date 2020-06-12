@@ -20,6 +20,7 @@ CREATE TABLE usuarios
   , es_critico          BOOLEAN         DEFAULT false
   , img_key             VARCHAR(255)
   , fondo_key           VARCHAR(255)
+  -- , pay_token           VARCHAR(255)    UNIQUE
 );
 
 DROP TABLE IF EXISTS plataformas CASCADE;

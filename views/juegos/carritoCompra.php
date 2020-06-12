@@ -18,6 +18,8 @@ foreach ($dataProvider->getModels() as $precio) {
 
 $precioTotal = (integer)($precioTotal * 100) / 100;
 
+$urlProcesarCarrito = Url::to(['copias/procesar-carrito'], true);
+$urlFinalCompra = Url::to(['copias/finalizar-compra'], true);
 ?>
 
 <div class="carrito-compra">
@@ -122,6 +124,7 @@ $precioTotal = (integer)($precioTotal * 100) / 100;
     <div id="paypal-button-container"></div>
     <script src="https://www.paypal.com/sdk/js?client-id=<?= getenv('PCLIENTID') ?>&currency=EUR" data-sdk-integration-source="button-factory"></script>
     <script>
+        token = '';
         paypal.Buttons({
             style: {
                 shape: 'pill',
@@ -130,7 +133,21 @@ $precioTotal = (integer)($precioTotal * 100) / 100;
                 label: 'paypal',
                 
             },
+
+            // Procesa el carro antes de la transaccion, para confimar que no hay errores
             createOrder: function(data, actions) {
+                $.ajax({
+                    method: 'GET',
+                    url: '<?= $urlProcesarCarrito ?>',
+                    success: function(result){
+                        if (result) {
+                            token = result;
+                        } else {
+                            window.location.href = '<?= Url::to(['site/home']) ?>';
+                        }
+                    }
+                });
+
                 return actions.order.create({
                     purchase_units: [{
                         amount: {
@@ -139,14 +156,24 @@ $precioTotal = (integer)($precioTotal * 100) / 100;
                     }]
                 });
             },
+
+            // Si la transaccion se hace correctamente, entonces finaliza la compra
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
-                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                    $.ajax({
+                        method: 'POST',
+                        url: '<?= $urlFinalCompra ?>',
+                        data: {authtoken: token},
+                        success: function(result){
+                            if (result) {
+                                window.location.href = result;
+                            }
+                        }
+                    });
                 });
             }
         }).render('#paypal-button-container');
     </script>
 
     <?= Yii::debug(Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id)) ?>
-
 </div>

@@ -54,6 +54,11 @@ class VentasController extends Controller
                                 return false;
                             }
 
+                            // if (!Usuarios::findOne(Yii::$app->user->id)->pay_token) {
+                            //     Yii::$app->session->setFlash('error', '¡No puedes poner nada en venta sin token de paypal!');
+                            //     return false;
+                            // }
+
                             return true;
                         },
                     ],

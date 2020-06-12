@@ -394,8 +394,6 @@ class JuegosController extends Controller
             ]);
 
             Yii::$app->response->cookies->add($cookie);
-
-            return Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
         } else {
             $cookieAntes = Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
 
@@ -406,11 +404,9 @@ class JuegosController extends Controller
             ]);
 
             Yii::$app->response->cookies->add($cookie);
-
-            return Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
         }
 
-        return false;
+        return Yii::$app->request->cookies->getValue('carro-' . Yii::$app->user->id);
     }
 
     /**

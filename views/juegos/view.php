@@ -315,7 +315,13 @@ $this->registerCSS($css);
                                         'width' => 30
                                     ]
                                 )
-                                . Yii::$app->formatter->asCurrency($precio->cifra * $precio->oferta),
+                                . Yii::$app->formatter->asCurrency(
+                                    round($precio->cifra * $precio->oferta, 3),
+                                    'EUR',
+                                    [
+                                        NumberFormatter::ROUNDING_MODE => 2
+                                    ]
+                                ),
                                 'javascript:void(0)',
                                 [
                                     'class' => 'btn btn-sm mr-2 mt-4 mb-4 text-light botonCompra',
