@@ -1,5 +1,14 @@
 # Dificultades encontradas
 
-Explicar, indicando también las soluciones adoptadas en cada caso.
+Token de autenticación de paypal.
 
-Incluir aquí el elemento de innovación que se indicó en la propuesta.
+Globalización de cliente de amazon S3.
+
+Creación de ventas con copias o productos
+
+Relaciones entre usuarios unidireccionales y bidireccionales
+
+
+
+
+Los elementos de innovación de mi proyecto son Amazon Web Services, y PayPal.
