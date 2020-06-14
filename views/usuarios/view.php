@@ -332,7 +332,7 @@ $this->registerJs($js);
     if ($model->es_critico) {
         echo Html::a('Ver lista de seguidores', ['index-filtrado', 'texto' => false, 'tipoLista' => 'seguidores'], ['class' => 'btn btn-success mb-4 mb-2']);
     }
-    echo Html::a('Ver lista de críticos seguidos', ['usuarios/lista-seguidos'], ['class' => 'btn btn-success mb-4 mb-2 ml-2']);
+    echo Html::a('Ver lista de críticos seguidos', ['criticas/index'], ['class' => 'btn btn-success mb-4 mb-2 ml-2']);
     ?>
 
     <h1>Inventario</h1>

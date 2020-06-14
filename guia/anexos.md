@@ -1,15 +1,8 @@
 # Anexos
 
-Documentos específicos vinculados a determinados requisitos funcionales o
-técnicos ("prueba del seis" y similares).
-
-Poner cada uno en un apartado separado, indicando en el título de cada apartado
-el código y la descripción corta del requisito asociado (por ejemplo,
-**(RF24) Prueba del seis**).
-
 **([RF26](https://github.com/pemife/GamesAndFriends/issues/26)) Code Climate**
 
-![CodeClimate](images/anexo/codeClimate.png)
+![CodeClimate](images/anexos/codeClimate.png)
 
 Estado del codigo segun Code Climate, con una mantenibilidad de rango C, de tres semanas.
 
@@ -21,37 +14,37 @@ Estado del codigo segun Code Climate, con una mantenibilidad de rango C, de tres
 
 Estas son las capturas de ejemplo para ver el diseño compatible con cada navegador.
 
-![captura chrome](images/anexo/chrome.png)
+![captura chrome](images/anexos/chrome.png)
 
 ---
 
 #### *Firefox y chromium*
 
-![captura firefox](images/anexo/firefoxChomium.png)
+![captura firefox](images/anexos/firefoxChromium.png)
 
 ---
 
 #### *Internet explorer*
 
-![captura firefox](images/anexo/internetexplorer.PNG)
+![captura firefox](images/anexos/internetexplorer.PNG)
 
 ---
 
 #### *Opera*
 
-![captura opera](images/anexo/opera.png)
+![captura opera](images/anexos/opera.png)
 
 ---
 
-**([RF38])(https://github.com/pemife/GamesAndFriends/issues/38) Despliegue local**
+**([RF38](https://github.com/pemife/GamesAndFriends/issues/38)) Despliegue local**
 
-![captura despliegue](images/anexo/despliegueLocal.png)
+![captura despliegue](images/anexos/despliegueLocal.png)
 
 ---
 
-**([RF34])(https://github.com/pemife/GamesAndFriends/issues/34) Validación html3, css3 y accesibilidad**
+**([RF34](https://github.com/pemife/GamesAndFriends/issues/34)) Validación html3, css3 y accesibilidad**
 
-![Validación html5](images/anexo/html5validate.png)
+![Validación html5](images/anexos/html5validate.png)
 
 [Enlace validación](https://validator.w3.org/nu/?doc=http%3A%2F%2Fgamesandfriends.herokuapp.com)
 
@@ -81,4 +74,4 @@ usuarios participantes.
 - Siempre hay un widget que muestra el camino que has recorrido para llegar hasta donde estés.
 
  6. ¿Cómo busco algo?
-- En cada índice hay un buscador.
+- Entrando en el apartado de lo que quieras buscar, Mercado, Comunidad o Usuarios, dentro hay barras de busqueda.

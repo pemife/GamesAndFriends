@@ -7,10 +7,10 @@
         
 <link href="./assets/6993b7a3/css/bootstrap.css" rel="stylesheet">
 <link href="./assets/d9ac8fa7/solarized_light.css" rel="stylesheet">
-<link href="./assets/837a9ec7/style.css" rel="stylesheet">
+<link href="./assets/1e3cc47/style.css" rel="stylesheet">
 <script src="./assets/7bb59eec/jquery.js"></script>
 <script src="./assets/6993b7a3/js/bootstrap.js"></script>
-<script src="./assets/ee881948/jssearch.js"></script>    <title>EtiquetasController, app\controllers\EtiquetasController - API del proyecto</title>
+<script src="./assets/cd9928dc/jssearch.js"></script>    <title>EtiquetasController, app\controllers\EtiquetasController - API del proyecto</title>
 </head>
 <body>
 
@@ -54,10 +54,8 @@
 <a class="list-group-item" href="./app-models-copias.html">Copias</a>
 <a class="list-group-item" href="./app-models-copiassearch.html">CopiasSearch</a>
 <a class="list-group-item" href="./app-models-criticas.html">Criticas</a>
-<a class="list-group-item" href="./app-models-criticassearch.html">CriticasSearch</a>
 <a class="list-group-item" href="./app-models-deseados.html">Deseados</a>
 <a class="list-group-item" href="./app-models-etiquetas.html">Etiquetas</a>
-<a class="list-group-item" href="./app-models-etiquetassearch.html">EtiquetasSearch</a>
 <a class="list-group-item" href="./app-models-ignorados.html">Ignorados</a>
 <a class="list-group-item" href="./app-models-juegos.html">Juegos</a>
 <a class="list-group-item" href="./app-models-juegossearch.html">JuegosSearch</a>
@@ -71,7 +69,6 @@
 <a class="list-group-item" href="./app-models-relaciones.html">Relaciones</a>
 <a class="list-group-item" href="./app-models-reportescomentarios.html">ReportesComentarios</a>
 <a class="list-group-item" href="./app-models-reportescriticas.html">ReportesCriticas</a>
-<a class="list-group-item" href="./app-models-user.html">User</a>
 <a class="list-group-item" href="./app-models-usuarios.html">Usuarios</a>
 <a class="list-group-item" href="./app-models-usuariossearch.html">UsuariosSearch</a>
 <a class="list-group-item" href="./app-models-ventas.html">Ventas</a>
@@ -222,9 +219,9 @@ in the request.</td>
   <th>Method</th><th>Description</th><th>Defined By</th>
 </tr>
         <tr class="inherited" id="__call()">
-        <td><a href="yii-base-baseobject.html#__call()-detail">__call()</a></td>
+        <td><a href="yii-base-component.html#__call()-detail">__call()</a></td>
         <td>Calls the named method which is not a class method.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="__clone()">
         <td><a href="yii-base-component.html#__clone()-detail">__clone()</a></td>
@@ -237,24 +234,24 @@ in the request.</td>
         <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
     </tr>
             <tr class="inherited" id="__get()">
-        <td><a href="yii-base-baseobject.html#__get()-detail">__get()</a></td>
-        <td>Returns the value of an object property.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html#__get()-detail">__get()</a></td>
+        <td>Returns the value of a component property.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="__isset()">
-        <td><a href="yii-base-baseobject.html#__isset()-detail">__isset()</a></td>
+        <td><a href="yii-base-component.html#__isset()-detail">__isset()</a></td>
         <td>Checks if a property is set, i.e. defined and not null.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="__set()">
-        <td><a href="yii-base-baseobject.html#__set()-detail">__set()</a></td>
-        <td>Sets value of an object property.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html#__set()-detail">__set()</a></td>
+        <td>Sets the value of a component property.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="__unset()">
-        <td><a href="yii-base-baseobject.html#__unset()-detail">__unset()</a></td>
-        <td>Sets an object property to null.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html#__unset()-detail">__unset()</a></td>
+        <td>Sets a component property to be null.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr id="actionCreate()">
         <td><a href="app-controllers-etiquetascontroller.html#actionCreate()-detail">actionCreate()</a></td>
@@ -264,11 +261,6 @@ in the request.</td>
             <tr id="actionDelete()">
         <td><a href="app-controllers-etiquetascontroller.html#actionDelete()-detail">actionDelete()</a></td>
         <td>Borra un modelo existente de Etiquetas.</td>
-        <td><a href="app-controllers-etiquetascontroller.html">app\controllers\EtiquetasController</a></td>
-    </tr>
-            <tr id="actionIndex()">
-        <td><a href="app-controllers-etiquetascontroller.html#actionIndex()-detail">actionIndex()</a></td>
-        <td>Lista todos los modelos de Etiquetas.</td>
         <td><a href="app-controllers-etiquetascontroller.html">app\controllers\EtiquetasController</a></td>
     </tr>
             <tr id="actionUpdate()">
@@ -312,9 +304,9 @@ in the request.</td>
         <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="beforeAction()">
-        <td><a href="yii-base-controller.html#beforeAction()-detail">beforeAction()</a></td>
+        <td><a href="yii-web-controller.html#beforeAction()-detail">beforeAction()</a></td>
         <td>This method is invoked right before an action is executed.</td>
-        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
     </tr>
             <tr id="behaviors()">
         <td><a href="app-controllers-etiquetascontroller.html#behaviors()-detail">behaviors()</a></td>
@@ -322,19 +314,19 @@ in the request.</td>
         <td><a href="app-controllers-etiquetascontroller.html">app\controllers\EtiquetasController</a></td>
     </tr>
             <tr class="inherited" id="bindActionParams()">
-        <td><a href="yii-base-controller.html#bindActionParams()-detail">bindActionParams()</a></td>
+        <td><a href="yii-web-controller.html#bindActionParams()-detail">bindActionParams()</a></td>
         <td>Binds the parameters to the action.</td>
-        <td><a href="yii-base-controller.html">yii\base\Controller</a></td>
+        <td><a href="yii-web-controller.html">yii\web\Controller</a></td>
     </tr>
             <tr class="inherited" id="canGetProperty()">
-        <td><a href="yii-base-baseobject.html#canGetProperty()-detail">canGetProperty()</a></td>
+        <td><a href="yii-base-component.html#canGetProperty()-detail">canGetProperty()</a></td>
         <td>Returns a value indicating whether a property can be read.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="canSetProperty()">
-        <td><a href="yii-base-baseobject.html#canSetProperty()-detail">canSetProperty()</a></td>
+        <td><a href="yii-base-component.html#canSetProperty()-detail">canSetProperty()</a></td>
         <td>Returns a value indicating whether a property can be set.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="className()">
         <td><a href="yii-base-baseobject.html#className()-detail">className()</a></td>
@@ -417,14 +409,14 @@ in the request.</td>
         <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="hasMethod()">
-        <td><a href="yii-base-baseobject.html#hasMethod()-detail">hasMethod()</a></td>
+        <td><a href="yii-base-component.html#hasMethod()-detail">hasMethod()</a></td>
         <td>Returns a value indicating whether a method is defined.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="hasProperty()">
-        <td><a href="yii-base-baseobject.html#hasProperty()-detail">hasProperty()</a></td>
-        <td>Returns a value indicating whether a property is defined.</td>
-        <td><a href="yii-base-baseobject.html">yii\base\BaseObject</a></td>
+        <td><a href="yii-base-component.html#hasProperty()-detail">hasProperty()</a></td>
+        <td>Returns a value indicating whether a property is defined for this component.</td>
+        <td><a href="yii-base-component.html">yii\base\Component</a></td>
     </tr>
             <tr class="inherited" id="init()">
         <td><a href="yii-base-baseobject.html#init()-detail">init()</a></td>
@@ -518,7 +510,7 @@ in the request.</td>
 <tr>
   <th>Method</th><th>Description</th><th>Defined By</th>
 </tr>
-                                                                                                                            <tr id="findModel()">
+                                                                                                                        <tr id="findModel()">
         <td><a href="app-controllers-etiquetascontroller.html#findModel()-detail">findModel()</a></td>
         <td>Encuentra el modelo Etiquetas basado en el valor de su clave primaria.</td>
         <td><a href="app-controllers-etiquetascontroller.html">app\controllers\EtiquetasController</a></td>
@@ -629,29 +621,6 @@ Esta accion está limitada solo al usuario administrador.</p>
 </td>
                 </tr>
                         </table>
-
-<!--	-->
-
-    <div class="detail-header h3" id="actionIndex()-detail">
-        <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
-        <a class="tool-link hash" href="app-controllers-etiquetascontroller.html#actionIndex()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
-        
-        actionIndex()
-        <span class="detail-header-tag small">
-            public                                    method
-                    </span>
-    </div>
-
-    
-    <div class="doc-description">
-        <p><strong>Lista todos los modelos de Etiquetas.</strong></p>
-
-        
-            </div>
-
-    <table class="detail-table table table-striped table-bordered table-hover">
-        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">mixed</span> <strong><a href="app-controllers-etiquetascontroller.html#actionIndex()-detail">actionIndex</a></strong> ( )</td></tr>
-            </table>
 
 <!--	-->
 
@@ -853,7 +822,7 @@ or be detached using <a href="yii-base-component.html#detachBehavior()-detail">d
 </div>
 
 <footer class="footer">
-        <p class="pull-right"><small>Page generated on Tue, 09 Jun 2020 08:33:38 +0000</small></p>
+        <p class="pull-right"><small>Page generated on Sun, 14 Jun 2020 15:28:18 +0000</small></p>
     Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
 
 <script>jQuery(function ($) {

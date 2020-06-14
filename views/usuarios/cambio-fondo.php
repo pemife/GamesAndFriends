@@ -78,10 +78,14 @@ $this->registerJS($js);
     display: none;
   }
 
+  .container {
+    background-color: white;
+  }
+
 </style>
 
 <h1 class="text-center bg-info rounded-pill">Imagenes de fondo</h1>
-<?php for ($i = 1; $i <= 6; $i++) :
+<?php for ($i = 1; $i <= 7; $i++) :
     $cmd = $s3->getCommand('GetObject', [
         'Bucket' => 'gamesandfriends',
         'Key' => 'Usuarios/fondos/personalizacion' . $i . '.jpg',

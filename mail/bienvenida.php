@@ -18,7 +18,7 @@ use yii\helpers\Url;
 )?> enlace</p>
 
 <p>
-    GamesandFriends1 es una pagina de compraventa de videojuegos digitales
-    de segunda mano, asi que si tienes una clave de un juego que no usas,
-    ¡Aqui podrás venderlo!.
+    GamesandFriends es una página de compra-venta de videojuegos digitales
+    de segunda mano, así que si tienes una clave de un juego que no usas,
+    ¡aquí podrás venderlo!.
 </p>
