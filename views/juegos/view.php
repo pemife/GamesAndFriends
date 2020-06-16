@@ -6,7 +6,6 @@ use yii\grid\GridView;
 use kartik\rating\StarRating as RatingStarRating;
 use yii\bootstrap4\Modal;
 use yii\widgets\ListView;
-use Aws\S3\S3Client;
 use yii\bootstrap4\Dropdown;
 use yii\helpers\Url;
 

@@ -10,7 +10,7 @@ CREATE TABLE usuarios
   , nombre              VARCHAR(32)     NOT NULL UNIQUE
                                         CONSTRAINT ck_nombre_sin_espacios
                                         CHECK (nombre NOT ILIKE '% %')
-  , password                            VARCHAR(60)   NOT NULL
+  , password            VARCHAR(60)     NOT NULL
   , created_at          DATE            NOT NULL DEFAULT CURRENT_DATE
   , requested_at        TIMESTAMP(0)    DEFAULT CURRENT_TIMESTAMP
   , token               VARCHAR(32)
@@ -141,22 +141,21 @@ DROP TABLE IF EXISTS usuarios_etiquetas CASCADE;
 
 CREATE TABLE usuarios_etiquetas
 (
-    id              BIGSERIAL         PRIMARY KEY
-  , usuario_id      BIGINT            REFERENCES usuarios(id)
+    usuario_id      BIGINT            REFERENCES usuarios(id)
                                       ON DELETE SET NULL
                                       ON UPDATE CASCADE
   , etiqueta_id     BIGINT            NOT NULL
                                       REFERENCES etiquetas(id)
                                       ON DELETE CASCADE
                                       ON UPDATE CASCADE
+  , PRIMARY KEY(usuario_id, etiqueta_id)
 );
 
 DROP TABLE IF EXISTS juegos_etiquetas CASCADE;
 
 CREATE TABLE juegos_etiquetas
 (
-    id               BIGSERIAL         PRIMARY KEY
-  , juego_id         BIGINT            NOT NULL
+    juego_id         BIGINT            NOT NULL
                                        REFERENCES juegos(id)
                                        ON DELETE CASCADE
                                        ON UPDATE CASCADE
@@ -164,6 +163,7 @@ CREATE TABLE juegos_etiquetas
                                        REFERENCES etiquetas(id)
                                        ON DELETE CASCADE
                                        ON UPDATE CASCADE
+  , PRIMARY KEY(juego_id, etiqueta_id)
 );
 
 DROP TABLE IF EXISTS copias CASCADE;
@@ -314,7 +314,7 @@ DROP TABLE IF EXISTS precios CASCADE;
 CREATE TABLE precios
 (   id              BIGSERIAL     PRIMARY KEY
   , juego_id        BIGINT        REFERENCES juegos(id)
-                                  ON DELETE NO ACTION
+                                  ON DELETE CASCADE
                                   ON UPDATE CASCADE
   , plataforma_id   BIGINT        REFERENCES plataformas(id)
                                   ON DELETE NO ACTION
@@ -333,7 +333,7 @@ VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com
 
 INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ, cont_adul, edad_minima, img_key)
 VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix LLC', 'Epic Games Inc.', false, 3, 'rocket-league.jpg'),
-('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con esteticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.', 'Nicalis Inc.', false, 12, 'isaac.jpg'),
+('The Binding of Isaac: Rebirth', 'Adéntrate en el sótano intentando huir de tu asesina, un juego Rogue-Like con estéticas bizarras y miles de secretos.', '2014-11-04', 'Nicalis Inc.', 'Nicalis Inc.', false, 12, 'isaac.jpg'),
 ('Counter Strike: Global Offensive', 'Juego de tiros en primera persona tactico, secuela de la mitica saga counter strike.', '2012-08-21', 'Valve', 'Valve', false, 16, 'csgo.jpg');
 
 INSERT INTO productos (nombre, descripcion, stock, propietario_id, img_key)

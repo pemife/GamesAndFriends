@@ -26,3 +26,7 @@ Venta de juegos de segunda mano entre usuarios.
 # Elemento de innovación
 
 Uso de paypal para los pagos y Amazon Web Services para el almacenamiento de imágenes y tráilers de juegos.
+
+## Enlace a Github Pages
+
+[Enlace Girhub Pages](https://pemife.github.io/GamesAndFriends/)
