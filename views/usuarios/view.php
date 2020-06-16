@@ -231,6 +231,9 @@ $this->registerJs($js);
                             'id' => 'botonFondos'
                         ]) ?>
                     </li>
+                    <li>
+                        <?= Html::a('Añadir géneros preferidos', ['usuarios/anadir-preferencias'], ['class' => 'btn btn-link',]) ?>
+                    </li>
                     <?php if ($model->token != null) : ?>
                     <li>
                         <?= Html::a(
@@ -302,6 +305,7 @@ $this->registerJs($js);
             'email:email',
             'biografia:ntext',
             'fechanac:Date',
+            'preferencias',
         ],
     ]) ?>
 

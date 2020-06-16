@@ -49,10 +49,7 @@
 <a class="list-group-item" href="#navigation-80" data-toggle="collapse" data-parent="#navigation">Conclusiones <b class="caret"></b></a><div id="navigation-80" class="submenu panel-collapse collapse"><a class="list-group-item" href="./conclusiones.html">Conclusiones</a></div>
 <a class="list-group-item" href="#navigation-81" data-toggle="collapse" data-parent="#navigation">Anexos <b class="caret"></b></a><div id="navigation-81" class="submenu panel-collapse collapse"><a class="list-group-item" href="./anexos.html">Anexos</a></div></div>    </div>
     <div class="col-md-9 guide-content" role="main">
-        <h1>Instrucciones de instalación y despliegue <span id="instrucciones-de-instalacion-y-despliegue"></span><a href="#instrucciones-de-instalacion-y-despliegue" class="hashlink">&para;</a></h1>
-<div class="toc"><ol><li><a href="#en-local">En local</a></li>
-<li><a href="#en-la-nube">En la nube</a></li></ol></div>
-<h2>En local <span id="en-local"></span><a href="#en-local" class="hashlink">&para;</a></h2><p><strong>Es necesario:</strong></p>
+        <h1>Instrucciones de instalación y despliegue <span id="instrucciones-de-instalacion-y-despliegue"></span><a href="#instrucciones-de-instalacion-y-despliegue" class="hashlink">&para;</a></h1><h2>En local <span id="en-local"></span><a href="#en-local" class="hashlink">&para;</a></h2><p><strong>Es necesario:</strong></p>
 <ul>
 <li>Git</li>
 <li>Composer</li>
@@ -70,57 +67,54 @@
 <li><p>Ejecutamos los siguientes comandos:</p>
 </li>
 </ul>
-<p><code>git clone https://github.com/pemife/gamesandfriends</code></p>
-<p><code>composer install</code></p>
-<ul>
-<li>Cambiamos la dirección del correo en config/params.php</li>
-</ul>
-<p><code>'smtpUsername' =&gt; 'xxxxxxxxxxxxxx@xxxx.xxx'</code></p>
-<ul>
-<li><p>Instalamos la base de datos con los siguientes comandos:
-<code>db/create.sh</code>
-<code>db/load.sh</code>
-./yii migrate
-`</p>
-</li>
-<li><p>Instanciar las variables de entorno correspondientes en el archivo ".env" (si no existe, lo creamos):</p>
-</li>
-</ul>
-<ol>
-<li>KEY: La clave de cliente de amazon s3</li>
-<li>SECRET: El secreto del cliente de amazon s3</li>
-<li>SMTP_PASS: Contraseña del correo que enviará las notificaciones</li>
-<li>MEDIA: Esta variable permite que haya contenido multimedia cuando tiene el valor '1', y lo bloquea con el valor '0'</li>
-<li>PCLIENTID: El id de la cuenta de paypal sandbox que recibirá las transacciones simuladas.</li>
-</ol>
-<ul>
-<li>Finalizamos con el comando <code>make serve</code>, y entrando con el navegador a la direccion de "localhost:8080".</li>
-</ul>
-<h2>En la nube <span id="en-la-nube"></span><a href="#en-la-nube" class="hashlink">&para;</a></h2><p><strong>Es necesario:</strong></p>
-<ul>
-<li>Heroku CLI</li>
-</ul>
-<p><strong>Instalación</strong></p>
-<ul>
-<li>Accedemos al repositorio del proyecto, <a href="https://github.com/pemife/gamesandfriends">Enlace a repo</a>.</li>
-<li><em>Forkeamos</em> el repositorio.</li>
-<li>Accedemos a heroku e iniciamos sesión, o creamos una cuenta si no la tenemos.</li>
-<li>Creamos una aplicación.</li>
-<li>Enlazamos con nuestro repositorio creado a partir del fork del proyecto.</li>
-<li>Habilitamos el addon "heroku postgres" para la base de datos.</li>
-<li><p>Declaramos las variables de entorno:</p>
-<ol>
-<li>KEY: La clave de cliente de amazon s3</li>
-<li>SECRET: El secreto del cliente de amazon s3</li>
-<li>SMTP_PASS: Contraseña del correo que enviará las notificaciones</li>
-<li>MEDIA: Esta variable permite que haya contenido multimedia cuando tiene el valor '1', y lo bloquea con el valor '0'</li>
-<li>PCLIENTID: El id de la cuenta de paypal sandbox que recibirá las transacciones simuladas.</li>
-</ol>
-</li>
-<li>Hacemos un clone del repositorio en local</li>
-<li>Realizamos el comando <code>heroku login</code></li>
-<li>Por ultimo cargamos la base de datos con el comando <code>heroku psql &lt; db/gamesandfriends.sql</code></li>
-</ul>
+<pre><code class="hljs markdown">
+<span class="hljs-code">```</span>composer install<span class="hljs-code">```</span>
+<span class="hljs-bullet">
+- </span>Cambiamos la dirección del correo en config/params.php
+
+<span class="hljs-code">```</span> 'smtpUsername' =&gt; 'xxxxxxxxxxxxxx@xxxx.xxx'<span class="hljs-code">```</span>
+<span class="hljs-bullet">
+- </span>Instalamos la base de datos con los siguientes comandos:
+<span class="hljs-code">```</span> db/create.sh <span class="hljs-code">```</span>
+<span class="hljs-code">```</span> db/load.sh <span class="hljs-code">```</span>
+<span class="hljs-code">```</span> ./yii migrate <span class="hljs-code">```</span>
+<span class="hljs-bullet">
+- </span>Instanciar las variables de entorno correspondientes en el archivo ".env" (si no existe, lo creamos):
+<span class="hljs-bullet">
+1. </span>KEY: La clave de cliente de amazon s3.
+<span class="hljs-bullet">2. </span>SECRET: El secreto del cliente de amazon s3.
+<span class="hljs-bullet">3. </span>SMTP_PASS: Contraseña del correo que enviará las notificaciones.
+<span class="hljs-bullet">4. </span>MEDIA: Esta variable permite que haya contenido multimedia cuando tiene el valor '1', y lo bloquea con el valor '0'.
+<span class="hljs-bullet">5. </span>PCLIENTID: El id de la cuenta de paypal sandbox que recibirá las transacciones simuladas.
+<span class="hljs-bullet">
+- </span>Finalizamos con el comando <span class="hljs-code">```</span>make serve<span class="hljs-code">```</span>, y entrando con el navegador a la direccion de "localhost:8080".
+
+<span class="hljs-section">## En la nube</span>
+
+<span class="hljs-strong">**Es necesario:**</span>
+<span class="hljs-bullet">
+- </span>Heroku CLI
+
+<span class="hljs-strong">**Instalación**</span>
+<span class="hljs-bullet">
+- </span>Accedemos al repositorio del proyecto, [<span class="hljs-string">Enlace a repo</span>](<span class="hljs-link">https://github.com/pemife/gamesandfriends</span>).
+<span class="hljs-bullet">- </span><span class="hljs-emphasis">*Forkeamos*</span> el repositorio.
+<span class="hljs-bullet">- </span>Accedemos a heroku e iniciamos sesión o creamos una cuenta si no la tenemos.
+<span class="hljs-bullet">- </span>Creamos una aplicación.
+<span class="hljs-bullet">- </span>Enlazamos con nuestro repositorio creado a partir del fork del proyecto.
+<span class="hljs-bullet">- </span>Habilitamos el addon "heroku postgres" para la base de datos.
+<span class="hljs-bullet">- </span>Declaramos las variables de entorno:
+<span class="hljs-bullet">
+    1. </span>KEY: La clave de cliente de amazon s3.
+<span class="hljs-bullet">    2. </span>SECRET: El secreto del cliente de amazon s3.
+<span class="hljs-bullet">    3. </span>SMTP_PASS: Contraseña del correo que enviará las notificaciones.
+<span class="hljs-bullet">    4. </span>MEDIA: Esta variable permite que haya contenido multimedia cuando tiene el valor '1' y lo bloquea con el valor '0'.
+<span class="hljs-bullet">    5. </span>PCLIENTID: El id de la cuenta de paypal sandbox que recibirá las transacciones simuladas.
+<span class="hljs-bullet">
+- </span>Hacemos un clone del repositorio en local
+<span class="hljs-bullet">- </span>Realizamos el comando <span class="hljs-code">```</span>heroku login<span class="hljs-code">```</span>
+<span class="hljs-bullet">- </span>Por ultimo cargamos la base de datos con el comando <span class="hljs-code">```</span>heroku psql <span class="xml"><span class="hljs-tag">&lt; <span class="hljs-attr">db</span>/<span class="hljs-attr">gamesandfriends.sql</span>```
+</span></span></code></pre>
         <div class="toplink"><a href="#" class="h1" title="go to top"><span class="glyphicon glyphicon-arrow-up"></a></div>
     </div>
 </div>
@@ -129,7 +123,7 @@
 </div>
 
 <footer class="footer">
-        <p class="pull-right"><small>Page generated on Tue, 16 Jun 2020 18:01:01 +0000</small></p>
+        <p class="pull-right"><small>Page generated on Tue, 16 Jun 2020 20:31:57 +0000</small></p>
     Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
 
 <script>jQuery(function ($) {

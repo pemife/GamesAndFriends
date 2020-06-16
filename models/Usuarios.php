@@ -837,4 +837,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             ]
         ];
     }
+
+    public function getPreferencias()
+    {
+        return implode(', ', $this->generosPreferencia(false));
+    }
 }
