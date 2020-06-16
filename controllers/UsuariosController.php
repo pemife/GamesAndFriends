@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Copias;
 use app\models\Deseados;
+use app\models\Etiquetas;
 use app\models\Ignorados;
 use app\models\Juegos;
 use app\models\LoginForm;
@@ -48,7 +49,7 @@ class UsuariosController extends Controller
                     'desbloquear-usuario', 'ver-lista-deseos',
                     'index', 'ordenar-lista-deseos',
                     'seguir-critico', 'abandonar-critico',
-                    'index-filtrado', 'lista-seguidos'
+                    'index-filtrado', 'lista-seguidos', 'anadir-preferencias'
                 ],
                 'rules' => [
                     [
@@ -58,7 +59,7 @@ class UsuariosController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['logout', 'index', 'lista-seguidos'],
+                        'actions' => ['logout', 'index', 'lista-seguidos', 'anadir-preferencias'],
                         'roles' => ['@'],
                     ],
                     [
@@ -1324,6 +1325,43 @@ class UsuariosController extends Controller
         return $this->render('cambio-fondo', [
             'model' => $model,
             's3' => $this->clienteS3(),
+        ]);
+    }
+
+    /**
+     * Permite al usuario seleccionar sus generos de preferencia
+     * genera una vista con las opciones de géneros.
+     *
+     * @return Response
+     */
+    public function actionAnadirPreferencias()
+    {
+        $model = $this->findModel(Yii::$app->user->id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $usuario = Yii::$app->request->post('Usuarios');
+            if ($usuario['etiquetas']) {
+                foreach ($model->etiquetas as $etiqueta) {
+                    $model->unlink('etiquetas', $etiqueta, true);
+                }
+                foreach ($usuario['etiquetas'] as $idEtiqueta) {
+                    if (in_array($idEtiqueta, $model->generosPreferencia(true))) {
+                        continue;
+                    }
+                    $model->link('etiquetas', Etiquetas::findOne($idEtiqueta));
+                }
+                Yii::$app->session->setFlash('success', 'Los generos de preferencia se han guardado correctamente');
+                return $this->redirect(['view', 'id' => Yii::$app->user->id]);
+            }
+        }
+
+        foreach (Etiquetas::find()->all() as $etiqueta) {
+            $generosArray[$etiqueta->id] = $etiqueta->nombre;
+        }
+
+        return $this->render('generos-preferencia', [
+            'model' => $model,
+            'generosArray' => $generosArray,
         ]);
     }
 
