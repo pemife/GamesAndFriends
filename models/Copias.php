@@ -42,7 +42,7 @@ class Copias extends \yii\db\ActiveRecord
             [['juego_id', 'propietario_id', 'plataforma_id'], 'integer'],
             [['clave'], 'default', 'value' => $this->generaClave()],
             [['clave'], 'string', 'max' => 17],
-            [['clave'], 'match', 'pattern' => '/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/'],
+            [['clave'], 'match', 'pattern' => '/^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$/', 'message' => 'La clave debe tener este patrón XXXXX-XXXXX-XXXXX'],
             [['juego_id'], 'exist', 'skipOnError' => true, 'targetClass' => Juegos::className(), 'targetAttribute' => ['juego_id' => 'id']],
             [['plataforma_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plataformas::className(), 'targetAttribute' => ['plataforma_id' => 'id']],
             [['propietario_id'], 'exist', 'skipOnError' => true, 'targetClass' => Usuarios::className(), 'targetAttribute' => ['propietario_id' => 'id']],
