@@ -74,7 +74,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['fondo_key'], 'default', 'value' => ''],
             [['fondo_key'], 'string', 'max'=> 255],
             [['img_key'], 'default', 'value' => 'sin-imagen.jpg'],
-            [['img_key'], 'string', 'max'=> 255]
+            [['img_key'], 'string', 'max'=> 255],
+            [['pay_token'], 'unique']
             // [['venta_solicitada'], 'validarVentaTerminada'],
         ];
     }
@@ -97,6 +98,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'es_critico' => 'Es Critico',
             'venta_solicitada' => 'Id de venta solicitada',
             'img_key' => 'Imagen de usuario',
+            'pay_token' => 'Cliente ID de cuenta de PayPal Sandbox',
         ];
     }
 

@@ -20,7 +20,7 @@ CREATE TABLE usuarios
   , es_critico          BOOLEAN         DEFAULT false
   , img_key             VARCHAR(255)
   , fondo_key           VARCHAR(255)
-  -- , pay_token           VARCHAR(255)    UNIQUE
+  , pay_token           VARCHAR(255)    UNIQUE
 );
 
 DROP TABLE IF EXISTS plataformas CASCADE;
@@ -36,17 +36,17 @@ DROP TABLE IF EXISTS juegos CASCADE;
 
 CREATE TABLE juegos
 (
-    id           BIGSERIAL     PRIMARY KEY
-  , titulo       VARCHAR(255)  NOT NULL UNIQUE
-  , descripcion  TEXT
-  , fechaLan     DATE
-  , dev          VARCHAR(255)  NOT NULL
-  , publ         VARCHAR(255)  NOT NULL
-  , cont_adul    BOOLEAN       NOT NULL
+    id              BIGSERIAL     PRIMARY KEY
+  , titulo          VARCHAR(255)  NOT NULL UNIQUE
+  , descripcion     TEXT
+  , fechaLan        DATE
+  , dev             VARCHAR(255)  NOT NULL
+  , publ            VARCHAR(255)  NOT NULL
+  , cont_adul       BOOLEAN       NOT NULL
                                DEFAULT false
-  , edad_minima  NUMERIC(2)    NOT NULL
+  , edad_minima     NUMERIC(2)    NOT NULL
   , CONSTRAINT CHK_Edad_Minima_Correcta CHECK (edad_minima=3 OR edad_minima=7 OR edad_minima=12 OR edad_minima=16 OR edad_minima=18)
-  , img_key      VARCHAR(255)  UNIQUE
+  , img_key         VARCHAR(255)  UNIQUE
 );
 
 DROP TABLE productos CASCADE;
@@ -327,9 +327,9 @@ CREATE TABLE precios
 
 --INSERTS --
 
-INSERT INTO usuarios (nombre, password, email, fechanac, img_key)
-VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com', '1987-01-01', 'animalCrossing/1.jpg'),
-('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org', '1995-12-03', 'zelda/3.jpg');
+INSERT INTO usuarios (nombre, password, email, fechanac, img_key, pay_token)
+VALUES ('admin', crypt('hnmpl', gen_salt('bf', 10)), 'gamesandfriends2@gmail.com', '1987-01-01', 'animalCrossing/1.jpg', 'AYi7h-xgIIXdO7160eS5SFxWc6j1T-AxyBnlpJRsFIWARxK0BobPklwQXeEXs3lviWPmsH6MKpMnZEnT'),
+('pepe', crypt('pepe', gen_salt('bf', 10)), 'jose.millan@iesdonana.org', '1995-12-03', 'zelda/3.jpg', 'Aanc4pigCMCylnRGnGleY8N6emFEJCALhbOIc6qHbQpp2lbEa3IGx2YcvFZjmyCmeFhgYaWmEt72IbDa');
 
 INSERT INTO juegos (titulo, descripcion, fechaLan, dev, publ, cont_adul, edad_minima, img_key)
 VALUES ('Rocket League', 'Futbol con coches teledirigidos equipados con un cohete. Una entrega de juego basado en fisicas con el motor Unreal Engine.', '2015-07-07', 'Psyonix LLC', 'Epic Games Inc.', false, 3, 'rocket-league.jpg'),

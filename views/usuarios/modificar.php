@@ -32,21 +32,8 @@ use kartik\date\DatePicker;
       ]
     ]) ?>
 
-    <?php
-        // echo $model->fechanac;
-        // echo '<br>';
-        // echo strtotime($model->fechanac);
-        // echo '<br>';
-        // echo date('Y-m-d');
-        // echo '<br>';
-        // if(strtotime($model->fechanac) > strtotime(date('Y-m-d'))){
-        //     echo '<p style="color:red;">es <b>mayor</b> que la fecha de hoy</p>';
-        //     echo 'fechanac: ' . strtotime($model->fechanac) . '<br>ahora: ' . strtotime(date('Y-m-d'));
-        // } else {
-        //     echo '<p style="color:red;">es <b>MENOR</b> que la fecha de hoy</p>';
-        //     echo 'fechanac: ' . strtotime($model->fechanac) . '<br>ahora: ' . strtotime(date('Y-m-d'));
-        // };
-    ?>
+    <?= $form->field($model, 'pay_token')->textInput(['maxlength' => true]) ?>
+    <p>Para mas información sobre PayPal Sandbox pinche <a href="https://pemife.github.io/GamesAndFriends/manual.html">este</a> enlace</p>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>

@@ -14,6 +14,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\Cookie;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -54,10 +55,10 @@ class VentasController extends Controller
                                 return false;
                             }
 
-                            // if (!Usuarios::findOne(Yii::$app->user->id)->pay_token) {
-                            //     Yii::$app->session->setFlash('error', '¡No puedes poner nada en venta sin token de paypal!');
-                            //     return false;
-                            // }
+                            if (!Usuarios::findOne(Yii::$app->user->id)->pay_token) {
+                                Yii::$app->session->setFlash('error', '¡No puedes poner nada en venta sin token de paypal!');
+                                return false;
+                            }
 
                             return true;
                         },
@@ -86,12 +87,12 @@ class VentasController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['solicitar-compra'],
+                        'actions' => ['procesar'],
                         'matchCallback' => function ($rule, $action) {
                             $venta = Ventas::findOne(Yii::$app->request->queryParams['idVenta']);
 
                             if (Yii::$app->user->isGuest) {
-                                Yii::$app->session->setFlash('error', '¡No puedes solicitar nada sin iniciar sesion!');
+                                Yii::$app->session->setFlash('error', '¡No puedes comprar nada sin iniciar sesion!');
                                 return false;
                             }
                             
@@ -102,56 +103,77 @@ class VentasController extends Controller
                                 return false;
                             }
                             
-                            if (isset($comprador->solicitud)) {
-                                Yii::$app->session->setFlash('error', '¡Ya tienes una compra solicitada!');
-                                return false;
-                            }
-                            
                             if (Yii::$app->user->id == $venta->vendedor->id) {
                                 Yii::$app->session->setFlash('error', '¡No puedes comprarte a ti mismo!');
                                 return false;
                             }
                             
                             if (isset($venta->finished_at)) {
-                                Yii::$app->session->setFlash('error', '¡No puedes solicitar la compra de una venta terminada!');
+                                Yii::$app->session->setFlash('error', '¡No puedes comprar en una venta terminada!');
                                 return false;
                             }
 
                             return true;
                         },
                     ],
+                    // [
+                    //     'allow' => true,
+                    //     'actions' => ['finalizar-venta'],
+                    //     'matchCallback' => function ($rule, $action) {
+                    //         $venta = Ventas::findOne(Yii::$app->request->queryParams['idVenta']);
+
+                    //         if (isset($venta->finished_at)) {
+                    //             Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta que ya esta acabada!');
+                    //             return false;
+                    //         }
+
+                    //         $comprador = Usuarios::findOne(Yii::$app->request->queryParams['idComprador']);
+
+                    //         if (Yii::$app->user->isGuest) {
+                    //             Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta sin iniciar sesion!');
+                    //             return false;
+                    //         }
+
+                    //         if ($venta->vendedor->id == Yii::$app->user->id) {
+                    //             if ($venta->vendedor->esVerificado() && $comprador->esVerificado()) {
+                    //                 if ($comprador->solicitud->id == $venta->id) {
+                    //                     return true;
+                    //                 }
+                    //                 Yii::$app->session->setFlash('error', '¡El comprador no ha solicitado esta venta!');
+                    //                 return false;
+                    //             }
+                    //             Yii::$app->session->setFlash('error', '¡Los usuarios implicados en la venta deben estar verificados!');
+                    //             return false;
+                    //         }
+                    //         Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta que no es tuya!');
+                    //         return false;
+                    //     },
+                    // ],
                     [
                         'allow' => true,
                         'actions' => ['finalizar-venta'],
                         'matchCallback' => function ($rule, $action) {
-                            $venta = Ventas::findOne(Yii::$app->request->queryParams['idVenta']);
-
-                            if (isset($venta->finished_at)) {
-                                Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta que ya esta acabada!');
-                                return false;
-                            }
-
-                            $comprador = Usuarios::findOne(Yii::$app->request->queryParams['idComprador']);
-
                             if (Yii::$app->user->isGuest) {
-                                Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta sin iniciar sesion!');
+                                Yii::$app->session->setFlash('error', 'Error al procesar la compra [sesion erronea]');
                                 return false;
                             }
 
-                            if ($venta->vendedor->id == Yii::$app->user->id) {
-                                if ($venta->vendedor->esVerificado() && $comprador->esVerificado()) {
-                                    if ($comprador->solicitud->id == $venta->id) {
-                                        return true;
-                                    }
-                                    Yii::$app->session->setFlash('error', '¡El comprador no ha solicitado esta venta!');
-                                    return false;
-                                }
-                                Yii::$app->session->setFlash('error', '¡Los usuarios implicados en la venta deben estar verificados!');
+                            // Compruebo que contiene la variable de autenticación
+                            if (!Yii::$app->request->post('authtoken')) {
+                                Yii::$app->session->setFlash('error', 'Compra no autorizada');
                                 return false;
                             }
-                            Yii::$app->session->setFlash('error', '¡No puedes finalizar una venta que no es tuya!');
+
+                            // Aseguro que al finalizar la compra existe la token de autorizacion
+                            // que se creó al procesar el carrito antes de la transacción
+                            $tokenCookie = Yii::$app->request->cookies->getValue('authtoken');
+                            $tokenPost = Yii::$app->request->post('authtoken');
+                            if ($tokenCookie == $tokenPost) {
+                                return true;
+                            }
+
                             return false;
-                        },
+                        }
                     ],
                     [
                         'allow' => true,
@@ -610,36 +632,39 @@ class VentasController extends Controller
      * solicitada al usuario solicitante.
      *
      * @param integer $idVenta el id de la venta solicitada
-     * @return Response
+     * @return string
      * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
-    public function actionSolicitarCompra($idVenta)
+    public function actionProcesar($idVenta, $idComprador)
     {
+        // Si no hay errores de validacion de la venta, crea una token
+        // de autorizacion, lo asigna a una cookie y lo devuelve.
         $venta = Ventas::findOne($idVenta);
-        $vendedor = Usuarios::findOne($venta->vendedor_id);
-        $comprador = Usuarios::findOne(Yii::$app->user->id);
-        $comprador->venta_solicitada = $idVenta;
+        $comprador = Usuarios::findOne($idComprador);
 
-        $mail = Yii::$app->mailer->compose(
-            'confirmacionVenta',
-            [
-                'idVenta' => $venta->id,
-                'idComprador' => Yii::$app->user->id,
-            ]
-        )
-        ->setFrom('gamesandfriends2@gmail.com')
-        ->setTo($vendedor->email)
-        ->setSubject('Confirmacion de venta');
+        $item = $venta->producto ? Productos::findOne($venta->producto->id) : Copias::findOne($venta->copia->id);
 
-        if ($comprador->save()) {
-            if ($mail->send()) {
-                Yii::$app->session->setFlash('info', '¡Se ha enviado la solicitud!');
-            }
-        } else {
-            Yii::$app->session->setFlash('error', 'Ha ocurrido un error en la solicitud de compra');
+        $item->propietario_id = $comprador->id;
+        $venta->comprador_id = $comprador->id;
+        $comprador->venta_solicitada = null;
+        $venta->finished_at = date('Y-m-d H:i:s');
+
+        if ($item->validate() && $venta->validate() && $comprador->validate()) {
+            $tokenAuth = Yii::$app->security->generateRandomString(32);
+    
+            $cookieAuth = new Cookie([
+                'name' => 'authtoken',
+                'value' =>  $tokenAuth,
+                'expire' => time() + 86400 * 365,
+            ]);
+    
+            Yii::$app->response->cookies->add($cookieAuth);
+    
+            return $tokenAuth;
         }
 
-        return $this->redirect(['ventas/view', 'id' => $venta->id]);
+        Yii::$app->session->setFlash('error', '¡Ha ocurrido un error al procesar la compra [Copia inválida]!');
+        return false;
     }
 
     /**
@@ -652,8 +677,11 @@ class VentasController extends Controller
      * @return Response|boolean
      * @throws ForbiddenHttpException si no supera las reglas de acceso
      */
-    public function actionFinalizarVenta($idVenta, $idComprador)
+    public function actionFinalizarVenta()
     {
+        $idVenta = Yii::$app->request->post('idVenta');
+        $idComprador = Yii::$app->request->post('idComprador');
+
         $venta = Ventas::findOne($idVenta);
         $comprador = Usuarios::findOne($idComprador);
 
