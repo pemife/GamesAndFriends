@@ -314,7 +314,7 @@ DROP TABLE IF EXISTS precios CASCADE;
 CREATE TABLE precios
 (   id              BIGSERIAL     PRIMARY KEY
   , juego_id        BIGINT        REFERENCES juegos(id)
-                                  ON DELETE NO ACTION
+                                  ON DELETE CASCADE
                                   ON UPDATE CASCADE
   , plataforma_id   BIGINT        REFERENCES plataformas(id)
                                   ON DELETE NO ACTION
