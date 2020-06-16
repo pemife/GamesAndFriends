@@ -44,22 +44,6 @@ class EtiquetasController extends Controller
     }
 
     /**
-     * Lista todos los modelos de Etiquetas.
-     *
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new EtiquetasSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
      * Muestra un único modelo Etiquetas.
      *
      * @param int $id
