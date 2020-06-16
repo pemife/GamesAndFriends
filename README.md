@@ -4,7 +4,10 @@
     </a>
     <h1 align="center">Games and Friends</h1>
     <br>
+    <hr>
 </p>
+
+<a href="https://pemife.github.io/GamesAndFriends/">GitHub Pages</a>
 
 # Descripción general del proyecto
 

@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return Html::encode($model->copia->juego->titulo) . '<br>' . Html::a(
                         Html::img($model->copia->juego->urlImagen, ['class' => 'mt-2', 'height' => 85, 'width' => 170, 'alt' => $model->copia->juego->titulo]),
-                        ['juegos/view', 'id' => $model->copia->juego->id]
+                        ['ventas/view', 'id' => $model->id]
                     );
                 }
             ],
@@ -64,7 +64,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'precio',
-                'contentOptions' => ['itemprop' => 'price']
+                'contentOptions' => ['itemprop' => 'price'],
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::encode(
+                        Yii::$app->formatter->asCurrency(
+                            round($model->precio, 3),
+                            'EUR',
+                            [
+                                NumberFormatter::ROUNDING_MODE => 2
+                            ]
+                        )
+                    );
+                }
             ],
             [
               'class' => 'yii\grid\ActionColumn',
