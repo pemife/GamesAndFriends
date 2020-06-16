@@ -295,8 +295,8 @@ y retira la solicitud de venta del usuario comprador.</td>
         <td>Muestra todas las ventas donde el vendedor es el usuario logueado.</td>
         <td><a href="app-controllers-ventascontroller.html">app\controllers\VentasController</a></td>
     </tr>
-            <tr id="actionSolicitarCompra()">
-        <td><a href="app-controllers-ventascontroller.html#actionSolicitarCompra()-detail">actionSolicitarCompra()</a></td>
+            <tr id="actionProcesar()">
+        <td><a href="app-controllers-ventascontroller.html#actionProcesar()-detail">actionProcesar()</a></td>
         <td>Crea la solicitud de compra de un objeto en venta, y asigna la venta
 solicitada al usuario solicitante.</td>
         <td><a href="app-controllers-ventascontroller.html">app\controllers\VentasController</a></td>
@@ -797,20 +797,8 @@ y retira la solicitud de venta del usuario comprador.</strong></p>
             </div>
 
     <table class="detail-table table table-striped table-bordered table-hover">
-        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response|<a href="http://www.php.net/language.types.boolean">boolean</a></span> <strong><a href="app-controllers-ventascontroller.html#actionFinalizarVenta()-detail">actionFinalizarVenta</a></strong> ( <span style="color: #0000BB">$idVenta</span>, <span style="color: #0000BB">$idComprador</span> )</td></tr>
-                                    <tr>
-                  <td class="param-name-col"><span style="color: #0000BB">$idVenta</span></td>
-                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
-                  <td class="param-desc-col"><p>El id de la venta a terminar</p>
-</td>
-                </tr>
-                            <tr>
-                  <td class="param-name-col"><span style="color: #0000BB">$idComprador</span></td>
-                  <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
-                  <td class="param-desc-col"><p>El id del usuario que compra el item</p>
-</td>
-                </tr>
-                                                    <tr>
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response|<a href="http://www.php.net/language.types.boolean">boolean</a></span> <strong><a href="app-controllers-ventascontroller.html#actionFinalizarVenta()-detail">actionFinalizarVenta</a></strong> ( )</td></tr>
+                                                            <tr>
                   <th class="param-name-col">throws</th>
                   <td class="param-type-col">\app\controllers\ForbiddenHttpException</td>
                   <td class="param-desc-col"><p>si no supera las reglas de acceso</p>
@@ -879,11 +867,11 @@ y retira la solicitud de venta del usuario comprador.</strong></p>
 
 <!--	-->
 
-    <div class="detail-header h3" id="actionSolicitarCompra()-detail">
+    <div class="detail-header h3" id="actionProcesar()-detail">
         <a href="#" class="tool-link" title="go to top"><span class="glyphicon glyphicon-arrow-up"></span></a>
-        <a class="tool-link hash" href="app-controllers-ventascontroller.html#actionSolicitarCompra()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
+        <a class="tool-link hash" href="app-controllers-ventascontroller.html#actionProcesar()-detail" title="direct link to this method"><span class="glyphicon icon-hash"></span></a>
         
-        actionSolicitarCompra()
+        actionProcesar()
         <span class="detail-header-tag small">
             public                                    method
                     </span>
@@ -898,12 +886,17 @@ solicitada al usuario solicitante.</strong></p>
             </div>
 
     <table class="detail-table table table-striped table-bordered table-hover">
-        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type">\app\controllers\Response</span> <strong><a href="app-controllers-ventascontroller.html#actionSolicitarCompra()-detail">actionSolicitarCompra</a></strong> ( <span style="color: #0000BB">$idVenta</span> )</td></tr>
+        <tr><td colspan="3" class="signature"><span class="signature-defs">public</span> <span class="signature-type"><a href="http://www.php.net/language.types.string">string</a></span> <strong><a href="app-controllers-ventascontroller.html#actionProcesar()-detail">actionProcesar</a></strong> ( <span style="color: #0000BB">$idVenta</span>, <span style="color: #0000BB">$idComprador</span> )</td></tr>
                                     <tr>
                   <td class="param-name-col"><span style="color: #0000BB">$idVenta</span></td>
                   <td class="param-type-col"><a href="http://www.php.net/language.types.integer">integer</a></td>
                   <td class="param-desc-col"><p>El id de la venta solicitada</p>
 </td>
+                </tr>
+                            <tr>
+                  <td class="param-name-col"><span style="color: #0000BB">$idComprador</span></td>
+                  <td class="param-type-col"></td>
+                  <td class="param-desc-col"></td>
                 </tr>
                                                     <tr>
                   <th class="param-name-col">throws</th>
@@ -1154,7 +1147,7 @@ or be detached using <a href="yii-base-component.html#detachBehavior()-detail">d
 </div>
 
 <footer class="footer">
-        <p class="pull-right"><small>Page generated on Tue, 16 Jun 2020 18:00:40 +0000</small></p>
+        <p class="pull-right"><small>Page generated on Tue, 16 Jun 2020 20:31:36 +0000</small></p>
     Powered by <a href="http://www.yiiframework.com/" rel="external">Yii Framework</a></footer>
 
 <script>jQuery(function ($) {
