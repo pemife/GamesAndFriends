@@ -32,6 +32,9 @@ use kartik\date\DatePicker;
       ]
     ]) ?>
 
+    <?= $form->field($model, 'pay_token')->textInput(['maxlength' => true]) ?>
+    <p>Para mas información sobre PayPal Sandbox pinche <a href="https://pemife.github.io/GamesAndFriends/manual.html">este</a> enlace</p>
+
     <?php $form->field($model, 'requested_at')->hiddenInput(['value' => (new \DateTime())->getTimestamp()])->label(false) ?>
 
     <div class="form-group">
