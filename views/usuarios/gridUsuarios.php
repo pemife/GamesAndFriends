@@ -45,7 +45,7 @@ use yii\bootstrap4\Html;
                             '',
                             'javascript:void(0)',
                             [
-                                'class' =>'glyphicon glyphicon-time',
+                                'class' =>'fas fa-time',
                                 'title' => 'Peticion de amistad pendiente'
                             ]
                         );
@@ -54,7 +54,7 @@ use yii\bootstrap4\Html;
                             '',
                             ['mandar-peticion', 'amigoId' => $model->id],
                             [
-                                'class' => 'glyphicon glyphicon-plus',
+                                'class' => 'fas fa-plus',
                                 'title' => 'Mandar peticion de amistad a ' . $model->nombre
                             ]
                         );
@@ -63,7 +63,7 @@ use yii\bootstrap4\Html;
                             '',
                             ['borrar-amigo','amigoId' => $model->id],
                             [
-                                'class' =>'glyphicon glyphicon-remove',
+                                'class' =>'fas fa-remove',
                                 'title' => 'Borrar amigo',
                                 'style' => [
                                     'color' => 'red',
@@ -76,7 +76,7 @@ use yii\bootstrap4\Html;
                             '',
                             ['desbloquear-usuario', 'usuarioId' => $model->id],
                             [
-                                'class' =>'glyphicon glyphicon-remove-circle',
+                                'class' =>'fas fa-remove-circle',
                                 'title' => 'Desbloquear usuario',
                                 'style' => [
                                     'color' => 'red',
@@ -89,7 +89,7 @@ use yii\bootstrap4\Html;
                             '',
                             ['seguir-critico', 'uId' => $model->id],
                             [
-                                'class' => 'glyphicon glyphicon-star',
+                                'class' => 'fas fa-star',
                                 'title' => 'Seguir crítico',
                                 'data-confirm' => '¿Confirmas querer seguir al crítico ' . $model->nombre . '? (Si el critico es un amigo, dejara de serlo)',
                             ]
@@ -99,7 +99,7 @@ use yii\bootstrap4\Html;
                             '',
                             ['abandonar-critico', 'uId' => $model->id],
                             [
-                                'class' => 'glyphicon glyphicon-star-empty',
+                                'class' => 'fas fa-star-empty',
                                 'title' => 'Dejar de seguir crítico',
                                 'data-confirm' => '¿Confirmas dejar de seguir al crítico ' . $model->nombre . '?',
                             ]
@@ -140,7 +140,7 @@ use yii\bootstrap4\Html;
                         }
                         
                         if (Yii::$app->user->id == 1 || $model->esAmigo(Yii::$app->user->id)) {
-                            return Html::a('', ['view', 'id' => $model->id], ['class' => 'glyphicon glyphicon-eye-open']);
+                            return Html::a('', ['view', 'id' => $model->id], ['class' => 'fas fa-eye-open']);
                         }
                     },
 
@@ -151,7 +151,7 @@ use yii\bootstrap4\Html;
                         
                         if (Yii::$app->user->id == 1 || Yii::$app->user->id == $model->id) {
                             return Html::a('', ['update', 'id' => $model->id], [
-                                'class' => 'glyphicon glyphicon-pencil',
+                                'class' => 'fas fa-pencil',
                                 'title' => 'Editar perfil',
                                 'style' => [
                                     'color' => 'red',
@@ -167,7 +167,7 @@ use yii\bootstrap4\Html;
                         
                         if (Yii::$app->user->id == 1 || Yii::$app->user->id == $model->id) {
                             return Html::a('', ['delete', 'id' => $model->id], [
-                                'class' => 'glyphicon glyphicon-trash',
+                                'class' => 'fas fa-trash',
                                 'title' => 'Borrar perfil',
                                 'style' => [
                                     'color' => 'red',
@@ -186,7 +186,7 @@ use yii\bootstrap4\Html;
                         };
                         
                         return Html::a('', ['bloquear-usuario', 'usuarioId' => $model->id], [
-                            'class' => 'glyphicon glyphicon-ban-circle',
+                            'class' => 'fas fa-ban-circle',
                             'title' => 'Bloquear usuario',
                             'style' => [
                                 'color' => 'red',
@@ -199,7 +199,7 @@ use yii\bootstrap4\Html;
                     //     if (Yii::$app->user->isGuest || !$model->es_critico) {
                     //         if ($model->esSeguidoPor(Yii::$app->user->id)) {
                     //             return Html::a('', ['anadir-quitar-critico', 'usuarioId' => $model->id], [
-                    //                 'class' => 'glyphicon glyphicon-star-empty',
+                    //                 'class' => 'fas fa-star-empty',
                     //                 'title' => 'Dejar de seguir crítico',
                     //                 'data-confirm' => '¿Confirmas dejar de seguir al crítico ' . $model->nombre . '?',
                     //             ]);
@@ -208,7 +208,7 @@ use yii\bootstrap4\Html;
                     //     }
 
                     //     return Html::a('', ['anadir-quitar-critico', 'usuarioId' => $model->id], [
-                    //         'class' => 'glyphicon glyphicon-star',
+                    //         'class' => 'fas fa-star',
                     //         'title' => 'Seguir crítico',
                     //         'data-confirm' => '¿Confirmas querer seguir al crítico ' . $model->nombre . '?',
                     //     ]);

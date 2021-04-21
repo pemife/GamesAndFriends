@@ -34,7 +34,7 @@ $this->title = 'Lista de juegos ignorados';
                             'esProducto' => false
                         ],
                         [
-                            'class' => 'glyphicon glyphicon-shopping-cart',
+                            'class' => 'fas fa-shopping-cart',
                             'title' => 'ver en mercado',
                         ]
                     ) ?>
@@ -48,7 +48,7 @@ $this->title = 'Lista de juegos ignorados';
                             'uId' => Yii::$app->user->id
                         ],
                         [
-                            'class' => 'glyphicon glyphicon-remove-circle',
+                            'class' => 'fas fa-remove-circle',
                             'title' => 'Borrar de tu lista de ignorados',
                             'data-confirm' => '¿Estas seguro de que quieres borrarlo?',
                         ]

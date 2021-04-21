@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
 
                         return Html::a(
-                            '<span class="glyphicon glyphicon-thumbs-up"></span>',
+                            '<span class="fas fa-thumbs-up"></span>',
                             ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => true],
                             ['title' => 'me gusta']
                         );
@@ -141,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return '';
                         }
                         return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '<span class="fas fa-pencil"></span>',
                             [
                                 '/criticas/update',
                                 'id' => $model->id,
@@ -159,7 +159,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return '';
                         }
                         return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
+                            '<span class="fas fa-trash"></span>',
                             [
                                 'criticas/delete',
                                 'id' => $model->id,
@@ -182,7 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         };
                         
                         return Html::a('', ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => false], [
-                            'class' => 'glyphicon glyphicon-exclamation-sign',
+                            'class' => 'fas fa-exclamation-sign',
                             'title' => 'Reportar critica',
                             'style' => [
                                 'color' => 'red',

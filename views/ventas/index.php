@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'buttons' => [
                 'vermercado' => function ($url, $model, $key) {
                     return Html::a(
-                        '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                        '<span class="fas fa-shopping-cart"></span>',
                         ['ventas/ventas-item', 'id' => $model->copia->juego->id, 'esProducto' => false],
                         ['title' => 'ventas de ' . $model->copia->juego->titulo]
                     );
@@ -95,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '<span class="fas fa-pencil"></span>',
                             ['ventas/update', 'id' => $model->id],
                             ['title' => 'Actualizar']
                         );
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
+                            '<span class="fas fa-trash"></span>',
                             ['ventas/delete', 'id' => $model->id],
                             [
                               'title' => 'Eliminar',
@@ -163,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'buttons' => [
                 'vermercado' => function ($url, $model, $key) {
                     return Html::a(
-                        '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                        '<span class="fas fa-shopping-cart"></span>',
                         ['ventas/ventas-item', 'id' => $model->producto->id, 'esProducto' => true],
                         ['title' => 'ventas de ' . $model->producto->nombre]
                     );
@@ -174,7 +174,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '<span class="fas fa-pencil"></span>',
                             ['ventas/update', 'id' => $model->id],
                             ['title' => 'Actualizar']
                         );
@@ -186,7 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     if (Yii::$app->user->id == $model->vendedor->id) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
+                            '<span class="fas fa-trash"></span>',
                             ['ventas/delete', 'id' => $model->id],
                             [
                               'title' => 'Eliminar',

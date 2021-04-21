@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         $itemId = $esProducto ? $model->producto_id : $model->juego_id;
                         $accion = $esProducto ? 'productos/view' : 'juegos/view';
                         return Html::a(
-                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '<span class="fas fa-eye"></span>',
                             [$accion, 'id' => $itemId, 'esProducto' => $esProducto],
                             ['title' => 'ver en mercado']
                         );
@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         $esProducto = empty($model->juego_id);
                         $itemId = $esProducto ? $model->producto_id : $model->juego_id;
                         return Html::a(
-                            '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                            '<span class="fas fa-shopping-cart"></span>',
                             ['ventas/ventas-item', 'id' => $itemId, 'esProducto' => $esProducto],
                             ['title' => 'ver en mercado']
                         );

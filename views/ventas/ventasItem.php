@@ -24,7 +24,7 @@ if($esProducto){
             'update' => function ($url, $model, $key){
                 if(Yii::$app->user->id == $model->vendedor->id) {
                     return Html::a(
-                      '<span class="glyphicon glyphicon-pencil"></span>',
+                      '<span class="fas fa-pencil"></span>',
                       ['ventas/update', 'id' => $model->id],
                       ['title' => 'Actualizar']
                     );
@@ -33,7 +33,7 @@ if($esProducto){
             'delete' => function ($url, $model, $key){
                 if(Yii::$app->user->id == $model->vendedor->id) {
                     return Html::a(
-                        '<span class="glyphicon glyphicon-trash"></span>',
+                        '<span class="fas fa-trash"></span>',
                         ['ventas/delete', 'id' => $model->id],
                         [
                             'title' => 'Eliminar',
@@ -72,7 +72,7 @@ if($esProducto){
             'update' => function ($url, $model, $key){
                 if(Yii::$app->user->id == $model->vendedor->id) {
                     return Html::a(
-                      '<span class="glyphicon glyphicon-pencil"></span>',
+                      '<span class="fas fa-pencil"></span>',
                       ['ventas/update', 'id' => $model->id],
                       ['title' => 'Actualizar']
                     );
@@ -81,7 +81,7 @@ if($esProducto){
             'delete' => function ($url, $model, $key){
                 if(Yii::$app->user->id == $model->vendedor->id) {
                     return Html::a(
-                        '<span class="glyphicon glyphicon-trash"></span>',
+                        '<span class="fas fa-trash"></span>',
                         ['ventas/delete', 'id' => $model->id],
                         [
                             'title' => 'Eliminar',

@@ -28,7 +28,7 @@ $urlImagen = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.ic
                 'esProducto' => false
             ],
             [
-                'class' => 'glyphicon glyphicon-shopping-cart',
+                'class' => 'fas fa-shopping-cart',
                 'title' => 'ver en mercado',
             ]
         ) ?>
@@ -42,7 +42,7 @@ $urlImagen = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.ic
                     'uId' => Yii::$app->user->id
                 ],
                 [
-                    'class' => 'glyphicon glyphicon-remove-circle',
+                    'class' => 'fas fa-remove-circle',
                     'title' => 'Borrar de tu lista de deseados',
                     'data-confirm' => '¿Estas seguro de que quieres borrarlo?',
                 ]

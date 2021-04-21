@@ -25,7 +25,6 @@
         "yiisoft/yii2": "~2.0.17",
         "yiisoft/yii2-bootstrap4": "^2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.1.0",
-        "xtetis/yii2-bootstrap4-glyphicons": "dev-master",
         "kartik-v/yii2-widget-datepicker": "dev-master",
         "kartik-v/yii2-widget-select2": "dev-master",
         "kartik-v/yii2-widget-rating": "dev-master",

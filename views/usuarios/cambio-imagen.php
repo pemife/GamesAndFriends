@@ -106,7 +106,7 @@ $this->registerJS($js);
                     '',
                     'javascript:void(0)',
                     [
-                    'class' => 'glyphicon glyphicon-ok',
+                    'class' => 'fas fa-ok',
                     'name' => 'botonSeleccionar'
                     ]
                 ) ?>

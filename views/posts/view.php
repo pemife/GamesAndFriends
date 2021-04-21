@@ -39,10 +39,10 @@ function votar(e){
 
 function cambiarIcono(){
     var claseBoton = $("#botonVoto").attr('class');
-    if (claseBoton == 'glyphicon glyphicon-star') {
-        $("#botonVoto").attr('class', 'glyphicon glyphicon-star-empty');
+    if (claseBoton == 'fas fa-star') {
+        $("#botonVoto").attr('class', 'fas fa-star-empty');
     } else {
-        $("#botonVoto").attr('class', 'glyphicon glyphicon-star');
+        $("#botonVoto").attr('class', 'fas fa-star');
     }
 }
 SCRIPT;
@@ -69,7 +69,7 @@ $this->registerJs($js);
 
     <h3>
         <?= Html::a('', 'javascript:void(0)', [
-        'class' => $usuarioHaVotado ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty',
+        'class' => $usuarioHaVotado ? 'fas fa-star' : 'fas fa-star-empty',
         'title' => 'Votar Post',
         'id' => 'botonVoto',
         ]) ?>
@@ -141,7 +141,7 @@ $this->registerJs($js);
                             return '';
                         }
                         return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '<span class="fas fa-pencil"></span>',
                             [
                                 '/comentarios/update',
                                 'id' => $model->id,
@@ -159,7 +159,7 @@ $this->registerJs($js);
                             return '';
                         }
                         return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
+                            '<span class="fas fa-trash"></span>',
                             [
                                 'comentarios/delete',
                                 'id' => $model->id,
@@ -179,7 +179,7 @@ $this->registerJs($js);
                         };
                         
                         return Html::a('', ['comentarios/reportar', 'cId' => $model->id], [
-                            'class' => 'glyphicon glyphicon-exclamation-sign',
+                            'class' => 'fas fa-exclamation-sign',
                             'title' => 'Reportar comentario',
                             'style' => [
                                 'color' => 'red',

@@ -169,18 +169,18 @@ $this->registerJs($js);
 <div class="usuarios-view">
     <div class="nombreOpciones">
       <div class="titulo">
-          <h1><?= Html::encode($model->nombre) ?> <?= $model->es_critico ? '<span class="glyphicon glyphicon-education" title="Insignia de Crítico de Juegos/Productos"> </span>' : '' ?></h1>
+          <h1><?= Html::encode($model->nombre) ?> <?= $model->es_critico ? '<span class="fas fa-education" title="Insignia de Crítico de Juegos/Productos"> </span>' : '' ?></h1>
           <p>&nbsp;&nbsp;&nbsp;</p>
           <div class="opciones">
             <?php
             if (!Yii::$app->user->isGuest && (Yii::$app->user->id !== $model->id)) {
                 switch ($model->estadoRelacion(Yii::$app->user->id)) {
                     case 1:
-                        echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-remove', 'title' => 'Borrar amigo']);
+                        echo Html::a('', ['borrar-amigo', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'fas fa-remove', 'title' => 'Borrar amigo']);
                     break;
                     case 2:
                     case 5:
-                        echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'glyphicon glyphicon-plus', 'title' => 'Mandar peticion de amistad']);
+                        echo Html::a('', ['mandar-peticion', 'amigoId' => $model->id], ['id' => 'botonAmistad', 'class' =>'fas fa-plus', 'title' => 'Mandar peticion de amistad']);
                     break;
                     case 3:
                     break;
@@ -192,7 +192,7 @@ $this->registerJs($js);
         <div class="opciones">
             <span class="dropdown">
                 <button 
-                  class="glyphicon glyphicon-cog"
+                  class="fas fa-cog"
                   type="button"
                   data-toggle="dropdown"
                   style="height: 30px; width: 35px;"
@@ -290,7 +290,7 @@ $this->registerJs($js);
                 '',
                 'javascript:void(0)',
                 [
-                  'class' => 'glyphicon glyphicon-edit rounded-circle',
+                  'class' => 'fas fa-edit rounded-circle',
                   'id' => 'botonEdit'
                 ]
             ) ?>
@@ -364,7 +364,7 @@ $this->registerJs($js);
                   'vender' => function ($url, $model, $key) {
                     if (!$model->estado) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                            '<span class="fas fa-shopping-cart"></span>',
                             [
                               'ventas/crea-venta-item',
                               'cId' => false,
@@ -377,7 +377,7 @@ $this->registerJs($js);
                   },
                   'view' => function ($url, $model, $key) {
                       return Html::a(
-                          '<span class="glyphicon glyphicon-eye-open"></span>',
+                          '<span class="fas fa-eye-open"></span>',
                           ['productos/view', 'id' => $model->id],
                           ['title' => 'ver producto']
                       );
@@ -385,7 +385,7 @@ $this->registerJs($js);
                   'delete' => function ($url, $model, $key) {
                     if (Yii::$app->user->id == $model->propietario_id) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
+                            '<span class="fas fa-trash"></span>',
                             [
                                 'productos/delete',
                                 'id' => $model->id,
@@ -427,7 +427,7 @@ $this->registerJs($js);
                   'buttons' => [
                     'view' => function ($url, $model, $key) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            '<span class="fas fa-eye-open"></span>',
                             ['copias/view', 'id' => $model->id],
                             ['title' => 'ver copia']
                         );
@@ -435,7 +435,7 @@ $this->registerJs($js);
                     'vender' => function ($url, $model, $key) {
                         if (!$model->estado) {
                             return Html::a(
-                                '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                                '<span class="fas fa-shopping-cart"></span>',
                                 [
                                   'ventas/crea-venta-item',
                                   'cId' => $model->id,
@@ -449,7 +449,7 @@ $this->registerJs($js);
                     'retirar' => function ($url, $model, $key) {
                         if (Yii::$app->user->id == $model->propietario_id) {
                             return Html::a(
-                                '<span class="glyphicon glyphicon-trash"></span>',
+                                '<span class="fas fa-trash"></span>',
                                 ['copias/retirar-inventario', 'id' => $model->id],
                                 [
                                     'data' => [
@@ -513,7 +513,7 @@ $this->registerJs($js);
                             '',
                             ['mandar-peticion', 'amigoId' => $model->id],
                             [
-                              'class' => 'glyphicon glyphicon-plus',
+                              'class' => 'fas fa-plus',
                               'title' => 'Mandar peticion de amistad a ' . $model->nombre
                             ]
                         );

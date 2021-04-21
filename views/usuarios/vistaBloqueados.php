@@ -10,7 +10,7 @@ use yii\bootstrap4\Html;
         <tr>
           <td id="bloqueado<?= $bloqueado->id ?>"><?= Html::encode($bloqueado->nombre) ?></td>
           <td><?= Html::a('', ['desbloquear-usuario', 'usuarioId' => $bloqueado->id], [
-            'class' => 'glyphicon glyphicon-ok-circle',
+            'class' => 'fas fa-ok-circle',
             'title' => 'Desbloquear usuario',
             'data-confirm' => 'Seguro que quieres desbloquear al usuario ' . $bloqueado->nombre . '?',
             ]) ?></td>

@@ -101,7 +101,7 @@ $this->registerJs($js);
               'buttons' => [
                 'vermercado' => function ($url, $model, $key) {
                     return Html::a(
-                        '<span class="glyphicon glyphicon-shopping-cart"></span>',
+                        '<span class="fas fa-shopping-cart"></span>',
                         ['ventas/ventas-item', 'id' => $model->id, 'esProducto' => false],
                         ['title' => 'ver en mercado']
                     );
@@ -112,7 +112,7 @@ $this->registerJs($js);
                     }
 
                     return Html::a(
-                        '<span class="glyphicon glyphicon-heart"></span>',
+                        '<span class="fas fa-heart"></span>',
                         'javascript:void(0)',
                         [
                           'title' => 'añadir a tu lista de deseos',
@@ -129,7 +129,7 @@ $this->registerJs($js);
                     }
 
                     return Html::a(
-                        '<span class="glyphicon glyphicon-warning-sign"></span>',
+                        '<span class="fas fa-exclamation-triangle"></span>',
                         'javascript:void(0)',
                         [
                           'title' => 'Ignorar juego',

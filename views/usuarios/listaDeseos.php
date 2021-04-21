@@ -89,9 +89,9 @@ $this->registerJS($js);
                     <h3><?= Html::encode($model->juego->titulo) ?></h3>
                 </div>
                 <div class="col-md-1">
-                    <div><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+                    <div><span class="fas fa-menu-hamburger"></span></div>
                     <div><h1><?= Html::encode($model->orden) ?></h1></div>
-                    <div><span class="glyphicon glyphicon-menu-hamburger"></span></div>
+                    <div><span class="fas fa-menu-hamburger"></span></div>
                 </div>
                 <div class="col-md-3">
                     <img src="<?= $urlImagen ?>" width="150" height="125">
@@ -108,7 +108,7 @@ $this->registerJS($js);
                             'esProducto' => false
                         ],
                         [
-                            'class' => 'glyphicon glyphicon-shopping-cart',
+                            'class' => 'fas fa-shopping-cart',
                             'title' => 'ver en mercado',
                             ]
                     ) ?>
@@ -122,7 +122,7 @@ $this->registerJS($js);
                                 'uId' => Yii::$app->user->id
                             ],
                             [
-                                'class' => 'glyphicon glyphicon-remove-circle',
+                                'class' => 'fas fa-remove-circle',
                                 'title' => 'Borrar de tu lista de deseados',
                                 'data-confirm' => '¿Estas seguro de que quieres borrarlo?',
                             ]

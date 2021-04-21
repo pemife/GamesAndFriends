@@ -375,7 +375,7 @@ $this->registerCSS($css);
                             }
 
                             return Html::a(
-                                '<span class=" glyphicon glyphicon-thumbs-up"></span>',
+                                '<span class=" fas fa-thumbs-up"></span>',
                                 ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => true]
                             );
                         }
@@ -421,7 +421,7 @@ $this->registerCSS($css);
                                 return '';
                             }
                             return Html::a(
-                                '<span class="glyphicon glyphicon-pencil"></span>',
+                                '<span class="fas fa-pencil"></span>',
                                 [
                                     '/criticas/update',
                                     'id' => $model->id,
@@ -439,7 +439,7 @@ $this->registerCSS($css);
                                 return '';
                             }
                             return Html::a(
-                                '<span class="glyphicon glyphicon-trash"></span>',
+                                '<span class="fas fa-trash"></span>',
                                 [
                                     'criticas/delete',
                                     'id' => $model->id,
@@ -463,7 +463,7 @@ $this->registerCSS($css);
                             };
                             
                             return Html::a('', ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => false], [
-                                'class' => 'glyphicon glyphicon-fire',
+                                'class' => 'fas fa-fire',
                                 'title' => 'Reportar critica',
                                 'style' => [
                                     'color' => 'red',
