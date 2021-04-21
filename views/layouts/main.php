@@ -31,7 +31,7 @@ AppAsset::register($this);
 
 $s3 = new S3Client([
     'version' => 'latest',
-    'region' => 'eu-west-2',
+    'region' => 'eu-west-3',
     'credentials' => [
         'key' => getenv('KEY'),
         'secret' => getenv('SECRET'),
