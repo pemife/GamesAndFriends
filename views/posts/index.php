@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return '';
                         }
                         return Html::a('', ['update', 'id' => $model->id], [
-                            'class' => 'fas fa-pencil',
+                            'class' => 'fas fa-pencil-alt',
                             'title' => 'Editar post',
                             'style' => [
                                 'color' => 'red',
@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return '';
                         }
                         return Html::a('', ['delete', 'id' => $model->id], [
-                            'class' => 'fas fa-trash',
+                            'class' => 'fas fa-trash-alt',
                             'title' => 'Borrar post',
                             'style' => [
                                 'color' => 'red',

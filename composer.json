@@ -28,7 +28,8 @@
         "kartik-v/yii2-widget-datepicker": "dev-master",
         "kartik-v/yii2-widget-select2": "dev-master",
         "kartik-v/yii2-widget-rating": "dev-master",
-        "aws/aws-sdk-php": "^3.138"
+        "aws/aws-sdk-php": "^3.138",
+        "fortawesome/font-awesome": "^5.15"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

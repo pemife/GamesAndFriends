@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         $itemId = $esProducto ? $model->producto_id : $model->juego_id;
                         $accion = $esProducto ? 'productos/view' : 'juegos/view';
                         return Html::a(
-                            '<span class="fas fa-eye"></span>',
+                            '<span class="far fa-eye"></span>',
                             [$accion, 'id' => $itemId, 'esProducto' => $esProducto],
                             ['title' => 'ver en mercado']
                         );

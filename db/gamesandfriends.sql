@@ -46,7 +46,7 @@ CREATE TABLE juegos
                                DEFAULT false
   , edad_minima     NUMERIC(2)    NOT NULL
   , CONSTRAINT CHK_Edad_Minima_Correcta CHECK (edad_minima=3 OR edad_minima=7 OR edad_minima=12 OR edad_minima=16 OR edad_minima=18)
-  , img_key         VARCHAR(255)  UNIQUE
+  , img_key         VARCHAR(255)
 );
 
 DROP TABLE productos CASCADE;

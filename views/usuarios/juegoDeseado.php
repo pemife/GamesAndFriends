@@ -42,7 +42,7 @@ $urlImagen = 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.ic
                     'uId' => Yii::$app->user->id
                 ],
                 [
-                    'class' => 'fas fa-remove-circle',
+                    'class' => 'fas fa-times-circle',
                     'title' => 'Borrar de tu lista de deseados',
                     'data-confirm' => '¿Estas seguro de que quieres borrarlo?',
                 ]

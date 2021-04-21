@@ -421,7 +421,7 @@ $this->registerCSS($css);
                                 return '';
                             }
                             return Html::a(
-                                '<span class="fas fa-pencil"></span>',
+                                '<span class="fas fa-pencil-alt"></span>',
                                 [
                                     '/criticas/update',
                                     'id' => $model->id,
@@ -439,7 +439,7 @@ $this->registerCSS($css);
                                 return '';
                             }
                             return Html::a(
-                                '<span class="fas fa-trash"></span>',
+                                '<span class="fas fa-trash-alt"></span>',
                                 [
                                     'criticas/delete',
                                     'id' => $model->id,
@@ -462,14 +462,17 @@ $this->registerCSS($css);
                                 return '';
                             };
                             
-                            return Html::a('', ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => false], [
-                                'class' => 'fas fa-fire',
-                                'title' => 'Reportar critica',
-                                'style' => [
-                                    'color' => 'red',
-                                ],
-                                'data-confirm' => '¿Confirmas querer reportar la crítica?',
-                            ]);
+                            return Html::a(
+                                '<span class="fas fa-fire"></span>',
+                                ['criticas/reportar', 'cId' => $model->id, 'esVotoPositivo' => false],
+                                [
+                                    'title' => 'Reportar critica',
+                                    'style' => [
+                                        'color' => 'red',
+                                    ],
+                                    'data-confirm' => '¿Confirmas querer reportar la crítica?',
+                                ]
+                            );
                         }
                     ]
                 ],

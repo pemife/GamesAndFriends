@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (!Yii::$app->user->isGuest) {
                         if (Yii::$app->user->id == $model->propietario->id) {
                             return Html::a(
-                                '<span class="fas fa-pencil"></span>',
+                                '<span class="fas fa-pencil-alt"></span>',
                                 ['ventas/update', 'id' => $model->id],
                                 ['title' => 'Actualizar']
                             );
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if (!Yii::$app->user->isGuest) {
                         if (Yii::$app->user->id == $model->propietario->id) {
                             return Html::a(
-                                '<span class="fas fa-trash"></span>',
+                                '<span class="fas fa-trash-alt"></span>',
                                 ['ventas/delete', 'id' => $model->id],
                                 [
                                   'title' => 'Eliminar',

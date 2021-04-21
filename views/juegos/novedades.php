@@ -183,7 +183,7 @@ $this->registerCSS($css);
                     }
 
                     return Html::a(
-                        '<span class="fas fa-warning-sign"></span>',
+                        '<span class="fas fa-exclamation-triangle"></span>',
                         'javascript:void(0)',
                         [
                           'title' => 'Ignorar juego',

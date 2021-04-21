@@ -141,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return '';
                         }
                         return Html::a(
-                            '<span class="fas fa-pencil"></span>',
+                            '<span class="fas fa-pencil-alt"></span>',
                             [
                                 '/criticas/update',
                                 'id' => $model->id,
@@ -159,7 +159,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return '';
                         }
                         return Html::a(
-                            '<span class="fas fa-trash"></span>',
+                            '<span class="fas fa-trash-alt"></span>',
                             [
                                 'criticas/delete',
                                 'id' => $model->id,

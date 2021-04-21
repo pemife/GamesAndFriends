@@ -290,7 +290,7 @@ $this->registerJs($js);
                 '',
                 'javascript:void(0)',
                 [
-                  'class' => 'fas fa-edit rounded-circle',
+                  'class' => 'far fa-edit rounded-circle',
                   'id' => 'botonEdit'
                 ]
             ) ?>
@@ -377,7 +377,7 @@ $this->registerJs($js);
                   },
                   'view' => function ($url, $model, $key) {
                       return Html::a(
-                          '<span class="fas fa-eye-open"></span>',
+                          '<span class="far fa-eye"></span>',
                           ['productos/view', 'id' => $model->id],
                           ['title' => 'ver producto']
                       );
@@ -385,7 +385,7 @@ $this->registerJs($js);
                   'delete' => function ($url, $model, $key) {
                     if (Yii::$app->user->id == $model->propietario_id) {
                         return Html::a(
-                            '<span class="fas fa-trash"></span>',
+                            '<span class="fas fa-trash-alt"></span>',
                             [
                                 'productos/delete',
                                 'id' => $model->id,
@@ -427,7 +427,7 @@ $this->registerJs($js);
                   'buttons' => [
                     'view' => function ($url, $model, $key) {
                         return Html::a(
-                            '<span class="fas fa-eye-open"></span>',
+                            '<span class="far fa-eye"></span>',
                             ['copias/view', 'id' => $model->id],
                             ['title' => 'ver copia']
                         );
@@ -449,7 +449,7 @@ $this->registerJs($js);
                     'retirar' => function ($url, $model, $key) {
                         if (Yii::$app->user->id == $model->propietario_id) {
                             return Html::a(
-                                '<span class="fas fa-trash"></span>',
+                                '<span class="fas fa-trash-alt"></span>',
                                 ['copias/retirar-inventario', 'id' => $model->id],
                                 [
                                     'data' => [

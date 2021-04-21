@@ -42,19 +42,19 @@ use yii\bootstrap4\Html;
                         }
 
                         $botones['peticion-amistad-pendiente'] = Html::a(
-                            '',
+                            '<span class="far fa-clock"></span>',
                             'javascript:void(0)',
                             [
-                                'class' =>'fas fa-time',
+                                // 'class' =>'far fa-clock',
                                 'title' => 'Peticion de amistad pendiente'
                             ]
                         );
 
                         $botones['mandar-peticion-amistad'] = Html::a(
-                            '',
+                            '<i class="fas fa-plus"></i>',
                             ['mandar-peticion', 'amigoId' => $model->id],
                             [
-                                'class' => 'fas fa-plus',
+                                // 'class' => 'fas fa-plus',
                                 'title' => 'Mandar peticion de amistad a ' . $model->nombre
                             ]
                         );
@@ -63,7 +63,7 @@ use yii\bootstrap4\Html;
                             '',
                             ['borrar-amigo','amigoId' => $model->id],
                             [
-                                'class' =>'fas fa-remove',
+                                'class' =>'fas fa-minus',
                                 'title' => 'Borrar amigo',
                                 'style' => [
                                     'color' => 'red',
@@ -76,7 +76,7 @@ use yii\bootstrap4\Html;
                             '',
                             ['desbloquear-usuario', 'usuarioId' => $model->id],
                             [
-                                'class' =>'fas fa-remove-circle',
+                                'class' =>'fas fa-times-circle',
                                 'title' => 'Desbloquear usuario',
                                 'style' => [
                                     'color' => 'red',
@@ -99,7 +99,7 @@ use yii\bootstrap4\Html;
                             '',
                             ['abandonar-critico', 'uId' => $model->id],
                             [
-                                'class' => 'fas fa-star-empty',
+                                'class' => 'far fa-star',
                                 'title' => 'Dejar de seguir crítico',
                                 'data-confirm' => '¿Confirmas dejar de seguir al crítico ' . $model->nombre . '?',
                             ]
@@ -140,7 +140,7 @@ use yii\bootstrap4\Html;
                         }
                         
                         if (Yii::$app->user->id == 1 || $model->esAmigo(Yii::$app->user->id)) {
-                            return Html::a('', ['view', 'id' => $model->id], ['class' => 'fas fa-eye-open']);
+                            return Html::a('', ['view', 'id' => $model->id], ['class' => 'far fa-eye']);
                         }
                     },
 
@@ -151,7 +151,7 @@ use yii\bootstrap4\Html;
                         
                         if (Yii::$app->user->id == 1 || Yii::$app->user->id == $model->id) {
                             return Html::a('', ['update', 'id' => $model->id], [
-                                'class' => 'fas fa-pencil',
+                                'class' => 'far fa-edit',
                                 'title' => 'Editar perfil',
                                 'style' => [
                                     'color' => 'red',
@@ -167,7 +167,7 @@ use yii\bootstrap4\Html;
                         
                         if (Yii::$app->user->id == 1 || Yii::$app->user->id == $model->id) {
                             return Html::a('', ['delete', 'id' => $model->id], [
-                                'class' => 'fas fa-trash',
+                                'class' => 'fas fa-trash-alt',
                                 'title' => 'Borrar perfil',
                                 'style' => [
                                     'color' => 'red',
@@ -186,7 +186,7 @@ use yii\bootstrap4\Html;
                         };
                         
                         return Html::a('', ['bloquear-usuario', 'usuarioId' => $model->id], [
-                            'class' => 'fas fa-ban-circle',
+                            'class' => 'fas fa-ban',
                             'title' => 'Bloquear usuario',
                             'style' => [
                                 'color' => 'red',

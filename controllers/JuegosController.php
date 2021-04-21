@@ -180,13 +180,14 @@ class JuegosController extends Controller
         ]);
 
         // Valoraciones positivas globales
-        $criticasQuery = $criticasQuery
-        ->andWhere(['>', 'valoracion', 3]);
-        $valPosGlob = $criticasQuery->count();
+        $valQuery = $criticasQuery;
+        $valPosGlob = $valQuery
+        ->andWhere(['>', 'valoracion', 3])
+        ->count();
 
         // Valoraciones positivas recientes
         $haceUnMes = date('Y-m-d', date('now') - strtotime('-1 month'));
-        $valPosRec = $criticasQuery
+        $valPosRec = $valQuery
         ->andWhere(['>', 'last_update', $haceUnMes])->count();
 
         $criticasProvider->sort->attributes['usuario.nombre'] = [

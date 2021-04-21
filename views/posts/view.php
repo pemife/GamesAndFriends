@@ -141,7 +141,7 @@ $this->registerJs($js);
                             return '';
                         }
                         return Html::a(
-                            '<span class="fas fa-pencil"></span>',
+                            '<span class="fas fa-pencil-alt"></span>',
                             [
                                 '/comentarios/update',
                                 'id' => $model->id,
@@ -159,7 +159,7 @@ $this->registerJs($js);
                             return '';
                         }
                         return Html::a(
-                            '<span class="fas fa-trash"></span>',
+                            '<span class="fas fa-trash-alt"></span>',
                             [
                                 'comentarios/delete',
                                 'id' => $model->id,

@@ -100,7 +100,7 @@ $urlFinalCompra = Url::to(['copias/finalizar-compra'], true);
                 'buttons' => [
                     'borrar' => function ($url, $model, $key) {
                         return Html::a(
-                            '<span class="fas fa-trash"></span>',
+                            '<span class="fas fa-trash-alt"></span>',
                             ['juegos/borrar-de-carrito', 'pId' => $model->id],
                             [
                                 'title' => 'borrar del carrito',
